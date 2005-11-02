@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Vorbis-to-MD</key>
+	<dict>
+		<key>ALBUM=</key>
+		<string>albm</string>
+		<key>ARTIST=</key>
+		<string>arts</string>
+		<key>COMMENT=</key>
+		<string>cmmt</string>
+		<key>DATE=</key>
+		<string>©day</string>
+		<key>TITLE=</key>
+		<string>name</string>
+		<key>YEAR=</key>
+		<string>©day</string>
+	</dict>
+	<key>Vorbis-to-UD</key>
+	<dict>
+		<key>ALBUM=</key>
+		<string>©alb</string>
+		<key>ARTIST=</key>
+		<string>©ART</string>
+		<key>COMMENT=</key>
+		<string>©cmt</string>
+		<key>DATE=</key>
+		<string>©day</string>
+		<key>GENRE=</key>
+		<string>©gen</string>
+		<key>TITLE=</key>
+		<string>©nam</string>
+		<key>TRACKNUMBER=</key>
+		<string>©trk</string>
+		<key>YEAR=</key>
+		<string>©day</string>
+	</dict>
+</dict>
+</plist>

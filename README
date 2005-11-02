@@ -1,0 +1,81 @@
+XiphQT
+======
+
+XiphQT, the Xiph QuickTime Components, is a collection of QuickTime
+and MacOS X 'plug-ins' providing support for the Xiph.Org Foundation's
+(http://www.xiph.org/) multimedia compression formats.
+
+
+Building
+========
+
+The XiphQT source code is accompanied by a set of Xcode project files,
+and can be built easily using Xcode GUI or 'xcodebuild' command line tool.
+The only additional requirement besides the developer tools, is set of
+Xiph frameworks for particular compression formats, installed where Xcode
+can find them (preferably - /Library/Frameworks).
+
+
+Installing
+==========
+
+The binary component bundles need to be installed in specific locations
+on your hard drive. Bundles with names starting with 'CA' go to
+/Library/Components (or ~/Library/Components) and all other go to
+/Library/QuickTime (or ~/Library/QuickTime).
+You will also need to install Xiph library frameworks in either
+/Library/Frameworks (or ~/Library/Frameworks). 
+
+The lastest version of XiphQT makes use of the following frameworks:
+Ogg.framework, Vorbis.framework, FLAC.framework, FLAC++.framework and
+Speex.framework. Those can be build from the corresponding Xiph format
+libraries, or the binary versions can be obtained from ???.
+
+
+Source code organisation
+========================
+
+./AppleSDK
+	contains selected files from the CoreAudio SDK; these files are the
+	base of the AudioCodec API
+
+./CAFLAC
+	FLAC AudioCodec files
+
+./CASpeex
+	Speex AudioCodec files
+
+./CAVorbis
+	Vorbis AudioCodec files
+
+./OggImport
+	Ogg QuickTime MovieImporter component files
+
+./common, ./utils and ./resources
+	Functions, definition and resources shared between several components
+
+
+Copying
+======= 
+
+    XiphQT is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    XiphQT is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See file COPYING
+    for the details.
+
+
+    ---
+    The part of the CoreAudio SDK, included under the ./AppleSDK directory,
+    is redistributed according to the terms specified in the files. See
+    the file headers for more details. 
+
+
+    ---
+    Part of the OggImport component source code, written by Steve Nicolai,
+    is distributed under the terms of BSD-style License. See file
+    COPYING.qtcomponents in the OggImport directory for the details. 
