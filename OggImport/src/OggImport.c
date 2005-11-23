@@ -43,7 +43,7 @@
 
 //#define NDEBUG
 
-#import "debug.h"
+#include "debug.h"
 
 
 #include "importer_types.h"
