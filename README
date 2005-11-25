@@ -29,7 +29,8 @@ You will also need to install Xiph library frameworks in either
 The lastest version of XiphQT makes use of the following frameworks:
 Ogg.framework, Vorbis.framework, FLAC.framework, FLAC++.framework and
 Speex.framework. Those can be build from the corresponding Xiph format
-libraries, or the binary versions can be obtained from ???.
+libraries, or the binary versions can be obtained from the project
+downloads page: http://www.xiph.org/quicktime/download.html .
 
 
 Source code organisation
@@ -76,6 +77,14 @@ Copying
 
 
     ---
-    Part of the OggImport component source code, written by Steve Nicolai,
+    Part of the OggImport component source code written by Steve Nicolai
     is distributed under the terms of BSD-style License. See file
     COPYING.qtcomponents in the OggImport directory for the details. 
+
+
+
+More Information
+================
+
+More information can be found on the project webpages at:
+http://www.xiph.org/quicktime/
