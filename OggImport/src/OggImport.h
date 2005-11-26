@@ -33,7 +33,7 @@
 
 #include "versions.h"
 
-#define kOggVorbisBundleID "net.barelyfocused.xiph.oggimport"
+#define kOggVorbisBundleID "org.xiph.xiph-qt.oggimport"
 
 #define kImporterResID                  4000
 #define kImporterNameStringResID        4000
