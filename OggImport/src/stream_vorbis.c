@@ -95,32 +95,41 @@ void clear_stream__vorbis(StreamInfo *si)
 ComponentResult create_sample_description__vorbis(StreamInfo *si)
 {
     ComponentResult err = noErr;
-    Handle	desc = NewHandleClear(sizeof(SoundDescriptionV1));
-	
-    if (desc != NULL)
-    {
-        SoundDescriptionV1Ptr	snd = (SoundDescriptionV1Ptr)*desc;
-        
-        snd->desc.descSize = sizeof(SoundDescriptionV1);
-        snd->desc.dataFormat = kAudioFormatXiphOggFramedVorbis;
-        snd->desc.dataRefIndex = 1;
-        snd->desc.version = 1;   //@@@@ use the version from the stream????
-        snd->desc.revlevel = 0;
-        snd->desc.vendor = kSoundComponentManufacturer;
-        snd->desc.numChannels = si->numChannels;
-        snd->desc.compressionID = variableCompression;
-        snd->desc.sampleSize = 16;
-        snd->desc.sampleRate = ((unsigned)si->rate) << 16;
-		
-		snd->samplesPerPacket = 0;
-		snd->bytesPerSample = 2;
-		snd->bytesPerFrame = 0;
-		snd->bytesPerPacket = 0;
-        
-		si->sampleDesc = (SampleDescriptionHandle)desc;
-    } else
-        err = MemError();
-	
+    Handle desc;
+    AudioStreamBasicDescription asbd;
+    AudioChannelLayout acl;
+    AudioChannelLayout *pacl = &acl;
+    ByteCount acl_size = sizeof(acl);
+    
+    asbd.mSampleRate = si->rate;
+    asbd.mFormatID = kAudioFormatXiphOggFramedVorbis;
+    asbd.mFormatFlags = 0;
+    asbd.mBytesPerPacket = 0;
+    asbd.mFramesPerPacket = 0;
+    //asbd.mBytesPerFrame = 2 * si->numChannels;
+    asbd.mBytesPerFrame = 0;
+    asbd.mChannelsPerFrame = si->numChannels;
+    //asbd.mBitsPerChannel = 16;
+    asbd.mBitsPerChannel = 0;
+    asbd.mReserved = 0;
+
+    if (si->numChannels == 1)
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
+    else if (si->numChannels == 2)
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+    else {
+        pacl = NULL;
+        acl_size = 0;
+    }
+    acl.mChannelBitmap = 0;
+    acl.mNumberChannelDescriptions = 0;
+
+    err = QTSoundDescriptionCreate(&asbd, pacl, acl_size, NULL, 0, kQTSoundDescriptionKind_Movie_Version2, (SoundDescriptionHandle*) &desc);
+
+    if (err == noErr) {
+        si->sampleDesc = (SampleDescriptionHandle) desc;
+    }
+
     return err;
 };
 
