@@ -35,22 +35,20 @@
 #include <Vorbis/codec.h>
 
 typedef enum VorbisImportStates {
-	kVStateInitial,
-	kVStateReadingComments,
-	kVStateReadingCodebooks,
-	kVStateReadingFirstPacket,
-	//kVStateSeekingLastPacket,
+    kVStateInitial,
+    kVStateReadingComments,
+    kVStateReadingCodebooks,
+    kVStateReadingFirstPacket,
+    //kVStateSeekingLastPacket,
     kVStateReadingPackets
 } VorbisImportStates;
 
 typedef struct {
-	VorbisImportStates	state;
-    
-	vorbis_info			vi;
-	vorbis_comment		vc;
+    VorbisImportStates state;
+
+    vorbis_info vi;
+    vorbis_comment vc;
 } StreamInfo__vorbis;
-
-
 
 
 #define _HAVE__VORBIS_SUPPORT 1

@@ -35,12 +35,12 @@ HINSTANCE ghInst = NULL;
 
 BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
 {
-	ghInst = (HINSTANCE) hInst;
+    ghInst = (HINSTANCE) hInst;
 
-	switch (ul_reason_for_call) {
-		//do nothing, so far...
-		default:
-			break;
+    switch (ul_reason_for_call) {
+        //do nothing, so far...
+        default:
+            break;
     }
 
     return TRUE;

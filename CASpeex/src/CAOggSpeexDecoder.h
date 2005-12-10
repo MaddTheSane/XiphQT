@@ -42,27 +42,27 @@
 class CAOggSpeexDecoder :
 public CASpeexDecoder
 {
-public:
+ public:
     CAOggSpeexDecoder();
     virtual ~CAOggSpeexDecoder();
 
-    virtual void			SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
-    
-    virtual UInt32			ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
+    virtual void            SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
+
+    virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                  AudioStreamPacketDescription* outPacketDescription);
 
-protected:
-    virtual void			BDCInitialize(UInt32 inInputBufferByteSize);
-    virtual void			BDCUninitialize();
-    virtual void			BDCReset();
-    virtual void			BDCReallocate(UInt32 inInputBufferByteSize);
+ protected:
+    virtual void            BDCInitialize(UInt32 inInputBufferByteSize);
+    virtual void            BDCUninitialize();
+    virtual void            BDCReset();
+    virtual void            BDCReallocate(UInt32 inInputBufferByteSize);
 
-    virtual void			InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
-    
-    void					InitializeCompressionSettings();
+    virtual void            InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
 
-    ogg_stream_state		mO_st;
-    std::vector<SInt32>		mFramesBufferedList;
+    void                    InitializeCompressionSettings();
+
+    ogg_stream_state        mO_st;
+    std::vector<SInt32>     mFramesBufferedList;
 };
 
 

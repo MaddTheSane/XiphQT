@@ -36,31 +36,31 @@ Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData, UInt32 inDataBy
 {
     if (inDataByteSize - inDataStartOffset < 27)
         return false;
-    
+
     const Byte* data = static_cast<const Byte*> (inRawData) + inDataStartOffset;
-    
+
     if (memcmp(data, "OggS", 4) != 0)
         return false;
-    
+
     UInt32 headerBytes = data[26] + 27;
-    
+
     if (inDataByteSize - inDataStartOffset < headerBytes)
         return false;
-    
+
     UInt32 bodyBytes = 0;
     UInt32 i;
-    
+
     /* just checking... */
     for (i = 0; i < data[26]; i++) {
         bodyBytes += data[27 + i];
     }
     if (bodyBytes > inDataByteSize - inDataStartOffset)
         return false;
-    
+
     outOggPage->header = const_cast<unsigned char*> (data);
     outOggPage->header_len = headerBytes;
     outOggPage->body = const_cast<unsigned char*> (data + headerBytes);
     outOggPage->body_len = bodyBytes;
-    
+
     return true;
 }

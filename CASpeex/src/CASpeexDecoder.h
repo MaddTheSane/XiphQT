@@ -51,74 +51,74 @@
 class CASpeexDecoder:
 public XCACodec
 {
-public:
+ public:
     CASpeexDecoder(Boolean inSkipFormatsInitialization = false);
     virtual ~CASpeexDecoder();
 
-    virtual void		Initialize(const AudioStreamBasicDescription* inInputFormat, \
-                                   const AudioStreamBasicDescription* inOutputFormat, \
+    virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
+                                   const AudioStreamBasicDescription* inOutputFormat,
                                    const void* inMagicCookie, UInt32 inMagicCookieByteSize);
-    virtual void		Uninitialize();
-    virtual void		Reset();
+    virtual void        Uninitialize();
+    virtual void        Reset();
 
-    virtual void		GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
-    virtual void		GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
-    
-    virtual void		SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
-    virtual void		SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);
-    virtual UInt32		GetVersion() const;
+    virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
+    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
 
-	virtual UInt32		GetMagicCookieByteSize() const;
-	virtual void		GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const;
-	virtual void		SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
+    virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
+    virtual void        SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);
+    virtual UInt32      GetVersion() const;
 
-protected:
-    virtual void		BDCInitialize(UInt32 inInputBufferByteSize);
-    virtual void		BDCUninitialize();
-    virtual void		BDCReset();
-    virtual void		BDCReallocate(UInt32 inInputBufferByteSize);
-    
-    virtual void		InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
-    
-    virtual UInt32		FramesReady() const;
-    virtual Boolean		GenerateFrames();
-    virtual void		OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const;
-    virtual void		Zap(UInt32 inFrames);
-    
-    void				SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
-    virtual void		InitializeCompressionSettings();
+    virtual UInt32      GetMagicCookieByteSize() const;
+    virtual void        GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const;
+    virtual void        SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
+
+ protected:
+    virtual void        BDCInitialize(UInt32 inInputBufferByteSize);
+    virtual void        BDCUninitialize();
+    virtual void        BDCReset();
+    virtual void        BDCReallocate(UInt32 inInputBufferByteSize);
+
+    virtual void        InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
+
+    virtual UInt32      FramesReady() const;
+    virtual Boolean     GenerateFrames();
+    virtual void        OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const;
+    virtual void        Zap(UInt32 inFrames);
+
+    void                SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
+    virtual void        InitializeCompressionSettings();
 
     //virtual void        FixFormats();
 
-protected:
-    Byte*				mCookie;
-    UInt32				mCookieSize;
+ protected:
+    Byte* mCookie;
+    UInt32 mCookieSize;
 
-    Boolean				mCompressionInitialized;
+    Boolean mCompressionInitialized;
 
-    Byte*				mOutBuffer;
-    UInt32				mOutBufferSize;
-    UInt32				mOutBufferUsedSize;
-    UInt32				mOutBufferStart;
+    Byte*  mOutBuffer;
+    UInt32 mOutBufferSize;
+    UInt32 mOutBufferUsedSize;
+    UInt32 mOutBufferStart;
 
     struct SpeexFramePacket {
         SInt32 frames;
-		UInt32 bytes;
-		UInt32 left;
-        
+        UInt32 bytes;
+        UInt32 left;
+
         SpeexFramePacket() : frames(0), bytes(0), left(0) {};
         SpeexFramePacket(SInt32 inFrames, UInt32 inBytes) : frames(inFrames), bytes(inBytes), left(inBytes) {};
     };
-    
+
     typedef std::vector<SpeexFramePacket>   SpeexFramePacketList;
-    SpeexFramePacketList    mSpeexFPList;
+    SpeexFramePacketList mSpeexFPList;
 
-    UInt32				mNumFrames;
+    UInt32 mNumFrames;
 
-    SpeexHeader			mSpeexHeader;
-    SpeexBits			mSpeexBits;
-    void				*mSpeexDecoderState;
-    SpeexStereoState	mSpeexStereoState;
+    SpeexHeader mSpeexHeader;
+    SpeexBits mSpeexBits;
+    void *mSpeexDecoderState;
+    SpeexStereoState mSpeexStereoState;
 
 
     enum {

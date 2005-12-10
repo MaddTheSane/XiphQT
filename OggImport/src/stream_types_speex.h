@@ -36,22 +36,20 @@
 #include <Speex/speex_header.h>
 
 typedef enum SpeexImportStates {
-	kSStateInitial,
-	kSStateReadingComments,
-	kSStateReadingAdditionalHeaders,
-	kSStateReadingFirstPacket,
+    kSStateInitial,
+    kSStateReadingComments,
+    kSStateReadingAdditionalHeaders,
+    kSStateReadingFirstPacket,
     kSStateReadingPackets
 } SpeexImportStates;
 
 typedef struct {
-	SpeexImportStates	state;
-    
-    UInt32				skipped_headers;
-	SpeexHeader			header;
-	vorbis_comment		vc;
+    SpeexImportStates state;
+
+    UInt32 skipped_headers;
+    SpeexHeader header;
+    vorbis_comment vc;
 } StreamInfo__speex;
-
-
 
 
 #define _HAVE__SPEEX_SUPPORT 1

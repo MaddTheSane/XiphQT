@@ -69,11 +69,11 @@
 
 
 typedef enum ImportStates {
-	kStateInitial,
-	kStateGettingSize,
-	kStateReadingPages,
-	kStateReadingLastPages,
-	kStateImportComplete
+    kStateInitial,
+    kStateGettingSize,
+    kStateReadingPages,
+    kStateReadingLastPages,
+    kStateImportComplete
 } ImportStates;
 
 
@@ -88,28 +88,28 @@ struct stream_format_handle_funcs; //forward declaration
 typedef struct {
     long                serialno;
     TimeValue           timeLoaded;
-	
-	ogg_stream_state	os;
-	
+
+    ogg_stream_state	os;
+
     int                 numChannels;
     int                 rate;
     Handle              soundDescExtension;
-	
+
     Track               theTrack;
     Media               theMedia;
     SampleDescriptionHandle sampleDesc;
-    
+
     ogg_int64_t         lastGranulePos;
     SInt64              prevPageOffset;
-    
+
     ogg_int64_t         lastSeenGranulePos;
     SInt64              lastSeenEndOffset;
-    
+
     TimeValue           startTime;
-    
-	CFDictionaryRef		MDmapping;
-	CFDictionaryRef		UDmapping;
-    
+
+    CFDictionaryRef		MDmapping;
+    CFDictionaryRef		UDmapping;
+
     struct stream_format_handle_funcs *sfhf;
 
     union {
@@ -126,7 +126,7 @@ typedef struct {
 
 typedef struct {
     ComponentInstance	    self;
-    
+
     Movie               theMovie;
     Handle              dataRef;
     long                dataRefType;
@@ -134,60 +134,60 @@ typedef struct {
     Boolean             usingIdle;
     int                 chunkSize;
     TimeValue           startTime;
-    
+
     ImportStates            state;
     ComponentResult         errEncountered;
-    
+
     SInt64                  dataStartOffset;
     SInt64                  dataEndOffset;
-    
+
     IdleManager             idleManager;
     IdleManager             dataIdleManager;
-    
+
     long                    newMovieFlags;
-    
+
     ComponentInstance	    dataReader;
-    
+
     DataHCompletionUPP	    dataReadCompletion;
     DataHCompletionUPP	    fileSizeCompletion;
-    
+
     wide                    wideTempforFileSize;
-    
+
     int	                    dataReadChunkSize;
-    
+
     Boolean                 dataCanDoAsyncRead;
     Boolean                 dataCanDoGetFileSizeAsync;
     Boolean                 dataCanDoGetFileSize64;
-    
+
     Boolean                 blocking;
     AliasHandle             aliasHandle;
-    
+
     ComponentResult         readError;
-    
+
     /* information about the data buffer */
     Ptr                     dataBuffer;
     int                     maxDataBufferSize;
     SInt64                  dataOffset;
     unsigned char           *validDataEnd;
     unsigned char           *currentData;
-    
-	ring_buffer				dataRB;
-    
+
+    ring_buffer				dataRB;
+
     int                     numTracksStarted;
     int                     numTracksSeen;		// completed tracks
     Track                   firstTrack;
-    
+
     TimeValue               timeLoaded;
-    
-	unsigned long           startTickCount;
-    
+
+    unsigned long           startTickCount;
+
     //    Track                   ghostTrack;
-    
+
     int                     streamCount;
     StreamInfo              **streamInfoHandle;
-    
-	Boolean					dataRequested;
-	Boolean					sizeInitialised;
+
+    Boolean					dataRequested;
+    Boolean					sizeInitialised;
 
 } OggImportGlobals, *OggImportGlobalsPtr;
 
@@ -208,7 +208,7 @@ typedef struct stream_format_handle_funcs {
 
     recognize_header			recognize;
     verify_header				verify;
-    
+
     process_first_packet		first_packet;
     create_sample_description	sample_description;
 

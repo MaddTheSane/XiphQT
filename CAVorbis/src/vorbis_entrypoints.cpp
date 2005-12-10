@@ -35,13 +35,12 @@
 
 extern "C"
 ComponentResult	CAVorbisDecoderEntry(ComponentParameters* inParameters, CAVorbisDecoder* inThis)
-{	
-	return	ACCodecDispatch(inParameters, inThis);
+{
+    return ACCodecDispatch(inParameters, inThis);
 }
 
 extern "C"
 ComponentResult	CAOggVorbisDecoderEntry(ComponentParameters* inParameters, CAOggVorbisDecoder* inThis)
-{	
-	return	ACCodecDispatch(inParameters, inThis);
+{
+    return ACCodecDispatch(inParameters, inThis);
 }
-

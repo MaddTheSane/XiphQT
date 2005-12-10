@@ -41,15 +41,15 @@
 
 
 CAOggSpeexDecoder::CAOggSpeexDecoder() :
-CASpeexDecoder(true),
-mO_st(), mFramesBufferedList()
+    CASpeexDecoder(true),
+    mO_st(), mFramesBufferedList()
 {
     CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphOggFramedSpeex,
                                             kSpeexBytesPerPacket, kSpeexFramesPerPacket,
                                             kSpeexBytesPerFrame, kSpeexChannelsPerFrame,
                                             kSpeexBitsPerChannel, kSpeexFormatFlags);
     AddInputFormat(theInputFormat);
-    
+
     mInputFormat.mSampleRate = 44100;
     mInputFormat.mFormatID = kAudioFormatXiphOggFramedSpeex;
     mInputFormat.mFormatFlags = kSpeexFormatFlags;
@@ -58,7 +58,7 @@ mO_st(), mFramesBufferedList()
     mInputFormat.mBytesPerFrame = kSpeexBytesPerFrame;
     mInputFormat.mChannelsPerFrame = 2;
     mInputFormat.mBitsPerChannel = 16;
-    
+
     CAStreamBasicDescription theOutputFormat1(kAudioStreamAnyRate, kAudioFormatLinearPCM, 0, 1, 0, 0, 16,
                                               kAudioFormatFlagsNativeEndian |
                                               kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked);
@@ -66,15 +66,15 @@ mO_st(), mFramesBufferedList()
     CAStreamBasicDescription theOutputFormat2(kAudioStreamAnyRate, kAudioFormatLinearPCM, 0, 1, 0, 0, 32,
                                               kAudioFormatFlagsNativeFloatPacked);
     AddOutputFormat(theOutputFormat2);
-    
+
     mOutputFormat.mSampleRate = 44100;
-	mOutputFormat.mFormatID = kAudioFormatLinearPCM;
-	mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	mOutputFormat.mBytesPerPacket = 8;
-	mOutputFormat.mFramesPerPacket = 1;
-	mOutputFormat.mBytesPerFrame = 8;
-	mOutputFormat.mChannelsPerFrame = 2;
-	mOutputFormat.mBitsPerChannel = 32;
+    mOutputFormat.mFormatID = kAudioFormatLinearPCM;
+    mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+    mOutputFormat.mBytesPerPacket = 8;
+    mOutputFormat.mFramesPerPacket = 1;
+    mOutputFormat.mBytesPerFrame = 8;
+    mOutputFormat.mChannelsPerFrame = 2;
+    mOutputFormat.mBitsPerChannel = 32;
 }
 
 CAOggSpeexDecoder::~CAOggSpeexDecoder()
@@ -85,18 +85,18 @@ CAOggSpeexDecoder::~CAOggSpeexDecoder()
 
 void CAOggSpeexDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
 {
-	if (!mIsInitialized) {
-		//	check to make sure the input format is legal
-		if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedSpeex) {
-			dbg_printf("CASpeexDecoder::SetFormats: only supports Xiph Speex (Ogg-framed)for input\n");
-			CODEC_THROW(kAudioCodecUnsupportedFormatError);
-		}
-		
-		//	tell our base class about the new format
-		XCACodec::SetCurrentInputFormat(inInputFormat);
-	} else {
-		CODEC_THROW(kAudioCodecStateError);
-	}
+    if (!mIsInitialized) {
+        //	check to make sure the input format is legal
+        if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedSpeex) {
+            dbg_printf("CASpeexDecoder::SetFormats: only supports Xiph Speex (Ogg-framed)for input\n");
+            CODEC_THROW(kAudioCodecUnsupportedFormatError);
+        }
+
+        //	tell our base class about the new format
+        XCACodec::SetCurrentInputFormat(inInputFormat);
+    } else {
+        CODEC_THROW(kAudioCodecStateError);
+    }
 }
 
 UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
@@ -125,7 +125,7 @@ UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOu
                 ogg_packets++;
                 mFramesBufferedList.erase(mFramesBufferedList.begin());
             }
-            
+
             speex_total_returned_data += speex_returned_data;
 
             if (speex_total_returned_data == ioOutputDataByteSize || speex_return == kAudioCodecProduceOutputPacketSuccess)
@@ -184,7 +184,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
 {
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnspecifiedError);
-    
+
     ogg_page op;
 
     if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize, inPacketDescription->mStartOffset))
@@ -218,7 +218,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
                 packet_length_adjust = 0;
             continue;
         }
-        
+
         packet_count++;
 
         speex_packet_desc.mDataByteSize = opk.bytes;
@@ -244,7 +244,7 @@ void CAOggSpeexDecoder::InitializeCompressionSettings()
             ogg_stream_clear(&mO_st);
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
-    
+
         if (EndianS32_BtoN(atom->type) == kCookieTypeOggSerialNo && (mCookieSize - EndianS32_BtoN(atom->size) >= 0)) {
             ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
         }

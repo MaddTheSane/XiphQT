@@ -66,7 +66,7 @@ void RingBuffer::Uninitialize() {
         delete[] mBuffer;
         mBuffer = NULL;
     }
-    
+
     Reset();
 
 }
@@ -94,14 +94,14 @@ UInt32 RingBuffer::GetDataAvailable() const {
 
 UInt32 RingBuffer::GetSpaceAvailable() const {
     UInt32 ret = mBSize;
-    
+
     if (mBStart > mBEnd)
         ret =  mBStart - mBEnd;
     else if (mBEnd > mBStart)
         ret = mBSize - mBEnd + mBStart;
-    
+
     return ret;
-    
+
 }
 
 
@@ -122,7 +122,7 @@ void RingBuffer::In(const void* data, UInt32& ioBytes) {
 
         BlockMoveData(data, mBuffer + mBEnd, wrappedBytes);
         BlockMoveData(dataSplit, mBuffer, mBEnd);
-        
+
         mNeedsWrapping = true;
     }
 

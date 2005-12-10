@@ -36,34 +36,34 @@
 
 class RingBuffer
 {
-public:
+ public:
     RingBuffer();
     virtual ~RingBuffer();
 
-public:
-    virtual void		Initialize(UInt32 inBufferByteSize);
-    virtual void		Uninitialize();
-    virtual void		Reset();
+ public:
+    virtual void   Initialize(UInt32 inBufferByteSize);
+    virtual void   Uninitialize();
+    virtual void   Reset();
 
-    virtual UInt32		GetBufferByteSize() const;
-    virtual UInt32		GetDataAvailable() const;
-    virtual UInt32		GetSpaceAvailable() const;
+    virtual UInt32 GetBufferByteSize() const;
+    virtual UInt32 GetDataAvailable() const;
+    virtual UInt32 GetSpaceAvailable() const;
 
-    virtual void		In(const void* data, UInt32& ioBytes);
-    virtual void		Zap(UInt32 inBytes);
+    virtual void   In(const void* data, UInt32& ioBytes);
+    virtual void   Zap(UInt32 inBytes);
 
-    virtual Byte *		GetData();
-    virtual Byte *		GetDataEnd();
-    
-protected:
-    Byte *		mBuffer;
+    virtual Byte * GetData();
+    virtual Byte * GetDataEnd();
 
-    UInt32		mBStart;
-    UInt32		mBEnd;
-    
-    UInt32		mBSize;
-    
-    Boolean		mNeedsWrapping;
+ protected:
+    Byte *  mBuffer;
+
+    UInt32  mBStart;
+    UInt32  mBEnd;
+
+    UInt32  mBSize;
+
+    Boolean mNeedsWrapping;
 };
 
 

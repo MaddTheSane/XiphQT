@@ -55,14 +55,14 @@
 // Ogg Importer
 
 #define kImporterFlags canMovieImportFiles | canMovieImportValidateFile | \
-		canMovieImportPartial | canMovieImportInPlace | hasMovieImportMIMEList | \
-		canMovieImportDataReferences | canMovieImportWithIdle | \
-		canMovieImportAvoidBlocking | canMovieImportValidateDataReferences | \
-                cmpThreadSafe
+    canMovieImportPartial | canMovieImportInPlace | hasMovieImportMIMEList | \
+    canMovieImportDataReferences | canMovieImportWithIdle |             \
+    canMovieImportAvoidBlocking | canMovieImportValidateDataReferences | \
+    cmpThreadSafe
 
 
 resource 'thng' (kImporterResID, OggImporterName, purgeable) {
-    kImporterComponentType, kCodecFormat, 'soun', 
+    kImporterComponentType, kCodecFormat, 'soun',
     0, 0, 0, 0,
     'STR ', kImporterNameStringResID,
     'STR ', kImporterInfoStringResID,
@@ -71,13 +71,13 @@ resource 'thng' (kImporterResID, OggImporterName, purgeable) {
     componentDoAutoVersion|componentHasMultiplePlatforms, 0,
     {
 #if TARGET_OS_MAC	       // COMPONENT PLATFORM INFORMATION ----------------------
-        kImporterFlags, 
+        kImporterFlags,
         'dlle',                                 // Code Resource type - Entry point found by symbol name 'dlle' resource
         kImporterResID,                         // ID of 'dlle' resource
         platformPowerPCNativeEntryPoint,
 #endif
 #if TARGET_OS_WIN32
-    kImporterFlags, 
+    kImporterFlags,
     'dlle',
     kImporterResID,
     platformWin32,
@@ -98,8 +98,8 @@ resource 'thga' (kImporterResID, OggImporterName, purgeable) {
     'STR ',                             // Name Type
     kImporterNameStringResID,           // Name ID
     'STR ',                             // Info Type
-    kImporterInfoStringResID,           // Info ID 
-    0,                                  // Icon Type 
+    kImporterInfoStringResID,           // Info ID
+    0,                                  // Icon Type
     0,                                  // Icon ID
                 // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
@@ -122,8 +122,8 @@ resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
     'STR ',                             // Name Type
     kImporterNameStringResID,           // Name ID
     'STR ',                             // Info Type
-    kImporterInfoStringResID,           // Info ID 
-    0,                                  // Icon Type 
+    kImporterInfoStringResID,           // Info ID
+    0,                                  // Icon Type
     0,                                  // Icon ID
                 // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
@@ -147,8 +147,8 @@ resource 'thga' (kImporterResID + 2, OggImporterName, purgeable) {
     'STR ',                             // Name Type
     kImporterNameStringResID,           // Name ID
     'STR ',                             // Info Type
-    kImporterInfoStringResID,           // Info ID 
-    0,                                  // Icon Type 
+    kImporterInfoStringResID,           // Info ID
+    0,                                  // Icon Type
     0,                                  // Icon ID
                                         // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
@@ -183,7 +183,7 @@ resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
 };
 
 
-/* 
+/*
     This is an example of how to build an atom container resource to hold mime types.
     This component's GetMIMETypeList implementation simply loads this resource and returns it.
     Please note that atoms of the same type MUST be grouped together within an atom container.
@@ -212,23 +212,23 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         kQTMediaConfigBinaryFile | kQTMediaConfigCanUseApp,
         'OggS',
         'TVOD',	/* we don't have a creator code for our files, hijack QT player */
-	kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
+        kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
         0, 0,
         'OGG ',
         kQTMediaInfoNetGroup,
-        
+
         /* no synonyms */
         {
         },
-        
+
         {
-        "Ogg Vorbis sound file",
-        "ogg",
-        "QuickTime Player",
-        "Ogg Vorbis file importer",
-        "",
+            "Ogg Vorbis sound file",
+            "ogg",
+            "QuickTime Player",
+            "Ogg Vorbis file importer",
+            "",
         },
-        
+
         /* mime types array */
         {
             "application/x-ogg";
@@ -244,11 +244,11 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         0, 0,
         'SPX ',
         kQTMediaInfoNetGroup,
-        
+
         /* no synonyms */
         {
         },
-        
+
         {
             "Ogg Speex sound file",
             "spx",
@@ -256,7 +256,7 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
             "Ogg Speex file importer",
             "",
         },
-        
+
         /* mime types array */
         {
             "audio/x-speex";

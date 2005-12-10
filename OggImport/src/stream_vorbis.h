@@ -47,8 +47,8 @@ extern int process_first_packet__vorbis(StreamInfo *si, ogg_page *op, ogg_packet
 extern ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
 
 #define HANDLE_FUNCTIONS__VORBIS { &process_stream_page__vorbis, &recognize_header__vorbis, \
-    &verify_header__vorbis, &process_first_packet__vorbis, &create_sample_description__vorbis, \
-    &initialize_stream__vorbis, &clear_stream__vorbis }
+            &verify_header__vorbis, &process_first_packet__vorbis, &create_sample_description__vorbis, \
+            &initialize_stream__vorbis, &clear_stream__vorbis }
 
 
 #endif /* __stream_vorbis_h__ */

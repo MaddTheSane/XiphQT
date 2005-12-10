@@ -35,13 +35,13 @@
 #include "config.h"
 
 typedef struct {
-	unsigned char	*buffer;
-	unsigned char	*b_start;
-	unsigned char	*b_end;
-	unsigned char   *b_reserved;
-	
-	long			b_size;
-	long			b_real_size;
+    unsigned char   *buffer;
+    unsigned char   *b_start;
+    unsigned char   *b_end;
+    unsigned char   *b_reserved;
+
+    long             b_size;
+    long             b_real_size;
 } ring_buffer;
 
 
@@ -63,7 +63,7 @@ extern void* rb_data(ring_buffer *rb);
 
 extern void* rb_reserve(ring_buffer *rb, long size);
 
-extern void rb_sync_reserved(ring_buffer *rb);
+extern void  rb_sync_reserved(ring_buffer *rb);
 
 
 #endif /* __rb_h__ */

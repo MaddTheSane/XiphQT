@@ -35,12 +35,12 @@
 
 extern "C"
 ComponentResult	CASpeexDecoderEntry(ComponentParameters* inParameters, CASpeexDecoder* inThis)
-{	
-	return	ACCodecDispatch(inParameters, inThis);
+{
+    return ACCodecDispatch(inParameters, inThis);
 }
 
 extern "C"
 ComponentResult	CAOggSpeexDecoderEntry(ComponentParameters* inParameters, CAOggSpeexDecoder* inThis)
-{	
-	return	ACCodecDispatch(inParameters, inThis);
+{
+    return ACCodecDispatch(inParameters, inThis);
 }

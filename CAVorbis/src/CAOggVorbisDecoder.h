@@ -42,26 +42,26 @@
 class CAOggVorbisDecoder :
 public CAVorbisDecoder
 {
-public:
+ public:
     CAOggVorbisDecoder();
     virtual ~CAOggVorbisDecoder();
 
-    virtual UInt32			ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
+    virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                  AudioStreamPacketDescription* outPacketDescription);
-    virtual void			SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
+    virtual void            SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
 
-protected:
-    virtual void			BDCInitialize(UInt32 inInputBufferByteSize);
-    virtual void			BDCUninitialize();
-    virtual void			BDCReset();
-    virtual void			BDCReallocate(UInt32 inInputBufferByteSize);
+ protected:
+    virtual void            BDCInitialize(UInt32 inInputBufferByteSize);
+    virtual void            BDCUninitialize();
+    virtual void            BDCReset();
+    virtual void            BDCReallocate(UInt32 inInputBufferByteSize);
 
-    virtual void			InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
-    
-    void					InitializeCompressionSettings();
+    virtual void            InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
 
-    ogg_stream_state		mO_st;
-    std::vector<SInt32>		mFramesBufferedList;
+    void                    InitializeCompressionSettings();
+
+    ogg_stream_state        mO_st;
+    std::vector<SInt32>     mFramesBufferedList;
 };
 
 

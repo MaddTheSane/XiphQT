@@ -40,29 +40,29 @@ enum {
 // format specific cookie types
 
 enum {
-    kCookieTypeVorbisHeader		= 'vCtH',
-    kCookieTypeVorbisComments	= 'vCt#',
-    kCookieTypeVorbisCodebooks	= 'vCtC'
+    kCookieTypeVorbisHeader = 'vCtH',
+    kCookieTypeVorbisComments = 'vCt#',
+    kCookieTypeVorbisCodebooks = 'vCtC'
 };
 
 enum {
-    kCookieTypeSpeexHeader		= 'sCtH',
-    kCookieTypeSpeexComments	= 'sCt#',
+    kCookieTypeSpeexHeader = 'sCtH',
+    kCookieTypeSpeexComments = 'sCt#',
     kCookieTypeSpeexExtraHeader	= 'sCtX'
 };
 
 
 struct OggSerialNoAtom {
-    long	size;			// = sizeof(OggSerialNoAtom)
-    long	type;			// = kOggCookieSerialNoType
-    long	serialno;
+    long size;			// = sizeof(OggSerialNoAtom)
+    long type;			// = kOggCookieSerialNoType
+    long serialno;
 };
 typedef struct OggSerialNoAtom OggSerialNoAtom;
 
 struct CookieAtomHeader {
-    long			size;
-    long			type;
-    unsigned char	data[1];
+    long           size;
+    long           type;
+    unsigned char  data[1];
 };
 typedef struct CookieAtomHeader CookieAtomHeader;
 

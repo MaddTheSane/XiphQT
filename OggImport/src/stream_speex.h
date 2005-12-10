@@ -47,8 +47,8 @@ extern int process_first_packet__speex(StreamInfo *si, ogg_page *op, ogg_packet 
 extern ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
 
 #define HANDLE_FUNCTIONS__SPEEX { &process_stream_page__speex, &recognize_header__speex, \
-    &verify_header__speex, &process_first_packet__speex, &create_sample_description__speex, \
-    &initialize_stream__speex, &clear_stream__speex }
+            &verify_header__speex, &process_first_packet__speex, &create_sample_description__speex, \
+            &initialize_stream__speex, &clear_stream__speex }
 
 
 #endif /* __stream_vorbis_h__ */

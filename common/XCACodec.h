@@ -48,48 +48,48 @@ typedef enum BDCStatus {
 
 class XCACodec : public ACBaseCodec
 {
-public:
+ public:
     XCACodec();
     virtual ~XCACodec();
-    
-    // AudioCodec interface
-    virtual void	ReallocateInputBuffer(UInt32 inInputBufferByteSize) { BDCReallocate(inInputBufferByteSize); };
-    virtual UInt32	GetInputBufferByteSize() const { return BufferGetBytesSize(); };
-    virtual UInt32	GetUsedInputBufferByteSize() const { return BufferGetUsedBytesSize(); };
 
-    virtual void	AppendInputData(const void* inInputData, UInt32& ioInputDataByteSize, UInt32& ioNumberPackets,
-                                    const AudioStreamPacketDescription* inPacketDescription);
-	virtual UInt32	ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
-                                         AudioStreamPacketDescription* outPacketDescription);
+    // AudioCodec interface
+    virtual void ReallocateInputBuffer(UInt32 inInputBufferByteSize) { BDCReallocate(inInputBufferByteSize); };
+    virtual UInt32 GetInputBufferByteSize() const { return BufferGetBytesSize(); };
+    virtual UInt32 GetUsedInputBufferByteSize() const { return BufferGetUsedBytesSize(); };
+
+    virtual void AppendInputData(const void* inInputData, UInt32& ioInputDataByteSize, UInt32& ioNumberPackets,
+                                 const AudioStreamPacketDescription* inPacketDescription);
+    virtual UInt32 ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
+                                        AudioStreamPacketDescription* outPacketDescription);
 
 
 #pragma mark Buffer/Decode/Convert interface
 
-protected:
-    RingBuffer			mBDCBuffer;
-    BDCStatus			mBDCStatus;
+ protected:
+    RingBuffer mBDCBuffer;
+    BDCStatus mBDCStatus;
 
 
-    virtual void		BDCInitialize(UInt32 inInputBufferByteSize);
-    virtual void		BDCUninitialize();
-    virtual void		BDCReset();
-    virtual void		BDCReallocate(UInt32 inInputBufferByteSize);
+    virtual void BDCInitialize(UInt32 inInputBufferByteSize);
+    virtual void BDCUninitialize();
+    virtual void BDCReset();
+    virtual void BDCReallocate(UInt32 inInputBufferByteSize);
 
-    virtual BDCStatus	BDCGetStatus() const { return mBDCStatus; };
+    virtual BDCStatus BDCGetStatus() const { return mBDCStatus; };
 
-    virtual UInt32		BufferGetBytesSize() const;
-    virtual UInt32		BufferGetUsedBytesSize() const;
-    virtual UInt32		BufferGetAvailableBytesSize() const;
-    virtual Boolean		BufferIsEmpty() const;
+    virtual UInt32 BufferGetBytesSize() const;
+    virtual UInt32 BufferGetUsedBytesSize() const;
+    virtual UInt32 BufferGetAvailableBytesSize() const;
+    virtual Boolean BufferIsEmpty() const;
 
-    virtual void		InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription) = 0;
+    virtual void InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription) = 0;
 
-    virtual UInt32		FramesReady() const = 0;
-    virtual Boolean		GenerateFrames() = 0;
-    virtual void		OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const = 0;
-    virtual void		Zap(UInt32 inFrames) = 0;
+    virtual UInt32 FramesReady() const = 0;
+    virtual Boolean GenerateFrames() = 0;
+    virtual void OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const = 0;
+    virtual void Zap(UInt32 inFrames) = 0;
 
-    virtual UInt32		InPacketsConsumed() const;
+    virtual UInt32 InPacketsConsumed() const;
 };
 
 

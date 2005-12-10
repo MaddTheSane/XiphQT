@@ -33,210 +33,210 @@
 #include <string.h>
 
 CFStringRef pxml_parse_key(unsigned char **str, long *str_size) {
-  CFStringRef ret = NULL;
+    CFStringRef ret = NULL;
 
-  char *l_str_pos = *str;
-  char *tmp_pos = NULL;
-  char *end_pos = NULL;
-  long l_str_size = *str_size;
+    char *l_str_pos = *str;
+    char *tmp_pos = NULL;
+    char *end_pos = NULL;
+    long l_str_size = *str_size;
 
-  if (strncmp(l_str_pos, "<key", 4) != 0)
-    return NULL;
-  else {
-    l_str_pos += 4;
-    l_str_size -= 4;
-  }
+    if (strncmp(l_str_pos, "<key", 4) != 0)
+        return NULL;
+    else {
+        l_str_pos += 4;
+        l_str_size -= 4;
+    }
 
-  tmp_pos = memchr(l_str_pos, '>', l_str_size);
-  if (tmp_pos == NULL)
-    return NULL;
+    tmp_pos = memchr(l_str_pos, '>', l_str_size);
+    if (tmp_pos == NULL)
+        return NULL;
 
-  tmp_pos += 1;
-  l_str_size -= tmp_pos - l_str_pos;
-  l_str_pos = tmp_pos;
-  if (l_str_size < 0)
-    return NULL;
+    tmp_pos += 1;
+    l_str_size -= tmp_pos - l_str_pos;
+    l_str_pos = tmp_pos;
+    if (l_str_size < 0)
+        return NULL;
 
-  end_pos = memchr(l_str_pos, '<', l_str_size);
-  if (end_pos == NULL)
-    return NULL;
+    end_pos = memchr(l_str_pos, '<', l_str_size);
+    if (end_pos == NULL)
+        return NULL;
 
-  l_str_size -= end_pos - l_str_pos;
-  l_str_pos = end_pos;
+    l_str_size -= end_pos - l_str_pos;
+    l_str_pos = end_pos;
 
-  if (l_str_size < 6 || strncmp(l_str_pos, "</key>", 6) != 0)
-    return NULL;
+    if (l_str_size < 6 || strncmp(l_str_pos, "</key>", 6) != 0)
+        return NULL;
 
-  *str = end_pos + 6;
-  *str_size = l_str_size - 6;
+    *str = end_pos + 6;
+    *str_size = l_str_size - 6;
 
-  ret = CFStringCreateWithBytes(NULL, tmp_pos, end_pos - tmp_pos, kCFStringEncodingUTF8, true);
+    ret = CFStringCreateWithBytes(NULL, tmp_pos, end_pos - tmp_pos, kCFStringEncodingUTF8, true);
 
-  return ret;
+    return ret;
 }
 
 CFStringRef pxml_parse_string(unsigned char **str, long *str_size) {
-  CFStringRef ret = NULL;
+    CFStringRef ret = NULL;
 
-  char *l_str_pos = *str;
-  char *tmp_pos = NULL;
-  char *end_pos = NULL;
-  long l_str_size = *str_size;
+    char *l_str_pos = *str;
+    char *tmp_pos = NULL;
+    char *end_pos = NULL;
+    long l_str_size = *str_size;
 
-  if (strncmp(l_str_pos, "<string", 7) != 0)
-    return NULL;
-  else {
-    l_str_pos += 7;
-    l_str_size -= 7;
-  }
+    if (strncmp(l_str_pos, "<string", 7) != 0)
+        return NULL;
+    else {
+        l_str_pos += 7;
+        l_str_size -= 7;
+    }
 
-  tmp_pos = memchr(l_str_pos, '>', l_str_size);
-  if (tmp_pos == NULL)
-    return NULL;
+    tmp_pos = memchr(l_str_pos, '>', l_str_size);
+    if (tmp_pos == NULL)
+        return NULL;
 
-  tmp_pos += 1;
-  l_str_size -= tmp_pos - l_str_pos;
-  l_str_pos = tmp_pos;
-  if (l_str_size < 0)
-    return NULL;
+    tmp_pos += 1;
+    l_str_size -= tmp_pos - l_str_pos;
+    l_str_pos = tmp_pos;
+    if (l_str_size < 0)
+        return NULL;
 
-  end_pos = memchr(l_str_pos, '<', l_str_size);
-  if (end_pos == NULL)
-    return NULL;
+    end_pos = memchr(l_str_pos, '<', l_str_size);
+    if (end_pos == NULL)
+        return NULL;
 
-  l_str_size -= end_pos - l_str_pos;
-  l_str_pos = end_pos;
+    l_str_size -= end_pos - l_str_pos;
+    l_str_pos = end_pos;
 
-  if (l_str_size < 9 || strncmp(l_str_pos, "</string>", 9) != 0)
-    return NULL;
+    if (l_str_size < 9 || strncmp(l_str_pos, "</string>", 9) != 0)
+        return NULL;
 
-  *str = end_pos + 9;
-  *str_size = l_str_size - 9;
+    *str = end_pos + 9;
+    *str_size = l_str_size - 9;
 
-  ret = CFStringCreateWithBytes(NULL, tmp_pos, end_pos - tmp_pos, kCFStringEncodingUTF8, true);
+    ret = CFStringCreateWithBytes(NULL, tmp_pos, end_pos - tmp_pos, kCFStringEncodingUTF8, true);
 
-  return ret;
+    return ret;
 }
 
 CFDictionaryRef pxml_parse_dict(unsigned char **str, long *str_size) {
-  CFDictionaryRef ret = NULL;
-  CFMutableDictionaryRef tmp_ret = NULL;
-  char *l_str_pos = *str;
-  char *tmp_pos = NULL;
-  long l_str_size = *str_size;
+    CFDictionaryRef ret = NULL;
+    CFMutableDictionaryRef tmp_ret = NULL;
+    char *l_str_pos = *str;
+    char *tmp_pos = NULL;
+    long l_str_size = *str_size;
 
-  if (strncmp(l_str_pos, "<dict", 5) != 0)
-    return NULL;
-  else {
-    l_str_pos += 5;
-    l_str_size -= 5;
-  }
-
-  tmp_ret = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-
-  while ((tmp_pos = memchr(l_str_pos, '<', l_str_size)) != NULL) {
-    CFStringRef d_key = NULL;
-    void *d_value = NULL;
-
-    l_str_size -= tmp_pos - l_str_pos;
-    l_str_pos = tmp_pos;
-
-    if (l_str_size > 7 && strncmp(l_str_pos, "</dict>", 7) == 0) {
-      l_str_size -= 7;
-      l_str_pos += 7;
-      break;
-    } else if (l_str_size < 4 || strncmp(l_str_pos, "<key", 4) != 0)
-      break;
-
-    d_key = pxml_parse_key(&l_str_pos, &l_str_size);
-    if (d_key == NULL)
-      break;
-
-    tmp_pos = memchr(l_str_pos, '<', l_str_size);
-    if (tmp_pos == NULL) {
-      CFRelease(d_key);
-      break;
+    if (strncmp(l_str_pos, "<dict", 5) != 0)
+        return NULL;
+    else {
+        l_str_pos += 5;
+        l_str_size -= 5;
     }
 
-    l_str_size -= tmp_pos - l_str_pos;
-    l_str_pos = tmp_pos;
+    tmp_ret = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    if (l_str_size > 7 && strncmp(l_str_pos, "</dict>", 7) == 0) {
-      l_str_size -= 7;
-      l_str_pos += 7;
-      break;
-    } else if (l_str_size > 7 && strncmp(l_str_pos, "<string", 7) == 0) {
-      d_value = pxml_parse_string(&l_str_pos, &l_str_size);
-    } else if (l_str_size > 5 && strncmp(l_str_pos, "<dict", 5) == 0) {
-      d_value = pxml_parse_dict(&l_str_pos, &l_str_size);
-    } else {
-      // other value types not supported
-      CFRelease(d_key);
-      break;
+    while ((tmp_pos = memchr(l_str_pos, '<', l_str_size)) != NULL) {
+        CFStringRef d_key = NULL;
+        void *d_value = NULL;
+
+        l_str_size -= tmp_pos - l_str_pos;
+        l_str_pos = tmp_pos;
+
+        if (l_str_size > 7 && strncmp(l_str_pos, "</dict>", 7) == 0) {
+            l_str_size -= 7;
+            l_str_pos += 7;
+            break;
+        } else if (l_str_size < 4 || strncmp(l_str_pos, "<key", 4) != 0)
+            break;
+
+        d_key = pxml_parse_key(&l_str_pos, &l_str_size);
+        if (d_key == NULL)
+            break;
+
+        tmp_pos = memchr(l_str_pos, '<', l_str_size);
+        if (tmp_pos == NULL) {
+            CFRelease(d_key);
+            break;
+        }
+
+        l_str_size -= tmp_pos - l_str_pos;
+        l_str_pos = tmp_pos;
+
+        if (l_str_size > 7 && strncmp(l_str_pos, "</dict>", 7) == 0) {
+            l_str_size -= 7;
+            l_str_pos += 7;
+            break;
+        } else if (l_str_size > 7 && strncmp(l_str_pos, "<string", 7) == 0) {
+            d_value = pxml_parse_string(&l_str_pos, &l_str_size);
+        } else if (l_str_size > 5 && strncmp(l_str_pos, "<dict", 5) == 0) {
+            d_value = pxml_parse_dict(&l_str_pos, &l_str_size);
+        } else {
+            // other value types not supported
+            CFRelease(d_key);
+            break;
+        }
+
+        if (d_value == NULL) {
+            CFRelease(d_key);
+            break;
+        }
+        CFDictionaryAddValue(tmp_ret, d_key, d_value);
     }
 
-    if (d_value == NULL) {
-      CFRelease(d_key);
-      break;
+
+    if (CFDictionaryGetCount(tmp_ret) > 0) {
+        ret = CFDictionaryCreateCopy(NULL, tmp_ret);
+        CFDictionaryRemoveAllValues(tmp_ret);
     }
-    CFDictionaryAddValue(tmp_ret, d_key, d_value);
-  }
 
+    if (ret != NULL) {
+        *str = l_str_pos;
+        *str_size = l_str_size;
+    }
 
-  if (CFDictionaryGetCount(tmp_ret) > 0) {
-    ret = CFDictionaryCreateCopy(NULL, tmp_ret);
-    CFDictionaryRemoveAllValues(tmp_ret);
-  }
-
-  if (ret != NULL) {
-    *str = l_str_pos;
-    *str_size = l_str_size;
-  }
-
-  return ret;
+    return ret;
 }
 
 
 CFDictionaryRef pxml_parse_plist(unsigned char *plist_str, long plist_size) {
-  CFDictionaryRef ret = NULL;
-  char *l_str_pos = plist_str;
-  char *tmp_pos = NULL;
-  long l_str_size = plist_size;
+    CFDictionaryRef ret = NULL;
+    char *l_str_pos = plist_str;
+    char *tmp_pos = NULL;
+    long l_str_size = plist_size;
 
-  while (l_str_size > 6 && strncmp(l_str_pos, "<plist", 6) != 0) {
-    tmp_pos = memchr(l_str_pos + 1, '<', l_str_size - 1);
+    while (l_str_size > 6 && strncmp(l_str_pos, "<plist", 6) != 0) {
+        tmp_pos = memchr(l_str_pos + 1, '<', l_str_size - 1);
 
-    if (tmp_pos == NULL) {
-      l_str_pos = NULL;
-      break;
-    }
+        if (tmp_pos == NULL) {
+            l_str_pos = NULL;
+            break;
+        }
 
-    l_str_size -= tmp_pos - l_str_pos;
-    l_str_pos = tmp_pos;
-  }
-
-  if (l_str_pos != NULL) {
-    l_str_pos += 6;
-    l_str_size -= 6;
-
-    while (l_str_size > 5 && strncmp(l_str_pos, "<dict", 5) != 0) {
-      tmp_pos = memchr(l_str_pos + 1, '<', l_str_size - 1);
-
-      if (tmp_pos == NULL) {
-        l_str_pos = NULL;
-        break;
-      }
-
-      l_str_size -= tmp_pos - l_str_pos;
-      l_str_pos = tmp_pos;
+        l_str_size -= tmp_pos - l_str_pos;
+        l_str_pos = tmp_pos;
     }
 
     if (l_str_pos != NULL) {
-      ret = pxml_parse_dict(&l_str_pos, &l_str_size);
-    }
-  }
+        l_str_pos += 6;
+        l_str_size -= 6;
 
-  return ret;
+        while (l_str_size > 5 && strncmp(l_str_pos, "<dict", 5) != 0) {
+            tmp_pos = memchr(l_str_pos + 1, '<', l_str_size - 1);
+
+            if (tmp_pos == NULL) {
+                l_str_pos = NULL;
+                break;
+            }
+
+            l_str_size -= tmp_pos - l_str_pos;
+            l_str_pos = tmp_pos;
+        }
+
+        if (l_str_pos != NULL) {
+            ret = pxml_parse_dict(&l_str_pos, &l_str_size);
+        }
+    }
+
+    return ret;
 }
 
 
@@ -246,17 +246,17 @@ CFDictionaryRef pxml_parse_plist(unsigned char *plist_str, long plist_size) {
 #include <fcntl.h>
 
 int main(int argc, char **argv) {
-  char fbuf[65536];
-  CFDictionaryRef dict = NULL;
-  int f = open(argv[1], O_RDONLY, 0);
-  int bytes_read = read(f, fbuf, 65535);
-  close(f);
-  fbuf[bytes_read] = '\0';
-  dict = parse_plist(fbuf, strlen(fbuf));
+    char fbuf[65536];
+    CFDictionaryRef dict = NULL;
+    int f = open(argv[1], O_RDONLY, 0);
+    int bytes_read = read(f, fbuf, 65535);
+    close(f);
+    fbuf[bytes_read] = '\0';
+    dict = parse_plist(fbuf, strlen(fbuf));
 
-  if (dict != NULL)
-    printf("Key count: %d\n", CFDictionaryGetCount(dict));
+    if (dict != NULL)
+        printf("Key count: %d\n", CFDictionaryGetCount(dict));
 
-  return 0;
+    return 0;
 }
 #endif /* PXML_TEST_IN_PLACE */

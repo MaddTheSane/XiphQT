@@ -41,15 +41,15 @@
 
 
 CAOggVorbisDecoder::CAOggVorbisDecoder() :
-CAVorbisDecoder(true),
-mFramesBufferedList()
+    CAVorbisDecoder(true),
+    mFramesBufferedList()
 {
     CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphOggFramedVorbis,
                                             kVorbisBytesPerPacket, kVorbisFramesPerPacket,
                                             kVorbisBytesPerFrame, kVorbisChannelsPerFrame,
                                             kVorbisBitsPerChannel, kVorbisFormatFlags);
     AddInputFormat(theInputFormat);
-    
+
     mInputFormat.mSampleRate = 44100;
     mInputFormat.mFormatID = kAudioFormatXiphOggFramedVorbis;
     mInputFormat.mFormatFlags = kVorbisFormatFlags;
@@ -58,7 +58,7 @@ mFramesBufferedList()
     mInputFormat.mBytesPerFrame = kVorbisBytesPerFrame;
     mInputFormat.mChannelsPerFrame = 2;
     mInputFormat.mBitsPerChannel = kVorbisBitsPerChannel;
-    
+
     CAStreamBasicDescription theOutputFormat1(kAudioStreamAnyRate, kAudioFormatLinearPCM, 0, 1, 0, 0, 16,
                                               kAudioFormatFlagsNativeEndian |
                                               kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked);
@@ -66,15 +66,15 @@ mFramesBufferedList()
     CAStreamBasicDescription theOutputFormat2(kAudioStreamAnyRate, kAudioFormatLinearPCM, 0, 1, 0, 0, 32,
                                               kAudioFormatFlagsNativeFloatPacked);
     AddOutputFormat(theOutputFormat2);
-    
+
     mOutputFormat.mSampleRate = 44100;
-	mOutputFormat.mFormatID = kAudioFormatLinearPCM;
-	mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	mOutputFormat.mBytesPerPacket = 8;
-	mOutputFormat.mFramesPerPacket = 1;
-	mOutputFormat.mBytesPerFrame = 8;
-	mOutputFormat.mChannelsPerFrame = 2;
-	mOutputFormat.mBitsPerChannel = 32;
+    mOutputFormat.mFormatID = kAudioFormatLinearPCM;
+    mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+    mOutputFormat.mBytesPerPacket = 8;
+    mOutputFormat.mFramesPerPacket = 1;
+    mOutputFormat.mBytesPerFrame = 8;
+    mOutputFormat.mChannelsPerFrame = 2;
+    mOutputFormat.mBitsPerChannel = 32;
 }
 
 CAOggVorbisDecoder::~CAOggVorbisDecoder()
@@ -85,15 +85,15 @@ CAOggVorbisDecoder::~CAOggVorbisDecoder()
 
 void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
 {
-	if (!mIsInitialized) {
-		if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedVorbis) {
-			dbg_printf("CAOggVorbisDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
-			CODEC_THROW(kAudioCodecUnsupportedFormatError);
-		}
+    if (!mIsInitialized) {
+        if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedVorbis) {
+            dbg_printf("CAOggVorbisDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
+            CODEC_THROW(kAudioCodecUnsupportedFormatError);
+        }
         XCACodec::SetCurrentInputFormat(inInputFormat);
-	} else {
-		CODEC_THROW(kAudioCodecStateError);
-	}
+    } else {
+        CODEC_THROW(kAudioCodecStateError);
+    }
 }
 
 UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
@@ -107,7 +107,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
         dbg_printf("<!E [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
-                ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+                   ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
 
@@ -127,7 +127,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
                 ogg_packets++;
                 mFramesBufferedList.erase(mFramesBufferedList.begin());
             }
-            
+
             vorbis_total_returned_data += vorbis_returned_data;
 
             if (vorbis_total_returned_data == ioOutputDataByteSize || vorbis_return == kAudioCodecProduceOutputPacketSuccess)
@@ -155,7 +155,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
     }
 
     dbg_printf("<.. [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-            (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
 
@@ -190,7 +190,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
 {
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnspecifiedError);
-    
+
     ogg_page op;
 
     if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize, inPacketDescription->mStartOffset))
@@ -208,7 +208,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
             page_packets--;
             continue;
         }
-        
+
         packet_count++;
 
         vorbis_packet_desc.mDataByteSize = opk.bytes;
@@ -227,7 +227,7 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
             ogg_stream_clear(&mO_st);
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
-    
+
         if (EndianS32_BtoN(atom->type) == kCookieTypeOggSerialNo && EndianS32_BtoN(atom->size) <= mCookieSize) {
             ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
         }
