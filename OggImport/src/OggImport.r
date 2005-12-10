@@ -37,6 +37,7 @@
 #define TARGET_REZ_CARBON_MACHO 1
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
+#include <QuickTime/QuickTimeComponents.r>
 #else
 #include "ConditionalMacros.r"
 #include "CoreServices.r"
@@ -190,8 +191,8 @@ resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
 */
 resource 'mime' (kImporterResID, OggImporterName, purgeable) {
     {
-        kMimeInfoMimeTypeTag,      1, "application/x-ogg";
-        kMimeInfoMimeTypeTag,      2, "application/ogg";
+        kMimeInfoMimeTypeTag,      1, "application/ogg";
+        kMimeInfoMimeTypeTag,      2, "application/x-ogg";
         kMimeInfoMimeTypeTag,      3, "audio/x-speex";
         kMimeInfoMimeTypeTag,      4, "audio/speex";
         kMimeInfoFileExtensionTag, 1, "ogg";
@@ -209,7 +210,9 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
     kVersionDoesntMatter,
     {
         kQTMediaConfigAudioGroupID,
-        kQTMediaConfigBinaryFile | kQTMediaConfigCanUseApp,
+        kQTMediaConfigBinaryFile | \
+            kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
+            kQTMediaConfigUsePluginByDefault,
         'OggS',
         'TVOD',	/* we don't have a creator code for our files, hijack QT player */
         kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
@@ -237,7 +240,9 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
 //    };
 //    {
         kQTMediaConfigAudioGroupID,
-        kQTMediaConfigBinaryFile | kQTMediaConfigCanUseApp,
+        kQTMediaConfigBinaryFile | \
+            kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
+            kQTMediaConfigUsePluginByDefault,
         'OggS',
         'TVOD',	/* we don't have a creator code for our files, hijack QT player */
         kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
