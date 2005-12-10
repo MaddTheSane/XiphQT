@@ -1,8 +1,7 @@
 /*
- *  wrap_ogg.h
+ *  DLLMain.cpp
  *
- *    WrapOggPage helper function - constructs an ogg_page 'around'
- *    a block of memory.
+ *    Win32 XiphQT dll entry point file.
  *
  *
  *  Copyright (c) 2005  Arek Korbik
@@ -29,15 +28,20 @@
  */
 
 
-#if !defined(__wrap_ogg_h__)
-#define __wrap_ogg_h__
+#include <windows.h>
 
 
-#include "config.h"
-#include <Ogg/ogg.h>
+HINSTANCE ghInst = NULL;
 
-extern Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData,
-                           UInt32 inDataByteSize, UInt32 inDataStartOffset);
+BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+{
+	ghInst = (HINSTANCE) hInst;
 
+	switch (ul_reason_for_call) {
+		//do nothing, so far...
+		default:
+			break;
+    }
 
-#endif /* __wrap_ogg_h__ */
+    return TRUE;
+}

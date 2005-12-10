@@ -113,7 +113,7 @@ Boolean FindPage(unsigned char **data, const unsigned char *end, ogg_page *og)
 }
 
 
-Boolean inline FindPageNoCRC(unsigned char **data, const unsigned char *end, ogg_page *og)
+inline Boolean FindPageNoCRC(unsigned char **data, const unsigned char *end, ogg_page *og)
 {
 	return InternalFindPage(data, end, og);
 }

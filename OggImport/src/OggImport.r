@@ -29,19 +29,27 @@
  */
 
 
-#define TARGET_REZ_CARBON_MACHO 1
-
 #define thng_RezTemplateVersion 2
 
 #define cfrg_RezTemplateVersion 1
 
-#include <Carbon/Carbon.r>
+#ifdef TARGET_REZ_MAC_PPC
+#define TARGET_REZ_CARBON_MACHO 1
+#include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
+#else
+#include "ConditionalMacros.r"
+#include "CoreServices.r"
+#include "QuickTimeComponents.r"
+#endif
 
 #include "OggImport.h"
 
 #define kImporterComponentType 'eat '
 
+#ifndef cmpThreadSafe
+#define cmpThreadSafe	0x10000000
+#endif
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Ogg Importer
@@ -159,11 +167,11 @@ resource 'thnr' (kImporterResID, OggImporterName, purgeable) {
 };
 
 
-#if TARGET_REZ_CARBON_MACHO /* || TARGET_REZ_WIN32 */
+//#if defined(TARGET_REZ_CARBON_MACHO) || defined(TARGET_REZ_WIN32)
 resource 'dlle' (kImporterResID, OggImporterName) {
     "OggImportComponentDispatch"
 };
-#endif
+//#endif
 
 // name and info string are shared by the compressor and decompressor
 resource 'STR ' (kImporterNameStringResID, OggImporterName, purgeable) {
@@ -257,4 +265,6 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
     };
 };
 
-
+#if TARGET_OS_WIN32
+read 'MDCf' (kImporterResID) "../MetaDataConfig.plist";
+#endif

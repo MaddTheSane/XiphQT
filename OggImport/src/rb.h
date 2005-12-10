@@ -32,7 +32,7 @@
 #define __rb_h__
 
 
-#include <Carbon/Carbon.h>
+#include "config.h"
 
 typedef struct {
 	unsigned char	*buffer;

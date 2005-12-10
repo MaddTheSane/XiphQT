@@ -18,6 +18,7 @@
 		73182D9B090AB7F800C25A13 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 73182D62090AAEA700C25A13 /* common.c */; };
 		73182D9F090AB83F00C25A13 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73182D9E090AB83F00C25A13 /* Vorbis.framework */; };
 		73182E37090AD49700C25A13 /* stream_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 73182E35090AD49700C25A13 /* stream_vorbis.c */; };
+		73DDD2B3093E665C001E170C /* config.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73DDD2B2093E665C001E170C /* config.h */; };
 		73E8B16D090BE13600686EE5 /* stream_speex.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E8B16A090BE13600686EE5 /* stream_speex.c */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
@@ -55,6 +56,7 @@
 			dstSubfolderSpec = 1;
 			files = (
 				73182D90090AB6D500C25A13 /* PkgInfo in CopyFiles */,
+				73DDD2B3093E665C001E170C /* config.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +90,7 @@
 		737C5A6D0912A05200700B79 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		738602C50915732900CB8105 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = SOURCE_ROOT; };
 		738602C60915732900CB8105 /* icon.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = icon.r; path = ../resources/icon.r; sourceTree = SOURCE_ROOT; };
+		73DDD2B2093E665C001E170C /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		73E8B10F090BCB6100686EE5 /* data_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = data_types.h; path = ../common/data_types.h; sourceTree = SOURCE_ROOT; };
 		73E8B16A090BE13600686EE5 /* stream_speex.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_speex.c; path = src/stream_speex.c; sourceTree = "<group>"; };
 		73E8B16B090BE13600686EE5 /* stream_speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_speex.h; path = src/stream_speex.h; sourceTree = "<group>"; };
@@ -154,6 +157,7 @@
 			children = (
 				73E8B169090BE11D00686EE5 /* speex */,
 				73E8B162090BDE5D00686EE5 /* vorbis */,
+				73DDD2B2093E665C001E170C /* config.h */,
 				73182DEC090AC8E900C25A13 /* debug.h */,
 				73182D79090AB4CE00C25A13 /* OggImport.exp */,
 				73182D7A090AB4CE00C25A13 /* versions.h */,
@@ -397,18 +401,21 @@
 		73182D5B090AAD7600C25A13 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
 			};
 			name = Development;
 		};
 		73182D5C090AAD7600C25A13 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
 			};
 			name = Deployment;
 		};
 		73182D5D090AAD7600C25A13 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
 			};
 			name = Default;
 		};

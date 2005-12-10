@@ -87,7 +87,7 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
 {
 	if (!mIsInitialized) {
 		if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedVorbis) {
-			dprintf("CAOggVorbisDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
+			dbg_printf("CAOggVorbisDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
 			CODEC_THROW(kAudioCodecUnsupportedFormatError);
 		}
         XCACodec::SetCurrentInputFormat(inInputFormat);
@@ -99,14 +99,14 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
 UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dprintf(" >> [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
+    dbg_printf(" >> [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dprintf("<!E [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+        dbg_printf("<!E [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
                 ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
@@ -154,7 +154,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
         }
     }
 
-    dprintf("<.. [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
+    dbg_printf("<.. [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
             (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }

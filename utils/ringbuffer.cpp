@@ -29,6 +29,7 @@
  */
 
 
+#include "config.h"
 #include "ringbuffer.h"
 
 RingBuffer::RingBuffer() :

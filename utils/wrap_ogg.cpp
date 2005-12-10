@@ -30,6 +30,7 @@
 
 
 #include "wrap_ogg.h"
+#include <string>
 
 Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData, UInt32 inDataByteSize, UInt32 inDataStartOffset)
 {

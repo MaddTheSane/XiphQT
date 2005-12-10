@@ -31,6 +31,7 @@
 #include "stream_vorbis.h"
 
 #include "debug.h"
+#define logg_page_last_packet_incomplete(op) (((unsigned char *)(op)->header)[26 + ((unsigned char *)(op)->header)[26]] == 255)
 
 #include "OggImport.h"
 
@@ -189,7 +190,7 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                     
 					ret = CreateTrackAndMedia(globals, si, opg);
 					if (ret != noErr) {
-						dprintf("??? -- CreateTrackAndMedia failed?: %ld\n", (long)ret);
+						dbg_printf("??? -- CreateTrackAndMedia failed?: %ld\n", (long)ret);
 					}
                     
 					/*err =*/ DecodeCommentsQT(globals, si, &si->si_vorbis.vc);
@@ -219,9 +220,9 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
 						if (ret == noErr) {
 							ret = AddSoundDescriptionExtension((SoundDescriptionHandle) si->sampleDesc,
 															   si->soundDescExtension, siDecompressionParams);
-							//dprintf("??? -- Adding extension: %ld\n", ret);
+							//dbg_printf("??? -- Adding extension: %ld\n", ret);
 						} else {
-							//dprintf("??? -- Hmm, something went wrong: %ld\n", ret);
+							//dbg_printf("??? -- Hmm, something went wrong: %ld\n", ret);
 						}
 					}
                     
@@ -236,7 +237,7 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
 				if (ogg_page_pageno(opg) > 3) {
 					si->lastGranulePos = ogg_page_granulepos(opg);
 					si->prevPageOffset = S64Add(globals->dataOffset, opg->header_len + opg->body_len);
-					dprintf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
+					dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
 					loop = false;
                     
 					if (si->lastGranulePos < 0)
@@ -254,17 +255,17 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
 				TimeValue	inserted  = 0;
 				
 				if (pos < 0) {
-					//dprintf("   -   :XX: not added page %ld (single, looooong packet)\n", ogg_page_pageno(opg));
+					//dbg_printf("   -   :XX: not added page %ld (single, looooong packet)\n", ogg_page_pageno(opg));
 				} else {
-					dprintf("   -   :++: adding sampleRef: %lld, len: %d, dur: %d\n", si->prevPageOffset, len, duration);
+					dbg_printf("   -   :++: adding sampleRef: %lld, len: %d, dur: %d\n", si->prevPageOffset, len, duration);
 					ret = AddMediaSampleReference(si->theMedia, si->prevPageOffset,
                                                   len, duration, si->sampleDesc, 1, 0, &inserted); //@@@@ 64-bit enable
 					if (ret == noErr)
 					{
-						dprintf("   -   :><: added page %04ld at %14ld (size: %5ld, tsize: %6d), f: %d\n",
+						dbg_printf("   -   :><: added page %04ld at %14ld (size: %5ld, tsize: %6d), f: %d\n",
 								ogg_page_pageno(opg), inserted,
 								opg->header_len + opg->body_len, len, !logg_page_last_packet_incomplete(opg));
-						dprintf("   -   :/>: inserting media: %ld, mt: %lld, dur: %d\n", si->startTime, si->lastGranulePos, duration);
+						dbg_printf("   -   :/>: inserting media: %ld, mt: %lld, dur: %d\n", si->startTime, si->lastGranulePos, duration);
 						ret = InsertMediaIntoTrack(si->theTrack, si->startTime /*inserted*/, /* si->lastGranulePos */ inserted, 
                                                    duration, fixed1);
 						si->startTime = -1;
@@ -272,7 +273,7 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
 						//if (globals->dataIsStream)
 						//	si->timeLoaded = (duration + inserted) * GetMovieTimeScale(globals->theMovie) / GetMediaTimeScale(si->theMedia);
 						
-						dprintf("   -   :><: added page %04ld at %14ld; offset: %ld, duration: %ld (%ld, %ld), mediats: %ld; moviets: %ld, ret = %ld\n",
+						dbg_printf("   -   :><: added page %04ld at %14ld; offset: %ld, duration: %ld (%ld, %ld), mediats: %ld; moviets: %ld, ret = %ld\n",
 								ogg_page_pageno(opg), inserted,
 								GetTrackOffset(si->theTrack), GetTrackDuration(si->theTrack), si->timeLoaded,
 								(duration * GetMovieTimeScale(globals->theMovie)) / GetMediaTimeScale(si->theMedia),

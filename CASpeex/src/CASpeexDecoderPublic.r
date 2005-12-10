@@ -42,8 +42,21 @@
 #define DESCRIPTION		"An AudioCodec that decodes Xiph Speex (Ogg-framed) into linear PCM data"
 #define ENTRY_POINT		"CAOggSpeexDecoderEntry"
 
-#include "AUResources.r"
+#define kPrimaryResourceID               -17330
+#define kComponentType                   'adec'
+#define kComponentSubtype                kAudioFormatXiphOggFramedSpeex
+#define kComponentManufacturer           'Xiph'
+#define	kComponentFlags                  0
+#define kComponentVersion                kCASpeex_adec_Version
+#define kComponentName                   "Xiph (Ogg-framed) Speex"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph (Ogg-framed) Speex into linear PCM data"
+#define kComponentEntryPoint             "CAOggSpeexDecoderEntry"
+#define	kComponentPublicResourceMapType	 0
+#define kComponentIsThreadSafe           1
 
+//#include "ACComponentResources.r"
+//#include "AUResources.r"
+#include "XCAResources.r"
 
 
 #define RES_ID			-17334
@@ -55,4 +68,18 @@
 #define DESCRIPTION		"An AudioCodec that decodes Xiph Speex into linear PCM data"
 #define ENTRY_POINT		"CASpeexDecoderEntry"
 
-#include "AUResources.r"
+#define kPrimaryResourceID               -17334
+#define kComponentType                   'adec'
+#define kComponentSubtype                kAudioFormatXiphSpeex
+#define kComponentManufacturer           'Xiph'
+#define	kComponentFlags                  0
+#define kComponentVersion                kCASpeex_adec_Version
+#define kComponentName                   "Xiph Speex"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph Speex into linear PCM data"
+#define kComponentEntryPoint             "CASpeexDecoderEntry"
+#define	kComponentPublicResourceMapType	 0
+#define kComponentIsThreadSafe           1
+
+//#include "ACComponentResources.r"
+//#include "AUResources.r"
+#include "XCAResources.r"

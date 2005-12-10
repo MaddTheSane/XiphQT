@@ -88,7 +88,7 @@ void CAOggSpeexDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription&
 	if (!mIsInitialized) {
 		//	check to make sure the input format is legal
 		if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedSpeex) {
-			dprintf("CASpeexDecoder::SetFormats: only supports Xiph Speex (Ogg-framed)for input\n");
+			dbg_printf("CASpeexDecoder::SetFormats: only supports Xiph Speex (Ogg-framed)for input\n");
 			CODEC_THROW(kAudioCodecUnsupportedFormatError);
 		}
 		

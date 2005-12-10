@@ -1,8 +1,7 @@
 /*
- *  wrap_ogg.h
+ *  config.h
  *
- *    WrapOggPage helper function - constructs an ogg_page 'around'
- *    a block of memory.
+ *    General compilation environment configuration file.
  *
  *
  *  Copyright (c) 2005  Arek Korbik
@@ -29,15 +28,15 @@
  */
 
 
-#if !defined(__wrap_ogg_h__)
-#define __wrap_ogg_h__
+#if !defined(__xiphqt_config_h__)
+#define __xiphqt_config_h__
 
 
-#include "config.h"
-#include <Ogg/ogg.h>
+#if defined(__APPLE_CC__)
+#include <CoreServices/CoreServices.h>
+#else
+#include <CoreServices.h>
+#endif
 
-extern Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData,
-                           UInt32 inDataByteSize, UInt32 inDataStartOffset);
 
-
-#endif /* __wrap_ogg_h__ */
+#endif /* __data_types_h__ */

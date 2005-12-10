@@ -33,9 +33,13 @@
 
 
 #if defined(NDEBUG)
-#define dprintf(...) {}
+#if defined(_MSC_VER)
+inline static void dbg_printf(char *fmt, ...) {}
 #else
-#define dprintf printf
+#define dbg_printf(...) {}
+#endif
+#else
+#define dbg_printf printf
 #endif
 
 

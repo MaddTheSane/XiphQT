@@ -40,6 +40,13 @@
 #include <vector>
 
 
+#define _SHOULD_BE_ZERO_HERE 0
+#if defined(TARGET_OS_WIN32) && defined(QT_WIN32__VBR_BROKEN)
+  #undef _SHOULD_BE_ZERO_HERE
+  #define _SHOULD_BE_ZERO_HERE 1
+#endif
+
+
 class CAVorbisDecoder:
 public XCACodec
 {
@@ -112,7 +119,7 @@ protected:
 
     enum {
         kVorbisBytesPerPacket = 0,
-        kVorbisFramesPerPacket = 0,
+        kVorbisFramesPerPacket = _SHOULD_BE_ZERO_HERE,
         kVorbisBytesPerFrame = 0,
         kVorbisChannelsPerFrame = 0,
         kVorbisBitsPerChannel = 16,

@@ -31,6 +31,8 @@
 #if !defined(__ringbuffer_h__)
 #define __ringbuffer_h__
 
+#include "config.h"
+
 
 class RingBuffer
 {

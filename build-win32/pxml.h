@@ -1,8 +1,7 @@
 /*
- *  wrap_ogg.h
+ *  pxml.h
  *
- *    WrapOggPage helper function - constructs an ogg_page 'around'
- *    a block of memory.
+ *    Very simple xml plist file parser - header file.
  *
  *
  *  Copyright (c) 2005  Arek Korbik
@@ -29,15 +28,29 @@
  */
 
 
-#if !defined(__wrap_ogg_h__)
-#define __wrap_ogg_h__
+#if !defined(__pxml_h__)
+#define __pxml_h__
+
+#if defined(__APPLE_CC__)
+#include <CoreServices/CoreServices.h>
+#include <CoreFoundation/CoreFoundation.h>
+#else
+#include <CoreServices.h>
+#include <CoreFoundation.h>
+#endif
 
 
-#include "config.h"
-#include <Ogg/ogg.h>
-
-extern Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData,
-                           UInt32 inDataByteSize, UInt32 inDataStartOffset);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
-#endif /* __wrap_ogg_h__ */
+extern CFDictionaryRef pxml_parse_plist(unsigned char *plist_str, long plist_size);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#endif /* __pxml_h__ */

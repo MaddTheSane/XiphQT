@@ -40,6 +40,13 @@
 
 =============================================================================*/
 
+/*
+ * Changed by Arek Korbik <arkadini@gmail.com>
+ * 30.11.2005: added platform conditional around
+ *   kAudioCodecPropertyNameCFString in ACBaseCode::GetProperty()
+ *
+ */
+
 //=============================================================================
 //	Includes
 //=============================================================================
@@ -182,6 +189,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 	
 	switch(inPropertyID)
 	{
+#if TARGET_OS_MAC
 		case kAudioCodecPropertyNameCFString:
 		{
 			if (ioPropertyDataSize != sizeof(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
@@ -200,6 +208,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			*(CFStringRef*)outPropertyData = name;
 			break; 
 		}
+#endif
 		case kAudioCodecPropertyMinimumNumberInputPackets :
 			if(ioPropertyDataSize != sizeof(UInt32)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 			*(UInt32*)outPropertyData = 1;

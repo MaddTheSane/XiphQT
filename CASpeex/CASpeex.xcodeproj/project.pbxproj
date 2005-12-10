@@ -71,6 +71,8 @@
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		32BAE0B30371A71500C91783 /* CASpeex_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CASpeex_Prefix.pch; sourceTree = "<group>"; };
 		730DC2AE09086D3B00B7BB6A /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		7348BD670944D3AF00AC363C /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = SOURCE_ROOT; };
+		7348BD690944D3C100AC363C /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		736FE584090DAFD800BC8DCC /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = /Library/Frameworks/Ogg.framework; sourceTree = "<absolute>"; };
 		737447470911261B006D2F02 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		737447BD09112E05006D2F02 /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wrap_ogg.h; sourceTree = "<group>"; };
@@ -94,12 +96,10 @@
 		73814C030908039E00C478FC /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
 		73814C040908039E00C478FC /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
 		73814C050908039E00C478FC /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
-		73814C060908039E00C478FC /* ACComponentResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; path = ACComponentResources.r; sourceTree = "<group>"; };
 		73814C070908039E00C478FC /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
 		73814C080908039E00C478FC /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
 		73814C090908039E00C478FC /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
 		73814C0A0908039E00C478FC /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
-		73814C0E0908039E00C478FC /* AUResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; path = AUResources.r; sourceTree = "<group>"; };
 		73814C100908039E00C478FC /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
 		73814C110908039E00C478FC /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
 		73814C120908039E00C478FC /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
@@ -158,6 +158,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7348BD670944D3AF00AC363C /* XCAResources.r */,
 				73814BF70908034600C478FC /* PkgInfo */,
 				73814BF4090802F600C478FC /* icon.icns */,
 				73814BF5090802F600C478FC /* icon.r */,
@@ -171,6 +172,7 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7348BD690944D3C100AC363C /* config.h */,
 				73E8B252090D3C6B00686EE5 /* data_types.h */,
 				73814BE60908027600C478FC /* CASpeexCodec.exp */,
 				73814BE70908027600C478FC /* CASpeexDecoder.cpp */,
@@ -241,7 +243,6 @@
 				73814C030908039E00C478FC /* ACCodec.h */,
 				73814C040908039E00C478FC /* ACCodecDispatch.h */,
 				73814C050908039E00C478FC /* ACCodecDispatchTypes.h */,
-				73814C060908039E00C478FC /* ACComponentResources.r */,
 				73814C070908039E00C478FC /* ACConditionalMacros.h */,
 				73814C080908039E00C478FC /* GetCodecBundle.cpp */,
 				73814C090908039E00C478FC /* GetCodecBundle.h */,
@@ -268,7 +269,6 @@
 		73814C0D0908039E00C478FC /* AUBase */ = {
 			isa = PBXGroup;
 			children = (
-				73814C0E0908039E00C478FC /* AUResources.r */,
 			);
 			path = AUBase;
 			sourceTree = "<group>";

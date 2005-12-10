@@ -42,8 +42,21 @@
 #define DESCRIPTION		"An AudioCodec that decodes Xiph Vorbis (Ogg-framed) into linear PCM data"
 #define ENTRY_POINT		"CAOggVorbisDecoderEntry"
 
-#include "AUResources.r"
+#define kPrimaryResourceID               -17110
+#define kComponentType                   'adec'
+#define kComponentSubtype                kAudioFormatXiphOggFramedVorbis
+#define kComponentManufacturer           'Xiph'
+#define	kComponentFlags                  0
+#define kComponentVersion                kCAVorbis_adec_Version
+#define kComponentName                   "Xiph (Ogg-framed) Vorbis"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph (Ogg-framed) Vorbis into linear PCM data"
+#define kComponentEntryPoint             "CAOggVorbisDecoderEntry"
+#define	kComponentPublicResourceMapType	 0
+#define kComponentIsThreadSafe           1
 
+//#include "ACComponentResources.r"
+//#include "AUResources.r"
+#include "XCAResources.r"
 
 
 #define RES_ID			-17114
@@ -55,4 +68,18 @@
 #define DESCRIPTION		"An AudioCodec that decodes Xiph Vorbis into linear PCM data"
 #define ENTRY_POINT		"CAVorbisDecoderEntry"
 
-#include "AUResources.r"
+#define kPrimaryResourceID               -17114
+#define kComponentType                   'adec'
+#define kComponentSubtype                kAudioFormatXiphVorbis
+#define kComponentManufacturer           'Xiph'
+#define	kComponentFlags                  0
+#define kComponentVersion                kCAVorbis_adec_Version
+#define kComponentName                   "Xiph Vorbis"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph Vorbis into linear PCM data"
+#define kComponentEntryPoint             "CAVorbisDecoderEntry"
+#define	kComponentPublicResourceMapType	 0
+#define kComponentIsThreadSafe           1
+
+//#include "ACComponentResources.r"
+//#include "AUResources.r"
+#include "XCAResources.r"

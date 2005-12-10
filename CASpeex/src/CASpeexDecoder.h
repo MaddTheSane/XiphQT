@@ -41,6 +41,13 @@
 #include <vector>
 
 
+#define _SHOULD_BE_ZERO_HERE 0
+#if defined(TARGET_OS_WIN32) && defined(QT_WIN32__VBR_BROKEN)
+  #undef _SHOULD_BE_ZERO_HERE
+  #define _SHOULD_BE_ZERO_HERE 1
+#endif
+
+
 class CASpeexDecoder:
 public XCACodec
 {
@@ -116,7 +123,7 @@ protected:
 
     enum {
         kSpeexBytesPerPacket = 0,
-        kSpeexFramesPerPacket = 0,
+        kSpeexFramesPerPacket = _SHOULD_BE_ZERO_HERE,
         kSpeexBytesPerFrame = 0,
         kSpeexChannelsPerFrame = 0,
         kSpeexBitsPerChannel = 0,

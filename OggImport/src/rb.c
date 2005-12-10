@@ -28,7 +28,7 @@
  */
 
 
-#include <Carbon/Carbon.h>
+#include "config.h"
 #include "rb.h"
 
 

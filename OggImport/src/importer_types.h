@@ -31,9 +31,36 @@
 #if !defined(__importer_types_h__)
 #define __importer_types_h__
 
+#if defined(__APPLE_CC__)
 #include <QuickTime/QuickTime.h>
 #include <Ogg/ogg.h>
+#else
+#include <QuickTimeComponents.h>
+#include <ogg.h>
 
+#if defined(TARGET_OS_WIN32)
+#define _WINIOCTL_
+#include <windows.h>
+#endif
+
+#if defined(__DO_WE_NEED_ALL_THOSE_P__)
+#include <MacTypes.h>
+#include <MacErrors.h>
+#include <Endian.h>
+#include <MacMemory.h>
+#include <Resources.h>
+#include <Components.h>
+#include <Sound.h>
+#include <QuickTimeComponents.h>
+#include <FixMath.h>
+#include <Math64.h>
+#include <IntlResources.h>
+#include <MoviesFormat.h>
+#include <Gestalt.h>
+#include <TextEncodingConverter.h>
+#endif
+
+#endif
 #include "rb.h"
 
 
