@@ -149,14 +149,15 @@ typedef struct {
     ComponentInstance	    dataReader;
 
     DataHCompletionUPP	    dataReadCompletion;
-    DataHCompletionUPP	    fileSizeCompletion;
 
     wide                    wideTempforFileSize;
 
     int	                    dataReadChunkSize;
 
     Boolean                 dataCanDoAsyncRead;
-    Boolean                 dataCanDoGetFileSizeAsync;
+
+    Boolean                 dataCanDoScheduleData;
+    Boolean                 dataCanDoScheduleData64;
     Boolean                 dataCanDoGetFileSize64;
 
     Boolean                 blocking;

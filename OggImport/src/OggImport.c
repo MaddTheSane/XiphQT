@@ -184,14 +184,38 @@ EXTERN_API_C(SInt32 ) S64Compare(SInt64 left, SInt64 right)
 static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 offset, long size)
 {
     ComponentResult err;
+    DataHScheduleRecord sched_rec, *sched_rec_ptr = NULL;
+    long const_ref = 0;
+    DataHCompletionUPP compl_upp = NULL;
     const wide wideOffset = SInt64ToWide(offset);
 
     dbg_printf("---- DoRead() called\n");
 
     dbg_printf("--->> READING: %lld [%ld] --> %lld\n", offset, size, offset + size);
-    dbg_printf("----> READING: usingIdle: %d, dataCanDoAsyncRead: %d, canDoGetFileSizeAsync: %d, canDoGetFileSize64: %d\n",
-               globals->usingIdle, globals->dataCanDoAsyncRead, globals->dataCanDoGetFileSizeAsync, globals->dataCanDoGetFileSize64);
+    dbg_printf("----> READING: usingIdle: %d, dataCanDoAsyncRead: %d, canDoScheduleData64: %d, "
+               "canDoScheduleData: %d, canDoGetFileSize64: %d\n",
+               globals->usingIdle, globals->dataCanDoAsyncRead, globals->dataCanDoScheduleData64,
+               globals->dataCanDoScheduleData, globals->dataCanDoGetFileSize64);
 
+    if (globals->usingIdle && globals->dataCanDoAsyncRead) {
+        globals->dataRequested = true;
+        const_ref = (long) globals;
+        compl_upp = globals->dataReadCompletion;
+        sched_rec.timeNeededBy.value.hi = 0; //S64Set(0);
+        sched_rec.timeNeededBy.value.lo = 0; //S64Set(0);
+        sched_rec.timeNeededBy.scale = 0;
+        sched_rec.timeNeededBy.base = GetMovieTimeBase(globals->theMovie);
+        sched_rec.extendedID = 0; // kDataHExtendedSchedule ?
+        sched_rec.extendedVers = 0;
+        sched_rec.priority = 0x00640000; // (Fixed) 100.0
+
+        sched_rec_ptr = &sched_rec;
+
+        err = QTIdleManagerSetNextIdleTimeNever(globals->idleManager);
+        dbg_printf("----: Disabling Idles: %ld\n", err);
+    }
+
+#if 0
     if (globals->usingIdle && globals->dataCanDoAsyncRead)
     {
         globals->dataRequested = true;
@@ -208,6 +232,22 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         if (err == noErr)
             rb_sync_reserved(&globals->dataRB);
     }
+#endif
+
+    if (globals->dataCanDoScheduleData64) {
+        err = DataHScheduleData64(globals->dataReader, buffer, &wideOffset, size, const_ref, sched_rec_ptr, compl_upp);
+    } else if (globals->dataCanDoScheduleData) {
+        err = DataHScheduleData(globals->dataReader, buffer, wideOffset.lo, size, const_ref, sched_rec_ptr, compl_upp);
+    } else {
+        err = badComponentSelector;
+        //err = DataHGetData(globals->dataReader, buffer, 0, wideOffset.lo, size);
+    }
+
+    //if (err == badComponentSelector)
+    //    err = DataHScheduleData(globals->dataReader, buffer, offset, size, const_ref, sched_rec_ptr, compl_upp);
+    dbg_printf("----: READ: %ld [%08lx]\n", err, err);
+    if (err == noErr && compl_upp == NULL)
+        rb_sync_reserved(&globals->dataRB);
     globals->readError = err;
 
     return err;
@@ -679,10 +719,23 @@ ComponentResult CreateTrackAndMedia(OggImportGlobalsPtr globals, StreamInfoPtr s
             si->theTrack = NewMovieTrack(globals->theMovie, 0, 0, kFullVolume);
             if (si->theTrack)
             {
+                Handle data_ref = globals->dataRef;
                 dbg_printf("! -- MovieTrack created OK\n");
-                dbg_printf("! -- calling => NewTrackMedia(%lx)\n", si->rate);
-                si->theMedia = NewTrackMedia(si->theTrack, SoundMediaType,
-                                             si->rate, globals->dataRef, globals->dataRefType);
+
+                // for non-url data handlers there seem to be some problems
+                // if we use dataRef obtained from the data handler and not
+                // the original one... - ? :/
+                if (globals->dataRefType == URLDataHandlerSubType)
+                    err = DataHGetDataRef(globals->dataReader, &data_ref);
+
+                if (err == noErr) {
+                    dbg_printf("! -- calling => NewTrackMedia(%lx)\n", si->rate);
+                    si->theMedia = NewTrackMedia(si->theTrack, SoundMediaType,
+                                                 si->rate, data_ref, globals->dataRefType);
+                    if (data_ref != globals->dataRef)
+                        DisposeHandle(data_ref);
+                }
+
                 if (si->theMedia)
                 {
                     dbg_printf("! -- TrackMedia created OK\n");
@@ -708,7 +761,14 @@ ComponentResult NotifyMovieChanged(OggImportGlobalsPtr globals)
 {
     //Notify the movie it's changed (from email from Chris Flick)
     QTAtomContainer container = NULL;
-    OSErr err = QTNewAtomContainer (&container);
+    OSErr err = noErr;
+
+    if (!globals->usingIdle) {
+        dbg_printf("  --  NotifyMovieChanged() = using idles, skipping\n");
+        return err;
+    }
+
+    err = QTNewAtomContainer (&container);
 
     if (err == noErr)
     {
@@ -721,6 +781,7 @@ ComponentResult NotifyMovieChanged(OggImportGlobalsPtr globals)
         if (err == noErr)
             err = MovieExecuteWiredActions (globals->theMovie, 0, container);
 
+        dbg_printf("  **  NotifyMovieChanged() = %ld\n", (long)err);
         err = QTDisposeAtomContainer (container);
     }
     return err;
@@ -863,8 +924,10 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
                 break;
 
             result = FillBuffer(globals);
-            if (result == eofErr)
+            if (result == eofErr) {
+                result = noErr;
                 globals->state = kStateReadingLastPages;
+            }
 
             break;
 
@@ -889,6 +952,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
         }
     }
 
+    dbg_printf("<----< StateProcess() = %ld (%08lx)\n", result, result);
     return result;
 }
 
@@ -933,43 +997,34 @@ static void ReadCompletion(Ptr request, long refcon, OSErr readErr)
 }
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-static void FileSizeCompletion(Ptr request, long refcon, OSErr readErr)
-{
-    OggImportGlobalsPtr globals = (OggImportGlobalsPtr) refcon;
-
-    dbg_printf("----- FileSizeCompletion() called = %ld\n", (long) readErr);
-    if (readErr == noErr)
-    {
-        globals->dataEndOffset = WideToSInt64(globals->wideTempforFileSize);
-        globals->sizeInitialised = true;
-        QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
-    }
-}
-
 static ComponentResult XQTGetFileSize(OggImportGlobalsPtr globals)
 {
     ComponentResult err = badComponentSelector;
-    wide size;
+    SInt64 size64 = -1;
 
     dbg_printf("---> XQTGetFileSize() called\n");
-    if (globals->usingIdle && globals->dataCanDoGetFileSizeAsync && false) {
-        err = DataHGetFileSizeAsync(globals->dataReader, &globals->wideTempforFileSize,
-                                    globals->fileSizeCompletion, (long) globals);
-        dbg_printf("---- :: async size, err: %ld (%lx)\n", (long)err, (long)err);
-
-    } else if (globals->dataCanDoGetFileSize64) {
+    if (globals->dataCanDoGetFileSize64) {
+        wide size = {0, -1};
         err = DataHGetFileSize64(globals->dataReader, &size);
+        size64 = WideToSInt64(size);
         dbg_printf("---- :: size: %ld%ld, err: %ld (%lx)\n", size.hi, size.lo, (long)err, (long)err);
-        globals->readError = err;
-        if (err == noErr) {
-            globals->dataEndOffset = WideToSInt64(size);
-            globals->sizeInitialised = true;
-        }
     } else {
+        long size = -1;
+        err = DataHGetFileSize(globals->dataReader, &size);
+        size64 = S64Set(size);
+        dbg_printf("---- :: size(32): %ld, err: %ld (%lx)\n", size, (long)err, (long)err);
+    }
+
+    if (err == noErr) {
+        globals->dataEndOffset = size64;
+        globals->sizeInitialised = true;
+    } else if (err == notEnoughDataErr) {
         globals->dataEndOffset = S64Set(-1);
         globals->sizeInitialised = true;
         err = noErr;
+    } else {
+        globals->readError = err;
+        globals->dataEndOffset = S64Set(-1);
     }
 
     dbg_printf("---< XQTGetFileSize() = %ld (%lx)\n", (long) err, (long) err);
@@ -1022,33 +1077,7 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
     {
         Component dataHComponent = NULL;
 
-#if 0
-        if (dataRefType == URLDataHandlerSubType)
-        {
-            ComponentDescription cdesc, cd;
-            int count;
-            Handle cname = NewHandle(0);
-
-            cdesc.componentType = DataHandlerType;
-            cdesc.componentSubType = URLDataHandlerSubType;
-            cdesc.componentManufacturer = kAnyComponentManufacturer;
-            cdesc.componentFlags = kAnyComponentFlagsMask;
-            cdesc.componentFlagsMask = kAnyComponentFlagsMask;
-
-            dbg_printf("---- >> CountComponents(urlDataHandlers): %ld\n", CountComponents(&cdesc));
-            count = 6;
-            while (count-- > 0) {
-                dataHComponent = FindNextComponent(dataHComponent, &cdesc);
-                GetComponentInfo(dataHComponent, &cd, cname, NULL, NULL);
-                dbg_printf("---- ->-> component desc: %s, manu: %4.4s\n", *cname, &cd.componentManufacturer);
-            }
-
-        } else {
-#endif
-            dataHComponent = GetDataHandler(dataRef, dataRefType, kDataHCanRead);
-#if 0
-        }
-#endif
+        dataHComponent = GetDataHandler(dataRef, dataRefType, kDataHCanRead);
 
         err = OpenAComponent(dataHComponent, &globals->dataReader);
 
@@ -1059,14 +1088,7 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
             dbg_printf("---- >> DataHSetDataRef() = %ld\n", (long)err);
             if (err == noErr)
                 err = DataHOpenForRead(globals->dataReader);
-#if 0
-            else {
-                Boolean wc;
-                err = DataHResolveDataRef(globals->dataReader, dataRef, &wc, false);
-                dbg_printf("---- >> DataHResolveDataRef() = %ld\n", (long)err);
-                err = noErr;
-            }
-#endif
+
             DataHPlaybackHints(globals->dataReader, 0, 0, -1, 49152);  // Don't care if it fails
 
             if (err == noErr)
@@ -1078,34 +1100,36 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
                 globals->dataRef = dataRef;
                 globals->dataRefType = dataRefType;
 
-                globals->dataCanDoAsyncRead = (CallComponentCanDo(globals->dataReader, kDataHReadAsyncSelect) == true);
-                globals->dataCanDoGetFileSizeAsync = (CallComponentCanDo(globals->dataReader, kDataHGetFileSizeAsyncSelect) == true);
-                globals->dataCanDoGetFileSize64 = (CallComponentCanDo(globals->dataReader, kDataHGetFileSize64Select) == true);
+                globals->dataCanDoAsyncRead = true;
 
-                globals->dataReadChunkSize = kDataBufferSize;
-                if ((globals->newMovieFlags & newMovieAsyncOK) != 0 && globals->dataCanDoGetFileSizeAsync)
-                    globals->dataReadChunkSize = kDataAsyncBufferSize;
-                err = DataHGetPreferredBlockSize(globals->dataReader, &blockSize);
-                if (err == noErr && blockSize < globals->dataReadChunkSize && blockSize > 1024)
-                    globals->dataReadChunkSize = blockSize;
-                dbg_printf("     - allocating buffer, size: %d (prefBlockSize: %ld); ret = %ld\n",
-                           globals->dataReadChunkSize, blockSize, (long)err);
-                err = noErr;	/* ignore any error and use our default read block size */
+                globals->dataCanDoScheduleData64 = (CallComponentCanDo(globals->dataReader, kDataHScheduleData64Select) == true);
+                globals->dataCanDoScheduleData = (CallComponentCanDo(globals->dataReader, kDataHScheduleDataSelect) == true);
 
-                err = rb_init(&globals->dataRB, 2 * globals->dataReadChunkSize); //hmm why was it x2 ?
+                if (!globals->dataCanDoScheduleData && !globals->dataCanDoScheduleData64)
+                    err = cantFindHandler; // ??!
+                else {
+                    globals->dataCanDoGetFileSize64 = (CallComponentCanDo(globals->dataReader, kDataHGetFileSize64Select) == true);
 
-                globals->currentData = (unsigned char *)globals->dataRB.buffer;
-                globals->validDataEnd = (unsigned char *)globals->dataRB.buffer;
+                    globals->dataReadChunkSize = kDataBufferSize;
+                    if ((globals->newMovieFlags & newMovieAsyncOK) != 0 && (dataRefType == URLDataHandlerSubType))
+                        globals->dataReadChunkSize = kDataAsyncBufferSize;
+                    err = DataHGetPreferredBlockSize(globals->dataReader, &blockSize);
+                    if (err == noErr && blockSize < globals->dataReadChunkSize && blockSize > 1024)
+                        globals->dataReadChunkSize = blockSize;
+                    dbg_printf("     - allocating buffer, size: %d (prefBlockSize: %ld); ret = %ld\n",
+                               globals->dataReadChunkSize, blockSize, (long)err);
+                    err = noErr;	/* ignore any error and use our default read block size */
+
+                    err = rb_init(&globals->dataRB, 2 * globals->dataReadChunkSize); //hmm why was it x2 ?
+
+                    globals->currentData = (unsigned char *)globals->dataRB.buffer;
+                    globals->validDataEnd = (unsigned char *)globals->dataRB.buffer;
+                }
             }
 
             if (err == noErr)
             {
                 globals->dataReadCompletion = NewDataHCompletionUPP(ReadCompletion);
-            }
-
-            if (err == noErr && globals->dataCanDoGetFileSizeAsync)
-            {
-                globals->fileSizeCompletion = NewDataHCompletionUPP(FileSizeCompletion);
             }
 
             if (err == noErr && globals->idleManager)
@@ -1119,7 +1143,7 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
                 // This logic is similar to the MP3 importer
                 UInt32  flags = 0;
 
-                globals->dataIsStream = globals->dataCanDoGetFileSizeAsync;
+                globals->dataIsStream = (dataRefType == URLDataHandlerSubType);
 
                 err = DataHGetInfoFlags(globals->dataReader, &flags);
                 if (err == noErr && (flags & kDataHInfoFlagNeverStreams))
@@ -1202,9 +1226,6 @@ COMPONENTFUNC OggImportClose(OggImportGlobalsPtr globals, ComponentInstance self
 
         if (globals->dataReadCompletion)
             DisposeDataHCompletionUPP(globals->dataReadCompletion);
-
-        if (globals->fileSizeCompletion)
-            DisposeDataHCompletionUPP(globals->fileSizeCompletion);
 
         if (globals->aliasHandle)
             DisposeHandle((Handle)globals->aliasHandle);
@@ -1387,10 +1408,9 @@ COMPONENTFUNC OggImportIdle(OggImportGlobalsPtr globals,
 
     if (globals->state == kStateImportComplete) {
         *outFlags |= movieImportResultComplete;
-        return err;
+    } else {
+        err = StateProcess(globals);
     }
-
-    err = StateProcess(globals);
 
 #if 0
     if (true) {
@@ -1459,8 +1479,7 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
     if (err == noErr)
         dbg_printf("    SetupDataHandler() succeeded\n");
 
-    globals->usingIdle = ((globals->dataIsStream || globals->dataCanDoAsyncRead)
-                          //&& globals->dataCanDoGetFileSizeAsync
+    globals->usingIdle = (globals->dataIsStream
                           && (inFlags & movieImportWithIdle) != 0);
 
     if (dataRefType != URLDataHandlerSubType)
