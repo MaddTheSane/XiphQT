@@ -215,25 +215,6 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         dbg_printf("----: Disabling Idles: %ld\n", err);
     }
 
-#if 0
-    if (globals->usingIdle && globals->dataCanDoAsyncRead)
-    {
-        globals->dataRequested = true;
-        err = DataHReadAsync(globals->dataReader, buffer, size, &wideOffset,
-                             globals->dataReadCompletion, (long) globals);
-        dbg_printf("----: READ: %ld\n", err);
-        err = QTIdleManagerSetNextIdleTimeNever(globals->idleManager);
-        dbg_printf("----: Disabling Idles: %ld\n", err);
-    }
-    else
-    {
-        err = DataHScheduleData64(globals->dataReader, buffer, &wideOffset,
-                                  size, 0, NULL, NULL);
-        if (err == noErr)
-            rb_sync_reserved(&globals->dataRB);
-    }
-#endif
-
     if (globals->dataCanDoScheduleData64) {
         err = DataHScheduleData64(globals->dataReader, buffer, &wideOffset, size, const_ref, sched_rec_ptr, compl_upp);
     } else if (globals->dataCanDoScheduleData) {
@@ -293,36 +274,6 @@ static ComponentResult FillBuffer(OggImportGlobalsPtr globals)
         return eofErr;
 
     return DoRead(globals, (Ptr) rb_reserve(&globals->dataRB, dataLeft), readDataOffset, dataLeft);
-}
-
-static OSErr CheckVorbisHeader(ogg_page *opg)
-{
-    OSErr err = noErr;
-
-    ogg_stream_state os;
-    ogg_packet       op;
-
-    vorbis_info      vi;
-    vorbis_comment   vc;
-
-    ogg_stream_init(&os, ogg_page_serialno(opg));
-
-    vorbis_info_init(&vi);
-    vorbis_comment_init(&vc);
-
-    if (ogg_stream_pagein(&os, opg) < 0)
-        err = invalidMedia;
-    else if (ogg_stream_packetout(&os, &op) != 1)
-        err = invalidMedia;
-    else if (vorbis_synthesis_headerin(&vi, &vc, &op) < 0)
-        err = noSoundTrackInMovieErr;
-
-    ogg_stream_clear(&os);
-
-    vorbis_comment_clear(&vc);
-    vorbis_info_clear(&vi);
-
-    return err;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
