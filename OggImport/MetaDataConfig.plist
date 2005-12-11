@@ -10,12 +10,33 @@
 		<string>arts</string>
 		<key>COMMENT=</key>
 		<string>cmmt</string>
+                <key>COPYRIGHT=</key>
+		<string>cprt</string>
 		<key>DATE=</key>
 		<string>©day</string>
+                <key>DESCRIPTION=</key>
+		<string>desc</string>
+                <key>ENCODEDBY=</key>
+                <string>soft</string>
+		<key>GENRE=</key>
+		<string>genr</string>
+                <key>ORGANIZATION=</key>
+		<string>prod</string>
+                <key>PERFORMER=</key>
+		<string>perf</string>
 		<key>TITLE=</key>
 		<string>name</string>
+                <key>TRANSCODEDFROM=</key>
+                <string>orif</string>
 		<key>YEAR=</key>
 		<string>©day</string>
+
+                <key>LICENSE=</key>
+		<string>info</string>
+                <key>CONTACT=</key>
+		<string>info</string>
+                <key>ISRC=</key>
+		<string>info</string>
 	</dict>
 	<key>Vorbis-to-UD</key>
 	<dict>
@@ -25,16 +46,51 @@
 		<string>©ART</string>
 		<key>COMMENT=</key>
 		<string>©cmt</string>
+                <key>COPYRIGHT=</key>
+		<string>©cpy</string>
 		<key>DATE=</key>
 		<string>©day</string>
+                <key>DESCRIPTION=</key>
+		<string>©des</string>
+                <key>ENCODEDBY=</key>
+		<string>©enc</string>
 		<key>GENRE=</key>
 		<string>©gen</string>
+                <key>ORGANIZATION=</key>
+		<string>©prd</string>
+                <key>PERFORMER=</key>
+		<string>©prf</string>
 		<key>TITLE=</key>
 		<string>©nam</string>
 		<key>TRACKNUMBER=</key>
 		<string>©trk</string>
+                <key>TRANSCODEDFROM=</key>
+		<string>©fmt</string>
 		<key>YEAR=</key>
 		<string>©day</string>
+
+                <key>LICENSE=</key>
+		<string>©inf</string>
+                <key>CONTACT=</key>
+		<string>©inf</string>
+                <key>ISRC=</key>
+		<string>©inf</string>
+	</dict>
+	<key>other--or--not-used-a_t_m_</key>
+	<dict>
+		<key>TRACKNUMBER=</key>
+		<string>????</string>
+                <key>LICENSE=</key>
+		<string>????</string>
+                <key>CONTACT=</key>
+		<string>????</string>
+                <key>ISRC=</key>
+		<string>????</string>
+
+		<key>VERSION=</key>
+		<string>????</string>
+                <key>LOCATION=</key>
+		<string>????</string>
 	</dict>
 </dict>
 </plist>
