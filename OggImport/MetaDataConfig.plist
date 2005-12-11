@@ -56,6 +56,8 @@
 		<string>©enc</string>
 		<key>GENRE=</key>
 		<string>©gen</string>
+                <key>LICENSE=</key>
+                <string>©dis</string>
                 <key>ORGANIZATION=</key>
 		<string>©prd</string>
                 <key>PERFORMER=</key>
@@ -69,8 +71,6 @@
 		<key>YEAR=</key>
 		<string>©day</string>
 
-                <key>LICENSE=</key>
-		<string>©inf</string>
                 <key>CONTACT=</key>
 		<string>©inf</string>
                 <key>ISRC=</key>
