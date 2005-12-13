@@ -67,6 +67,7 @@
 #include "stream_types_vorbis.h"
 #include "stream_types_speex.h"
 
+#define INCOMPLETE_PAGE_DURATION 1
 
 typedef enum ImportStates {
     kStateInitial,
@@ -87,7 +88,6 @@ struct stream_format_handle_funcs; //forward declaration
 
 typedef struct {
     long                serialno;
-    TimeValue           timeLoaded;
 
     ogg_stream_state	os;
 
@@ -100,12 +100,11 @@ typedef struct {
     SampleDescriptionHandle sampleDesc;
 
     ogg_int64_t         lastGranulePos;
-    SInt64              prevPageOffset;
 
-    ogg_int64_t         lastSeenGranulePos;
-    SInt64              lastSeenEndOffset;
+    TimeValue           incompleteCompensation;
 
-    TimeValue           startTime;
+    TimeValue           insertTime;
+    TimeValue           streamOffset;
 
     CFDictionaryRef		MDmapping;
     CFDictionaryRef		UDmapping;
@@ -143,6 +142,10 @@ typedef struct {
 
     IdleManager             idleManager;
     IdleManager             dataIdleManager;
+
+    // ogg grouped and chained streams support variables
+    Boolean                 groupStreamsFound;
+    TimeValue               currentGroupOffset;
 
     long                    newMovieFlags;
 
@@ -205,16 +208,16 @@ typedef ComponentResult (*process_stream_page) (OggImportGlobals *globals, Strea
 
 
 typedef struct stream_format_handle_funcs {
-    process_stream_page			process_page;
+    process_stream_page                 process_page;
 
-    recognize_header			recognize;
-    verify_header				verify;
+    recognize_header                    recognize;
+    verify_header                       verify;
 
-    process_first_packet		first_packet;
-    create_sample_description	sample_description;
+    process_first_packet                first_packet;
+    create_sample_description           sample_description;
 
-    initialize_stream			initialize;
-    clear_stream				clear;
+    initialize_stream                   initialize;
+    clear_stream                        clear;
 } stream_format_handle_funcs;
 
 #define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL }

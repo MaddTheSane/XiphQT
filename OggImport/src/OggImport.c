@@ -297,7 +297,6 @@ static ComponentResult OpenStream(OggImportGlobalsPtr globals, long serialno, og
     {
         StreamInfo *si = &(*globals->streamInfoHandle)[globals->streamCount - 1];
         si->serialno = serialno;
-        si->timeLoaded = 0;
 
         ogg_stream_init(&si->os,serialno);
 
@@ -306,7 +305,6 @@ static ComponentResult OpenStream(OggImportGlobalsPtr globals, long serialno, og
         if (ff->initialize != NULL)
             (*ff->initialize)(si); // check for error here and clean-up if not OK
 
-        si->startTime = globals->startTime;
         si->soundDescExtension = NewHandle(0);
 
         si->MDmapping = NULL;
@@ -335,7 +333,7 @@ static StreamInfoPtr FindStream(OggImportGlobalsPtr globals, long serialno)
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-static void CloseStream(OggImportGlobalsPtr globals, StreamInfoPtr si)
+static void _close_stream(OggImportGlobalsPtr globals, StreamInfoPtr si)
 {
     ogg_stream_clear(&si->os);
 
@@ -360,12 +358,32 @@ static void CloseAllStreams(OggImportGlobalsPtr globals)
     for (i = 0; i < globals->streamCount; i++)
     {
         StreamInfoPtr si = &(*globals->streamInfoHandle)[i];
-        CloseStream(globals, si);
+        _close_stream(globals, si);
     }
     globals->streamCount = 0;
     SetHandleSize((Handle) globals->streamInfoHandle, 0);
 }
 
+static void CloseStream(OggImportGlobalsPtr globals, StreamInfoPtr si)
+{
+    int i;
+
+    for (i = 0; i < globals->streamCount; i++)
+    {
+        if (si == &(*globals->streamInfoHandle)[i]) {
+            _close_stream(globals, si);
+
+            if (i < globals->streamCount - 1) {
+                HLock((Handle) globals->streamInfoHandle);
+                BlockMove(&(*globals->streamInfoHandle)[i+1], &(*globals->streamInfoHandle)[i], sizeof(StreamInfo) * (globals->streamCount - 1 - i));
+                HUnlock((Handle) globals->streamInfoHandle);
+            }
+            globals->streamCount--;
+            SetHandleSize((Handle) globals->streamInfoHandle, sizeof(StreamInfo) * globals->streamCount);
+            break;
+        }
+    }
+}
 
 static int InitialiseMetaDataMappings(OggImportGlobalsPtr globals, StreamInfoPtr si) {
     SInt32 ret = 0;
@@ -715,7 +733,7 @@ ComponentResult NotifyMovieChanged(OggImportGlobalsPtr globals)
     OSErr err = noErr;
 
     if (!globals->usingIdle) {
-        dbg_printf("  --  NotifyMovieChanged() = using idles, skipping\n");
+        dbg_printf("  --  NotifyMovieChanged() = not using idles, skipping\n");
         return err;
     }
 
@@ -775,37 +793,64 @@ static stream_format_handle_funcs* find_stream_support(ogg_page *op) {
 static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
     ComponentResult ret = noErr;
     long serialno;
-    StreamInfoPtr si;
+    StreamInfoPtr si = NULL;
+    Boolean process_page = true;
 
     serialno = ogg_page_serialno(op);
 
     dbg_printf("   - = page found, nr: %08lx\n", ogg_page_pageno(op));
-    if (ogg_page_bos(op)) {
-        stream_format_handle_funcs *ff = NULL;
-        dbg_printf("   - = new stream found: %lx\n" , serialno);
-        ff = find_stream_support(op);
-        if (ff != NULL) {
-            dbg_printf("   - == And a supported one!\n");
-            ret = OpenStream(globals, serialno, op, ff);
+    if (!globals->groupStreamsFound) {
+        if (ogg_page_bos(op)) {
+            stream_format_handle_funcs *ff = NULL;
+            dbg_printf("   - = new stream found: %08lx\n" , serialno);
+            //si = FindStream(globals, serialno);
+            //if (si != NULL)
+            //    ; // !?!?
+            ff = find_stream_support(op);
+            if (ff != NULL) {
+                dbg_printf("   - == And a supported one!\n");
+                ret = OpenStream(globals, serialno, op, ff);
+                if (ret == noErr) {
+                    ogg_packet opckt;
 
-            if (ret == noErr) {
-                ogg_packet       opckt;
-                StreamInfoPtr si = FindStream(globals, serialno);
+                    si = FindStream(globals, serialno);
+                    if (si != NULL) {
+                        ogg_stream_pagein(&si->os, op); //check errors?
+                        ogg_stream_packetout(&si->os, &opckt); //check errors?
 
-                if (si != NULL) {
-                    ogg_stream_pagein(&si->os, op); //check errors?
-                    ogg_stream_packetout(&si->os, &opckt); //check errors?
+                        if (si->sfhf->first_packet != NULL)
+                            (*si->sfhf->first_packet)(si, op, &opckt); //check errors?
 
-                    if (si->sfhf->first_packet != NULL)
-                        (*si->sfhf->first_packet)(si, op, &opckt); //check errors?
+                        if (globals->currentGroupOffset == -1)
+                            globals->currentGroupOffset = globals->timeLoaded;
+
+                        process_page = false;
+                    }
                 }
+            }
+        } else {
+            si = FindStream(globals, serialno);
+            if (si != NULL) {
+                globals->groupStreamsFound = true;
             }
         }
     } else {
-        si = FindStream(globals, serialno);
+        if (!ogg_page_bos(op))
+            si = FindStream(globals, serialno);
+    }
 
-        if (si != NULL) {
+    if (si != NULL) {
+        if (process_page) {
             ret = ProcessStreamPage(globals, si, op);
+        }
+
+        if (ogg_page_eos(op)) {
+            dbg_printf("   x = closing stream: %08lx\n" , serialno);
+            CloseStream(globals, si);
+            if (globals->streamCount == 0) {
+                globals->groupStreamsFound = false;
+                globals->currentGroupOffset = -1;
+            }
         }
     }
 
@@ -835,6 +880,9 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->timeLoaded = 0;
             globals->dataRequested = false;
             globals->startTickCount = TickCount();
+
+            globals->currentGroupOffset = globals->startTime;
+            globals->groupStreamsFound = false;
 
             if (S64Compare(globals->dataEndOffset, S64Set(-1)) == 0) {
                 globals->sizeInitialised = false;
@@ -869,10 +917,13 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
 
             while (result == noErr && FindPage(&globals->currentData, globals->validDataEnd, &og)) {
                 result = ProcessPage(globals, &og);
+                dbg_printf("   - << (:kStateReadingPages:) :: ProcessPage() = %ld\n", (long) result);
             }
 
-            if (result != noErr)
+            if (result != noErr) {
+                process = false;
                 break;
+            }
 
             result = FillBuffer(globals);
             if (result == eofErr) {
@@ -888,9 +939,14 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->validDataEnd = globals->currentData + rb_data_available(&globals->dataRB);
 
             dbg_printf("   + (:kStateReadingLastPages:)\n");
-            while (FindPage(&globals->currentData, globals->validDataEnd, &og)) {
+            while (result == noErr && FindPage(&globals->currentData, globals->validDataEnd, &og)) {
                 result = ProcessPage(globals, &og);
-                dbg_printf("  <- (:kStateReadingLastPages:) = %ld\n", (long)result);
+                dbg_printf("   - << (:kStateReadingLastPages:) :: ProcessPage() = %ld\n", (long) result);
+            }
+
+            if (result != noErr) {
+                process = false;
+                break;
             }
 
             globals->state = kStateImportComplete;
@@ -1408,7 +1464,9 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
     *outFlags = 0;
 
     globals->theMovie = theMovie;
-    globals->startTime = atTime;
+    globals->startTime = 0;
+    if (atTime >= 0)
+        globals->startTime = atTime;
 
     dbg_printf("-- DataRef(at:%ld) called\n", atTime);
     if (GetHandleSize(dataRef) < 256) {
