@@ -180,7 +180,7 @@ resource 'STR ' (kImporterNameStringResID, OggImporterName, purgeable) {
 };
 
 resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
-    "Ogg " "0.1.1" " (See http://www.xiph.org)."
+    "Ogg " "0.1.3" " (See http://www.xiph.org)."
 };
 
 
