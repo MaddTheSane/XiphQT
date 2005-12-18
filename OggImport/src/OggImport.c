@@ -884,22 +884,10 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->currentGroupOffset = globals->startTime;
             globals->groupStreamsFound = false;
 
-            if (S64Compare(globals->dataEndOffset, S64Set(-1)) == 0) {
-                globals->sizeInitialised = false;
-                globals->state = kStateGettingSize;
-                result = XQTGetFileSize(globals);
-                if (!globals->sizeInitialised)
-                    process = false;
-            } else
-                globals->state = kStateReadingPages;
-
-            break;
-
-        case kStateGettingSize:
-            dbg_printf("   - (:kStateGettingSize:)\n");
             if (!globals->sizeInitialised) {
-                process = false;
-                break;
+                result = XQTGetFileSize(globals);
+                if (result != noErr)
+                    process = false;
             }
 
             globals->state = kStateReadingPages;
@@ -1187,6 +1175,7 @@ COMPONENTFUNC OggImportOpen(OggImportGlobalsPtr globals, ComponentInstance self)
         globals->self = self;
 
         globals->dataEndOffset = S64Set(-1);
+        globals->sizeInitialised = false;
         globals->idleManager = NULL;
         globals->dataIdleManager = NULL;
 
@@ -1260,6 +1249,7 @@ COMPONENTFUNC OggImportSetOffsetAndLimit64(OggImportGlobalsPtr globals, const wi
     dbg_printf("-- SetOffsetAndLimit64(%ld%ld, %ld%ld) called\n", offset->hi, offset->lo, limit->hi, limit->lo);
     globals->dataStartOffset = WideToSInt64(*offset);
     globals->dataEndOffset  = WideToSInt64(*limit);
+    globals->sizeInitialised = true;
 
     return noErr;
 }
@@ -1271,6 +1261,7 @@ COMPONENTFUNC OggImportSetOffsetAndLimit(OggImportGlobalsPtr globals, unsigned l
     dbg_printf("-- SetOffsetAndLimit(%ld, %ld) called\n", offset, limit);
     globals->dataStartOffset = S64SetU(offset);
     globals->dataEndOffset = S64SetU(limit);
+    globals->sizeInitialised = true;
 
     return noErr;
 }
@@ -1524,7 +1515,6 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
     switch (globals->state)
     {
     case kStateInitial:
-    case kStateGettingSize:
         *loadState = kMovieLoadStateLoading;
         break;
 

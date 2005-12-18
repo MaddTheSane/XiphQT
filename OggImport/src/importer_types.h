@@ -71,7 +71,6 @@
 
 typedef enum ImportStates {
     kStateInitial,
-    kStateGettingSize,
     kStateReadingPages,
     kStateReadingLastPages,
     kStateImportComplete
