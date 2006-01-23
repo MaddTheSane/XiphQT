@@ -1,12 +1,10 @@
 /*
- *  fccs.h
+ *  stream_types_flac.h
  *
- *    Four Character Code identifiers for Xiph formats, used by
- *    XiphQT for internal identification and identification when
- *    exported in QT movie container.
+ *    Definition of FLAC specific data structures.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -30,21 +28,32 @@
  */
 
 
-
-#if !defined(__fccs_h__)
-#define __fccs_h__
-
-
-enum {
-    kAudioFormatXiphVorbis                  = 'XiVs',
-    kAudioFormatXiphOggFramedVorbis         = 'XoVs',
-
-    kAudioFormatXiphSpeex                   = 'XiSp',
-    kAudioFormatXiphOggFramedSpeex          = 'XoSp',
-
-    kAudioFormatXiphFLAC                    = 'XiFL',
-    kAudioFormatXiphOggFramedFLAC           = 'XoFL',
-};
+#if !defined(__stream_types_flac_h__)
+#define __stream_types_flac_h__
 
 
-#endif /* __fccs_h__ */
+#include <Speex/speex.h>
+#include <Speex/speex_header.h>
+
+typedef enum FLACImportStates {
+    kFStateInitial,
+    kFStateReadingComments,
+    kFStateReadingAdditionalMDBlocks,
+    kFStateReadingFirstPacket,
+    kFStateReadingPackets
+} FLACImportStates;
+
+typedef struct {
+    FLACImportStates state;
+
+    // TODO: add needed variables
+    vorbis_comment vc;
+    SInt32 metablocks;
+    SInt32 skipped;
+    UInt32 bps;
+} StreamInfo__flac;
+
+
+#define _HAVE__FLAC_SUPPORT 1
+
+#endif /* __stream_types_flac_h__ */

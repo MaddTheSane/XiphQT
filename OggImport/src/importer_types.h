@@ -4,7 +4,7 @@
  *    Definitions of OggImporter data structures.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -66,6 +66,7 @@
 
 #include "stream_types_vorbis.h"
 #include "stream_types_speex.h"
+#include "stream_types_flac.h"
 
 #define INCOMPLETE_PAGE_DURATION 1
 
@@ -116,6 +117,9 @@ typedef struct {
 #endif
 #if defined(_HAVE__SPEEX_SUPPORT)
         StreamInfo__speex si_speex;
+#endif
+#if defined(_HAVE__FLAC_SUPPORT)
+        StreamInfo__flac si_flac;
 #endif
     };
 

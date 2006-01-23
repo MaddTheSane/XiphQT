@@ -4,7 +4,7 @@
  *    The main part of the OggImport component.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -64,10 +64,14 @@
 //stream-type support functions
 #include "stream_vorbis.h"
 #include "stream_speex.h"
+#include "stream_flac.h"
 
 static stream_format_handle_funcs s_formats[] = {
 #if defined(_HAVE__VORBIS_SUPPORT)
     HANDLE_FUNCTIONS__VORBIS,
+#endif
+#if defined(_HAVE__FLAC_SUPPORT)
+    HANDLE_FUNCTIONS__FLAC,
 #endif
 #if defined(_HAVE__SPEEX_SUPPORT)
     HANDLE_FUNCTIONS__SPEEX,
