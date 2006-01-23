@@ -4,7 +4,7 @@
  *    CASpeexDecoder class definition.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -42,7 +42,7 @@
 
 
 #define _SHOULD_BE_ZERO_HERE 0
-#if defined(TARGET_OS_WIN32) && defined(QT_WIN32__VBR_BROKEN)
+#if defined(TARGET_CPU_X86) && defined(QT_IA32__VBR_BROKEN)
   #undef _SHOULD_BE_ZERO_HERE
   #define _SHOULD_BE_ZERO_HERE 1
 #endif

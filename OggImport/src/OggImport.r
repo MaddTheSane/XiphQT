@@ -5,7 +5,7 @@
  *    resources.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -34,7 +34,6 @@
 #define cfrg_RezTemplateVersion 1
 
 #ifdef TARGET_REZ_MAC_PPC
-#define TARGET_REZ_CARBON_MACHO 1
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
 #include <QuickTime/QuickTimeComponents.r>
@@ -42,14 +41,42 @@
 #include "ConditionalMacros.r"
 #include "CoreServices.r"
 #include "QuickTimeComponents.r"
-#endif
+#endif /* TARGET_REZ_MAC_PPC */
 
 #include "OggImport.h"
 
 #define kImporterComponentType 'eat '
 
+
+/* How do I do this properly... anybody? */
+#if defined(BUILD_UNIVERSAL)
+  #define TARGET_CPU_PPC 1
+  #define TARGET_CPU_X86 1
+#endif
+
+
 #ifndef cmpThreadSafe
 #define cmpThreadSafe	0x10000000
+#endif
+
+#if TARGET_OS_MAC
+  #if TARGET_CPU_PPC && TARGET_CPU_X86
+    #define TARGET_REZ_FAT_COMPONENTS 1
+    #define Target_PlatformType       platformPowerPCNativeEntryPoint
+    #define Target_SecondPlatformType platformIA32NativeEntryPoint
+  #elif TARGET_CPU_X86
+    #define Target_PlatformType       platformIA32NativeEntryPoint
+  #else
+    #define Target_PlatformType       platformPowerPCNativeEntryPoint
+  #endif
+#elif TARGET_OS_WIN32
+  #define Target_PlatformType platformWin32
+#else
+  #error get a real platform type
+#endif /* TARGET_OS_MAC */
+
+#if !defined(TARGET_REZ_FAT_COMPONENTS)
+  #define TARGET_REZ_FAT_COMPONENTS 0
 #endif
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,17 +98,16 @@ resource 'thng' (kImporterResID, OggImporterName, purgeable) {
     kOgg_eat__Version,
     componentDoAutoVersion|componentHasMultiplePlatforms, 0,
     {
-#if TARGET_OS_MAC	       // COMPONENT PLATFORM INFORMATION ----------------------
+        // COMPONENT PLATFORM INFORMATION ----------------------
         kImporterFlags,
         'dlle',                                 // Code Resource type - Entry point found by symbol name 'dlle' resource
         kImporterResID,                         // ID of 'dlle' resource
-        platformPowerPCNativeEntryPoint,
-#endif
-#if TARGET_OS_WIN32
-    kImporterFlags,
-    'dlle',
-    kImporterResID,
-    platformWin32,
+        Target_PlatformType,
+#if TARGET_REZ_FAT_COMPONENTS
+        kImporterFlags,
+        'dlle',
+        kImporterResID,
+        Target_SecondPlatformType,
 #endif
     },
     'thnr', kImporterResID
@@ -90,7 +116,8 @@ resource 'thng' (kImporterResID, OggImporterName, purgeable) {
 // Component Alias
 resource 'thga' (kImporterResID, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
-    'OGG ',                             // Subtype - this must be in uppercase. It will match an ".ogg" suffix case-insensitively.
+    'OGG ',                             // Subtype - this must be in uppercase.
+                                        // It will match an ".ogg" suffix case-insensitively.
     'soun',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
@@ -114,7 +141,8 @@ resource 'thga' (kImporterResID, OggImporterName, purgeable) {
 // Component Alias
 resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
-    'OGM ',                             // Subtype - this must be in uppercase. It will match an ".ogm" suffix case-insensitively.
+    'OGM ',                             // Subtype - this must be in uppercase.
+                                        // It will match an ".ogm" suffix case-insensitively.
     'soun',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
@@ -138,9 +166,9 @@ resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
 // Component Alias
 resource 'thga' (kImporterResID + 2, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
-    'SPX ',                             // Subtype - this must be in uppercase. It will match an ".ogm" suffix case-insensitively.
+    'SPX ',                             // Subtype - this must be in uppercase.
+                                        // It will match an ".ogm" suffix case-insensitively.
     'soun',                             // Manufacturer
-//    kImporterFlags /*| movieImportSubTypeIsFileExtension */,	// The .spx extension is used by System Profiler
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
     0,                                  // Code Type
@@ -168,11 +196,9 @@ resource 'thnr' (kImporterResID, OggImporterName, purgeable) {
 };
 
 
-//#if defined(TARGET_REZ_CARBON_MACHO) || defined(TARGET_REZ_WIN32)
 resource 'dlle' (kImporterResID, OggImporterName) {
     "OggImportComponentDispatch"
 };
-//#endif
 
 // name and info string are shared by the compressor and decompressor
 resource 'STR ' (kImporterNameStringResID, OggImporterName, purgeable) {

@@ -329,9 +329,13 @@
 		73182D57090AAD7600C25A13 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/OggImport.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../../../../../Library/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -355,9 +359,13 @@
 		73182D58090AAD7600C25A13 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/OggImport.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../../../../../Library/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -380,8 +388,12 @@
 		73182D59090AAD7600C25A13 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				EXPORTED_SYMBOLS_FILE = src/OggImport.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../../../../../Library/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OggImport_Prefix.pch;
@@ -401,21 +413,27 @@
 		73182D5B090AAD7600C25A13 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
 		73182D5C090AAD7600C25A13 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};
 		73182D5D090AAD7600C25A13 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Default;
 		};

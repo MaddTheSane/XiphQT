@@ -4,7 +4,7 @@
  *    'thng' (and other) resource template for XiphQT CoreAudio components.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -51,6 +51,13 @@
 
 #define __HAVE_INCLUDES_ALREADY__
 #endif /* __HAVE_INCLUDES_ALREADY__ */
+
+
+/* How do I do this properly... anybody? */
+#if defined(BUILD_UNIVERSAL)
+  #define TARGET_CPU_PPC 1
+  #define TARGET_CPU_X86 1
+#endif
 
 
 #ifndef GEN_MISSING
@@ -130,7 +137,7 @@ resource 'thng' (kPrimaryResourceID, kComponentName)
         'dlle', kPrimaryResourceID,
         Target_PlatformType,
 #if TARGET_REZ_FAT_COMPONENTS
-        COMPONENT_FLAGS
+        COMPONENT_FLAGS,
         'dlle', kPrimaryResourceID,
         Target_SecondPlatformType,
 #endif

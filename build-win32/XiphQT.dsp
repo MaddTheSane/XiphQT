@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\common" /I "..\utils" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_WIN32__VBR_BROKEN" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\common" /I "..\utils" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_IA32__VBR_BROKEN" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
@@ -77,7 +77,7 @@ PostBuild_Cmds=if exist "$(IntDir)\$(TargetName).qtx" Attrib -R "$(IntDir)\$(Tar
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_WIN32__VBR_BROKEN" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_IA32__VBR_BROKEN" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
