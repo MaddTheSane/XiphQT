@@ -120,10 +120,14 @@ public XCACodec
     enum {
         kVorbisBytesPerPacket = 0,
         kVorbisFramesPerPacket = _SHOULD_BE_ZERO_HERE,
+        kVorbisFramesPerPacketReported = 8192,
         kVorbisBytesPerFrame = 0,
         kVorbisChannelsPerFrame = 0,
         kVorbisBitsPerChannel = 16,
         kVorbisFormatFlags = 0,
+
+        /* Just a funny number, and only roughly valid for the 'Xiph (Ogg-Framed) Vorbis'. */
+        kVorbisFormatMaxBytesPerPacket = 255 * 255,
 
         kVorbisDecoderBufferSize = 64 * 1024
     };

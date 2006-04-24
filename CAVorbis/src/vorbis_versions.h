@@ -4,7 +4,7 @@
  *    The current version of the Vorbis component.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -33,9 +33,9 @@
 
 
 #ifdef DEBUG
-#define kCAVorbis_adec_Version		(0x00FF0101)
+#define kCAVorbis_adec_Version		(0x00FF0105)
 #else
-#define kCAVorbis_adec_Version		(0x00000101)
+#define kCAVorbis_adec_Version		(0x00000105)
 #endif /* DEBUG */
 
 

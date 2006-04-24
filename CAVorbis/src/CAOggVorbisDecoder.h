@@ -4,7 +4,7 @@
  *    CAOggVorbisDecoder class definition.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -62,6 +62,17 @@ public CAVorbisDecoder
 
     ogg_stream_state        mO_st;
     std::vector<SInt32>     mFramesBufferedList;
+
+    /* SampleOffsetBuffer */
+    Byte                    *mSOBuffer;
+    UInt32                  mSOBufferSize;
+    UInt32                  mSOBufferUsed;
+    UInt32                  mSOBufferWrapped;
+    UInt32                  mSOBufferPackets;
+    UInt32                  mSOBufferPages;
+    UInt32                  mSOReturned;
+
+    UInt32                  mFirstPageNo;
 };
 
 

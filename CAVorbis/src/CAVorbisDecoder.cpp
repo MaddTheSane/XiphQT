@@ -5,7 +5,7 @@
  *    codec functionality.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -57,7 +57,7 @@ CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false 
                                             kVorbisBitsPerChannel, kVorbisFormatFlags);
     AddInputFormat(theInputFormat);
 
-    mInputFormat.mSampleRate = 44100;
+    mInputFormat.mSampleRate = 44100.0;
     mInputFormat.mFormatID = kAudioFormatXiphVorbis;
     mInputFormat.mFormatFlags = kVorbisFormatFlags;
     mInputFormat.mBytesPerPacket = kVorbisBytesPerPacket;
@@ -74,7 +74,7 @@ CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false 
                                               kAudioFormatFlagsNativeFloatPacked);
     AddOutputFormat(theOutputFormat2);
 
-    mOutputFormat.mSampleRate = 44100;
+    mOutputFormat.mSampleRate = 44100.0;
     mOutputFormat.mFormatID = kAudioFormatLinearPCM;
     mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
     mOutputFormat.mBytesPerPacket = 8;
@@ -169,10 +169,26 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     case kAudioCodecPropertyPacketFrameSize:
         if(ioPropertyDataSize == sizeof(UInt32))
         {
-            *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacket;
+            /* The following line has been changed according to Apple engineers' suggestion
+               I received via Steve Nicolai (in response to *my* bugreport, I think...).
+                 (Why don't they just implement the VBR-VFPP properly? *sigh*)
+
+               The original line is left here as I still believe that's how it should be
+               implemented according to the QT docs. (And in case this workaround stops
+               working again one wonderful morning!) */
+            // *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacket;
+            *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacketReported;
         }
         else
         {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
+
+    case kAudioCodecPropertyMaximumPacketByteSize:
+        if(ioPropertyDataSize == sizeof(UInt32)) {
+            *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFormatMaxBytesPerPacket;
+        } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
@@ -213,6 +229,11 @@ void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
         break;
 
     case kAudioCodecPropertyPacketFrameSize:
+        outPropertyDataSize = sizeof(UInt32);
+        outWritable = false;
+        break;
+
+    case kAudioCodecPropertyMaximumPacketByteSize:
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
