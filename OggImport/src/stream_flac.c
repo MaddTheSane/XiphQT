@@ -41,6 +41,40 @@
 #include "data_types.h"
 
 
+static int unpack_vorbis_coments(vorbis_comment *vc, const void *data, UInt32 data_size)
+{
+    int i;
+    char *dptr = (char *) data;
+    char *dend = dptr + data_size;
+    int len = EndianU32_LtoN(*(UInt32 *)dptr);
+    int commnum = 0;
+    char save;
+
+    dptr += 4 + len;
+    if (len >= 0 && dptr < dend) {
+        commnum = EndianU32_LtoN(*(UInt32 *)dptr);
+        if (commnum >= 0) {
+            dptr += 4;
+
+            for (i = 0; i < commnum && dptr <= dend; i++) {
+                len = EndianU32_LtoN(*(UInt32 *)dptr);
+                dptr += 4;
+                if (dptr + len > dend)
+                    break;
+
+                save = *(dptr + len);
+                *(dptr + len) = '\0';
+                vorbis_comment_add(vc, dptr);
+                dptr += len;
+                *dptr = save;
+            }
+        }
+    }
+
+    //vorbis_comment_clear(vc);
+    return 0;
+}
+
 int recognize_header__flac(ogg_page *op)
 {
     char fh[] = {0x7f, 'F', 'L', 'A', 'C', '\0'};
@@ -51,9 +85,16 @@ int recognize_header__flac(ogg_page *op)
     return 1;
 };
 
-int verify_header__flac(ogg_page *op) //?
+int verify_header__flac(ogg_page *op)
 {
-    // TODO: check mapping version, etc.?
+    char nfh[] = "fLaC";
+    dbg_printf("! -- - flac_verify_header: mapping ver: %d.%d\n", (int)((char *)op->body)[5], (int)((char *)op->body)[6]);
+    if ((int)((char *)op->body)[5] != FLAC_MAPPING_SUPPORTED_MAJOR)
+        return -1;
+    if (strncmp(nfh, ((char *)op->body) + 9, 4))
+        return -1;
+
+    // anything else to check?
     return 0;
 };
 
@@ -91,7 +132,8 @@ ComponentResult create_sample_description__flac(StreamInfo *si)
     asbd.mBytesPerFrame = 0;
     asbd.mChannelsPerFrame = si->numChannels;
     //asbd.mBitsPerChannel = 16;
-    asbd.mBitsPerChannel = 0;
+    //asbd.mBitsPerChannel = 0;
+    asbd.mBitsPerChannel = si->si_flac.bps;
     asbd.mReserved = 0;
 
     if (si->numChannels == 1)
@@ -118,9 +160,7 @@ int process_first_packet__flac(StreamInfo *si, ogg_page *op, ogg_packet *opckt)
 {
     unsigned long serialnoatom[3] = { EndianU32_NtoB(sizeof(serialnoatom)), EndianU32_NtoB(kCookieTypeOggSerialNo),
                                       EndianS32_NtoB(ogg_page_serialno(op)) };
-    //unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeSpeexHeader) };
-
-    //vorbis_synthesis_headerin(&si->si_vorbis.vi, &si->si_vorbis.vc, opckt); //check errors?
+    unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeFLACStreaminfo) };
 
     si->si_flac.metablocks =  (SInt32) EndianU16_BtoN(* (UInt16 *) (((char *)opckt->packet) + 7));
     UInt32 sib = EndianU32_BtoN(* (UInt32 *) (((char *)opckt->packet) + 27));
@@ -131,11 +171,11 @@ int process_first_packet__flac(StreamInfo *si, ogg_page *op, ogg_packet *opckt)
     si->numChannels = (sib & 0x07) + 1;
     si->rate = (sib >> 3) & 0xfffff;
 
-    dbg_printf("! -- - flac_first_packet: ch: %d, rate: %ld\n", si->numChannels, si->rate);
+    dbg_printf("! -- - flac_first_packet: ch: %d, rate: %ld, bps: %ld\n", si->numChannels, si->rate, si->si_flac.bps);
 
     PtrAndHand(serialnoatom, si->soundDescExtension, sizeof(serialnoatom)); //check errors?
-    //PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead)); //check errors?
-    //PtrAndHand(opckt->packet, si->soundDescExtension, opckt->bytes); //check errors?
+    PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead)); //check errors?
+    PtrAndHand((((char *)opckt->packet) + 13), si->soundDescExtension, opckt->bytes - 13); //check errors?
 
     si->si_flac.state = kFStateReadingComments;
 
@@ -170,19 +210,33 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
             } else if (ovret < 1) {
                 loop = false;
             } else {
-                //unsigned long atomhead[2] = { EndianU32_NtoB(op.bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeSpeexComments) };
-
-                //PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
-                //PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
-                //vorbis_synthesis_headerin(&si->si_vorbis.vi, &si->si_vorbis.vc, &op);
-
                 ret = CreateTrackAndMedia(globals, si, opg);
                 if (ret != noErr) {
                     dbg_printf("??? -- CreateTrackAndMedia failed?: %ld\n", (long)ret);
+                    loop = false;
+                    break;
                 }
 
-                // /*err =*/ DecodeCommentsQT(globals, si, &si->si_vorbis.vc);
-                //NotifyMovieChanged(globals);
+                if (si->si_flac.metablocks == 0 && (*((unsigned char*) op.packet) == 0xff)) {
+                    si->si_flac.metablocks = si->si_flac.skipped;
+                    si->si_flac.state = kFStateReadingAdditionalMDBlocks;
+                    break;
+                }
+
+                {
+                    unsigned long atomhead[2] = { EndianU32_NtoB(op.bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeFLACMetadata) };
+
+                    PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
+                    PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
+                }
+
+                if (((* (char *) op.packet) & 0x7f) == 4) {
+                    dbg_printf("!  > - flac_stream_page - mb: %ld, skipped: %ld, h: %02x\n", si->si_flac.metablocks, si->si_flac.skipped,
+                               (*(char *) op.packet) & 0x7f);
+                    unpack_vorbis_coments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
+                    /*err =*/ DecodeCommentsQT(globals, si, &si->si_flac.vc);
+                    //NotifyMovieChanged(globals);
+                }
 
                 si->si_flac.skipped += 1;
                 si->si_flac.state = kFStateReadingAdditionalMDBlocks;
@@ -192,7 +246,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
 
         case kFStateReadingAdditionalMDBlocks:
             dbg_printf("! -- - flac_stream_page - mb: %ld, skipped: %ld\n", si->si_flac.metablocks, si->si_flac.skipped);
-            if (si->si_flac.skipped >= si->si_flac.metablocks) {
+            if (si->si_flac.metablocks > 0 && si->si_flac.skipped >= si->si_flac.metablocks) {
                 unsigned long endAtom[2] = { EndianU32_NtoB(sizeof(endAtom)), EndianU32_NtoB(kAudioTerminatorAtomType) };
 
                 ret = PtrAndHand(endAtom, si->soundDescExtension, sizeof(endAtom));
@@ -209,7 +263,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                 si->incompleteCompensation = 0;
                 si->si_flac.state = kFStateReadingFirstPacket;
 
-                loop = false; // ??!
+                loop = false; // the audio data is supposed to start on a fresh page
                 break;
             }
 
@@ -222,9 +276,23 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                 loop = false;
             } else {
                 // not much here so far, basically just skip the extra header packet
-                //unsigned long atomhead[2] = { EndianU32_NtoB(op.bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeSpeexExtraHeader) };
-                //PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
-                //PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
+                unsigned long atomhead[2] = { EndianU32_NtoB(op.bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeFLACMetadata) };
+
+                if (si->si_flac.metablocks == 0 && (* (unsigned char*) op.packet) == 0xff) {
+                    si->si_flac.metablocks = si->si_flac.skipped;
+                    break;
+                }
+
+                PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
+                PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
+
+                if (((* (unsigned char *) op.packet) & 0x7f) == 4) {
+                    dbg_printf("!  > - flac_stream_page - mb: %ld, skipped: %ld, h: %02x\n", si->si_flac.metablocks, si->si_flac.skipped,
+                               (*(char *) op.packet) & 0x7f);
+                    unpack_vorbis_coments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
+                    /*err =*/ DecodeCommentsQT(globals, si, &si->si_flac.vc);
+                    //NotifyMovieChanged(globals);
+                }
 
                 si->si_flac.skipped += 1;
             }
@@ -232,6 +300,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
             break;
 
         case kFStateReadingFirstPacket:
+            // what to do with this one? is it needed at all??
             if (ogg_page_pageno(opg) > 2 && false) {
                 si->lastGranulePos = ogg_page_granulepos(opg);
                 dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));

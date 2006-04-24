@@ -4,7 +4,7 @@
  *    Definition of Vorbis specific data structures.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -32,6 +32,7 @@
 #define __stream_types_vorbis_h__
 
 
+#if !defined(_NO_VORBIS_SUPPORT)
 #include <Vorbis/codec.h>
 
 typedef enum VorbisImportStates {
@@ -52,5 +53,6 @@ typedef struct {
 
 
 #define _HAVE__VORBIS_SUPPORT 1
+#endif
 
 #endif /* __stream_types_vorbis_h__ */

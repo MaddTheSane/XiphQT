@@ -67,6 +67,7 @@
 #include "stream_types_vorbis.h"
 #include "stream_types_speex.h"
 #include "stream_types_flac.h"
+#include "stream_types_theora.h"
 
 #define INCOMPLETE_PAGE_DURATION 1
 
@@ -105,6 +106,7 @@ typedef struct {
 
     TimeValue           insertTime;
     TimeValue           streamOffset;
+    // SInt32              sampleOffset;
 
     CFDictionaryRef		MDmapping;
     CFDictionaryRef		UDmapping;
@@ -120,6 +122,9 @@ typedef struct {
 #endif
 #if defined(_HAVE__FLAC_SUPPORT)
         StreamInfo__flac si_flac;
+#endif
+#if defined(_HAVE__THEORA_SUPPORT)
+        StreamInfo__theora si_theora;
 #endif
     };
 
@@ -205,6 +210,8 @@ typedef int (*verify_header) (ogg_page *op);
 typedef int (*initialize_stream) (StreamInfo *si);
 typedef void (*clear_stream) (StreamInfo *si);
 typedef ComponentResult (*create_sample_description) (StreamInfo *si);
+typedef ComponentResult (*create_track) (OggImportGlobals *globals, StreamInfo *si);
+typedef ComponentResult (*create_track_media) (OggImportGlobals *globals, StreamInfo *si, Handle data_ref);
 
 typedef int (*process_first_packet) (StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 typedef ComponentResult (*process_stream_page) (OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
@@ -218,11 +225,13 @@ typedef struct stream_format_handle_funcs {
 
     process_first_packet                first_packet;
     create_sample_description           sample_description;
+    create_track                        track;
+    create_track_media                  track_media;
 
     initialize_stream                   initialize;
     clear_stream                        clear;
 } stream_format_handle_funcs;
 
-#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 
 #endif /* __importer_types_h__ */

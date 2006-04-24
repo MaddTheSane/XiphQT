@@ -35,6 +35,9 @@
 
 #include "importer_types.h"
 
+#define FLAC_MAPPING_SUPPORTED_MAJOR 1
+
+
 extern int recognize_header__flac(ogg_page *op);
 extern int verify_header__flac(ogg_page *op);
 
@@ -47,7 +50,7 @@ extern ComponentResult process_stream_page__flac(OggImportGlobals *globals, Stre
 
 #define HANDLE_FUNCTIONS__FLAC { &process_stream_page__flac, &recognize_header__flac, \
             &verify_header__flac, &process_first_packet__flac, &create_sample_description__flac, \
-            &initialize_stream__flac, &clear_stream__flac }
+            NULL, NULL, &initialize_stream__flac, &clear_stream__flac }
 
 
 #endif /* __stream_flac_h__ */

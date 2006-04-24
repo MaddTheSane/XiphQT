@@ -65,6 +65,7 @@
 #include "stream_vorbis.h"
 #include "stream_speex.h"
 #include "stream_flac.h"
+#include "stream_theora.h"
 
 static stream_format_handle_funcs s_formats[] = {
 #if defined(_HAVE__VORBIS_SUPPORT)
@@ -75,6 +76,9 @@ static stream_format_handle_funcs s_formats[] = {
 #endif
 #if defined(_HAVE__SPEEX_SUPPORT)
     HANDLE_FUNCTIONS__SPEEX,
+#endif
+#if defined(_HAVE__THEORA_SUPPORT)
+    HANDLE_FUNCTIONS__THEORA,
 #endif
 
     HANDLE_FUNCTIONS__NULL
@@ -313,6 +317,8 @@ static ComponentResult OpenStream(OggImportGlobalsPtr globals, long serialno, og
 
         si->MDmapping = NULL;
         si->UDmapping = NULL;
+
+        // si->sampleOffset = 0;
 
         globals->numTracksStarted++;
     }
@@ -689,7 +695,10 @@ ComponentResult CreateTrackAndMedia(OggImportGlobalsPtr globals, StreamInfoPtr s
         if (err == noErr)
         {
             dbg_printf("! -- SampleDescription created OK\n");
-            si->theTrack = NewMovieTrack(globals->theMovie, 0, 0, kFullVolume);
+            if (si->sfhf->track != NULL)
+                /* err = */ (*si->sfhf->track)(globals, si);
+            else
+                si->theTrack = NewMovieTrack(globals->theMovie, 0, 0, kFullVolume);
             if (si->theTrack)
             {
                 Handle data_ref = globals->dataRef;
@@ -702,9 +711,14 @@ ComponentResult CreateTrackAndMedia(OggImportGlobalsPtr globals, StreamInfoPtr s
                     err = DataHGetDataRef(globals->dataReader, &data_ref);
 
                 if (err == noErr) {
-                    dbg_printf("! -- calling => NewTrackMedia(%lx)\n", si->rate);
-                    si->theMedia = NewTrackMedia(si->theTrack, SoundMediaType,
-                                                 si->rate, data_ref, globals->dataRefType);
+                    if (si->sfhf->track_media != NULL)
+                        /* err = */ (*si->sfhf->track_media)(globals, si, data_ref);
+                    else {
+                        dbg_printf("! -- calling => NewTrackMedia(%lx)\n", si->rate);
+                        si->theMedia = NewTrackMedia(si->theTrack, SoundMediaType,
+                                                     si->rate, data_ref, globals->dataRefType);
+                    }
+
                     if (data_ref != globals->dataRef)
                         DisposeHandle(data_ref);
                 }

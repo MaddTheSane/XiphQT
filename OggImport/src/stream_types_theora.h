@@ -1,10 +1,10 @@
 /*
- *  versions.h
+ *  stream_types_theora.h
  *
- *    The current version of the OggImport component.
+ *    Definition of Theora specific data structures.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,13 +28,34 @@
  */
 
 
-#if !defined(__versions_h__)
-#define __versions_h__
+#if !defined(__stream_types_theora_h__)
+#define __stream_types_theora_h__
 
-#ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF0106)
-#else
-#define kOgg_eat__Version		(0x00000106)
-#endif /* DEBUG */
 
-#endif /* __versions_h__ */
+#if !defined(_NO_THEORA_SUPPORT)
+#include <Theora/theora.h>
+
+typedef enum TheoraImportStates {
+    kTStateInitial,
+    kTStateReadingComments,
+    kTStateReadingCodebooks,
+    kTStateReadingFirstPacket,
+    //kTStateSeekingLastPacket,
+    kTStateReadingPackets
+} TheoraImportStates;
+
+typedef struct {
+    TheoraImportStates state;
+
+    theora_info ti;
+    theora_comment tc;
+
+    UInt32 granulepos_shift;
+    UInt32 fps_framelen;
+} StreamInfo__theora;
+
+
+#define _HAVE__THEORA_SUPPORT 1
+#endif
+
+#endif /* __stream_types_theora_h__ */

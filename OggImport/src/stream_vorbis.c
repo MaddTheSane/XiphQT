@@ -4,7 +4,7 @@
  *    Vorbis format related part of OggImporter.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -213,18 +213,6 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                 PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
 
                 vorbis_synthesis_headerin(&si->si_vorbis.vi, &si->si_vorbis.vc, &op);
-                {
-                    unsigned long endAtom[2] = { EndianU32_NtoB(sizeof(endAtom)), EndianU32_NtoB(kAudioTerminatorAtomType) };
-
-                    ret = PtrAndHand(endAtom, si->soundDescExtension, sizeof(endAtom));
-                    if (ret == noErr) {
-                        ret = AddSoundDescriptionExtension((SoundDescriptionHandle) si->sampleDesc,
-                                                           si->soundDescExtension, siDecompressionParams);
-                        //dbg_printf("??? -- Adding extension: %ld\n", ret);
-                    } else {
-                        //dbg_printf("??? -- Hmm, something went wrong: %ld\n", ret);
-                    }
-                }
 
                 si->si_vorbis.state = kVStateReadingFirstPacket;
                 si->insertTime = 0;
@@ -243,6 +231,21 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                 if (si->lastGranulePos < 0)
                     si->lastGranulePos = 0;
             }
+            {
+                unsigned long pagenoatom[3] = { EndianU32_NtoB(sizeof(pagenoatom)), EndianU32_NtoB(kCookieTypeVorbisFirstPageNo),
+                                                EndianU32_NtoB(ogg_page_pageno(opg)) };
+                unsigned long endAtom[2] = { EndianU32_NtoB(sizeof(endAtom)), EndianU32_NtoB(kAudioTerminatorAtomType) };
+                PtrAndHand(pagenoatom, si->soundDescExtension, sizeof(pagenoatom)); //check errors?
+                ret = PtrAndHand(endAtom, si->soundDescExtension, sizeof(endAtom));
+                if (ret == noErr) {
+                    ret = AddSoundDescriptionExtension((SoundDescriptionHandle) si->sampleDesc,
+                                                       si->soundDescExtension, siDecompressionParams);
+                    //dbg_printf("??? -- Adding extension: %ld\n", ret);
+                } else {
+                    //dbg_printf("??? -- Hmm, something went wrong: %ld\n", ret);
+                }
+            }
+
             si->si_vorbis.state = kVStateReadingPackets;
             break;
 
@@ -293,11 +296,13 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                                 SetTrackEnabled(si->theTrack, true);
                             }
                         }
+                        /*
                         if (GetMovieTimeScale(globals->theMovie) < GetMediaTimeScale(si->theMedia)) {
                             dbg_printf("   # - changing movie time scale: %ld --> %ld\n",
                                        GetMovieTimeScale(globals->theMovie), GetMediaTimeScale(si->theMedia));
                             SetMovieTimeScale(globals->theMovie, GetMediaTimeScale(si->theMedia));
                         }
+                        */
                     }
                     si->insertTime = -1;
                     timeLoaded = GetTrackDuration(si->theTrack);

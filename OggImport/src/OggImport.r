@@ -188,6 +188,31 @@ resource 'thga' (kImporterResID + 2, OggImporterName, purgeable) {
     'thnr', kImporterResID, 0
 };
 
+// Component Alias
+resource 'thga' (kImporterResID + 3, OggImporterName, purgeable) {
+    kImporterComponentType,             // Type
+    'ANX ',                             // Subtype - this must be in uppercase.
+                                        // It will match an ".anx" suffix case-insensitively.
+    'soun',                             // Manufacturer
+    kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
+    0,                                  // Component Flags Mask
+    0,                                  // Code Type
+    0,                                  // Code ID
+    'STR ',                             // Name Type
+    kImporterNameStringResID,           // Name ID
+    'STR ',                             // Info Type
+    kImporterInfoStringResID,           // Info ID
+    0,                                  // Icon Type
+    0,                                  // Icon ID
+                // TARGET COMPONENT ---------------
+    kImporterComponentType,             // Type
+    kCodecFormat,                       // SubType
+    'soun',                             // Manufaturer
+    kImporterFlags,                     // Component Flags
+    0,                                  // Component Flags Mask
+    'thnr', kImporterResID, 0
+};
+
 resource 'thnr' (kImporterResID, OggImporterName, purgeable) {
     {
         'mime', 1, 0, 'mime', kImporterResID, cmpResourceNoFlags,
@@ -221,14 +246,17 @@ resource 'mime' (kImporterResID, OggImporterName, purgeable) {
         kMimeInfoMimeTypeTag,      2, "application/x-ogg";
         kMimeInfoMimeTypeTag,      3, "audio/x-speex";
         kMimeInfoMimeTypeTag,      4, "audio/speex";
+        kMimeInfoMimeTypeTag,      5, "application/x-annodex";
         kMimeInfoFileExtensionTag, 1, "ogg";
         kMimeInfoFileExtensionTag, 2, "ogg";
         kMimeInfoFileExtensionTag, 3, "spx";
         kMimeInfoFileExtensionTag, 4, "spx";
+        kMimeInfoFileExtensionTag, 5, "anx";
         kMimeInfoDescriptionTag,   1, "Ogg Vorbis";
         kMimeInfoDescriptionTag,   2, "Ogg Vorbis";
         kMimeInfoDescriptionTag,   3, "Ogg Speex";
         kMimeInfoDescriptionTag,   4, "Ogg Speex";
+        kMimeInfoDescriptionTag,   5, "Annodex";
     };
 };
 
@@ -292,6 +320,35 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         {
             "audio/x-speex";
             "audio/speex";
+        };
+//    };
+//    {
+        kQTMediaConfigAudioGroupID,
+        kQTMediaConfigBinaryFile | \
+            kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
+            kQTMediaConfigUsePluginByDefault,
+        'OggS',
+        'TVOD',	/* we don't have a creator code for our files, hijack QT player */
+        kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
+        0, 0,
+        'ANX ',
+        kQTMediaInfoNetGroup,
+
+        /* no synonyms */
+        {
+        },
+
+        {
+            "Annodex media file",
+            "anx",
+            "QuickTime Player",
+            "Annodex file importer",
+            "",
+        },
+
+        /* mime types array */
+        {
+            "application/x-annodex";
         };
     };
 };

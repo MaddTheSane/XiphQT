@@ -4,7 +4,7 @@
  *    Definition of Speex specific data structures.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -32,6 +32,8 @@
 #define __stream_types_speex_h__
 
 
+#if !defined(_NO_SPEEX_SUPPORT)
+#include <Vorbis/codec.h>
 #include <Speex/speex.h>
 #include <Speex/speex_header.h>
 
@@ -53,5 +55,6 @@ typedef struct {
 
 
 #define _HAVE__SPEEX_SUPPORT 1
+#endif
 
 #endif /* __stream_types_speex_h__ */

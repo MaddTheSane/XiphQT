@@ -32,8 +32,8 @@
 #define __stream_types_flac_h__
 
 
-#include <Speex/speex.h>
-#include <Speex/speex_header.h>
+#if !defined(_NO_FLAC_SUPPORT)
+#include <Vorbis/codec.h>
 
 typedef enum FLACImportStates {
     kFStateInitial,
@@ -55,5 +55,6 @@ typedef struct {
 
 
 #define _HAVE__FLAC_SUPPORT 1
+#endif
 
 #endif /* __stream_types_flac_h__ */

@@ -5,7 +5,7 @@
  *    components.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -42,7 +42,8 @@ enum {
 enum {
     kCookieTypeVorbisHeader = 'vCtH',
     kCookieTypeVorbisComments = 'vCt#',
-    kCookieTypeVorbisCodebooks = 'vCtC'
+    kCookieTypeVorbisCodebooks = 'vCtC',
+    kCookieTypeVorbisFirstPageNo = 'vCtN'
 };
 
 enum {
@@ -51,6 +52,16 @@ enum {
     kCookieTypeSpeexExtraHeader	= 'sCtX'
 };
 
+enum {
+    kCookieTypeTheoraHeader = 'tCtH',
+    kCookieTypeTheoraComments = 'tCt#',
+    kCookieTypeTheoraCodebooks = 'tCtC'
+};
+
+enum {
+    kCookieTypeFLACStreaminfo = 'fCtS',
+    kCookieTypeFLACMetadata = 'fCtM'
+};
 
 struct OggSerialNoAtom {
     long size;			// = sizeof(OggSerialNoAtom)
