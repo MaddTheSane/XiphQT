@@ -162,8 +162,8 @@ int process_first_packet__flac(StreamInfo *si, ogg_page *op, ogg_packet *opckt)
                                       EndianS32_NtoB(ogg_page_serialno(op)) };
     unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeFLACStreaminfo) };
 
-    si->si_flac.metablocks =  (SInt32) EndianU16_BtoN(* (UInt16 *) (((char *)opckt->packet) + 7));
     UInt32 sib = EndianU32_BtoN(* (UInt32 *) (((char *)opckt->packet) + 27));
+    si->si_flac.metablocks =  (SInt32) EndianU16_BtoN(* (UInt16 *) (((char *)opckt->packet) + 7));
 
     sib >>= 4;
     si->si_flac.bps = (sib & 0x1f) + 1;
