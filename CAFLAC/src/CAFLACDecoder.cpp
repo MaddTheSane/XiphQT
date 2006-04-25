@@ -46,7 +46,7 @@
 CAFLACDecoder::CAFLACDecoder(Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0),
-    mFLACsrate(44100), mFLACchannels(2), mFLACbits(16), // some defaults...?
+    mFLACsrate(44100), mFLACchannels(2), mFLACbits(16),
     mFLACFPList(),
     mFrame(), mNumFrames(0), mBPtrs(NULL)
 {
@@ -59,7 +59,7 @@ CAFLACDecoder::CAFLACDecoder(Boolean inSkipFormatsInitialization /* = false */) 
                                             kFLACBitsPerChannel, kFLACFormatFlags);
     AddInputFormat(theInputFormat);
 
-    mInputFormat.mSampleRate = 44100;
+    mInputFormat.mSampleRate = 44100.0;
     mInputFormat.mFormatID = kAudioFormatXiphFLAC;
     mInputFormat.mFormatFlags = kFLACFormatFlags;
     mInputFormat.mBytesPerPacket = kFLACBytesPerPacket;
@@ -76,7 +76,7 @@ CAFLACDecoder::CAFLACDecoder(Boolean inSkipFormatsInitialization /* = false */) 
                                               kAudioFormatFlagsNativeFloatPacked);
     AddOutputFormat(theOutputFormat2);
 
-    mOutputFormat.mSampleRate = 44100;
+    mOutputFormat.mSampleRate = 44100.0;
     mOutputFormat.mFormatID = kAudioFormatLinearPCM;
     mOutputFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
     mOutputFormat.mBytesPerPacket = 8;
@@ -90,10 +90,6 @@ CAFLACDecoder::~CAFLACDecoder()
 {
     if (mCookie != NULL)
         delete[] mCookie;
-
-    if (mCompressionInitialized) {
-        //TODO: free FLAC specific resources
-    }
 }
 
 void CAFLACDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -105,11 +101,11 @@ void CAFLACDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
         /////// TODO: !! what do to with the formats?!!
-        //mFInfo.srate = static_cast<UInt32> (inInputFormat->mSampleRate);
-        //mFInfo.channels = inInputFormat->mChannelsPerFrame;
-        //mFInfo.bits = mInputFormat.mBitsPerChannel;
-        //if (mFInfo.bits < 4)
-        //    mFInfo.bits = 16;
+        mFLACsrate = static_cast<UInt32> (inInputFormat->mSampleRate);
+        mFLACchannels = inInputFormat->mChannelsPerFrame;
+        mFLACbits = mInputFormat.mBitsPerChannel;
+        if (mFLACbits < 4)
+            mFLACbits = 16;
     }
 
     if(inOutputFormat != NULL) {
@@ -123,14 +119,11 @@ void CAFLACDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
 
     BDCInitialize(kFLACDecoderInBufferSize);
 
-    //if (inMagicCookieByteSize == 0)
-    //    CODEC_THROW(kAudioCodecUnsupportedFormatError);
-
     if (inMagicCookieByteSize != 0) {
         SetMagicCookie(inMagicCookie, inMagicCookieByteSize);
     }
 
-    //if (mOVinited)
+    //if (mCompressionInitialized)
     //    FixFormats();
 
     XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
@@ -150,16 +143,6 @@ void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
     dbg_printf(" >> [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
-    /*
-    case kAudioCodecPropertyMaximumPacketByteSize:
-        if(ioPropertyDataSize == sizeof(UInt32)) {
-            *reinterpret_cast<UInt32*>(outPropertyData) = 32 * 8 * 1024;
-        } else {
-            CODEC_THROW(kAudioCodecBadPropertySizeError);
-        }
-        break;
-    */
-
     case kAudioCodecPropertyRequiresPacketDescription:
         if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = 1;
@@ -178,11 +161,21 @@ void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
 
     case kAudioCodecPropertyPacketFrameSize:
         if(ioPropertyDataSize == sizeof(UInt32)) {
-            *reinterpret_cast<UInt32*>(outPropertyData) = kFLACFramesPerPacket;
+            *reinterpret_cast<UInt32*>(outPropertyData) = kFLACFramesPerPacketReported;
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
+
+        /*
+        case kAudioCodecPropertyMaximumPacketByteSize:
+            if(ioPropertyDataSize == sizeof(UInt32)) {
+                *reinterpret_cast<UInt32*>(outPropertyData) = 32 * 8 * 1024;
+            } else {
+                CODEC_THROW(kAudioCodecBadPropertySizeError);
+            }
+            break;
+        */
 
         //case kAudioCodecPropertyQualitySetting: ???
 #if TARGET_OS_MAC
@@ -206,16 +199,9 @@ void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
 
 void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
-    /*
-    case kAudioCodecPropertyMaximumPacketByteSize:
-        outPropertyDataSize = sizeof(UInt32);
-        outWritable = false;
-        break;
-    */
-
     case kAudioCodecPropertyRequiresPacketDescription:
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
@@ -230,6 +216,13 @@ void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& o
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
+
+    /*
+    case kAudioCodecPropertyMaximumPacketByteSize:
+        outPropertyDataSize = sizeof(UInt32);
+        outWritable = false;
+        break;
+    */
 
     default:
         ACBaseCodec::GetPropertyInfo(inPropertyID, outPropertyDataSize, outWritable);
@@ -268,7 +261,7 @@ void CAFLACDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCook
 
 void CAFLACDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    printf(" >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf(" >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
     if (mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
@@ -278,54 +271,44 @@ void CAFLACDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagic
 
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);
-    printf("<.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("<.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
 }
 
 
 void CAFLACDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
 {
-    if(!mIsInitialized)
-    {
+    if(!mIsInitialized) {
         //	check to make sure the input format is legal
         if(inInputFormat.mFormatID != kAudioFormatXiphFLAC)
         {
-#if VERBOSE
-            DebugMessage("CAFLACDecoder::SetFormats: only support Xiph Vorbis for input");
-#endif
+            dbg_printf("CAFLACDecoder::SetFormats: only support Xiph Vorbis for input\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
         //	tell our base class about the new format
-        ACBaseCodec::SetCurrentInputFormat(inInputFormat);
-    }
-    else
-    {
+        XCACodec::SetCurrentInputFormat(inInputFormat);
+    } else {
         CODEC_THROW(kAudioCodecStateError);
     }
 }
 
 void CAFLACDecoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat)
 {
-    if(!mIsInitialized)
-    {
+    if(!mIsInitialized) {
         //	check to make sure the output format is legal
-        if(	(inOutputFormat.mFormatID != kAudioFormatLinearPCM) ||
-                !( ( (inOutputFormat.mFormatFlags == kAudioFormatFlagsNativeFloatPacked) &&
-                     (inOutputFormat.mBitsPerChannel == 32) ) ||
-                   ( (inOutputFormat.mFormatFlags == (kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked) ) &&
-                     (inOutputFormat.mBitsPerChannel == 16) ) ) )
+        if ((inOutputFormat.mFormatID != kAudioFormatLinearPCM) ||
+            !(((inOutputFormat.mFormatFlags == kAudioFormatFlagsNativeFloatPacked) &&
+               (inOutputFormat.mBitsPerChannel == 32)) ||
+              ((inOutputFormat.mFormatFlags == (kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked)) &&
+               (inOutputFormat.mBitsPerChannel == 16))))
         {
-#if VERBOSE
-            DebugMessage("CAFLACDecoder::SetFormats: only supports either 16 bit native endian signed integer or 32 bit native endian Core Audio floats for output");
-#endif
+            dbg_printf("CAFLACDecoder::SetFormats: only supports either 16 bit native endian signed integer or 32 bit native endian Core Audio floats for output\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
         //	tell our base class about the new format
-        ACBaseCodec::SetCurrentOutputFormat(inOutputFormat);
-    }
-    else
-    {
+        XCACodec::SetCurrentOutputFormat(inOutputFormat);
+    } else {
         CODEC_THROW(kAudioCodecStateError);
     }
 }
@@ -368,10 +351,24 @@ void CAFLACDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UIn
         for (i = 0; i < mFLACchannels; i++) {
             SInt16* theOutputData = static_cast<SInt16*> (outOutputData) + i + (inFramesOffset * mFLACchannels);
             const FLAC__int32* mono = static_cast<const FLAC__int32*> (mBPtrs[i] + mFrame.header.blocksize - mNumFrames);
+            SInt32 bitshift = mFLACbits - mOutputFormat.mBitsPerChannel;
 
-            for (j = 0; j < inNumberFrames; j++) {
-                *theOutputData = static_cast<SInt16> (mono[j]);
-                theOutputData += mFLACchannels;
+            if (bitshift == 0) {
+                for (j = 0; j < inNumberFrames; j++) {
+                    *theOutputData = static_cast<SInt16> (mono[j]);
+                    theOutputData += mFLACchannels;
+                }
+            } else if (bitshift > 0) {
+                for (j = 0; j < inNumberFrames; j++) {
+                    *theOutputData = static_cast<SInt16> (mono[j] >> bitshift);
+                    theOutputData += mFLACchannels;
+                }
+            } else {
+                bitshift = -bitshift;
+                for (j = 0; j < inNumberFrames; j++) {
+                    *theOutputData = static_cast<SInt16> (mono[j] << bitshift);
+                    theOutputData += mFLACchannels;
+                }
             }
         }
     }
@@ -385,9 +382,6 @@ void CAFLACDecoder::SetCookie(const void* inMagicCookie, UInt32 inMagicCookieByt
     mCookieSize = inMagicCookieByteSize;
     if (inMagicCookieByteSize != 0) {
         mCookie = new Byte[inMagicCookieByteSize];
-
-        //const Byte * theData = static_cast<const Byte *> (inMagicCookie);
-        //BlockMoveData(theData + 8, mCookie, inMagicCookieByteSize - 8);
         BlockMoveData(inMagicCookie, mCookie, inMagicCookieByteSize);
     } else {
         mCookie = NULL;
@@ -399,98 +393,31 @@ void CAFLACDecoder::InitializeCompressionSettings()
     if (mCookie == NULL)
         return;
 
-#if 0
-    if (mCompressionInitialized) {
-        ogg_stream_clear(&mO_st);
-
-        vorbis_block_clear(&mV_vb);
-        vorbis_dsp_clear(&mV_vd);
-
-        vorbis_info_clear(&mV_vi);
-    }
-
     mCompressionInitialized = false;
 
-    UInt32 startOffset = 8; // atomsize + atomtype, ?
-    ogg_page og;
-    vorbis_comment vc;
+    Byte *ptrheader = mCookie;
+    Byte *cend = mCookie + mCookieSize;
+    CookieAtomHeader *aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
 
-    if (!WrapOggPage(&og, mCookie, mCookieSize, startOffset))
-        return;
+    while (ptrheader < cend) {
+        aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
+        ptrheader += EndianU32_BtoN(aheader->size);
 
-    ogg_stream_init(&mO_st, ogg_page_serialno(&og));
+        if (EndianS32_BtoN(aheader->type) == kCookieTypeFLACStreaminfo && ptrheader <= cend) {
+            UInt32 sib = EndianU32_BtoN(* (UInt32 *) (((Byte *)aheader->data) + 14));
 
-    vorbis_info_init(&mV_vi);
-    vorbis_comment_init(&vc);
-    ogg_packet op;
+            sib >>= 4;
+            mFLACbits = (sib & 0x1f) + 1;
+            sib >>= 5;
+            mFLACchannels = (sib & 0x07) + 1;
+            mFLACsrate = (sib >> 3) & 0xfffff;
 
-    if (ogg_stream_pagein(&mO_st, &og) < 0) {
-        ogg_stream_clear(&mO_st);
+            dbg_printf("  = [%08lx] CAFLACDecoder :: InitializeCompressionSettings(sr: %ld, chn: %ld, bi: %ld)\n",
+                       (UInt32) this, mFLACsrate, mFLACchannels, mFLACbits);
 
-        vorbis_comment_clear(&vc);
-        vorbis_info_clear(&mV_vi);
-
-        return;
-    }
-
-    if (ogg_stream_packetout(&mO_st, &op) != 1) {
-        ogg_stream_clear(&mO_st);
-
-        vorbis_comment_clear(&vc);
-        vorbis_info_clear(&mV_vi);
-
-        return;
-    }
-
-    if (vorbis_synthesis_headerin(&mV_vi, &vc, &op) < 0) {
-        ogg_stream_clear(&mO_st);
-
-        vorbis_comment_clear(&vc);
-        vorbis_info_clear(&mV_vi);
-
-        return;
-    }
-
-    UInt32 i=0;
-    int result;
-
-    while(i<2){
-        if (!WrapOggPage(&og, mCookie, mCookieSize, startOffset)) {
-            ogg_stream_clear(&mO_st);
-
-            vorbis_comment_clear(&vc);
-            vorbis_info_clear(&mV_vi);
-
-            return;
-        }
-
-        ogg_stream_pagein(&mO_st, &og);
-
-        while(i<2){
-            result=ogg_stream_packetout(&mO_st, &op);
-            if (result == 0)
-                break;
-            else if(result < 0) {
-                ogg_stream_clear(&mO_st);
-
-                vorbis_comment_clear(&vc);
-                vorbis_info_clear(&mV_vi);
-
-                return;
-            }
-
-            vorbis_synthesis_headerin(&mV_vi, &vc, &op);
-            i++;
+            mCompressionInitialized = true;
         }
     }
-
-    vorbis_synthesis_init(&mV_vd, &mV_vi);
-    vorbis_block_init(&mV_vd, &mV_vb);
-
-    vorbis_comment_clear(&vc);
-#endif
-
-    mCompressionInitialized = true;
 }
 
 
@@ -586,16 +513,6 @@ void CAFLACDecoder::Zap(UInt32 inFrames)
     }
 };
 
-// UInt32 BACFLAC::GetNumberOfChannels() const
-// {
-//     return mFLACchannels;
-// };
-
-// UInt32 BACFLAC::GetBitsPerSample() const
-// {
-//     return mFLACbits;
-// };
-
 
 void CAFLACDecoder::DFPinit(const ::FLAC__Frame& inFrame, const FLAC__int32 *const inBuffer[])
 {
@@ -620,7 +537,7 @@ void CAFLACDecoder::DFPclear()
 
 ::FLAC__StreamDecoderReadStatus CAFLACDecoder::read_callback(FLAC__byte buffer[], unsigned *bytes)
 {
-    printf(" | -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
+    dbg_printf(" | -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
     FLAC__StreamDecoderReadStatus ret = FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 
     if (mFLACFPList.empty()) {
@@ -643,14 +560,14 @@ void CAFLACDecoder::DFPclear()
             ffp.left -= *bytes;
     }
 
-    printf(" |<-. [%08lx] :: read_callback(%ld) = %ld\n", (UInt32) this, *bytes, ret);
+    dbg_printf(" |<-. [%08lx] :: read_callback(%ld) = %ld\n", (UInt32) this, *bytes, ret);
     return ret;
 }
 
 ::FLAC__StreamDecoderWriteStatus CAFLACDecoder::write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[])
 {
     ::FLAC__StreamDecoderWriteStatus ret = FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
-    printf(" | +> [%08lx] :: write_callback(%ld)\n", (UInt32) this, frame->header.blocksize);
+    dbg_printf(" | +> [%08lx] :: write_callback(%ld)\n", (UInt32) this, frame->header.blocksize);
 
     FLAC__int32** lbuffer = new FLAC__int32*[frame->header.channels];
     for (unsigned int i = 0; i < frame->header.channels; i++) {
@@ -662,16 +579,16 @@ void CAFLACDecoder::DFPclear()
 
     DFPinit(*frame, lbuffer); //MFDFPacket will free the lbuffer on .clear() call
 
-    printf(" |<+. [%08lx] :: write_callback()\n", (UInt32) this);
+    dbg_printf(" |<+. [%08lx] :: write_callback()\n", (UInt32) this);
     return ret;
 }
 
 void CAFLACDecoder::metadata_callback(const ::FLAC__StreamMetadata *metadata)
 {
-    printf(" |\".\" [%08lx] :: metadata_callback()\n", (UInt32) this);
+    dbg_printf(" |\".\" [%08lx] :: metadata_callback()\n", (UInt32) this);
 }
 
 void CAFLACDecoder::error_callback(::FLAC__StreamDecoderErrorStatus status)
 {
-    printf(" |<!> [%08lx] :: error_callback(%ld)\n", (UInt32) this, status);
+    dbg_printf(" |<!> [%08lx] :: error_callback(%ld)\n", (UInt32) this, status);
 }

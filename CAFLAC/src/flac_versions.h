@@ -32,9 +32,9 @@
 #define __flac_versions_h__
 
 #ifdef DEBUG
-#define kCAFLAC_adec_Version		(0x00FF0101)
+#define kCAFLAC_adec_Version		(0x00FF0102)
 #else
-#define kCAFLAC_adec_Version		(0x00000101)
+#define kCAFLAC_adec_Version		(0x00000102)
 #endif /* DEBUG */
 
 #endif /* __flac_versions_h__ */

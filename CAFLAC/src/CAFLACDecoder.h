@@ -135,10 +135,13 @@ protected:
     enum {
         kFLACBytesPerPacket = 0,
         kFLACFramesPerPacket = _SHOULD_BE_ZERO_HERE,
+        kFLACFramesPerPacketReported = 8192,
         kFLACBytesPerFrame = 0,
         kFLACChannelsPerFrame = 0,
         kFLACBitsPerChannel = 0,
         kFLACFormatFlags = 0,
+
+        kFLACFormatMaxBytesPerPacket = 65535,
 
         kFLACDecoderInBufferSize = 96 * 1024,
         kFLACDecoderOutBufferSize = 32 * 1024
