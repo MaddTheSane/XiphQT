@@ -160,7 +160,7 @@ int process_first_packet__flac(StreamInfo *si, ogg_page *op, ogg_packet *opckt)
 {
     unsigned long serialnoatom[3] = { EndianU32_NtoB(sizeof(serialnoatom)), EndianU32_NtoB(kCookieTypeOggSerialNo),
                                       EndianS32_NtoB(ogg_page_serialno(op)) };
-    unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeFLACStreaminfo) };
+    unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead) - 13), EndianU32_NtoB(kCookieTypeFLACStreaminfo) };
 
     UInt32 sib = EndianU32_BtoN(* (UInt32 *) (((char *)opckt->packet) + 27));
     si->si_flac.metablocks =  (SInt32) EndianU16_BtoN(* (UInt16 *) (((char *)opckt->packet) + 7));
