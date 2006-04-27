@@ -29,6 +29,7 @@
 
 
 #include "stream_theora.h"
+#include <Theora/theoradec.h>
 
 #include "debug.h"
 #define logg_page_last_packet_incomplete(op) (((unsigned char *)(op)->header)[26 + ((unsigned char *)(op)->header)[26]] == 255)
@@ -77,33 +78,39 @@ int verify_header__theora(ogg_page *op) //?
     ogg_stream_state os;
     ogg_packet       opk;
 
-    theora_info      ti;
-    theora_comment   tc;
+    th_info        ti;
+    th_comment     tc;
+    th_setup_info *ts = NULL;
 
     ogg_stream_init(&os, ogg_page_serialno(op));
 
-    theora_info_init(&ti);
-    theora_comment_init(&tc);
+
+    th_info_init(&ti);
+    th_comment_init(&tc);
 
     if (ogg_stream_pagein(&os, op) < 0)
         err = invalidMedia;
     else if (ogg_stream_packetout(&os, &opk) != 1)
         err = invalidMedia;
-    else if (theora_decode_header(&ti, &tc, &opk) < 0)
-        err = noSoundTrackInMovieErr;
+    else if (th_decode_headerin(&ti, &tc, &ts, &opk) < 0)
+        err = noVideoTrackInMovieErr;
 
     ogg_stream_clear(&os);
 
-    theora_comment_clear(&tc);
-    theora_info_clear(&ti);
+    if (ts != NULL)         // theoretically this shouldn't happen, but then
+        th_setup_free(ts);  // theoretically I don't know that this shouldn't happen
+
+    th_comment_clear(&tc);
+    th_info_clear(&ti);
 
     return err;
 };
 
 int initialize_stream__theora(StreamInfo *si)
 {
-    theora_info_init(&si->si_theora.ti);
-    theora_comment_init(&si->si_theora.tc);
+    th_info_init(&si->si_theora.ti);
+    th_comment_init(&si->si_theora.tc);
+    si->si_theora.ts = NULL;
 
     si->si_theora.state = kTStateInitial;
 
@@ -112,8 +119,10 @@ int initialize_stream__theora(StreamInfo *si)
 
 void clear_stream__theora(StreamInfo *si)
 {
-    theora_info_clear(&si->si_theora.ti);
-    theora_comment_clear(&si->si_theora.tc);
+    if (si->si_theora.ts != NULL)
+        th_setup_free(si->si_theora.ts);
+    th_info_clear(&si->si_theora.ti);
+    th_comment_clear(&si->si_theora.tc);
 };
 
 ComponentResult create_sample_description__theora(StreamInfo *si)
@@ -179,7 +188,7 @@ int process_first_packet__theora(StreamInfo *si, ogg_page *op, ogg_packet *opckt
     unsigned long fps_gcd = 1, multiplier = 1;
     UInt32 fps_N, fps_D;
 
-    theora_decode_header(&si->si_theora.ti, &si->si_theora.tc, opckt); //check errors?
+    th_decode_headerin(&si->si_theora.ti, &si->si_theora.tc, &si->si_theora.ts, opckt); //check errors?
 
     si->numChannels = 0;
 
@@ -206,7 +215,7 @@ int process_first_packet__theora(StreamInfo *si, ogg_page *op, ogg_packet *opckt
     dbg_printf("! -T   setting FPS values: [gcd: %8ld, mult: %8ld] fl: %8ld, rate: %8ld (N: %8ld, D: %8ld) (nN: %8ld, nD: %8ld)\n",
                fps_gcd, multiplier, si->si_theora.fps_framelen, si->rate, si->si_theora.ti.fps_numerator, si->si_theora.ti.fps_denominator,
                fps_N, fps_D);
-    si->si_theora.granulepos_shift = theora_granule_shift(&si->si_theora.ti);
+    si->si_theora.granulepos_shift = si->si_theora.ti.keyframe_granule_shift;
 
     PtrAndHand(serialnoatom, si->soundDescExtension, sizeof(serialnoatom)); //check errors?
     PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead)); //check errors?
@@ -250,7 +259,7 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
 
                 PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
                 PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
-                theora_decode_header(&si->si_theora.ti, &si->si_theora.tc, &op);
+                th_decode_headerin(&si->si_theora.ti, &si->si_theora.tc, &si->si_theora.ts, &op);
 
                 ret = CreateTrackAndMedia(globals, si, opg);
                 if (ret != noErr) {
@@ -276,7 +285,7 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                 PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
                 PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
 
-                theora_decode_header(&si->si_theora.ti, &si->si_theora.tc, &op);
+                th_decode_headerin(&si->si_theora.ti, &si->si_theora.tc, &si->si_theora.ts, &op);
                 {
                     unsigned long endAtom[2] = { EndianU32_NtoB(sizeof(endAtom)), EndianU32_NtoB(kAudioTerminatorAtomType) };
 

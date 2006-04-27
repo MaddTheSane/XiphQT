@@ -32,7 +32,7 @@
 #define __stream_theora_h__
 
 #include <Ogg/ogg.h>
-#include <Theora/theora.h>
+//#include <Theora/theora.h>
 
 #include "importer_types.h"
 

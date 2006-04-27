@@ -33,7 +33,7 @@
 
 
 #if !defined(_NO_THEORA_SUPPORT)
-#include <Theora/theora.h>
+#include <Theora/theoradec.h>
 
 typedef enum TheoraImportStates {
     kTStateInitial,
@@ -47,8 +47,9 @@ typedef enum TheoraImportStates {
 typedef struct {
     TheoraImportStates state;
 
-    theora_info ti;
-    theora_comment tc;
+    th_info ti;
+    th_comment tc;
+    th_setup_info *ts;
 
     UInt32 granulepos_shift;
     UInt32 fps_framelen;
