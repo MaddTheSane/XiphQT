@@ -29,7 +29,7 @@
 
 
 #include "stream_theora.h"
-#include <Theora/theoradec.h>
+#include <TheoraExp/theoradec.h>
 
 #include "debug.h"
 #define logg_page_last_packet_incomplete(op) (((unsigned char *)(op)->header)[26 + ((unsigned char *)(op)->header)[26]] == 255)

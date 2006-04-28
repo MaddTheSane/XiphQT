@@ -33,7 +33,7 @@
 
 
 #if !defined(_NO_THEORA_SUPPORT)
-#include <Theora/theoradec.h>
+#include <TheoraExp/theoradec.h>
 
 typedef enum TheoraImportStates {
     kTStateInitial,
