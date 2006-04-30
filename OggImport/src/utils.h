@@ -1,12 +1,10 @@
 /*
- *  fccs.h
+ *  utils.h
  *
- *    Four Character Code identifiers for Xiph formats, used by
- *    XiphQT for internal identification and identification when
- *    exported in QT movie container.
+ *    Support functions header file.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -30,25 +28,12 @@
  */
 
 
+#if !defined(__ogg_utils_h__)
+#define __ogg_utils_h__
 
-#if !defined(__fccs_h__)
-#define __fccs_h__
+#include <Vorbis/codec.h>
 
-
-enum {
-    kXiphComponentsManufacturer             = 'Xiph',
-
-    kAudioFormatXiphVorbis                  = 'XiVs',
-    kAudioFormatXiphOggFramedVorbis         = 'XoVs',
-
-    kAudioFormatXiphSpeex                   = 'XiSp',
-    kAudioFormatXiphOggFramedSpeex          = 'XoSp',
-
-    kAudioFormatXiphFLAC                    = 'XiFL',
-    kAudioFormatXiphOggFramedFLAC           = 'XoFL',
-
-    kVideoFormatXiphTheora                  = 'XiTh'
-};
+extern int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size);
 
 
-#endif /* __fccs_h__ */
+#endif /* __ogg_utils_h__ */

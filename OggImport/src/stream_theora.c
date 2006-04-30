@@ -292,7 +292,7 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                     ret = PtrAndHand(endAtom, si->soundDescExtension, sizeof(endAtom));
                     if (ret == noErr) {
                         ret = AddImageDescriptionExtension((ImageDescriptionHandle) si->sampleDesc,
-                                                           si->soundDescExtension, 'XYZ?' /* siDecompressionParams */);
+                                                           si->soundDescExtension, kSampleDescriptionExtensionTheora);
                         //dbg_printf("??? -- Adding extension: %ld\n", ret);
                     } else {
                         //dbg_printf("??? -- Hmm, something went wrong: %ld\n", ret);
@@ -317,21 +317,6 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                     si->lastGranulePos = 0;
             }
             si->si_theora.state = kTStateReadingPackets;
-#if 0
-            {
-                Handle h = NewHandleClear(sizeof(si->si_theora));
-                ret = BeginMediaEdits(si->theMedia);
-                dbg_printf("! -T-XXX:: ret = %ld\n", ret);
-                ret = AddMediaSample(si->theMedia, h, 0, sizeof(si->si_theora), 249, si->sampleDesc, 1, 0, NULL);
-                dbg_printf("! -T-XXX:: ret = %ld\n", ret);
-                ret = EndMediaEdits(si->theMedia);
-                dbg_printf("! -T-XXX:: ret = %ld\n", ret);
-                ret = InsertMediaIntoTrack(si->theTrack, si->insertTime /*inserted*/, /* si->lastGranulePos */ 0,
-                                           249, fixed1);
-                dbg_printf("! -T-XXX:: ret = %ld\n", ret);
-                si->insertTime = -1;
-            }
-#endif /* 0 */
             break;
 
         case kTStateReadingPackets:

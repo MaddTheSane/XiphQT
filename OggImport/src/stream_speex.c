@@ -39,7 +39,7 @@
 
 #include "fccs.h"
 #include "data_types.h"
-
+#include "utils.h"
 
 int recognize_header__speex(ogg_page *op)
 {
@@ -117,7 +117,6 @@ int process_first_packet__speex(StreamInfo *si, ogg_page *op, ogg_packet *opckt)
                                       EndianS32_NtoB(ogg_page_serialno(op)) };
     unsigned long atomhead[2] = { EndianU32_NtoB(opckt->bytes + sizeof(atomhead)), EndianU32_NtoB(kCookieTypeSpeexHeader) };
     SpeexHeader *inheader = (SpeexHeader *) opckt->packet;
-    //vorbis_synthesis_headerin(&si->si_vorbis.vi, &si->si_vorbis.vc, opckt); //check errors?
 
     si->si_speex.header.bitrate =                 EndianS32_LtoN(inheader->bitrate);
     si->si_speex.header.extra_headers =           EndianS32_LtoN(inheader->extra_headers);
@@ -179,14 +178,14 @@ ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo
 
                 PtrAndHand(atomhead, si->soundDescExtension, sizeof(atomhead));
                 PtrAndHand(op.packet, si->soundDescExtension, op.bytes);
-                //vorbis_synthesis_headerin(&si->si_vorbis.vi, &si->si_vorbis.vc, &op);
 
                 ret = CreateTrackAndMedia(globals, si, opg);
                 if (ret != noErr) {
                     dbg_printf("??? -- CreateTrackAndMedia failed?: %ld\n", (long)ret);
                 }
 
-                // /*err =*/ DecodeCommentsQT(globals, si, &si->si_vorbis.vc);
+                unpack_vorbis_comments(&si->si_speex.vc, op.packet, op.bytes);
+                /*err =*/ DecodeCommentsQT(globals, si, &si->si_speex.vc);
                 //NotifyMovieChanged(globals);
 
                 si->si_speex.state = kSStateReadingAdditionalHeaders;
@@ -292,11 +291,13 @@ ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo
                                 SetTrackEnabled(si->theTrack, true);
                             }
                         }
+                        /*
                         if (GetMovieTimeScale(globals->theMovie) < GetMediaTimeScale(si->theMedia)) {
                             dbg_printf("   # - changing movie time scale: %ld --> %ld\n",
                                        GetMovieTimeScale(globals->theMovie), GetMediaTimeScale(si->theMedia));
                             SetMovieTimeScale(globals->theMovie, GetMediaTimeScale(si->theMedia));
                         }
+                        */
                     }
                     si->insertTime = -1;
                     timeLoaded = GetTrackOffset(si->theTrack) + GetTrackDuration(si->theTrack);

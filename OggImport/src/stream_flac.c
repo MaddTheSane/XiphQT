@@ -39,41 +39,8 @@
 
 #include "fccs.h"
 #include "data_types.h"
+#include "utils.h"
 
-
-static int unpack_vorbis_coments(vorbis_comment *vc, const void *data, UInt32 data_size)
-{
-    int i;
-    char *dptr = (char *) data;
-    char *dend = dptr + data_size;
-    int len = EndianU32_LtoN(*(UInt32 *)dptr);
-    int commnum = 0;
-    char save;
-
-    dptr += 4 + len;
-    if (len >= 0 && dptr < dend) {
-        commnum = EndianU32_LtoN(*(UInt32 *)dptr);
-        if (commnum >= 0) {
-            dptr += 4;
-
-            for (i = 0; i < commnum && dptr <= dend; i++) {
-                len = EndianU32_LtoN(*(UInt32 *)dptr);
-                dptr += 4;
-                if (dptr + len > dend)
-                    break;
-
-                save = *(dptr + len);
-                *(dptr + len) = '\0';
-                vorbis_comment_add(vc, dptr);
-                dptr += len;
-                *dptr = save;
-            }
-        }
-    }
-
-    //vorbis_comment_clear(vc);
-    return 0;
-}
 
 int recognize_header__flac(ogg_page *op)
 {
@@ -233,7 +200,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                 if (((* (char *) op.packet) & 0x7f) == 4) {
                     dbg_printf("!  > - flac_stream_page - mb: %ld, skipped: %ld, h: %02x\n", si->si_flac.metablocks, si->si_flac.skipped,
                                (*(char *) op.packet) & 0x7f);
-                    unpack_vorbis_coments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
+                    unpack_vorbis_comments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
                     /*err =*/ DecodeCommentsQT(globals, si, &si->si_flac.vc);
                     //NotifyMovieChanged(globals);
                 }
@@ -289,7 +256,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                 if (((* (unsigned char *) op.packet) & 0x7f) == 4) {
                     dbg_printf("!  > - flac_stream_page - mb: %ld, skipped: %ld, h: %02x\n", si->si_flac.metablocks, si->si_flac.skipped,
                                (*(char *) op.packet) & 0x7f);
-                    unpack_vorbis_coments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
+                    unpack_vorbis_comments(&si->si_flac.vc, ((char *) op.packet) + 4, op.bytes - 4);
                     /*err =*/ DecodeCommentsQT(globals, si, &si->si_flac.vc);
                     //NotifyMovieChanged(globals);
                 }

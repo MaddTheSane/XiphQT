@@ -19,6 +19,7 @@
 		73182D9F090AB83F00C25A13 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73182D9E090AB83F00C25A13 /* Vorbis.framework */; };
 		73182E37090AD49700C25A13 /* stream_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 73182E35090AD49700C25A13 /* stream_vorbis.c */; };
 		7321B3690A022B20004A699F /* TheoraExp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7321B3680A022B20004A699F /* TheoraExp.framework */; };
+		7321B3990A03BC0A004A699F /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 7321B3970A03BC0A004A699F /* utils.c */; };
 		73A515E509844E1D0018101A /* stream_flac.c in Sources */ = {isa = PBXBuildFile; fileRef = 73A515E209844E1D0018101A /* stream_flac.c */; };
 		73BED3E709D77E8500ACC195 /* stream_theora.c in Sources */ = {isa = PBXBuildFile; fileRef = 73BED3E409D77E8500ACC195 /* stream_theora.c */; };
 		73E8B16D090BE13600686EE5 /* stream_speex.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E8B16A090BE13600686EE5 /* stream_speex.c */; };
@@ -89,6 +90,8 @@
 		73182E35090AD49700C25A13 /* stream_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stream_vorbis.c; path = src/stream_vorbis.c; sourceTree = "<group>"; };
 		73182E4C090AE29000C25A13 /* stream_types_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stream_types_vorbis.h; path = src/stream_types_vorbis.h; sourceTree = "<group>"; };
 		7321B3680A022B20004A699F /* TheoraExp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TheoraExp.framework; path = /Library/Frameworks/TheoraExp.framework; sourceTree = "<absolute>"; };
+		7321B3970A03BC0A004A699F /* utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = utils.c; path = src/utils.c; sourceTree = "<group>"; };
+		7321B3980A03BC0A004A699F /* utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils.h; path = src/utils.h; sourceTree = "<group>"; };
 		737C5A6D0912A05200700B79 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		738602C50915732900CB8105 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = SOURCE_ROOT; };
 		738602C60915732900CB8105 /* icon.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = icon.r; path = ../resources/icon.r; sourceTree = SOURCE_ROOT; };
@@ -165,6 +168,8 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7321B3970A03BC0A004A699F /* utils.c */,
+				7321B3980A03BC0A004A699F /* utils.h */,
 				73BED3E309D77E6300ACC195 /* theora */,
 				73A515E109844DF70018101A /* flac */,
 				73E8B169090BE11D00686EE5 /* speex */,
@@ -343,6 +348,7 @@
 				73E8B16D090BE13600686EE5 /* stream_speex.c in Sources */,
 				73A515E509844E1D0018101A /* stream_flac.c in Sources */,
 				73BED3E709D77E8500ACC195 /* stream_theora.c in Sources */,
+				7321B3990A03BC0A004A699F /* utils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

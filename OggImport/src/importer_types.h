@@ -104,6 +104,8 @@ typedef struct {
 
     TimeValue           incompleteCompensation;
 
+    TimeValue           lastMediaInserted;
+    TimeValue           mediaLength;
     TimeValue           insertTime;
     TimeValue           streamOffset;
     // SInt32              sampleOffset;

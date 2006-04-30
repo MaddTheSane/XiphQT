@@ -63,6 +63,12 @@ enum {
     kCookieTypeFLACMetadata = 'fCtM'
 };
 
+
+enum {
+    kSampleDescriptionExtensionTheora = 'XdxT',
+};
+
+
 struct OggSerialNoAtom {
     long size;			// = sizeof(OggSerialNoAtom)
     long type;			// = kOggCookieSerialNoType
