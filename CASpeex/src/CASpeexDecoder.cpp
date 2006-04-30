@@ -174,7 +174,17 @@ void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPr
     case kAudioCodecPropertyPacketFrameSize:
         if(ioPropertyDataSize == sizeof(UInt32))
         {
-            *reinterpret_cast<UInt32*>(outPropertyData) = kSpeexFramesPerPacket;
+            UInt32 *outProp = reinterpret_cast<UInt32*>(outPropertyData);
+            if (!mCompressionInitialized)
+                *outProp = kSpeexFramesPerPacket;
+            else if (mSpeexHeader.frame_size != 0 * mSpeexHeader.frames_per_packet != 0)
+                *outProp = mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet;
+            else
+                *outProp = 8192;
+            if (*outProp < 8192 && mInputFormat.mFormatID == kAudioFormatXiphOggFramedSpeex)
+                *outProp = 8192;
+            dbg_printf("  = [%08lx] CASpeexDecoder :: GetProperty('pakf'): %ld\n",
+                       (UInt32) this, *outProp);
         }
         else
         {
@@ -390,6 +400,9 @@ void CASpeexDecoder::InitializeCompressionSettings()
 
     //TODO: fix some of the header fields here
 
+    int enhzero = 0;
+    speex_decoder_ctl(mSpeexDecoderState, SPEEX_SET_ENH, &enhzero);
+
     if (mSpeexHeader.nb_channels == 2)
     {
         SpeexCallback callback;
@@ -488,6 +501,12 @@ Boolean CASpeexDecoder::GenerateFrames()
     SpeexFramePacket &sfp = mSpeexFPList.front();
 
     speex_bits_read_from(&mSpeexBits, reinterpret_cast<char*> (mBDCBuffer.GetData()), sfp.bytes);
+
+    if (sfp.frames > 0 && (sfp.frames - mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet > 0)) {
+        UInt32 zeroBytes = mOutputFormat.FramesToBytes(sfp.frames - mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet);
+        memset(mOutBuffer + mOutBufferUsedSize, 0, zeroBytes);
+        mOutBufferUsedSize += zeroBytes;
+    }
 
     for (SInt32 i = 0; i < mSpeexHeader.frames_per_packet; i++) {
         if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0)

@@ -102,13 +102,18 @@ void CAOggSpeexDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription&
 UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                AudioStreamPacketDescription* outPacketDescription)
 {
+    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
+    UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
+
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
-        return kAudioCodecProduceOutputPacketNeedsMoreInputData;
+        ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
+        dbg_printf("<!E [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+                   ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+        return ret;
     }
 
-    UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
     UInt32 speex_packets = mFramesBufferedList.front();
     UInt32 ogg_packets = 0;
     UInt32 speex_returned_data = ioOutputDataByteSize;
@@ -150,6 +155,9 @@ UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOu
             ioNumberPackets = ogg_packets;
         }
     }
+
+    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
+               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
 
@@ -182,6 +190,7 @@ void CAOggSpeexDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 
 void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
+    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: InPacket({%ld, %ld})\n", (UInt32) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnspecifiedError);
 
@@ -197,6 +206,9 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
     UInt32 page_packets = ogg_page_packets(&op);
     SInt32 packet_length_adjust = 0;
 
+    dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): no: %ld, fs: %ld, fpp: %ld, np: %ld\n",
+               (UInt32) this, ogg_page_pageno(&op), mSpeexHeader.frame_size, mSpeexHeader.frames_per_packet, page_packets);
+
     if (mSpeexHeader.frame_size != 0 && mSpeexHeader.frames_per_packet != 0) {
         if (mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet * page_packets != inPacketDescription->mVariableFramesInPacket) {
             packet_length_adjust = mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet * page_packets - inPacketDescription->mVariableFramesInPacket;
@@ -207,6 +219,8 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
                 }
                 packet_length_adjust = -packet_length_adjust;
             }
+            dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): p_l_adjust: %ld\n",
+                       (UInt32) this, packet_length_adjust);
         }
     }
 
@@ -222,7 +236,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
         packet_count++;
 
         speex_packet_desc.mDataByteSize = opk.bytes;
-        speex_packet_desc.mVariableFramesInPacket = mSpeexHeader.frame_size;
+        speex_packet_desc.mVariableFramesInPacket = mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet;
         if (packet_count == 1 && packet_length_adjust > 0) {
             speex_packet_desc.mVariableFramesInPacket -= packet_length_adjust;
             packet_length_adjust = 0;
@@ -234,6 +248,8 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
     }
 
     mFramesBufferedList.push_back(packet_count);
+
+    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: InPacket(): packet_count: %ld\n", (UInt32) this, packet_count);
 }
 
 
