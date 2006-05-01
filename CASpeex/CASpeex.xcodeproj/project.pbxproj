@@ -483,10 +483,6 @@
 		73814AA50907F9EC00C478FC /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -530,7 +526,7 @@
 				73814AA20907F9EC00C478FC /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		73814AA40907F9EC00C478FC /* Build configuration list for PBXProject "CASpeex" */ = {
 			isa = XCConfigurationList;
@@ -539,7 +535,7 @@
 				73814AA60907F9EC00C478FC /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};

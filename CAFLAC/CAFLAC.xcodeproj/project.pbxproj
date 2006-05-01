@@ -488,6 +488,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -513,7 +517,7 @@
 				739EAEA908FEB331008D8013 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		739EAEAB08FEB331008D8013 /* Build configuration list for PBXProject "CAFLAC" */ = {
 			isa = XCConfigurationList;
@@ -522,7 +526,7 @@
 				739EAEAD08FEB331008D8013 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};

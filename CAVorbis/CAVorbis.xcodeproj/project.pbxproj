@@ -433,10 +433,6 @@
 		737810D108FCC24B00686713 /* Deployment (optimized+) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -486,10 +482,6 @@
 		737C9E9908F7FE4D00DAC36C /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -514,10 +506,6 @@
 		737C9E9A08F7FE4D00DAC36C /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -543,10 +531,6 @@
 		737C9E9D08F7FE4D00DAC36C /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -593,7 +577,7 @@
 				737810D108FCC24B00686713 /* Deployment (optimized+) */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		737C9E9C08F7FE4D00DAC36C /* Build configuration list for PBXProject "CAVorbis" */ = {
 			isa = XCConfigurationList;
@@ -603,7 +587,7 @@
 				737810D208FCC24B00686713 /* Deployment (optimized+) */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};

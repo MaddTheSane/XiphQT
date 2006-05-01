@@ -369,10 +369,6 @@
 		73182D57090AAD7600C25A13 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/OggImport.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -447,6 +443,10 @@
 		73182D5C090AAD7600C25A13 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -467,7 +467,7 @@
 				73182D58090AAD7600C25A13 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		73182D5A090AAD7600C25A13 /* Build configuration list for PBXProject "OggImport" */ = {
 			isa = XCConfigurationList;
@@ -476,7 +476,7 @@
 				73182D5C090AAD7600C25A13 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};

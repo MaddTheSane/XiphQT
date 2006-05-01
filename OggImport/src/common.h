@@ -29,7 +29,8 @@
     #include <Math64.h>
 #endif
 
-#include "vorbis/codec.h"
+#include <Ogg/ogg.h>
+#include <Vorbis/codec.h>
 
 
 Boolean FindPage(unsigned char **data, const unsigned char *end, ogg_page *og);
