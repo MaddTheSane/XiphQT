@@ -31,6 +31,7 @@
 #if !defined(__ogg_utils_h__)
 #define __ogg_utils_h__
 
+#include "config.h"
 #include <Vorbis/codec.h>
 
 extern int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size);

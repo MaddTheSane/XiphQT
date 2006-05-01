@@ -51,11 +51,6 @@
 //#undef __COMPONENTS_R__ //??
 #endif /* TARGET_REZ_MAC_PPC */
 
-#define TARGET_REZ_CARBON_MACHO 1
-#define TARGET_REZ_MAC_PPC 1
-#define TARGET_REZ_MAC_X86 0
-#define TARGET_REZ_WIN32 0
-
 #include "TheoraDecoder.h"
 
 

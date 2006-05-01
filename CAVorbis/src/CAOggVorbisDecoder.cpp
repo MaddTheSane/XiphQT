@@ -150,7 +150,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
                             mSOBufferWrapped = vorbis_total_returned_data % mSOBufferSize;
                             mSOBufferUsed = mSOBufferSize;
                         } else if (vorbis_total_returned_data < mSOBufferSize) {
-                            BlockZero(mSOBuffer + mSOBufferUsed, mSOBufferSize - mSOBufferUsed);
+                            memset(mSOBuffer + mSOBufferUsed, 0, mSOBufferSize - mSOBufferUsed);
                             mSOBufferWrapped = mSOBufferUsed;
                         }
                         the_data = static_cast<Byte*> (outOutputData);

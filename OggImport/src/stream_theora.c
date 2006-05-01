@@ -29,7 +29,11 @@
 
 
 #include "stream_theora.h"
+#if defined(__APPLE_CC__)
 #include <TheoraExp/theoradec.h>
+#else
+#include <theoradec.h>
+#endif
 
 #include "debug.h"
 #define logg_page_last_packet_incomplete(op) (((unsigned char *)(op)->header)[26 + ((unsigned char *)(op)->header)[26]] == 255)
@@ -39,6 +43,17 @@
 #include "fccs.h"
 #include "data_types.h"
 
+
+#if TARGET_OS_WIN32
+EXTERN_API_C(SInt32 ) U64Compare(UInt64 left, UInt64 right)
+{
+    if (left < right)
+        return -1;
+    if (left == right)
+        return 0;
+    return 1;
+}
+#endif
 
 /*
  * Euclid's GCD algorithm
@@ -153,7 +168,6 @@ ComponentResult create_sample_description__theora(StreamInfo *si)
 ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
 {
     ComponentResult ret = noErr;
-    dbg_printf("! -T calling => NewMovieTrack()\n");
     UInt32 frame_width = si->si_theora.ti.frame_width;
     UInt32 frame_width_fraction = 0;
 
@@ -161,6 +175,7 @@ ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
         frame_width_fraction = (frame_width * si->si_theora.ti.aspect_numerator % si->si_theora.ti.aspect_denominator) * 0x10000 / si->si_theora.ti.aspect_denominator;
         frame_width = frame_width * si->si_theora.ti.aspect_numerator / si->si_theora.ti.aspect_denominator;
     }
+    dbg_printf("! -T calling => NewMovieTrack()\n");
     si->theTrack = NewMovieTrack(globals->theMovie,
                                  frame_width << 16 | (frame_width_fraction & 0xffff),
                                  si->si_theora.ti.frame_height << 16, 0);
@@ -332,6 +347,7 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                 int i, segments;
                 Boolean continued = ogg_page_continued(opg);
                 SampleReference64Record sampleRec;
+                SInt64 tmp = 0;
                 ogg_int64_t last_packet_pos = si->lastGranulePos >> si->si_theora.granulepos_shift;
                 last_packet_pos += si->lastGranulePos - (last_packet_pos << si->si_theora.granulepos_shift);
 
@@ -382,7 +398,8 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                         if ((opg->body[poffset] & 0x40) != 0)
                             smp_flags |= mediaSampleNotSync;
                         memset(&sampleRec, 0, sizeof(sampleRec));
-                        sampleRec.dataOffset = SInt64ToWide(globals->dataOffset + S64Set(poffset + opg->header_len));
+                        tmp = globals->dataOffset + S64Set(poffset + opg->header_len);
+                        sampleRec.dataOffset = SInt64ToWide(tmp);
                         sampleRec.dataSize = psize;
                         sampleRec.sampleFlags = smp_flags;
                         sampleRec.durationPerSample = pduration;

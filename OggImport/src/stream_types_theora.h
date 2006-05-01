@@ -33,7 +33,11 @@
 
 
 #if !defined(_NO_THEORA_SUPPORT)
+#if defined(__APPLE_CC__)
 #include <TheoraExp/theoradec.h>
+#else
+#include <theoradec.h>
+#endif
 
 typedef enum TheoraImportStates {
     kTStateInitial,

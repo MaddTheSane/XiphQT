@@ -49,6 +49,10 @@
 #include "TheoraDecoder.h"
 #include "debug.h"
 
+#if !TARGET_OS_MAC
+#undef pascal
+#define pascal
+#endif
 
 static OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy);
 static OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy);
@@ -546,15 +550,16 @@ pascal ComponentResult Theora_ImageCodecGetCodecInfo(Theora_Globals glob, CodecI
 
 OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
 {
-    dbg_printf("BLIT: Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT: Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
-
     size_t x, y;
     const UInt8 *lineBase_Y  = pb[0].data;
     const UInt8 *lineBase_Cb = pb[1].data;
     const UInt8 *lineBase_Cr = pb[2].data;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+
+    dbg_printf("BLIT: Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT: Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
+               pb[2].width, pb[2].height, pb[2].ystride);
+
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
@@ -583,15 +588,16 @@ OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
 
 OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
 {
-    dbg_printf("BLIT> Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT> Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
-
     size_t x, y;
     const UInt8 *lineBase_Y  = pb[0].data;
     const UInt8 *lineBase_Cb = pb[1].data;
     const UInt8 *lineBase_Cr = pb[2].data;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+
+    dbg_printf("BLIT> Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT> Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
+               pb[2].width, pb[2].height, pb[2].ystride);
+
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
@@ -627,15 +633,16 @@ OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
    TODO: proper subsampling? */
 OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
 {
-    dbg_printf("BLIT? Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT? Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
-
     size_t x, y;
     const UInt8 *lineBase_Y  = pb[0].data;
     const UInt8 *lineBase_Cb = pb[1].data;
     const UInt8 *lineBase_Cr = pb[2].data;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+
+    dbg_printf("BLIT? Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT? Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
+               pb[2].width, pb[2].height, pb[2].ystride);
+
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
