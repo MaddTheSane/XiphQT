@@ -4,7 +4,7 @@
 ;    Win32 XiphQT dll entry-point declarations.
 ;
 ;
-;  Copyright (c) 2005  Arek Korbik
+;  Copyright (c) 2005-2006  Arek Korbik
 ;
 ;  This file is part of XiphQT, the Xiph QuickTime Components.
 ;
@@ -43,6 +43,8 @@ EXPORTS
 	CAOggVorbisDecoderEntry
 	CASpeexDecoderEntry
 	CAOggSpeexDecoderEntry
+	CAFLACDecoderEntry
+	CAOggFLACDecoderEntry
 	OggImportComponentDispatch
 	Theora_ImageCodecComponentDispatch
 

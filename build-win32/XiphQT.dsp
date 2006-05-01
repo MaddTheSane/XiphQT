@@ -44,7 +44,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_IA32__VBR_BROKEN" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\flac\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "FLAC__NO_DLL" /D "QT_IA32__VBR_BROKEN" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static.lib vorbis_static.lib theoradec_static.lib /nologo /dll /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /def:".\XiphQT.def" /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Release" /libpath:"..\..\ogg\win32\Static_Release" /libpath:"..\..\vorbis\win32\Vorbis_Static_Release" /libpath:"..\..\theora-exp\win32\msvc60\Release_theoradec_static"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static.lib vorbis_static.lib theoradec_static.lib libFLAC_static.lib libFLAC++_static.lib /nologo /dll /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /def:".\XiphQT.def" /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Release" /libpath:"..\..\ogg\win32\Static_Release" /libpath:"..\..\vorbis\win32\Vorbis_Static_Release" /libpath:"..\..\theora-exp\win32\msvc60\Release_theoradec_static" /libpath:"..\..\flac\obj\release\lib"
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 IntDir=.\Release
@@ -78,7 +78,7 @@ PostBuild_Cmds=if exist "$(IntDir)\$(TargetName).qtx" Attrib -R "$(IntDir)\$(Tar
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_IA32__VBR_BROKEN" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\flac\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "FLAC__NO_DLL" /D "QT_IA32__VBR_BROKEN" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -88,7 +88,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static_d.lib vorbis_static_d.lib theoradec_static.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /def:".\XiphQT.def" /pdbtype:sept /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Debug" /libpath:"..\..\ogg\win32\Static_Debug" /libpath:"..\..\vorbis\win32\Vorbis_Static_Debug" /libpath:"..\..\theora-exp\win32\msvc60\Release_theoradec_static"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static_d.lib vorbis_static_d.lib theoradec_static_d.lib libFLAC_static.lib libFLAC++_static.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmt.lib" /def:".\XiphQT.def" /pdbtype:sept /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Debug" /libpath:"..\..\ogg\win32\Static_Debug" /libpath:"..\..\vorbis\win32\Vorbis_Static_Debug" /libpath:"..\..\theora-exp\win32\msvc60\Debug_theoradec_static" /libpath:"..\..\flac\obj\debug\lib"
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 IntDir=.\Debug
@@ -113,7 +113,7 @@ PostBuild_Cmds=if exist "$(IntDir)\$(TargetName).qtx" Attrib -R "$(IntDir)\$(Tar
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "QT_IA32__VBR_BROKEN" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\QuickTime SDK\CIncludes" /I "..\AppleSDK\CoreAudio\PublicUtility" /I "..\AppleSDK\CoreAudio\AudioCodecs\ACPublic" /I "..\..\ogg\include" /I "..\..\ogg\include\ogg" /I "..\..\vorbis\include" /I "..\..\speex\include" /I "..\..\flac\include" /I "..\..\theora-exp\include\theora" /I "..\common" /I "..\utils" /I "." /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "XIPHQT_EXPORTS" /D inline=__inline /D "FLAC__NO_DLL" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -124,7 +124,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static_d.lib vorbis_static_d.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /def:".\XiphQT.def" /pdbtype:sept /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Debug" /libpath:"..\..\ogg\win32\Static_Debug" /libpath:"..\..\vorbis\win32\Vorbis_Static_Debug"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static_d.lib vorbis_static_d.lib theoradec_static.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /def:".\XiphQT.def" /pdbtype:sept /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Debug" /libpath:"..\..\ogg\win32\Static_Debug" /libpath:"..\..\vorbis\win32\Vorbis_Static_Debug" /libpath:"..\..\theora-exp\win32\msvc60\Release_theoradec_static"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib qtmlClient.lib libspeex.lib ogg_static_d.lib vorbis_static_d.lib theoradec_static_d.lib libFLAC_static.lib libFLAC++_static.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmt.lib" /def:".\XiphQT.def" /pdbtype:sept /libpath:"C:\Program Files\QuickTime SDK\Libraries" /libpath:"..\..\speex\win32\libspeex\Debug" /libpath:"..\..\ogg\win32\Static_Debug" /libpath:"..\..\vorbis\win32\Vorbis_Static_Debug" /libpath:"..\..\theora-exp\win32\msvc60\Debug_theoradec_static" /libpath:"..\..\flac\obj\debug\lib"
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 IntDir=.\Debug_broken
@@ -452,6 +452,34 @@ SOURCE=..\Theora\src\TheoraDecoder.h
 SOURCE=..\Theora\src\TheoraDecoderDispatch.h
 # End Source File
 # End Group
+# Begin Group "CAFLAC"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\CAFLACDecoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\CAFLACDecoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\CAOggFLACDecoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\CAOggFLACDecoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\flac_entrypoints.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\flac_versions.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "Header Files"
 
@@ -460,6 +488,10 @@ SOURCE=..\Theora\src\TheoraDecoderDispatch.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+
+SOURCE=..\CAFLAC\src\CAFLACDecoderPublic.r
+# End Source File
 # Begin Source File
 
 SOURCE=..\CASpeex\src\CASpeexDecoderPublic.r
@@ -484,7 +516,7 @@ TargetName=XiphQT
 InputPath=.\resources.r
 
 "$(TargetDir)\$(TargetName).qtr" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\Theora\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
+	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\CAFLAC\src -i ..\Theora\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
 
 # End Custom Build
 
@@ -496,7 +528,7 @@ TargetName=XiphQT
 InputPath=.\resources.r
 
 "$(TargetDir)\$(TargetName).qtr" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
+	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\CAFLAC\src -i ..\Theora\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
 
 # End Custom Build
 
@@ -508,7 +540,7 @@ TargetName=XiphQT
 InputPath=.\resources.r
 
 "$(TargetDir)\$(TargetName).qtr" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
+	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\CAFLAC\src -i ..\Theora\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
 
 # End Custom Build
 

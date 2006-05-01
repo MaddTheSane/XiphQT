@@ -4,7 +4,7 @@
  *    Win32 XiphQT resources definition 'umbrella' file.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -34,6 +34,7 @@
 
 #include "CAVorbisDecoderPublic.r"
 #include "CASpeexDecoderPublic.r"
+#include "CAFLACDecoderPublic.r"
 
 #include "OggImport.r"
 
