@@ -427,6 +427,10 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/CAFLACCodec.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -446,6 +450,10 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAFLACCodec.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -458,27 +466,13 @@
 			};
 			name = Deployment;
 		};
-		739EAEAA08FEB331008D8013 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EXPORTED_SYMBOLS_FILE = src/CAFLACCodec.exp;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = CAFLAC_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Components";
-				PRODUCT_NAME = CAFLAC;
-				WRAPPER_EXTENSION = component;
-			};
-			name = Default;
-		};
 		739EAEAC08FEB331008D8013 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
-					"$(HOME)/Library/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
@@ -496,7 +490,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
-					"$(HOME)/Library/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
@@ -509,24 +503,6 @@
 			};
 			name = Deployment;
 		};
-		739EAEAE08FEB331008D8013 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(FRAMEWORK_SEARCH_PATHS)",
-					"$(HOME)/Library/Frameworks",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					__MACOSX__,
-					QT_IA32__VBR_BROKEN,
-				);
-				OTHER_CFLAGS = "-Wall";
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -535,7 +511,6 @@
 			buildConfigurations = (
 				739EAEA808FEB331008D8013 /* Development */,
 				739EAEA908FEB331008D8013 /* Deployment */,
-				739EAEAA08FEB331008D8013 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
@@ -545,7 +520,6 @@
 			buildConfigurations = (
 				739EAEAC08FEB331008D8013 /* Development */,
 				739EAEAD08FEB331008D8013 /* Deployment */,
-				739EAEAE08FEB331008D8013 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;

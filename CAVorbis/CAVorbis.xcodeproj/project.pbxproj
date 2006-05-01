@@ -439,7 +439,10 @@
 				);
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -463,7 +466,10 @@
 					ppc,
 					i386,
 				);
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -486,7 +492,10 @@
 				);
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -511,7 +520,10 @@
 				);
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -528,25 +540,6 @@
 			};
 			name = Deployment;
 		};
-		737C9E9B08F7FE4D00DAC36C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				EXPORTED_SYMBOLS_FILE = src/CAVorbisCodec.exp;
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\"";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = CAVorbis_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Components";
-				PRODUCT_NAME = CAVorbis;
-				WRAPPER_EXTENSION = component;
-			};
-			name = Default;
-		};
 		737C9E9D08F7FE4D00DAC36C /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -554,7 +547,10 @@
 					ppc,
 					i386,
 				);
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__MACOSX__,
@@ -572,7 +568,10 @@
 					ppc,
 					i386,
 				);
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__MACOSX__,
 					QT_IA32__VBR_BROKEN,
@@ -583,23 +582,6 @@
 			};
 			name = Deployment;
 		};
-		737C9E9F08F7FE4D00DAC36C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__MACOSX__,
-					QT_IA32__VBR_BROKEN,
-				);
-				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -609,10 +591,9 @@
 				737C9E9908F7FE4D00DAC36C /* Development */,
 				737C9E9A08F7FE4D00DAC36C /* Deployment */,
 				737810D108FCC24B00686713 /* Deployment (optimized+) */,
-				737C9E9B08F7FE4D00DAC36C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		737C9E9C08F7FE4D00DAC36C /* Build configuration list for PBXProject "CAVorbis" */ = {
 			isa = XCConfigurationList;
@@ -620,10 +601,9 @@
 				737C9E9D08F7FE4D00DAC36C /* Development */,
 				737C9E9E08F7FE4D00DAC36C /* Deployment */,
 				737810D208FCC24B00686713 /* Deployment (optimized+) */,
-				737C9E9F08F7FE4D00DAC36C /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 /* End XCConfigurationList section */
 	};

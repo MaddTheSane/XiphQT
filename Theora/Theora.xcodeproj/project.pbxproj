@@ -242,6 +242,10 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/Theora.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -263,6 +267,10 @@
 					i386,
 				);
 				EXPORTED_SYMBOLS_FILE = src/Theora.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS)",
+					"$(HOME)/Library/Frameworks",
+				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Theora_Prefix.pch;
