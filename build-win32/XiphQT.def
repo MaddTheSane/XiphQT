@@ -44,5 +44,6 @@ EXPORTS
 	CASpeexDecoderEntry
 	CAOggSpeexDecoderEntry
 	OggImportComponentDispatch
+	Theora_ImageCodecComponentDispatch
 
 

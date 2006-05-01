@@ -36,3 +36,9 @@
 #include "CASpeexDecoderPublic.r"
 
 #include "OggImport.r"
+
+#undef __COMPONENTS_R__
+#undef version
+
+#include "TheoraDecoder.r"
+
