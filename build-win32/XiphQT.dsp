@@ -428,6 +428,30 @@ SOURCE=..\common\XCACodec.cpp
 SOURCE=..\common\XCACodec.h
 # End Source File
 # End Group
+# Begin Group "Theora"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\Theora\src\decoder_types.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Theora\src\theora_versions.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Theora\src\TheoraDecoder.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\Theora\src\TheoraDecoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Theora\src\TheoraDecoderDispatch.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "Header Files"
 
@@ -460,7 +484,7 @@ TargetName=XiphQT
 InputPath=.\resources.r
 
 "$(TargetDir)\$(TargetName).qtr" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
+	Rez.exe -p -i "C:\Program Files\QuickTime SDK\RIncludes" -i ..\OggImport\src -i ..\CAVorbis\src -i ..\CASpeex\src -i ..\Theora\src -i ..\common -i ..\utils -i ..\resources -o "$(TargetDir)\$(TargetName).qtr" <  "$(InputPath)"
 
 # End Custom Build
 
@@ -490,6 +514,10 @@ InputPath=.\resources.r
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\Theora\src\TheoraDecoder.r
 # End Source File
 # Begin Source File
 
