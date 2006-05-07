@@ -452,6 +452,11 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-falign-loops=16",
+					"-ffast-math",
+				);
 				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

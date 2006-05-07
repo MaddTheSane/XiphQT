@@ -109,7 +109,7 @@
 		732019FD08FEDFAD002000DA /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
 		732019FE08FEDFAD002000DA /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
 		73201A0808FEE030002000DA /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
-		73201A3808FEE41B002000DA /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAC.framework; path = ../../../../../../Library/Frameworks/FLAC.framework; sourceTree = SOURCE_ROOT; };
+		73201A3808FEE41B002000DA /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAC.framework; path = /Library/Frameworks/FLAC.framework; sourceTree = "<absolute>"; };
 		734EA23D0902851800D10866 /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = "<group>"; };
 		734EA23E0902851800D10866 /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = "<group>"; };
 		7350DCB1098BC1EF00A5DAB4 /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = SOURCE_ROOT; };
@@ -121,7 +121,7 @@
 		7350DCD4098BC37D00A5DAB4 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 		7350DCD5098BC37D00A5DAB4 /* wrap_ogg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = wrap_ogg.cpp; sourceTree = "<group>"; };
 		7350DCD6098BC37D00A5DAB4 /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wrap_ogg.h; sourceTree = "<group>"; };
-		739A57430901A47600CF57C1 /* FLAC++.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "FLAC++.framework"; path = "../../../../../../Library/Frameworks/FLAC++.framework"; sourceTree = SOURCE_ROOT; };
+		739A57430901A47600CF57C1 /* FLAC++.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "FLAC++.framework"; path = "/Library/Frameworks/FLAC++.framework"; sourceTree = "<absolute>"; };
 		73A55FD7090008A2009FD166 /* PkgInfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PkgInfo; sourceTree = "<group>"; };
 		73AE0E540907D14A0008B8A1 /* flac_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = flac_entrypoints.cpp; path = src/flac_entrypoints.cpp; sourceTree = "<group>"; };
 		73E597F70900114900357BC8 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = SOURCE_ROOT; };
@@ -469,25 +469,24 @@
 		739EAEAC08FEB331008D8013 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					__MACOSX__,
 					QT_IA32__VBR_BROKEN,
 				);
-				OTHER_CFLAGS = "-Wall";
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
+				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
 		739EAEAD08FEB331008D8013 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
 					ppc,
 					i386,
@@ -502,8 +501,13 @@
 					QT_IA32__VBR_BROKEN,
 					NDEBUG,
 				);
-				OTHER_CFLAGS = "-Wall";
-				OTHER_REZFLAGS = "-D TARGET_REZ_MAC_PPC=1";
+				OTHER_CFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-falign-loops=16",
+					"-ffast-math",
+				);
+				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};

@@ -24,13 +24,13 @@ on your hard drive. Bundles with names starting with 'CA' go to
 /Library/Components (or ~/Library/Components) and all other go to
 /Library/QuickTime (or ~/Library/QuickTime).
 You will also need to install Xiph library frameworks in either
-/Library/Frameworks (or ~/Library/Frameworks). 
+/Library/Frameworks (or ~/Library/Frameworks).
 
 The lastest version of XiphQT makes use of the following frameworks:
-Ogg.framework, Vorbis.framework, FLAC.framework, FLAC++.framework and
-Speex.framework. Those can be build from the corresponding Xiph format
-libraries, or the binary versions can be obtained from the project
-downloads page: http://www.xiph.org/quicktime/download.html .
+Ogg, Vorbis, FLAC, FLAC++, Speex and TheoraExp. Those can be build
+from the corresponding Xiph format libraries, or the binary versions
+can be obtained from the project downloads page:
+http://www.xiph.org/quicktime/download.html .
 
 
 Source code organisation
@@ -52,12 +52,15 @@ Source code organisation
 ./OggImport
 	Ogg QuickTime MovieImporter component files
 
+./Theora
+        Theora QuickTime ImageCodec component files
+
 ./common, ./utils and ./resources
 	Functions, definition and resources shared between several components
 
 
 Copying
-======= 
+=======
 
     XiphQT is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -73,13 +76,13 @@ Copying
     ---
     The part of the CoreAudio SDK, included under the ./AppleSDK directory,
     is redistributed according to the terms specified in the files. See
-    the file headers for more details. 
+    the file headers for more details.
 
 
     ---
     Part of the OggImport component source code written by Steve Nicolai
     is distributed under the terms of BSD-style License. See file
-    COPYING.qtcomponents in the OggImport directory for the details. 
+    COPYING.qtcomponents in the OggImport directory for the details.
 
 
 

@@ -511,6 +511,11 @@
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					QT_IA32__VBR_BROKEN,
 				);
+				OTHER_CFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-falign-loops=16",
+					"-ffast-math",
+				);
 				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
