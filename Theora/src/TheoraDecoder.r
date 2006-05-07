@@ -82,9 +82,9 @@
 #endif
 
 
-#define kTheoraDecoderFlags (codecInfoDoes32 /*| codecInfoDoes16 | codecInfoDoes8 | codecInfoDoes1*/ | codecInfoDoesSpool)
+#define kTheoraDecoderFlags (codecInfoDoes32 | codecInfoDoesTemporal | codecInfoDoesSpool)
 
-#define kTheoraFormatFlags	(codecInfoDepth32 /* ??! */ | codecInfoDepth24)
+#define kTheoraFormatFlags	(codecInfoDepth24)
 
 resource 'cdci' (kTheoraDecoderResID) {
 	kTheoraDecoderFormatName, // Type

@@ -57,6 +57,15 @@ typedef struct {
 
     UInt32 granulepos_shift;
     UInt32 fps_framelen;
+
+    //variables to store last packet params
+    SInt64 lpkt_data_offset;
+    UInt32 lpkt_data_size;
+    SInt32 lpkt_duration;
+    short  lpkt_flags;
+
+    // segmentation ratio; defined as a denominator, with numerator = 1
+    UInt32 psegment_ratio;
 } StreamInfo__theora;
 
 

@@ -248,7 +248,7 @@ pascal ComponentResult Theora_ImageCodecTarget(Theora_Globals glob, ComponentIns
 
 pascal ComponentResult Theora_ImageCodecInitialize(Theora_Globals glob, ImageSubCodecDecompressCapabilities *cap)
 {
-    dbg_printf("--:Theora:- CodecInitalize(%08lx) called\n", (long)glob);
+    dbg_printf("--:Theora:- CodecInitalize(%08lx) called (Qsize: %d)\n", (long)glob, cap->suggestedQueueSize);
 
     cap->decompressRecordSize = sizeof(Theora_DecompressRecord);
     cap->canAsync = true;
@@ -256,6 +256,9 @@ pascal ComponentResult Theora_ImageCodecInitialize(Theora_Globals glob, ImageSub
     if (cap->recordSize > offsetof(ImageSubCodecDecompressCapabilities, baseCodecShouldCallDecodeBandForAllFrames) ) {
         cap->subCodecIsMultiBufferAware = true;
         cap->baseCodecShouldCallDecodeBandForAllFrames = true;
+
+        // the following setting is not entirely true, but some applications seem to need it
+        cap->subCodecSupportsOutOfOrderDisplayTimes = true; // ?!!
     }
 
     return noErr;
@@ -267,8 +270,9 @@ pascal ComponentResult Theora_ImageCodecPreflight(Theora_Globals glob, CodecDeco
     OSTypePtr         formats = *glob->wantedDestinationPixelTypeH;
     OSErr             ret = noErr;
 
-    dbg_printf("--:Theora:- CodecPreflight(%08lx) called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x)\n",
-               (long)glob, p->sequenceID, p->frameNumber, (p->conditionFlags & codecConditionFirstFrame) != 1, p->data[0]);
+    dbg_printf("--:Theora:- CodecPreflight(%08lx) called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x, flags: %08lx, flags2: %08lx)\n",
+               (long)glob, p->sequenceID, p->frameNumber, (p->conditionFlags & codecConditionFirstFrame) != 1, p->bufferSize > 1 ? p->data[1] : 0,
+               capabilities->flags, capabilities->flags2);
     dbg_printf("         :- image: %dx%d, pixform: %x\n", (**p->imageDescription).width, (**p->imageDescription).height, glob->ti.pixel_fmt);
 
     /* only decode full images at the moment */
@@ -299,13 +303,14 @@ pascal ComponentResult Theora_ImageCodecBeginBand(Theora_Globals glob, CodecDeco
     long offsetH, offsetV;
     Theora_DecompressRecord *myDrp = (Theora_DecompressRecord *)drp->userDecompressRecord;
 
-    dbg_printf("--:Theora:- CodecBeginBand(%08lx, %08lx, %08lx) called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x) (pixF: '%4.4s')\n",
+    dbg_printf("--:Theora:- CodecBeginBand(%08lx, %08lx, %08lx) called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x[%02x]) (pixF: '%4.4s') (complP: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, p->sequenceID, p->frameNumber, (p->conditionFlags & codecConditionFirstFrame) != 1,
-               p->data[0], &p->dstPixMap.pixelFormat);
+               p->bufferSize > 1 ? p->data[1] : 0, p->bufferSize > 1 ? ((unsigned char *)drp->codecData)[1] : 0, &p->dstPixMap.pixelFormat, p->completionProcRecord);
     if (p->frameTime != NULL) {
-        dbg_printf("--:Theora:-      BeginBand::frameTime: scale: %8ld, duration: %8ld, rate: %5ld.%05ld (vd: %8ld)\n",
+        dbg_printf("--:Theora:-      BeginBand::frameTime: scale: %8ld, duration: %8ld, rate: %5ld.%05ld (vd: %8ld) [fl: %02lx]\n",
                    p->frameTime->scale, p->frameTime->duration, p->frameTime->rate >> 16, p->frameTime->rate & 0xffff,
-                   (p->frameTime->flags & icmFrameTimeHasVirtualStartTimeAndDuration) ? p->frameTime->virtualDuration : -1);
+                   (p->frameTime->flags & icmFrameTimeHasVirtualStartTimeAndDuration) ? p->frameTime->virtualDuration : -1,
+                   p->frameTime->flags);
     }
 
 #if 0
@@ -327,7 +332,14 @@ pascal ComponentResult Theora_ImageCodecBeginBand(Theora_Globals glob, CodecDeco
     }
 #endif /* 0 */
 
-    if ((*(unsigned char *)drp->codecData) & 0x40 == 0)
+    /* importer should send us samples prepended by a single pading
+       byte (this is because QT doesn't allow zero-sized samples) and
+       it is PREpended because there is ALWAYS some data BEFORE a
+       packet but not necesarrily after */
+    /* p->bufferSize -= 1; */
+    drp->codecData += 1;
+
+    if (p->bufferSize > 1 && ((unsigned char *)drp->codecData)[0] & 0x40 == 0)
         drp->frameType = kCodecFrameTypeKey;
     else
         drp->frameType = kCodecFrameTypeDifference;
@@ -335,10 +347,13 @@ pascal ComponentResult Theora_ImageCodecBeginBand(Theora_Globals glob, CodecDeco
     myDrp->width = (**p->imageDescription).width;
     myDrp->height = (**p->imageDescription).height;
     myDrp->depth = (**p->imageDescription).depth;
-    myDrp->dataSize = p->bufferSize;
+    myDrp->dataSize = p->bufferSize - 1;
     myDrp->frameNumber = p->frameNumber;
     myDrp->pixelFormat = p->dstPixMap.pixelFormat;
     myDrp->draw = 0;
+    myDrp->decoded = 0;
+    if (p->frameTime != NULL && (p->frameTime->flags & icmFrameAlreadyDecoded) != 0)
+        myDrp->decoded = 1;
 
     if (glob->last_frame < 0) {
         dbg_printf("--:Theora:-  calling theora_decode_init()...\n");
@@ -354,15 +369,19 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
     OSErr err = noErr;
     Theora_DecompressRecord *myDrp = (Theora_DecompressRecord *)drp->userDecompressRecord;
     unsigned char *dataPtr = (unsigned char *)drp->codecData;
+    SInt32 dataConsumed = 0;
     ICMDataProcRecordPtr dataProc = drp->dataProcRecord.dataProc ? &drp->dataProcRecord : NULL;
     SInt32 dataAvailable = dataProc != NULL ? codecMinimumDataSize : -1;
 
     dbg_printf("--:Theora:-  CodecDecodeBand(%08lx, %08lx, %08lx) cald (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
-#if 0
-    // TODO: implement using dataProc for loading data if not all available at once
     if (dataAvailable > -1) {
+#if 1
+        dbg_printf("       ! ! ! CodecDecodeBand(): NOT IMPLEMENTED - use dataProc to load data!\n");
+        err = codecErr;
+#else
+        // TODO: implement using dataProc for loading data if not all available at once
         unsigned char *tmpDataPtr = dataPtr;
         UInt32 bytesToLoad = myDrp->dataSize;
         while (dataAvailable > 0) {
@@ -370,14 +389,13 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             if (err == eofErr)
                 err = noErr;
         }
+#endif /* 1 */
     }
-#endif /* 0 */
 
-    
-    {
+    if (err == noErr) {
         ogg_packet op;
         int terr;
-        Boolean drop = false;
+        Boolean do_decode = true;
         Boolean continued = (glob->p_buffer_used > 0);
         UInt8 *data_buffer = dataPtr;
         UInt32 data_size = myDrp->dataSize;
@@ -390,26 +408,28 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
         glob->last_frame = myDrp->frameNumber;
 
         if (myDrp->dataSize % 255 == 4) {
-            // TODO: extend the checks below with frame duration checks
             if (!memcmp(dataPtr + myDrp->dataSize - 4, "OggS", 4)) {
-                err = codecDroppedFrameErr;
-                drop = true;
-                if (myDrp->dataSize + glob->p_buffer_used > glob->p_buffer_len) {
-                    // TODO: implement reallocation with expansion
+                do_decode = false;
+                if (myDrp->dataSize - 4 + glob->p_buffer_used > glob->p_buffer_len) {
+                    dbg_printf("         !!! CodecDecodeBand(): NOT IMPLEMENTED - reallocate with resize!\n");
                     err = codecErr;
                 } else {
                     BlockMoveData(dataPtr, glob->p_buffer + glob->p_buffer_used, myDrp->dataSize - 4);
                     glob->p_buffer_used += myDrp->dataSize - 4;
                 }
+            } else {
+                myDrp->draw = 1;
             }
-        } else if (myDrp->dataSize == 1) {
-            myDrp->dataSize = 0;
+        } else if (myDrp->dataSize == 0 && !continued) {
             myDrp->draw = 1;
+            drp->frameType = kCodecFrameTypeDroppableDifference;
         } else {
             myDrp->draw = 1;
         }
 
-        if (!drop && continued) {
+        dataConsumed = myDrp->dataSize;
+
+        if (do_decode && continued) {
             /* this should be the last fragment */
             if (myDrp->dataSize > 0)
                 BlockMoveData(dataPtr, glob->p_buffer + glob->p_buffer_used, myDrp->dataSize);
@@ -418,10 +438,9 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             data_buffer = glob->p_buffer;
         }
 
-        if (drop)
+        if (myDrp->draw == 0)
             err = codecDroppedFrameErr;
-
-        if (!drop && myDrp->draw != 0) {
+        else {
             op.b_o_s = 0;
             op.e_o_s = 0;
             op.granulepos = -1;
@@ -429,7 +448,7 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             op.bytes = data_size;
             op.packet = data_buffer;
             terr = th_decode_packetin(glob->td, &op, NULL);
-            dbg_printf("--:Theora:-  theora_decode_packetin() = %d\n", terr);
+            dbg_printf("--:Theora:-  theora_decode_packetin(pktno: %lld, size: %ld, data1: [%02x]) = %d\n", op.packetno, op.bytes, data_buffer[0], terr);
 
             if (terr != 0) {
                 myDrp->draw = 0;
@@ -438,7 +457,8 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
         }
     }
 
-    
+    myDrp->decoded = 1;
+    drp->codecData += dataConsumed;
     return err;
 }
 
@@ -453,39 +473,50 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
     dbg_printf("--:Theora:-  CodecDrawBand(%08lx, %08lx, %08lx) called (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
-    if (myDrp->draw == 0)
-        err = codecDroppedFrameErr;
-    else {
-        th_ycbcr_buffer ycbcrB;
-        dbg_printf("--:Theora:-  calling theora_decode_YUVout()...\n");
-        th_decode_ycbcr_out(glob->td, ycbcrB);
-        if (myDrp->pixelFormat == k422YpCbCr8PixelFormat) {
-            if (glob->ti.pixel_fmt == TH_PF_420) {
-                err = CopyPlanarYCbCr420ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
-            } else if (glob->ti.pixel_fmt == TH_PF_422) {
-                err = CopyPlanarYCbCr422ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
-            } else if (glob->ti.pixel_fmt == TH_PF_444) {
-                err = CopyPlanarYCbCr444ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+    if (myDrp->decoded == 0) {
+        err = Theora_ImageCodecDecodeBand(glob, drp, 0);
+    }
+
+    if (err == noErr) {
+        if (myDrp->draw == 0) {
+            err = codecDroppedFrameErr;
+        } else  {
+            th_ycbcr_buffer ycbcrB;
+            dbg_printf("--:Theora:-  calling theora_decode_YUVout()...\n");
+            th_decode_ycbcr_out(glob->td, ycbcrB);
+            if (myDrp->pixelFormat == k422YpCbCr8PixelFormat) {
+                if (glob->ti.pixel_fmt == TH_PF_420) {
+                    err = CopyPlanarYCbCr420ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                } else if (glob->ti.pixel_fmt == TH_PF_422) {
+                    err = CopyPlanarYCbCr422ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                } else if (glob->ti.pixel_fmt == TH_PF_444) {
+                    err = CopyPlanarYCbCr444ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                } else {
+                    dbg_printf("--:Theora:-  'What PLANET is this!?' (%d)\n", glob->ti.pixel_fmt);
+                    err = codecBadDataErr;
+                }
+            } else if (myDrp->pixelFormat == kYUV420PixelFormat) {
+                err = CopyPlanarYCbCr422ToPlanarYUV422(ycbcrB, dataProc, (UInt8 *)drp->baseAddr, drp->rowBytes, myDrp->width, myDrp->height);
             } else {
-                dbg_printf("--:Theora:-  'What PLANET is this!?' (%d)\n", glob->ti.pixel_fmt);
+                dbg_printf("--:Theora:-  'Again, What PLANET is this!?' (%lx)\n", myDrp->pixelFormat);
                 err = codecBadDataErr;
             }
-        } else if (myDrp->pixelFormat == kYUV420PixelFormat) {
-            err = CopyPlanarYCbCr422ToPlanarYUV422(ycbcrB, dataProc, (UInt8 *)drp->baseAddr, drp->rowBytes, myDrp->width, myDrp->height);
         }
     }
 
-    //err = noErr;
-    //err = codecBadDataErr;
     return err;
 }
 
 pascal ComponentResult Theora_ImageCodecEndBand(Theora_Globals glob, ImageSubCodecDecompressRecord *drp, OSErr result, long flags)
 {
-#pragma unused(glob, drp,result, flags)
+#pragma unused(glob, result, flags)
+    OSErr err = noErr;
+    Theora_DecompressRecord *myDrp = (Theora_DecompressRecord *)drp->userDecompressRecord;
     dbg_printf("--:Theora:-   CodecEndBand(%08lx, %08lx, %08lx, %08lx) called\n", (long)glob, (long)drp, (long)drp->userDecompressRecord, result);
 
-    return noErr;
+    if (myDrp->draw == 0)
+        err = codecDroppedFrameErr;
+    return err;
 }
 
 pascal ComponentResult Theora_ImageCodecQueueStarting(Theora_Globals glob)

@@ -98,9 +98,8 @@ typedef struct {
     long dataSize;
     long frameNumber;
     long draw;
+    long decoded;
     OSType pixelFormat;
-
-    long _padding_unused;
 } Theora_DecompressRecord;
 
 #endif /* __decoder_types_h__ */
