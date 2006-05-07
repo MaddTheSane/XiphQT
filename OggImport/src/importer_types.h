@@ -107,8 +107,9 @@ typedef struct {
     TimeValue           lastMediaInserted;
     TimeValue           mediaLength;
     TimeValue           insertTime;
+
     TimeValue           streamOffset;
-    // SInt32              sampleOffset;
+    SInt32              streamOffsetSamples;
 
     CFDictionaryRef		MDmapping;
     CFDictionaryRef		UDmapping;
@@ -156,6 +157,7 @@ typedef struct {
     // ogg grouped and chained streams support variables
     Boolean                 groupStreamsFound;
     TimeValue               currentGroupOffset;
+    Float64                 currentGroupOffsetSubSecond;   // same as with timeLoaded
 
     long                    newMovieFlags;
 
@@ -192,6 +194,7 @@ typedef struct {
     Track                   firstTrack;
 
     TimeValue               timeLoaded;
+    Float64                 timeLoadedSubSecond;        // last second fraction remainder
 
     unsigned long           startTickCount;
 

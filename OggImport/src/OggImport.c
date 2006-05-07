@@ -839,8 +839,10 @@ static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
                         if (si->sfhf->first_packet != NULL)
                             (*si->sfhf->first_packet)(si, op, &opckt); //check errors?
 
-                        if (globals->currentGroupOffset == -1)
+                        if (globals->currentGroupOffset == -1) {
                             globals->currentGroupOffset = globals->timeLoaded;
+                            globals->currentGroupOffsetSubSecond = globals->timeLoadedSubSecond;
+                        }
 
                         process_page = false;
                     }
@@ -868,6 +870,7 @@ static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
             if (globals->streamCount == 0) {
                 globals->groupStreamsFound = false;
                 globals->currentGroupOffset = -1;
+                globals->currentGroupOffsetSubSecond = 0.0;
             }
         }
     }
@@ -896,10 +899,12 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->dataOffset = globals->dataStartOffset;
             globals->numTracksSeen = 0;
             globals->timeLoaded = 0;
+            globals->timeLoadedSubSecond = 0.0;
             globals->dataRequested = false;
             globals->startTickCount = TickCount();
 
             globals->currentGroupOffset = globals->startTime;
+            globals->currentGroupOffsetSubSecond = (Float64) (globals->startTime % GetMovieTimeScale(globals->theMovie)) / (Float64) GetMovieTimeScale(globals->theMovie);
             globals->groupStreamsFound = false;
 
             if (!globals->sizeInitialised) {
@@ -1143,6 +1148,8 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
             if (err == noErr)
             {
                 globals->dataReadCompletion = NewDataHCompletionUPP(ReadCompletion);
+                dbg_printf("     - dataReadCompletion: %8lx; err = %lx\n",
+                           globals->dataReadCompletion, GetMoviesError());
             }
 
             if (err == noErr && globals->idleManager)
@@ -1497,11 +1504,16 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
     if (err == noErr)
         dbg_printf("    SetupDataHandler() succeeded\n");
 
+#if 1
     globals->usingIdle = (globals->dataIsStream
                           && (inFlags & movieImportWithIdle) != 0);
 
     if (dataRefType != URLDataHandlerSubType)
         globals->usingIdle = false;
+#else
+    globals->usingIdle = ((inFlags & movieImportWithIdle) != 0);
+#endif /* 1 */
+
     dbg_printf("--> 2: globals->usingIdle: %d\n", globals->usingIdle);
 
     if (globals->usingIdle) {
