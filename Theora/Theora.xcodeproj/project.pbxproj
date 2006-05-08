@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7321B37E0A022D43004A699F /* TheoraExp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7321B37D0A022D43004A699F /* TheoraExp.framework */; };
+		736ED37B0A0FF641005F518F /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = 736ED35F0A0FF57E005F518F /* PkgInfo */; };
 		7380D65E09D9853300A36679 /* TheoraDecoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 7380D65C09D9853300A36679 /* TheoraDecoder.c */; };
 		7380D66909D9859D00A36679 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7380D66709D9859D00A36679 /* Ogg.framework */; };
 		7380D66E09D985B800A36679 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7380D66D09D985B800A36679 /* QuickTime.framework */; };
@@ -31,6 +32,19 @@
 		};
 /* End PBXBuildStyle section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		736ED3770A0FF5E8005F518F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents;
+			dstSubfolderSpec = 1;
+			files = (
+				736ED37B0A0FF641005F518F /* PkgInfo in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -38,6 +52,7 @@
 		7321B37D0A022D43004A699F /* TheoraExp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TheoraExp.framework; path = /Library/Frameworks/TheoraExp.framework; sourceTree = "<absolute>"; };
 		7321B3B10A04F1CC004A699F /* TheoraDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraDecoder.h; path = src/TheoraDecoder.h; sourceTree = "<group>"; };
 		7321B3C20A04F91D004A699F /* decoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = decoder_types.h; path = src/decoder_types.h; sourceTree = "<group>"; };
+		736ED35F0A0FF57E005F518F /* PkgInfo */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = PkgInfo; sourceTree = "<group>"; };
 		7380D65509D9849B00A36679 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		7380D65609D984CD00A36679 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		7380D65709D984CD00A36679 /* data_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = data_types.h; path = ../common/data_types.h; sourceTree = SOURCE_ROOT; };
@@ -94,6 +109,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				736ED35F0A0FF57E005F518F /* PkgInfo */,
 				7380D65F09D9854100A36679 /* TheoraDecoder.r */,
 				7380D65809D984FD00A36679 /* icon.icns */,
 				7380D65909D984FD00A36679 /* icon.r */,
@@ -136,6 +152,7 @@
 			buildConfigurationList = 4FADC23308B4156C00ABE55E /* Build configuration list for PBXNativeTarget "Theora" */;
 			buildPhases = (
 				8D01CCC90486CAD60068D4B7 /* Resources */,
+				736ED3770A0FF5E8005F518F /* CopyFiles */,
 				8D01CCCB0486CAD60068D4B7 /* Sources */,
 				8D01CCCD0486CAD60068D4B7 /* Frameworks */,
 				7380D69D09D987FC00A36679 /* Rez */,

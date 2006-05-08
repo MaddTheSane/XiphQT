@@ -22,7 +22,6 @@
 		73201A3908FEE41B002000DA /* FLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73201A3808FEE41B002000DA /* FLAC.framework */; };
 		734EA2400902851800D10866 /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734EA23E0902851800D10866 /* XCACodec.cpp */; };
 		7350DCD2098BC2F100A5DAB4 /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7350DCD0098BC2F100A5DAB4 /* CAOggFLACDecoder.cpp */; };
-		7350DCD3098BC2F100A5DAB4 /* CAOggFLACDecoder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7350DCD1098BC2F100A5DAB4 /* CAOggFLACDecoder.h */; };
 		7350DCD8098BC37D00A5DAB4 /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7350DCD5098BC37D00A5DAB4 /* wrap_ogg.cpp */; };
 		739A57440901A47600CF57C1 /* FLAC++.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 739A57430901A47600CF57C1 /* FLAC++.framework */; };
 		73A55FD8090008A2009FD166 /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73A55FD7090008A2009FD166 /* PkgInfo */; };
@@ -63,7 +62,6 @@
 			dstSubfolderSpec = 1;
 			files = (
 				73A55FD8090008A2009FD166 /* PkgInfo in CopyFiles */,
-				7350DCD3098BC2F100A5DAB4 /* CAOggFLACDecoder.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
