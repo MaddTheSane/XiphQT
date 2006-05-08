@@ -90,7 +90,7 @@
 
 
 resource 'thng' (kImporterResID, OggImporterName, purgeable) {
-    kImporterComponentType, kCodecFormat, 'soun',
+    kImporterComponentType, kCodecFormat, 'vide',
     0, 0, 0, 0,
     'STR ', kImporterNameStringResID,
     'STR ', kImporterInfoStringResID,
@@ -118,7 +118,7 @@ resource 'thga' (kImporterResID, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
     'OGG ',                             // Subtype - this must be in uppercase.
                                         // It will match an ".ogg" suffix case-insensitively.
-    'soun',                             // Manufacturer
+    'vide',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
     0,                                  // Code Type
@@ -132,7 +132,7 @@ resource 'thga' (kImporterResID, OggImporterName, purgeable) {
                 // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
     kCodecFormat,                       // SubType
-    'soun',                             // Manufaturer
+    'vide',                             // Manufaturer
     kImporterFlags,                     // Component Flags
     0,                                  // Component Flags Mask
     'thnr', kImporterResID, 0
@@ -143,7 +143,7 @@ resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
     'OGM ',                             // Subtype - this must be in uppercase.
                                         // It will match an ".ogm" suffix case-insensitively.
-    'soun',                             // Manufacturer
+    'vide',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
     0,                                  // Code Type
@@ -157,7 +157,7 @@ resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
                 // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
     kCodecFormat,                       // SubType
-    'soun',                             // Manufaturer
+    'vide',                             // Manufaturer
     kImporterFlags,                     // Component Flags
     0,                                  // Component Flags Mask
     'thnr', kImporterResID, 0
@@ -167,7 +167,7 @@ resource 'thga' (kImporterResID + 1, OggImporterName, purgeable) {
 resource 'thga' (kImporterResID + 2, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
     'SPX ',                             // Subtype - this must be in uppercase.
-                                        // It will match an ".ogm" suffix case-insensitively.
+                                        // It will match an ".spx" suffix case-insensitively.
     'soun',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
@@ -182,7 +182,7 @@ resource 'thga' (kImporterResID + 2, OggImporterName, purgeable) {
                                         // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
     kCodecFormat,                       // SubType
-    'soun',                             // Manufaturer
+    'vide',                             // Manufaturer
     kImporterFlags,                     // Component Flags
     0,                                  // Component Flags Mask
     'thnr', kImporterResID, 0
@@ -193,7 +193,7 @@ resource 'thga' (kImporterResID + 3, OggImporterName, purgeable) {
     kImporterComponentType,             // Type
     'ANX ',                             // Subtype - this must be in uppercase.
                                         // It will match an ".anx" suffix case-insensitively.
-    'soun',                             // Manufacturer
+    'vide',                             // Manufacturer
     kImporterFlags | movieImportSubTypeIsFileExtension,	// The subtype is a file name suffix
     0,                                  // Component Flags Mask
     0,                                  // Code Type
@@ -207,7 +207,7 @@ resource 'thga' (kImporterResID + 3, OggImporterName, purgeable) {
                 // TARGET COMPONENT ---------------
     kImporterComponentType,             // Type
     kCodecFormat,                       // SubType
-    'soun',                             // Manufaturer
+    'vide',                             // Manufaturer
     kImporterFlags,                     // Component Flags
     0,                                  // Component Flags Mask
     'thnr', kImporterResID, 0
@@ -231,7 +231,7 @@ resource 'STR ' (kImporterNameStringResID, OggImporterName, purgeable) {
 };
 
 resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
-    "Ogg " "0.1.3" " (See http://www.xiph.org)."
+    "Ogg " "0.1.6" " (See http://www.xiph.org)."
 };
 
 
@@ -252,19 +252,20 @@ resource 'mime' (kImporterResID, OggImporterName, purgeable) {
         kMimeInfoFileExtensionTag, 3, "spx";
         kMimeInfoFileExtensionTag, 4, "spx";
         kMimeInfoFileExtensionTag, 5, "anx";
-        kMimeInfoDescriptionTag,   1, "Ogg Vorbis";
-        kMimeInfoDescriptionTag,   2, "Ogg Vorbis";
+        kMimeInfoDescriptionTag,   1, "Ogg Multimedia Bitstream";
+        kMimeInfoDescriptionTag,   2, "Ogg Multimedia Bitstream";
         kMimeInfoDescriptionTag,   3, "Ogg Speex";
         kMimeInfoDescriptionTag,   4, "Ogg Speex";
-        kMimeInfoDescriptionTag,   5, "Annodex";
+        kMimeInfoDescriptionTag,   5, "Annodex Media";
     };
 };
 
 resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
     kVersionDoesntMatter,
     {
-        kQTMediaConfigAudioGroupID,
+        kQTMediaConfigVideoGroupID,
         kQTMediaConfigBinaryFile | \
+            kQTMediaConfigTakeFileAssociationByDefault | \
             kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
             kQTMediaConfigUsePluginByDefault,
         'OggS',
@@ -279,10 +280,10 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         },
 
         {
-            "Ogg Vorbis sound file",
+            "Ogg Multimedia Bitstream",
             "ogg",
             "QuickTime Player",
-            "Ogg Vorbis file importer",
+            "Ogg file importer",
             "",
         },
 
@@ -295,6 +296,7 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
 //    {
         kQTMediaConfigAudioGroupID,
         kQTMediaConfigBinaryFile | \
+            kQTMediaConfigTakeFileAssociationByDefault | \
             kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
             kQTMediaConfigUsePluginByDefault,
         'OggS',
@@ -309,7 +311,7 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         },
 
         {
-            "Ogg Speex sound file",
+            "Ogg Speex audio",
             "spx",
             "QuickTime Player",
             "Ogg Speex file importer",
@@ -323,8 +325,9 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         };
 //    };
 //    {
-        kQTMediaConfigAudioGroupID,
+        kQTMediaConfigVideoGroupID,
         kQTMediaConfigBinaryFile | \
+            kQTMediaConfigTakeFileAssociationByDefault | \
             kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
             kQTMediaConfigUsePluginByDefault,
         'OggS',
@@ -339,7 +342,7 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         },
 
         {
-            "Annodex media file",
+            "Annodex Media",
             "anx",
             "QuickTime Player",
             "Annodex file importer",
