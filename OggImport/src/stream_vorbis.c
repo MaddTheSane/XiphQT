@@ -114,16 +114,33 @@ ComponentResult create_sample_description__vorbis(StreamInfo *si)
     asbd.mBitsPerChannel = 0;
     asbd.mReserved = 0;
 
-    if (si->numChannels == 1)
+    acl.mChannelBitmap = 0;
+    acl.mNumberChannelDescriptions = 0;
+    switch (si->numChannels) {
+    case 1:
         acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
-    else if (si->numChannels == 2)
+        break;
+    case 2:
         acl.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
-    else {
+        break;
+    case 3:
+        //TODO: this should be done using channel descriptions probably...
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelBitmap;
+        acl.mChannelBitmap = kAudioChannelBit_Left | kAudioChannelBit_Right | kAudioChannelBit_CenterSurround;
+        break;
+    case 4:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_Quadraphonic;
+        break;
+    case 5:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_MPEG_5_0_C;
+        break;
+    case 6:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_MPEG_5_1_C;
+        break;
+    default:
         pacl = NULL;
         acl_size = 0;
     }
-    acl.mChannelBitmap = 0;
-    acl.mNumberChannelDescriptions = 0;
 
     err = QTSoundDescriptionCreate(&asbd, pacl, acl_size, NULL, 0, kQTSoundDescriptionKind_Movie_Version2, (SoundDescriptionHandle*) &desc);
 
