@@ -331,7 +331,8 @@ ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo
                     movie_changed = true;
                 }
 
-                si->lastGranulePos = pos;
+                if (pos != -1)
+                    si->lastGranulePos = pos;
             }
             loop = false;
             break;

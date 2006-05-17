@@ -367,7 +367,8 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                     movie_changed = true;
                 }
 
-                si->lastGranulePos = pos;
+                if (pos != -1)
+                    si->lastGranulePos = pos;
             }
             loop = false;
             break;

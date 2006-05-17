@@ -353,7 +353,8 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                     movie_changed = true;
                 }
 
-                si->lastGranulePos = pos;
+                if (pos != -1)
+                    si->lastGranulePos = pos;
             }
             loop = false;
             break;
