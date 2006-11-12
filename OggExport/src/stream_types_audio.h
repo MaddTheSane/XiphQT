@@ -1,10 +1,10 @@
 /*
- *  versions.h
+ *  stream_types_audio.h
  *
- *    The current version of the OggImport component.
+ *    Definition of audio stream data structures for OggExport.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,13 +28,36 @@
  */
 
 
-#if !defined(__versions_h__)
-#define __versions_h__
+#if !defined(__stream_types_audio_h__)
+#define __stream_types_audio_h__
 
-#ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF0107)
-#else
-#define kOgg_eat__Version		(0x00000107)
-#endif /* DEBUG */
+enum {
+    kOES_A_init_op_size = 1024,
+};
 
-#endif /* __versions_h__ */
+typedef struct {
+    ComponentInstance stdAudio;
+
+    // quickTimeMovieExporter output asbd
+    AudioStreamBasicDescription qte_out_asbd;
+
+    // stdAudioComponent output format asbd
+    AudioStreamBasicDescription stda_asbd;
+
+    ogg_packet op;
+    UInt32 op_duration;
+    void * op_buffer;
+    UInt32 op_buffer_size;
+
+    UInt32 max_packet_size;
+
+    AudioBufferList * abl;
+    UInt32 abl_size;
+
+    AudioStreamPacketDescription * aspds;
+    UInt32 aspds_size;
+
+} StreamInfo__audio;
+
+#define _HAVE__OE_AUDIO 1
+#endif /* __stream_types_audio_h__ */

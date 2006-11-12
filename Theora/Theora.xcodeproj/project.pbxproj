@@ -17,21 +17,6 @@
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		4F9091AC011F3BD104CA0E50 /* Debug */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4F9091AD011F3BD104CA0E50 /* Release */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-			};
-			name = Release;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		736ED3770A0FF5E8005F518F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -160,8 +145,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-			};
 			dependencies = (
 			);
 			name = Theora;
@@ -176,12 +159,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "Theora" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4F9091AC011F3BD104CA0E50 /* Debug */,
-				4F9091AD011F3BD104CA0E50 /* Release */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* Theora */;
 			projectDirPath = "";

@@ -86,7 +86,8 @@ class XCACodec : public ACBaseCodec
 
     virtual UInt32 FramesReady() const = 0;
     virtual Boolean GenerateFrames() = 0;
-    virtual void OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const = 0;
+    virtual void OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+                              AudioStreamPacketDescription* outPacketDescription) const = 0;
     virtual void Zap(UInt32 inFrames) = 0;
 
     virtual UInt32 InPacketsConsumed() const;

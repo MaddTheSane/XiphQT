@@ -33,9 +33,11 @@
 
 
 #ifdef DEBUG
-#define kCAVorbis_adec_Version		(0x00FF0105)
+#define kCAVorbis_adec_Version		(0x00FF0107)
+#define kCAVorbis_aenc_Version		(0x00FF0101)
 #else
-#define kCAVorbis_adec_Version		(0x00000105)
+#define kCAVorbis_adec_Version		(0x00000107)
+#define kCAVorbis_aenc_Version		(0x00000101)
 #endif /* DEBUG */
 
 

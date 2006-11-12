@@ -4,7 +4,7 @@
  *    The current version of the Speex component.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -33,9 +33,9 @@
 
 
 #ifdef DEBUG
-#define kCASpeex_adec_Version		(0x00FF0102)
+#define kCASpeex_adec_Version		(0x00FF0103)
 #else
-#define kCASpeex_adec_Version		(0x00000102)
+#define kCASpeex_adec_Version		(0x00000103)
 #endif /* DEBUG */
 
 

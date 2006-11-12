@@ -5,7 +5,7 @@
  *    codec functionality.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -544,7 +544,8 @@ Boolean CASpeexDecoder::GenerateFrames()
     return ret;
 }
 
-void CASpeexDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const
+void CASpeexDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+                                  AudioStreamPacketDescription* /* outPacketDescription */) const
 {
     if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0) {
         float* theOutputData = static_cast<float*> (outOutputData) + inFramesOffset * mSpeexHeader.nb_channels;

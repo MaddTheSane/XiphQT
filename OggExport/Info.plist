@@ -5,25 +5,25 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>CAVorbis</string>
+	<string>OggExport</string>
 	<key>CFBundleGetInfoString</key>
-	<string>CoreAudio Vorbis Decoder Component 0.1.7, Copyright © 2005-2006 Arek Korbik</string>
+	<string>QuickTime Ogg Exporter Component 0.1.1, Copyright © 2006 Arek Korbik</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>org.xiph.xiph-qt.cavorbis</string>
+	<string>org.xiph.xiph-qt.oggexport</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.1.7</string>
 	<key>CFBundleSignature</key>
-	<string>acdc</string>
+	<string>spit</string>
 	<key>CFBundleVersion</key>
-	<string>0.1.7</string>
+	<string>0.1.1</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.1</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>CoreAudio Vorbis Decoder Component 0.1.7, Copyright © 2005-2006 Arek Korbik</string>
+	<string>QuickTime Ogg Exporter Component 0.1.1, Copyright © 2006 Arek Korbik</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>

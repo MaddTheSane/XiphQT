@@ -330,7 +330,8 @@ void CAFLACDecoder::FixFormats()
 
 #pragma mark The CORE
 
-void CAFLACDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const
+void CAFLACDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+                                 AudioStreamPacketDescription* /* outPacketDescription */) const
 {
     UInt32 i, j;
 

@@ -1,10 +1,10 @@
 /*
- *  CAFLACDecoder.h
+ *  CAVorbisEncoder.h
  *
- *    CAFLACDecoder class definition.
+ *    CAVorbisEncoder class definition.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,41 +28,37 @@
  */
 
 
-#if !defined(__CAFLACDecoder_h__)
-#define __CAFLACDecoder_h__
+#if !defined(__CAVorbisEncoder_h__)
+#define __CAVorbisEncoder_h__
 
 
 #include "XCACodec.h"
 
-//#include <Ogg/ogg.h>
-#include <FLAC++/decoder.h>
+#include <Ogg/ogg.h>
+#include <Vorbis/codec.h>
 
 #include <vector>
 
 
-#define _SHOULD_BE_ZERO_HERE 0
-#if defined(TARGET_CPU_X86) && defined(QT_IA32__VBR_BROKEN)
-  #undef _SHOULD_BE_ZERO_HERE
-  #define _SHOULD_BE_ZERO_HERE 1
-#endif
-
-
-class CAFLACDecoder:
-public XCACodec, FLAC::Decoder::Stream
+class CAVorbisEncoder:
+public XCACodec
 {
-public:
-    CAFLACDecoder(Boolean inSkipFormatsInitialization = false);
-    ~CAFLACDecoder();
+ public:
+    CAVorbisEncoder();
+    virtual ~CAVorbisEncoder();
 
-    virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat, \
-                                   const AudioStreamBasicDescription* inOutputFormat, \
+    virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
+                                   const AudioStreamBasicDescription* inOutputFormat,
                                    const void* inMagicCookie, UInt32 inMagicCookieByteSize);
     virtual void        Uninitialize();
     virtual void        Reset();
-    //virtual void        FixFormats();
+
+    virtual UInt32      ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
+                                             AudioStreamPacketDescription* outPacketDescription);
 
     virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
     virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
+    virtual void        SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPropertyDataSize, const void* inPropertyData);
 
     virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
     virtual void        SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);
@@ -80,74 +76,68 @@ public:
 
     virtual void        InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription);
 
-    virtual UInt32      FramesReady() const;
-    virtual Boolean     GenerateFrames();
+    virtual UInt32      FramesReady() const { return 0; };
+    virtual Boolean     GenerateFrames() { return false; };
     virtual void        OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
-                                     AudioStreamPacketDescription* outPacketDescription) const;
-    virtual void        Zap(UInt32 inFrames);
+                                     AudioStreamPacketDescription* outPacketDescription) const {};
+    virtual void        Zap(UInt32 inFrames) {};
 
-//    virtual UInt32      InPacketsConsumed() const;
+    virtual UInt32      InPacketsConsumed() const { return 0; };
 
     void                SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
     virtual void        InitializeCompressionSettings();
 
-protected:
-    /* FLAC callback interface functions */
+    virtual void        FixFormats();
 
-    virtual ::FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], unsigned *bytes);
-    virtual ::FLAC__StreamDecoderWriteStatus write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[]);
-    virtual void metadata_callback(const ::FLAC__StreamMetadata *metadata);
-    virtual void error_callback(::FLAC__StreamDecoderErrorStatus status);
+ private:
+    Boolean             BuildSettings(void *outSettingsDict);
 
  protected:
     Byte* mCookie;
     UInt32 mCookieSize;
 
     Boolean mCompressionInitialized;
+    Boolean mEOSHit;
 
-    FLAC__int32* mOutBuffer;
-    UInt32       mOutBufferSize;
-    UInt32       mOutBufferUsedSize;
+    vorbis_info mV_vi;
+    vorbis_comment mV_vc;
+    vorbis_dsp_state mV_vd;
+    vorbis_block mV_vb;
 
-    UInt32 mFLACsrate;
-    UInt32 mFLACchannels;
-    UInt32 mFLACbits;
+    ogg_int64_t last_granulepos;
+    ogg_int64_t last_packetno; // do I need this one?
 
-    struct FLACFramePacket {
+    struct VorbisFramePacket {
         UInt32 frames;
         UInt32 bytes;
         UInt32 left;
 
-        FLACFramePacket() : frames(0), bytes(0), left(0) {};
-        FLACFramePacket(UInt32 inFrames, UInt32 inBytes) : frames(inFrames), bytes(inBytes), left(inBytes) {};
+        VorbisFramePacket() : frames(0), bytes(0), left(0) {};
+        VorbisFramePacket(UInt32 inFrames, UInt32 inBytes) : frames(inFrames), bytes(inBytes), left(inBytes) {};
     };
 
-    typedef std::vector<FLACFramePacket> FLACFramePacketList;
-    FLACFramePacketList mFLACFPList;
+    typedef std::vector<VorbisFramePacket>	VorbisFramePacketList;
+    VorbisFramePacketList mVorbisFPList;
+    typedef std::vector<ogg_packet> VorbisPacketList;
+    VorbisPacketList mProducedPList;
 
-    ::FLAC__Frame mFrame;
-    UInt32 mNumFrames;
-    const FLAC__int32** mBPtrs;
-
-    void DFPinit(const ::FLAC__Frame& inFrame, const FLAC__int32 *const inBuffer[]);
-    void DFPclear();
+    //UInt32 mFullInPacketsZapped;
 
 
     enum {
-        kFLACBytesPerPacket = 0,
-        kFLACFramesPerPacket = _SHOULD_BE_ZERO_HERE,
-        kFLACFramesPerPacketReported = 8192,
-        kFLACBytesPerFrame = 0,
-        kFLACChannelsPerFrame = 0,
-        kFLACBitsPerChannel = 0,
-        kFLACFormatFlags = 0,
+        kVorbisBytesPerPacket = 0,
+        kVorbisFramesPerPacket = 0,
+        kVorbisFramesPerPacketReported = 8192,
+        kVorbisBytesPerFrame = 0,
+        kVorbisChannelsPerFrame = 0,
+        kVorbisBitsPerChannel = 0,
+        kVorbisFormatFlags = 0,
 
-        kFLACFormatMaxBytesPerPacket = 65535,
+        /* Just a funny number, and only roughly valid for the 'Xiph (Ogg-Framed) Vorbis'. */
+        kVorbisFormatMaxBytesPerPacket = 255 * 255,
 
-        kFLACDecoderInBufferSize = 96 * 1024,
-        kFLACDecoderOutBufferSize = 32 * 1024
+        kVorbisEncoderBufferSize = 256 * 1024
     };
 };
 
-
-#endif /* __CAFLACDecoder_h__ */
+#endif /* __CAVorbisEncoder_h__ */

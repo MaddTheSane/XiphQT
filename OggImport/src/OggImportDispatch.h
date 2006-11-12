@@ -1,5 +1,5 @@
 /*
- *  OggImport.h
+ *  OggImportDispatch.h
  *
  *    OggImport component dispatch helper header.
  *

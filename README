@@ -52,6 +52,9 @@ Source code organisation
 ./OggImport
 	Ogg QuickTime MovieImporter component files
 
+./OggExport
+	Ogg QuickTime Movie Data Export component files
+
 ./Theora
         Theora QuickTime ImageCodec component files
 

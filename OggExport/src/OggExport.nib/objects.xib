@@ -1,0 +1,75 @@
+<?xml version="1.0" standalone="yes"?>
+<object class="NSIBObjectData">
+  <string name="targetFramework">IBCarbonFramework</string>
+  <object name="rootObject" class="NSCustomObject" id="1">
+    <string name="customClass">NSApplication</string>
+  </object>
+  <array count="5" name="allObjects">
+    <object class="IBCarbonWindow" id="166">
+      <string name="windowRect">167 334 288 756 </string>
+      <string name="title">Ogg Exporter Settings</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="167">
+        <string name="bounds">0 0 121 422 </string>
+        <string name="viewFrame">0 0 422 121 </string>
+        <array count="3" name="subviews">
+          <object class="IBCarbonButton" id="180">
+            <string name="bounds">81 333 101 402 </string>
+            <string name="viewFrame">333 81 69 20 </string>
+            <int name="controlID">1</int>
+            <string name="title">OK</string>
+            <ostype name="command">ok  </ostype>
+            <object name="layoutInfo" class="IBCarbonHILayoutInfo">
+              <int name="bindingBottomKind">2</int>
+              <int name="bindingRightKind">2</int>
+            </object>
+            <int name="buttonType">1</int>
+          </object>
+          <object class="IBCarbonButton" id="181">
+            <string name="bounds">81 252 101 321 </string>
+            <string name="viewFrame">252 81 69 20 </string>
+            <int name="controlID">2</int>
+            <string name="title">Cancel</string>
+            <ostype name="command">not!</ostype>
+            <object name="layoutInfo" class="IBCarbonHILayoutInfo">
+              <int name="bindingBottomKind">2</int>
+            </object>
+            <int name="buttonType">2</int>
+          </object>
+          <object class="IBCarbonButton" id="182">
+            <string name="bounds">20 20 40 157 </string>
+            <string name="viewFrame">20 20 137 20 </string>
+            <int name="controlID">3</int>
+            <string name="title">Configure Audio</string>
+            <ostype name="command">OEca</ostype>
+            <object name="layoutInfo" class="IBCarbonHILayoutInfo">
+              <int name="bindingLeftKind">1</int>
+              <int name="bindingRightKind">2</int>
+            </object>
+          </object>
+        </array>
+      </object>
+      <boolean name="receiveUpdates">FALSE</boolean>
+      <boolean name="compositing">TRUE</boolean>
+      <int name="carbonWindowClass">4</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="167"/>
+    <reference idRef="180"/>
+    <reference idRef="181"/>
+    <reference idRef="182"/>
+  </array>
+  <array count="5" name="allParents">
+    <reference idRef="1"/>
+    <reference idRef="166"/>
+    <reference idRef="167"/>
+    <reference idRef="167"/>
+    <reference idRef="167"/>
+  </array>
+  <dictionary count="2" name="nameTable">
+    <string>File&apos;s Owner</string>
+    <reference idRef="1"/>
+    <string>Settings</string>
+    <reference idRef="166"/>
+  </dictionary>
+  <unsigned_int name="nextObjectID">183</unsigned_int>
+</object>

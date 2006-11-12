@@ -81,7 +81,8 @@ public XCACodec
 
     virtual UInt32      FramesReady() const;
     virtual Boolean     GenerateFrames();
-    virtual void        OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const;
+    virtual void        OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+                                     AudioStreamPacketDescription* outPacketDescription) const;
     virtual void        Zap(UInt32 inFrames);
 
     virtual UInt32      InPacketsConsumed() const;
@@ -89,7 +90,7 @@ public XCACodec
     void                SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize);
     virtual void        InitializeCompressionSettings();
 
-    //virtual void        FixFormats();
+    virtual void        FixFormats();
 
  protected:
     Byte* mCookie;
@@ -123,7 +124,8 @@ public XCACodec
         kVorbisFramesPerPacketReported = 8192,
         kVorbisBytesPerFrame = 0,
         kVorbisChannelsPerFrame = 0,
-        kVorbisBitsPerChannel = 16,
+        //kVorbisBitsPerChannel = 16,
+        kVorbisBitsPerChannel = 0,
         kVorbisFormatFlags = 0,
 
         /* Just a funny number, and only roughly valid for the 'Xiph (Ogg-Framed) Vorbis'. */

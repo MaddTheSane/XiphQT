@@ -1,10 +1,10 @@
 /*
- *  versions.h
+ *  OggExport.h
  *
- *    The current version of the OggImport component.
+ *    OggExport.h - some constants definitions.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,13 +28,25 @@
  */
 
 
-#if !defined(__versions_h__)
-#define __versions_h__
+#ifndef __OGGEXPORT_H__
+#define __OGGEXPORT_H__ 1
 
-#ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF0107)
+#include "oggexport_versions.h"
+
+#define kOggExportBundleID "org.xiph.xiph-qt.oggexport"
+
+#define kExporterResID                  4040
+#define kExporterNameStringResID        4040
+#define kExporterInfoStringResID        4041
+
+#define kSoundComponentManufacturer     'Xiph'
+#define kCodecFormat                    'OggS'
+
+
+#ifdef _DEBUG
+#define OggExporterName        "Ogg Vorbis Exporter"
 #else
-#define kOgg_eat__Version		(0x00000107)
-#endif /* DEBUG */
+#define OggExporterName        ""
+#endif
 
-#endif /* __versions_h__ */
+#endif /* __OGGEXPORT_H__ */

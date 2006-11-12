@@ -43,6 +43,12 @@
 //#define NDEBUG
 #include "debug.h"
 
+#define DBG_STREAMDESC_FMT " [CASBD: sr=%lf, fmt=%4.4s, fl=%lx, bpp=%ld, fpp=%ld, bpf=%ld, ch=%ld, bpc=%ld]"
+#define DBG_STREAMDESC_FILL(x) (x)->mSampleRate, reinterpret_cast<const char*> (&((x)->mFormatID)), \
+        (x)->mFormatFlags, (x)->mBytesPerPacket, (x)->mFramesPerPacket, (x)->mBytesPerPacket, \
+        (x)->mChannelsPerFrame, (x)->mBitsPerChannel
+
+
 CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mVorbisFPList(), mConsumedFPList(),
@@ -101,7 +107,11 @@ void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputForma
                                  const AudioStreamBasicDescription* inOutputFormat,
                                  const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
-    dbg_printf(" >> [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("[VD  ]  >> [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    if (inInputFormat)
+        dbg_printf("[VD  ]   > [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inInputFormat));
+    if (inOutputFormat)
+        dbg_printf("[VD  ]   > [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inOutputFormat));
 
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
@@ -125,47 +135,46 @@ void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputForma
         SetMagicCookie(inMagicCookie, inMagicCookieByteSize);
     }
 
-    //if (mCompressionInitialized)
-    //    FixFormats();
+    if (mCompressionInitialized)
+        FixFormats();
 
-    XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
-    dbg_printf("<.. [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    if (mCompressionInitialized)
+        XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
+    dbg_printf("[VD  ]  <  [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mInputFormat));
+    dbg_printf("[VD  ]  <  [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mOutputFormat));
+    dbg_printf("[VD  ] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
 void CAVorbisDecoder::Uninitialize()
 {
-    dbg_printf(" >> [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[VD  ]  >> [%08lx] :: Uninitialize()\n", (UInt32) this);
     BDCUninitialize();
 
     XCACodec::Uninitialize();
-    dbg_printf("<.. [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[VD  ] <.. [%08lx] :: Uninitialize()\n", (UInt32) this);
 }
 
 void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf(" >> [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %ld)\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID), ioPropertyDataSize);
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
-        if(ioPropertyDataSize == sizeof(UInt32))
-        {
+        if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = 1;
-        }
-        else
-        {
+        } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
+
     case kAudioCodecPropertyHasVariablePacketByteSizes:
-        if(ioPropertyDataSize == sizeof(UInt32))
-        {
+        if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = 1;
-        }
-        else
-        {
+        } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
+
     case kAudioCodecPropertyPacketFrameSize:
         if(ioPropertyDataSize == sizeof(UInt32))
         {
@@ -177,10 +186,9 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
                implemented according to the QT docs. (And in case this workaround stops
                working again one wonderful morning!) */
             // *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacket;
-            *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacketReported;
-        }
-        else
-        {
+            //*reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacketReported;
+            *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFramesPerPacket;
+        } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
@@ -188,6 +196,26 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     case kAudioCodecPropertyMaximumPacketByteSize:
         if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFormatMaxBytesPerPacket;
+        } else {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
+
+    case kAudioCodecPropertyCurrentInputSampleRate:
+        if (ioPropertyDataSize == sizeof(Float64)) {
+            *reinterpret_cast<Float64*>(outPropertyData) = mInputFormat.mSampleRate;
+        } else if (ioPropertyDataSize == sizeof(UInt32)) {
+            *reinterpret_cast<UInt32*>(outPropertyData) = mInputFormat.mSampleRate;
+        } else {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
+
+    case kAudioCodecPropertyCurrentOutputSampleRate:
+        if (ioPropertyDataSize == sizeof(Float64)) {
+            *reinterpret_cast<Float64*>(outPropertyData) = mOutputFormat.mSampleRate;
+        } else if (ioPropertyDataSize == sizeof(UInt32)) {
+            *reinterpret_cast<UInt32*>(outPropertyData) = mOutputFormat.mSampleRate;
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
@@ -210,12 +238,12 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     default:
         ACBaseCodec::GetProperty(inPropertyID, ioPropertyDataSize, outPropertyData);
     }
-    dbg_printf("<.. [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    dbg_printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -238,21 +266,27 @@ void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
         outWritable = false;
         break;
 
+    case kAudioCodecPropertyCurrentInputSampleRate:
+    case kAudioCodecPropertyCurrentOutputSampleRate:
+        outPropertyDataSize = sizeof(Float64);
+        outWritable = false;
+        break;
+
     default:
         ACBaseCodec::GetPropertyInfo(inPropertyID, outPropertyDataSize, outWritable);
         break;
 
     }
-    dbg_printf("<.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisDecoder::Reset()
 {
-    dbg_printf(">> [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[VD  ] >> [%08lx] :: Reset()\n", (UInt32) this);
     BDCReset();
 
     XCACodec::Reset();
-    dbg_printf("<< [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[VD  ] << [%08lx] :: Reset()\n", (UInt32) this);
 }
 
 UInt32 CAVorbisDecoder::GetVersion() const
@@ -305,15 +339,17 @@ UInt32 CAVorbisDecoder::GetMagicCookieByteSize() const
 
 void CAVorbisDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
 {
-    ioMagicCookieDataByteSize = mCookieSize;
-
-    if (mCookie != NULL)
-        outMagicCookieData = mCookie;
+    if (mCookie != NULL) {
+        ioMagicCookieDataByteSize = mCookieSize;
+        BlockMoveData(mCookie, outMagicCookieData, ioMagicCookieDataByteSize);
+    } else {
+        ioMagicCookieDataByteSize = 0;
+    }
 }
 
 void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    dbg_printf(" >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[VD  ]  >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
     if (mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
@@ -323,7 +359,7 @@ void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMag
 
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);
-    dbg_printf("<.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[VD  ] <.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
 }
 
 void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
@@ -342,19 +378,25 @@ void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCoo
 
 
 
-#if 0
 void CAVorbisDecoder::FixFormats()
 {
+    dbg_printf("[VD  ]  >> [%08lx] :: FixFormats()\n", (UInt32) this);
     mInputFormat.mSampleRate = mV_vi.rate;
     mInputFormat.mChannelsPerFrame = mV_vi.channels;
+    mInputFormat.mBitsPerChannel = 0;
+    mInputFormat.mBytesPerPacket = 0;
+    mInputFormat.mFramesPerPacket = 0;
+
+    //long long_blocksize = (reinterpret_cast<long *>(mV_vi.codec_setup))[1];
+    //mInputFormat.mFramesPerPacket = long_blocksize;
 
     /*
       mInputFormat.mFramesPerPacket = 64;
       mInputFormat.mBytesPerPacket = mInputFormat.mChannelsPerFrame * 34;
       mInputFormat.mBytesPerFrame = 0;
     */
+    dbg_printf("[VD  ] <.. [%08lx] :: FixFormats()\n", (UInt32) this);
 }
-#endif
 
 
 void CAVorbisDecoder::InitializeCompressionSettings()
@@ -371,71 +413,73 @@ void CAVorbisDecoder::InitializeCompressionSettings()
 
     mCompressionInitialized = false;
 
-    OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
-    Byte *ptrheader = mCookie + EndianU32_BtoN(atom->size);
+    Byte *ptrheader = mCookie;
+    Byte *cend = mCookie + mCookieSize;
     CookieAtomHeader *aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
+    ogg_packet header, header_vc, header_cb;
+    header.bytes = header_vc.bytes = header_cb.bytes = 0;
 
-    // scan quickly through the cookie, check types and packet sizes
-    if (EndianS32_BtoN(atom->type) != kCookieTypeOggSerialNo || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
-        return;
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeVorbisHeader || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
-        return;
-    aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeVorbisComments || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
-        return;
-    aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeVorbisCodebooks || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
-        return;
+    while (ptrheader < cend) {
+        aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
+        ptrheader += EndianU32_BtoN(aheader->size);
+        if (ptrheader > cend || EndianU32_BtoN(aheader->size) <= 0)
+            break;
 
-    // all OK, back to the first vorbis packet
-    aheader = reinterpret_cast<CookieAtomHeader*> (mCookie + EndianU32_BtoN(atom->size));
+        switch(EndianS32_BtoN(aheader->type)) {
+        case kCookieTypeVorbisHeader:
+            header.b_o_s = 1;
+            header.e_o_s = 0;
+            header.granulepos = 0;
+            header.packetno = 0;
+            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header.packet = aheader->data;
+            break;
+
+        case kCookieTypeVorbisComments:
+            header_vc.b_o_s = 0;
+            header_vc.e_o_s = 0;
+            header_vc.granulepos = 0;
+            header_vc.packetno = 1;
+            header_vc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_vc.packet = aheader->data;
+            break;
+
+        case kCookieTypeVorbisCodebooks:
+            header_cb.b_o_s = 0;
+            header_cb.e_o_s = 0;
+            header_cb.granulepos = 0;
+            header_cb.packetno = 2;
+            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_cb.packet = aheader->data;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if (header.bytes == 0 || header_vc.bytes == 0 || header_cb.bytes == 0)
+        return;
 
     vorbis_comment vc;
 
-    //ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
-
     vorbis_info_init(&mV_vi);
     vorbis_comment_init(&vc);
-    ogg_packet op;
 
-    op.b_o_s = 1;
-    op.e_o_s = 0;
-    op.granulepos = 0;
-    op.packetno = 0;
-    op.bytes = EndianU32_BtoN(aheader->size) - 2 * sizeof(long); // FIXME??
-    op.packet = aheader->data;
-
-    if (vorbis_synthesis_headerin(&mV_vi, &vc, &op) < 0) {
-        //ogg_stream_clear(&mO_st);
-
+    if (vorbis_synthesis_headerin(&mV_vi, &vc, &header) < 0) {
         vorbis_comment_clear(&vc);
         vorbis_info_clear(&mV_vi);
 
         return;
     }
 
-    op.b_o_s = 0;
-    UInt32 i=0;
-
-    while (i < 2) {
-        aheader = reinterpret_cast<CookieAtomHeader*> (reinterpret_cast<Byte*> (aheader) + EndianU32_BtoN(aheader->size));
-        op.packetno += 1;
-        op.bytes = EndianU32_BtoN(aheader->size) - 2 * sizeof(long); // FIXME??
-        op.packet = aheader->data;
-
-        vorbis_synthesis_headerin(&mV_vi, &vc, &op);
-        i++;
-    }
+    vorbis_synthesis_headerin(&mV_vi, &vc, &header_vc);
+    vorbis_synthesis_headerin(&mV_vi, &vc, &header_cb);
 
     vorbis_synthesis_init(&mV_vd, &mV_vi);
     vorbis_block_init(&mV_vd, &mV_vb);
 
     vorbis_comment_clear(&vc);
-
-    //ogg_stream_reset(&mO_st);
 
     mCompressionInitialized = true;
 }
@@ -534,7 +578,8 @@ Boolean CAVorbisDecoder::GenerateFrames()
     return ret;
 }
 
-void CAVorbisDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset) const
+void CAVorbisDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+                                   AudioStreamPacketDescription* /* outPacketDescription */) const
 {
     float **pcm;
     vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), &pcm);  // ignoring the result, but should be (!!) at least inNumberFrames

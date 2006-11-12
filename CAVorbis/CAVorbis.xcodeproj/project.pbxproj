@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		734252F60AECFAB8003F78A8 /* CAVorbisEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734252F30AECFAB8003F78A8 /* CAVorbisEncoder.cpp */; };
+		734252F80AECFAB8003F78A8 /* CAVorbisEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 734252F50AECFAB8003F78A8 /* CAVorbisEncoderPublic.r */; };
 		737C589309125B5900700B79 /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589209125B5900700B79 /* vorbis_entrypoints.cpp */; };
-		737C589D09125C2700700B79 /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589B09125C2700700B79 /* XCACodec.cpp */; };
 		737C58A109125C7E00700B79 /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589F09125C7E00700B79 /* wrap_ogg.cpp */; };
 		737C593B09125DB700700B79 /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737C589809125BA000700B79 /* PkgInfo */; };
 		737C59960912617B00700B79 /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C59940912617B00700B79 /* CAOggVorbisDecoder.cpp */; };
@@ -26,32 +27,9 @@
 		737CA4D908F95A2C00DAC36C /* CAVorbisDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 737CA4B708F9588900DAC36C /* CAVorbisDecoderPublic.r */; };
 		737CA65008F9D34000DAC36C /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737CA64308F9D34000DAC36C /* Ogg.framework */; };
 		737CA65108F9D34000DAC36C /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737CA64408F9D34000DAC36C /* Vorbis.framework */; };
+		73C298B30AEFAA7100EF9C25 /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589B09125C2700700B79 /* XCACodec.cpp */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		4F9091AC011F3BD104CA0E50 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4F9091AD011F3BD104CA0E50 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		737C593509125CFB00700B79 /* CopyFiles */ = {
@@ -69,6 +47,9 @@
 /* Begin PBXFileReference section */
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		32BAE0B30371A71500C91783 /* CAVorbis_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAVorbis_Prefix.pch; sourceTree = "<group>"; };
+		734252F30AECFAB8003F78A8 /* CAVorbisEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAVorbisEncoder.cpp; path = src/CAVorbisEncoder.cpp; sourceTree = "<group>"; };
+		734252F40AECFAB8003F78A8 /* CAVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAVorbisEncoder.h; path = src/CAVorbisEncoder.h; sourceTree = "<group>"; };
+		734252F50AECFAB8003F78A8 /* CAVorbisEncoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = CAVorbisEncoderPublic.r; path = src/CAVorbisEncoderPublic.r; sourceTree = "<group>"; };
 		7348BD580944D32400AC363C /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = SOURCE_ROOT; };
 		7348BD5A0944D37900AC363C /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		737C589209125B5900700B79 /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vorbis_entrypoints.cpp; path = src/vorbis_entrypoints.cpp; sourceTree = "<group>"; };
@@ -163,6 +144,7 @@
 				737C589409125B8500700B79 /* icon.icns */,
 				737C589509125B8500700B79 /* icon.r */,
 				737CA4B708F9588900DAC36C /* CAVorbisDecoderPublic.r */,
+				734252F50AECFAB8003F78A8 /* CAVorbisEncoderPublic.r */,
 				8D01CCD10486CAD60068D4B7 /* Info.plist */,
 				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
 			);
@@ -172,6 +154,8 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				734252F30AECFAB8003F78A8 /* CAVorbisEncoder.cpp */,
+				734252F40AECFAB8003F78A8 /* CAVorbisEncoder.h */,
 				7348BD5A0944D37900AC363C /* config.h */,
 				737C59940912617B00700B79 /* CAOggVorbisDecoder.cpp */,
 				737C59950912617B00700B79 /* CAOggVorbisDecoder.h */,
@@ -317,15 +301,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = CAVorbis_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				PRODUCT_NAME = CAVorbis;
-				WRAPPER_EXTENSION = bundle;
-			};
 			dependencies = (
 			);
 			name = CAVorbis;
@@ -340,12 +315,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 737C9E9C08F7FE4D00DAC36C /* Build configuration list for PBXProject "CAVorbis" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4F9091AC011F3BD104CA0E50 /* Development */,
-				4F9091AD011F3BD104CA0E50 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* CAVorbis */;
 			projectDirPath = "";
@@ -372,6 +341,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				737CA4D908F95A2C00DAC36C /* CAVorbisDecoderPublic.r in Rez */,
+				734252F80AECFAB8003F78A8 /* CAVorbisEncoderPublic.r in Rez */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,9 +380,10 @@
 				737CA04708F82EF400DAC36C /* CABundleLocker.cpp in Sources */,
 				737CA0D108F8352A00DAC36C /* AudioCodecComponentGlue.c in Sources */,
 				737C589309125B5900700B79 /* vorbis_entrypoints.cpp in Sources */,
-				737C589D09125C2700700B79 /* XCACodec.cpp in Sources */,
 				737C58A109125C7E00700B79 /* wrap_ogg.cpp in Sources */,
 				737C59960912617B00700B79 /* CAOggVorbisDecoder.cpp in Sources */,
+				734252F60AECFAB8003F78A8 /* CAVorbisEncoder.cpp in Sources */,
+				73C298B30AEFAA7100EF9C25 /* XCACodec.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

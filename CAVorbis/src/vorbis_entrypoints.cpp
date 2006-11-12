@@ -30,6 +30,7 @@
 
 #include "CAVorbisDecoder.h"
 #include "CAOggVorbisDecoder.h"
+#include "CAVorbisEncoder.h"
 
 #include "ACCodecDispatch.h"
 
@@ -44,3 +45,10 @@ ComponentResult	CAOggVorbisDecoderEntry(ComponentParameters* inParameters, CAOgg
 {
     return ACCodecDispatch(inParameters, inThis);
 }
+
+extern "C"
+ComponentResult	CAVorbisEncoderEntry(ComponentParameters* inParameters, CAVorbisEncoder* inThis)
+{
+    return ACCodecDispatch(inParameters, inThis);
+}
+

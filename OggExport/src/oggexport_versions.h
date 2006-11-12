@@ -1,10 +1,10 @@
 /*
- *  versions.h
+ *  oggexport_versions.h
  *
- *    The current version of the OggImport component.
+ *    The current version of the OggExport component.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,13 +28,13 @@
  */
 
 
-#if !defined(__versions_h__)
-#define __versions_h__
+#if !defined(__oggexport_versions_h__)
+#define __oggexport_versions_h__
 
 #ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF0107)
+#define kOgg_spit__Version		(0x00FF0101)
 #else
-#define kOgg_eat__Version		(0x00000107)
+#define kOgg_spit__Version		(0x00000101)
 #endif /* DEBUG */
 
-#endif /* __versions_h__ */
+#endif /* __oggexport_versions_h__ */
