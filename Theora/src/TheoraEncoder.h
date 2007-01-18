@@ -1,10 +1,10 @@
 /*
- *  vorbis_entrypoints.cpp
+ *  TheoraEncoder.h
  *
- *    Declaration of the entry points for the Vorbis component.
+ *    TheoraEncoder.h - some constants definitions.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,31 +28,32 @@
  */
 
 
-#include "CAVorbisDecoder.h"
-#include "CAOggVorbisDecoder.h"
-#include "CAVorbisEncoder.h"
+#ifndef __theoraencoder_h__
+#define __theoraencoder_h__ 1
 
-#include "ACCodecDispatch.h"
+#include "theora_versions.h"
+#include "fccs.h"
 
-extern "C"
-ComponentResult	CAVorbisDecoderEntry(ComponentParameters* inParameters, CAVorbisDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+#define kTheoraEncoderResID                  -17790
+#define kTheoraEncoderNameStringResID        -17790
+#define kTheoraEncoderInfoStringResID        -17791
 
-extern "C"
-ComponentResult	CAOggVorbisDecoderEntry(ComponentParameters* inParameters, CAOggVorbisDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+#define	kTheoraEncoderFormatName  "Xiph Theora"
 
 
-#if !defined(XIPHQT_NO_ENCODERS)
+#define kTheoraEncoderDITLResID              -17790
+#define kTheoraEncoderPopupCNTLResID         -17790
+#define kTheoraEncoderPopupMENUResID         -17790
 
-extern "C"
-ComponentResult	CAVorbisEncoderEntry(ComponentParameters* inParameters, CAVorbisEncoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+#define TEXT_HEIGHT            16
+#define INTER_CONTROL_SPACING  12
+#define POPUP_CONTROL_HEIGHT   22
 
-#endif  /* XIPHQT_NO_ENCODERS */
+
+#ifdef _DEBUG
+#define TheoraEncoderName        "Xiph Theora Decoder"
+#else
+#define TheoraEncoderName        ""
+#endif
+
+#endif /* __theoraencoder_h__ */

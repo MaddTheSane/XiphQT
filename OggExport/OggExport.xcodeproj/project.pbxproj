@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		730CCC0C0B11F0E20037043F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 730CCC0B0B11F0E20037043F /* QuartzCore.framework */; };
 		739BE4490AFE641A009300B9 /* stream_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 739BE4460AFE641A009300B9 /* stream_audio.c */; };
 		73C738510AFB516A00E8ACC3 /* OggExport.c in Sources */ = {isa = PBXBuildFile; fileRef = 73C7384E0AFB516A00E8ACC3 /* OggExport.c */; };
 		73C738570AFB53A500E8ACC3 /* OggExport.r in Rez */ = {isa = PBXBuildFile; fileRef = 73C738540AFB538100E8ACC3 /* OggExport.r */; };
@@ -15,6 +16,7 @@
 		73C738790AFB632200E8ACC3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73C738770AFB632200E8ACC3 /* CoreFoundation.framework */; };
 		73C7387A0AFB632200E8ACC3 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73C738780AFB632200E8ACC3 /* QuickTime.framework */; };
 		73C739170AFB87DE00E8ACC3 /* OggExport.nib in Resources */ = {isa = PBXBuildFile; fileRef = 73C739160AFB87DE00E8ACC3 /* OggExport.nib */; };
+		73F746960B0A24F400BCCED1 /* stream_video.c in Sources */ = {isa = PBXBuildFile; fileRef = 73F746930B0A24F400BCCED1 /* stream_video.c */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
@@ -36,6 +38,7 @@
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		32BAE0B30371A71500C91783 /* OggExport_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggExport_Prefix.pch; sourceTree = "<group>"; };
+		730CCC0B0B11F0E20037043F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		730EBAFA0B0348DA003486CB /* stream_types_audio.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_audio.h; path = src/stream_types_audio.h; sourceTree = "<group>"; };
 		730EBB200B0377EC003486CB /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		739BE4450AFE641A009300B9 /* oggexport_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggexport_versions.h; path = src/oggexport_versions.h; sourceTree = "<group>"; };
@@ -57,6 +60,9 @@
 		73C738770AFB632200E8ACC3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		73C738780AFB632200E8ACC3 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		73C739160AFB87DE00E8ACC3 /* OggExport.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = OggExport.nib; path = src/OggExport.nib; sourceTree = "<group>"; };
+		73F746920B0A24F400BCCED1 /* stream_types_video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_video.h; path = src/stream_types_video.h; sourceTree = "<group>"; };
+		73F746930B0A24F400BCCED1 /* stream_video.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_video.c; path = src/stream_video.c; sourceTree = "<group>"; };
+		73F746940B0A24F400BCCED1 /* stream_video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_video.h; path = src/stream_video.h; sourceTree = "<group>"; };
 		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D01CCD20486CAD60068D4B7 /* OggExport.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OggExport.component; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -70,6 +76,7 @@
 				73C738760AFB62F600E8ACC3 /* Ogg.framework in Frameworks */,
 				73C738790AFB632200E8ACC3 /* CoreFoundation.framework in Frameworks */,
 				73C7387A0AFB632200E8ACC3 /* QuickTime.framework in Frameworks */,
+				730CCC0C0B11F0E20037043F /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +97,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				730CCC0B0B11F0E20037043F /* QuartzCore.framework */,
 				73C738770AFB632200E8ACC3 /* CoreFoundation.framework */,
 				73C738780AFB632200E8ACC3 /* QuickTime.framework */,
 				73C738750AFB62F600E8ACC3 /* Ogg.framework */,
@@ -114,8 +122,9 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				730EBB200B0377EC003486CB /* fccs.h */,
 				730EBAF90B0348B3003486CB /* audio */,
+				73F746910B0A24D100BCCED1 /* video */,
+				730EBB200B0377EC003486CB /* fccs.h */,
 				739BE4530AFE7E8D009300B9 /* data_types.h */,
 				739BE4450AFE641A009300B9 /* oggexport_versions.h */,
 				73C738730AFB5BE900E8ACC3 /* debug.h */,
@@ -147,6 +156,16 @@
 				739BE4470AFE641A009300B9 /* stream_audio.h */,
 			);
 			name = audio;
+			sourceTree = "<group>";
+		};
+		73F746910B0A24D100BCCED1 /* video */ = {
+			isa = PBXGroup;
+			children = (
+				73F746920B0A24F400BCCED1 /* stream_types_video.h */,
+				73F746930B0A24F400BCCED1 /* stream_video.c */,
+				73F746940B0A24F400BCCED1 /* stream_video.h */,
+			);
+			name = video;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +255,7 @@
 			files = (
 				73C738510AFB516A00E8ACC3 /* OggExport.c in Sources */,
 				739BE4490AFE641A009300B9 /* stream_audio.c in Sources */,
+				73F746960B0A24F400BCCED1 /* stream_video.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,10 +1,10 @@
 /*
- *  vorbis_entrypoints.cpp
+ *  stream_types_video.h
  *
- *    Declaration of the entry points for the Vorbis component.
+ *    Definition of video stream data structures for OggExport.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,31 +28,41 @@
  */
 
 
-#include "CAVorbisDecoder.h"
-#include "CAOggVorbisDecoder.h"
-#include "CAVorbisEncoder.h"
+#if !defined(__stream_types_video_h__)
+#define __stream_types_video_h__
 
-#include "ACCodecDispatch.h"
+enum {
+    kOES_V_init_op_size = 1024,
+};
 
-extern "C"
-ComponentResult	CAVorbisDecoderEntry(ComponentParameters* inParameters, CAVorbisDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+typedef struct {
+    ComponentInstance stdVideo;
 
-extern "C"
-ComponentResult	CAOggVorbisDecoderEntry(ComponentParameters* inParameters, CAOggVorbisDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+    ICMCompressionSessionRef cs;
+    ICMCompressionSessionOptionsRef cs_opts;
 
+    ICMDecompressionSessionRef ds;
+    ICMDecompressionSessionOptionsRef ds_opts;
 
-#if !defined(XIPHQT_NO_ENCODERS)
+    ImageDescriptionHandle cs_imdsc;
 
-extern "C"
-ComponentResult	CAVorbisEncoderEntry(ComponentParameters* inParameters, CAVorbisEncoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+    float frames_time;
 
-#endif  /* XIPHQT_NO_ENCODERS */
+    Fixed width;
+    Fixed height;
+    Fixed fps;
+    SInt16 depth;
+
+    ogg_packet op;
+    UInt32 op_duration;
+    void * op_buffer;
+    UInt32 op_buffer_size;
+    MediaSampleFlags op_flags;
+
+    UInt32 max_packet_size;
+
+    UInt32 grpos_shift;
+} StreamInfo__video;
+
+#define _HAVE__OE_VIDEO 1
+#endif /* __stream_types_video_h__ */

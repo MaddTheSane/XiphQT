@@ -8,11 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		7321B37E0A022D43004A699F /* TheoraExp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7321B37D0A022D43004A699F /* TheoraExp.framework */; };
+		73317FCA0B0D14FC0021F8A8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73317FC90B0D14FC0021F8A8 /* QuartzCore.framework */; };
+		73514EE50B0C808C00CEC060 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73514EE40B0C808C00CEC060 /* Theora.framework */; };
 		736ED37B0A0FF641005F518F /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = 736ED35F0A0FF57E005F518F /* PkgInfo */; };
 		7380D65E09D9853300A36679 /* TheoraDecoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 7380D65C09D9853300A36679 /* TheoraDecoder.c */; };
 		7380D66909D9859D00A36679 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7380D66709D9859D00A36679 /* Ogg.framework */; };
 		7380D66E09D985B800A36679 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7380D66D09D985B800A36679 /* QuickTime.framework */; };
 		7380D6A009D9884600A36679 /* TheoraDecoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 7380D65F09D9854100A36679 /* TheoraDecoder.r */; };
+		73D286E00B0BFCE800A4C9E3 /* TheoraEncoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 73D286DC0B0BFCE800A4C9E3 /* TheoraEncoder.c */; };
+		73D286E60B0BFD2300A4C9E3 /* TheoraEncoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 73D286E50B0BFD2300A4C9E3 /* TheoraEncoder.r */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
@@ -37,6 +41,8 @@
 		7321B37D0A022D43004A699F /* TheoraExp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TheoraExp.framework; path = /Library/Frameworks/TheoraExp.framework; sourceTree = "<absolute>"; };
 		7321B3B10A04F1CC004A699F /* TheoraDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraDecoder.h; path = src/TheoraDecoder.h; sourceTree = "<group>"; };
 		7321B3C20A04F91D004A699F /* decoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = decoder_types.h; path = src/decoder_types.h; sourceTree = "<group>"; };
+		73317FC90B0D14FC0021F8A8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		73514EE40B0C808C00CEC060 /* Theora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Theora.framework; path = ../../../../../../Library/Frameworks/Theora.framework; sourceTree = SOURCE_ROOT; };
 		736ED35F0A0FF57E005F518F /* PkgInfo */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = PkgInfo; sourceTree = "<group>"; };
 		7380D65509D9849B00A36679 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		7380D65609D984CD00A36679 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
@@ -50,6 +56,11 @@
 		7380D66709D9859D00A36679 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = /Library/Frameworks/Ogg.framework; sourceTree = "<absolute>"; };
 		7380D66D09D985B800A36679 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		7380D6E809D98EEE00A36679 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../utils/debug.h; sourceTree = SOURCE_ROOT; };
+		73D286DB0B0BFCE800A4C9E3 /* encoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = encoder_types.h; path = src/encoder_types.h; sourceTree = "<group>"; };
+		73D286DC0B0BFCE800A4C9E3 /* TheoraEncoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = TheoraEncoder.c; path = src/TheoraEncoder.c; sourceTree = "<group>"; };
+		73D286DD0B0BFCE800A4C9E3 /* TheoraEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraEncoder.h; path = src/TheoraEncoder.h; sourceTree = "<group>"; };
+		73D286DE0B0BFCE800A4C9E3 /* TheoraEncoderDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraEncoderDispatch.h; path = src/TheoraEncoderDispatch.h; sourceTree = "<group>"; };
+		73D286E50B0BFD2300A4C9E3 /* TheoraEncoder.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = TheoraEncoder.r; path = src/TheoraEncoder.r; sourceTree = "<group>"; };
 		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D01CCD20486CAD60068D4B7 /* Theora.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Theora.component; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -63,6 +74,8 @@
 				7380D66909D9859D00A36679 /* Ogg.framework in Frameworks */,
 				7380D66E09D985B800A36679 /* QuickTime.framework in Frameworks */,
 				7321B37E0A022D43004A699F /* TheoraExp.framework in Frameworks */,
+				73514EE50B0C808C00CEC060 /* Theora.framework in Frameworks */,
+				73317FCA0B0D14FC0021F8A8 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +96,8 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				73317FC90B0D14FC0021F8A8 /* QuartzCore.framework */,
+				73514EE40B0C808C00CEC060 /* Theora.framework */,
 				7321B37D0A022D43004A699F /* TheoraExp.framework */,
 				7380D66709D9859D00A36679 /* Ogg.framework */,
 				7380D66D09D985B800A36679 /* QuickTime.framework */,
@@ -94,6 +109,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				73D286E50B0BFD2300A4C9E3 /* TheoraEncoder.r */,
 				736ED35F0A0FF57E005F518F /* PkgInfo */,
 				7380D65F09D9854100A36679 /* TheoraDecoder.r */,
 				7380D65809D984FD00A36679 /* icon.icns */,
@@ -107,6 +123,10 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				73D286DB0B0BFCE800A4C9E3 /* encoder_types.h */,
+				73D286DC0B0BFCE800A4C9E3 /* TheoraEncoder.c */,
+				73D286DD0B0BFCE800A4C9E3 /* TheoraEncoder.h */,
+				73D286DE0B0BFCE800A4C9E3 /* TheoraEncoderDispatch.h */,
 				7321B3C20A04F91D004A699F /* decoder_types.h */,
 				7321B3B10A04F1CC004A699F /* TheoraDecoder.h */,
 				7380D6E809D98EEE00A36679 /* debug.h */,
@@ -185,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7380D6A009D9884600A36679 /* TheoraDecoder.r in Rez */,
+				73D286E60B0BFD2300A4C9E3 /* TheoraEncoder.r in Rez */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7380D65E09D9853300A36679 /* TheoraDecoder.c in Sources */,
+				73D286E00B0BFCE800A4C9E3 /* TheoraEncoder.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

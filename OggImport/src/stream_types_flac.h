@@ -43,6 +43,11 @@ typedef enum FLACImportStates {
     kFStateReadingPackets
 } FLACImportStates;
 
+enum {
+    kSRefsInitial = 32,
+    kSRefsIncrement = 8
+};
+
 typedef struct {
     FLACImportStates state;
 
@@ -51,6 +56,12 @@ typedef struct {
     SInt32 metablocks;
     SInt32 skipped;
     UInt32 bps;
+
+    //SampleReference array
+    SampleReference64Record *sample_refs;
+    UInt32 sample_refs_size;
+    UInt32 sample_refs_count;
+    TimeValue sample_refs_duration;
 } StreamInfo__flac;
 
 

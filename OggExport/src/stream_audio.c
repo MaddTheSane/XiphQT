@@ -37,7 +37,7 @@
 
 #include "debug.h"
 
-ComponentResult
+static ComponentResult
 _flush_ogg(StreamInfoPtr si, DataHandler data_h, wide *offset)
 {
     ComponentResult err = noErr;
@@ -75,7 +75,7 @@ _flush_ogg(StreamInfoPtr si, DataHandler data_h, wide *offset)
     return err;
 }
 
-static void _ready_page(StreamInfoPtr si, UInt32 *pos_sec, Float64 *pos_subsec)
+static void _ready_page(StreamInfoPtr si)
 {
     UInt32 len = si->og.header_len + si->og.body_len;
     Float64 pos;
@@ -98,14 +98,14 @@ static void _ready_page(StreamInfoPtr si, UInt32 *pos_sec, Float64 *pos_subsec)
     }
 
     pos = si->og_grpos / si->si_a.stda_asbd.mSampleRate;
-    *pos_sec = (UInt32) pos;
-    *pos_subsec = (pos - (Float64) *pos_sec);
+    si->og_ts_sec = (UInt32) pos;
+    si->og_ts_subsec = (pos - (Float64) si->og_ts_sec);
 
     if (ogg_page_eos(&si->og))
         si->eos = true;
 }
 
-ComponentResult
+static ComponentResult
 _InputDataProc__audio(ComponentInstance ci, UInt32 *ioNumberDataPackets,
                       AudioBufferList *ioData,
                       AudioStreamPacketDescription **outDataPacketDescription,
@@ -138,6 +138,10 @@ _InputDataProc__audio(ComponentInstance ci, UInt32 *ioNumberDataPackets,
 
             err = InvokeMovieExportGetDataUPP(si->refCon, &si->gdp,
                                               si->getDataProc);
+            dbg_printf("[  OE]  <  [%08lx] :: _InputDataProc__audio() = %ld; "
+                       "%ld, %ld, %ld, %ld, %ld)\n",
+                       (UInt32) -1, err, *ioNumberDataPackets, si->gdp.dataSize,
+                       si->gdp.requestedTime, si->gdp.actualTime, ioData->mNumberBuffers);
             if (!err)
                 si->time += si->gdp.durationPerSample * si->gdp.actualSampleCount;
 
@@ -201,7 +205,7 @@ ComponentResult validate_movie__audio(OggExportGlobals *globals,
     return err;
 }
 
-extern ComponentResult initialize_stream__audio(StreamInfo *si)
+ComponentResult initialize_stream__audio(StreamInfo *si)
 {
     ComponentResult err = noErr;
 
@@ -259,7 +263,7 @@ extern ComponentResult initialize_stream__audio(StreamInfo *si)
     return err;
 }
 
-extern void clear_stream__audio(StreamInfo *si)
+void clear_stream__audio(StreamInfo *si)
 {
     if (si->si_a.aspds) {
         free(si->si_a.aspds);
@@ -442,7 +446,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
 
 ComponentResult
 fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
-                 Float64 max_duration, UInt32 *pos_sec, Float64 *pos_subsec)
+                 Float64 max_duration)
 {
     ComponentResult err = noErr;
 
@@ -461,7 +465,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
 
     if (ogg_stream_pageout(&si->os, &si->og) > 0) {
         /* there was data left in the internal ogg_stream buffers */
-        _ready_page(si, pos_sec, pos_subsec);
+        _ready_page(si);
     } else {
         /* otherwise, get more data */
         if (si->si_a.aspds_size < pullPackets *
@@ -590,14 +594,14 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
             if (((eos_hit || si->acc_duration > max_page_duration) &&
                  ogg_stream_flush(&si->os, &si->og) > 0) ||
                 (ogg_stream_pageout(&si->os, &si->og) > 0)) {
-                _ready_page(si, pos_sec, pos_subsec);
+                _ready_page(si);
                 do_loop = false;
             }
         }
     }
 
     dbg_printf("[  OE] <   [%08lx] :: fill_page__audio() = %ld (%ld, %lf)\n",
-               (UInt32) globals, err, *pos_sec, *pos_subsec);
+               (UInt32) globals, err, si->og_ts_sec, si->og_ts_subsec);
     return err;
 }
 

@@ -31,9 +31,15 @@
 #ifndef __OGGIMPORT_H__
 #define __OGGIMPORT_H__ 1
 
+#include "config.h"
 #include "versions.h"
 
+#if !defined(XIPHQT_BUNDLE_ID)
 #define kOggVorbisBundleID "org.xiph.xiph-qt.oggimport"
+#else
+//#define kOggVorbisBundleID kXiphQTBundleID
+#define kOggVorbisBundleID XIPHQT_BUNDLE_ID
+#endif  /* XIPHQT_BUNDLE_ID */
 
 #define kImporterResID                  4000
 #define kImporterNameStringResID        4000

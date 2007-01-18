@@ -48,7 +48,7 @@
 
 
 #include "stream_types_audio.h"
-//#include "stream_types_video.h"
+#include "stream_types_video.h"
 
 
 enum {
@@ -68,8 +68,8 @@ typedef struct {
     ogg_int64_t og_grpos;
     Boolean og_ready;
 
-    //UInt32   og_ts_sec;
-    //Float64  og_ts_subsec;
+    UInt32   og_ts_sec;
+    Float64  og_ts_subsec;
 
     ogg_int64_t packets_total;
     ogg_int64_t acc_packets;
@@ -99,8 +99,6 @@ typedef struct {
     UInt32 out_buffer_size;
 
     long lastDescSeed;
-
-    //ComponentInstance stdAudio;
 
     //ImageSequence decompressSequence;
     //GWorldPtr gw;
@@ -132,6 +130,29 @@ typedef struct {
     Boolean            canceled;
 
     Boolean            use_hires_audio;
+
+    /* settings */
+    UInt16             set_v_disable;
+    UInt16             set_a_disable;
+
+    CodecQ             set_v_quality;
+    Fixed              set_v_fps;
+    UInt32             set_v_bitrate;
+    UInt32             set_v_keyrate;
+    QTAtomContainer    set_v_settings;
+    Handle             set_v_custom;
+
+    CodecQ             set_a_quality;
+    UInt32             set_a_bitrate;
+    Float64            set_a_samplerate;
+
+    /* settings dialog vars */
+    Boolean            setdlg_a_allow;
+    Boolean            setdlg_v_allow;
+    Movie              setdlg_movie;
+    Track              setdlg_track;
+    TimeValue          setdlg_start;
+    TimeValue          setdlg_duration;
 } OggExportGlobals, *OggExportGlobalsPtr;
 
 
@@ -150,8 +171,7 @@ typedef ComponentResult (*write_headers) (StreamInfoPtr si, DataHandler data_h,
                                           wide *offset);
 
 typedef ComponentResult (*fill_page) (OggExportGlobalsPtr globals,
-                                      StreamInfoPtr si, Float64 max_duration,
-                                      UInt32 *pos_sec, Float64 *pos_subsec);
+                                      StreamInfoPtr si, Float64 max_duration);
 
 typedef ComponentResult (*initialize_stream) (StreamInfo *si);
 typedef void (*clear_stream) (StreamInfo *si);

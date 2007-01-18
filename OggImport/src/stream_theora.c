@@ -29,10 +29,10 @@
 
 
 #include "stream_theora.h"
-#if defined(__APPLE_CC__)
+#if defined(__APPLE_CC__) && defined(XIPHQT_USE_FRAMEWORKS)
 #include <TheoraExp/theoradec.h>
 #else
-#include <theoradec.h>
+#include <theora/theoradec.h>
 #endif
 
 #include "debug.h"
@@ -164,8 +164,8 @@ ComponentResult create_sample_description__theora(StreamInfo *si)
     imgdsc->vendor = kXiphComponentsManufacturer;
     imgdsc->temporalQuality = codecMaxQuality;
     imgdsc->spatialQuality = codecMaxQuality;
-    imgdsc->width = si->si_theora.ti.frame_width;
-    imgdsc->height = si->si_theora.ti.frame_height;
+    imgdsc->width = si->si_theora.ti.pic_width;
+    imgdsc->height = si->si_theora.ti.pic_height;
     imgdsc->hRes = 72<<16;
     imgdsc->vRes = 72<<16;
     imgdsc->depth = 24;
@@ -179,7 +179,7 @@ ComponentResult create_sample_description__theora(StreamInfo *si)
 ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
 {
     ComponentResult ret = noErr;
-    UInt32 frame_width = si->si_theora.ti.frame_width;
+    UInt32 frame_width = si->si_theora.ti.pic_width;
     UInt32 frame_width_fraction = 0;
 
     if (si->si_theora.ti.aspect_numerator != si->si_theora.ti.aspect_denominator) {
@@ -189,7 +189,7 @@ ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
     dbg_printf("! -T calling => NewMovieTrack()\n");
     si->theTrack = NewMovieTrack(globals->theMovie,
                                  frame_width << 16 | (frame_width_fraction & 0xffff),
-                                 si->si_theora.ti.frame_height << 16, 0);
+                                 si->si_theora.ti.pic_height << 16, 0);
 
     return ret;
 };

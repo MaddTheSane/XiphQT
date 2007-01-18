@@ -1,7 +1,7 @@
 /*
- *  decoder_types.h
+ *  encoder_types.h
  *
- *    Definitions of TheoraDecoder data structures.
+ *    Definitions of TheoraEncoder data structures.
  *
  *
  *  Copyright (c) 2006  Arek Korbik
@@ -28,8 +28,8 @@
  */
 
 
-#if !defined(__decoder_types_h__)
-#define __decoder_types_h__
+#if !defined(__encoder_types_h__)
+#define __encoder_types_h__
 
 #if defined(__APPLE_CC__)
 #include <QuickTime/QuickTime.h>
@@ -40,48 +40,31 @@
 #define _WINIOCTL_
 #include <windows.h>
 #endif
-
-#if defined(__DO_WE_NEED_ALL_THOSE_P__)
-#include <MacTypes.h>
-#include <MacErrors.h>
-#include <Endian.h>
-#include <MacMemory.h>
-#include <Resources.h>
-#include <Components.h>
-#include <Sound.h>
-#include <QuickTimeComponents.h>
-#include <FixMath.h>
-#include <Math64.h>
-#include <IntlResources.h>
-#include <MoviesFormat.h>
-#include <Gestalt.h>
-#include <TextEncodingConverter.h>
-#endif /* __DO_WE_NEED_ALL_THOSE_P__ */
 #endif /* __APPLE_CC__ */
 
-#if defined(__APPLE_CC__) && defined(XIPHQT_USE_FRAMEWORKS)
-#include <TheoraExp/theoradec.h>
+#if defined(__APPLE_CC__)
+#include <Theora/theora.h>
 #else
-#include <theora/theoradec.h>
+#include <theora.h>
 #endif /* __APPLE_CC__ */
 
 
 // Constants
-const UInt8 kNumPixelFormatsSupported = 2;
-const UInt32 kPacketBufferAllocIncrement = 64 * 1024;
+//const UInt8 kNumPixelFormatsSupported = 2;
+//const UInt32 kPacketBufferAllocIncrement = 64 * 1024;
 
 // Data structures
 typedef struct	{
     ComponentInstance       self;
-    ComponentInstance       delegateComponent;
     ComponentInstance       target;
-    OSType**                wantedDestinationPixelTypeH;
-    ImageCodecMPDrawBandUPP drawBandUPP;
 
-    th_info ti;
-    //theora_comment tc;
-    th_setup_info *ts;
-    th_dec_ctx *td;
+    ICMCompressorSessionRef session;
+    ICMCompressionSessionOptionsRef sessionOptions;
+
+    theora_info ti;
+    theora_comment tc;
+    theora_state ts;
+
     Boolean info_initialised;
     long last_frame;
 
@@ -89,17 +72,29 @@ typedef struct	{
     UInt8* p_buffer;
     UInt32 p_buffer_len;
     UInt32 p_buffer_used;
-} Theora_GlobalsRecord, *Theora_Globals;
 
-typedef struct {
     long width;
     long height;
-    long depth;
-    long dataSize;
-    long frameNumber;
-    long draw;
-    long decoded;
-    OSType pixelFormat;
-} Theora_DecompressRecord;
+    size_t maxEncodedDataSize;
+    int nextDecodeNumber;
+
+    //struct InternalPixelBuffer currentFrame;
+    yuv_buffer yuv;
+    UInt8     *yuv_buffer;
+    UInt32     yuv_buffer_size;
+
+    /* ========================= */
+    int keyFrameCountDown;
+
+    /* ======= settings ======== */
+    CodecQ set_quality;
+    UInt32 set_fps_numer;
+    UInt32 set_fps_denom;
+    UInt32 set_bitrate;
+    UInt32 set_keyrate;
+
+    UInt16 set_sharp;
+    UInt16 set_quick;
+} TheoraGlobals, *TheoraGlobalsPtr;
 
 #endif /* __decoder_types_h__ */

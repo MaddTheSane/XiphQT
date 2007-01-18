@@ -4,7 +4,7 @@
  *    General compilation environment configuration file.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005-2006  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -32,11 +32,6 @@
 #define __xiphqt_config_h__
 
 
-#if defined(__APPLE_CC__)
-#include <CoreServices/CoreServices.h>
-#else
-#include <CoreServices.h>
-#endif
-
+#define kXiphQTBundleID "org.xiph.xiph-qt.xiphqt"
 
 #endif /* __data_types_h__ */

@@ -1,7 +1,7 @@
 /*
- *  TheoraDecoder.r
+ *  TheoraEncoder.r
  *
- *    Information bit definitions for the 'thng' and other TheoraDecoder
+ *    Information bit definitions for the 'thng' and other TheoraEncoder
  *    resources.
  *
  *
@@ -37,21 +37,14 @@
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
 #include <QuickTime/QuickTimeComponents.r>
-/* vvv ???
-#undef __CARBON_R__
-#undef __CORESERVICES_R__
-#undef __CARBONCORE_R__
-#undef __COMPONENTS_R__
-   ^^^ */
 #else
 #include "ConditionalMacros.r"
 #include "CoreServices.r"
 #include "QuickTimeComponents.r"
-#include "ImageCodec.r" //??
-//#undef __COMPONENTS_R__ //??
+#include "ImageCodec.r"
 #endif /* TARGET_REZ_MAC_PPC */
 
-#include "TheoraDecoder.h"
+#include "TheoraEncoder.h"
 
 
 /* How do I do this properly... anybody? */
@@ -84,23 +77,22 @@
 #endif
 
 
-#define kTheoraDecoderFlags (codecInfoDoes32 | codecInfoDoesTemporal | codecInfoDoesSpool)
-//#define kTheoraEncoderFlags (codecInfoDoes32 | codecInfoDoesTemporal | codecInfoDoesRateConstrain | theoraThreadSafe)
+#define kTheoraEncoderFlags (codecInfoDoes32 | codecInfoDoesTemporal | codecInfoDoesRateConstrain | theoraThreadSafe)
 
 #define kTheoraFormatFlags	(codecInfoDepth24)
 
-resource 'cdci' (kTheoraDecoderResID) {
-	kTheoraDecoderFormatName, // Type
+resource 'cdci' (kTheoraEncoderResID) {
+	kTheoraEncoderFormatName, // Type
 	1, // Version
-        kTheora_imdc_Version,
+        kTheora_imco_Version,
 	kXiphComponentsManufacturer, // Manufacturer
-	kTheoraDecoderFlags, // Decompression Flags
-	0, // Compression Flags
+	0, // Decompression Flags
+	kTheoraEncoderFlags, // Compression Flags
 	kTheoraFormatFlags, // Format Flags
-            0, //128, // Compression Accuracy
-	128, // Decomression Accuracy
-            0, //128, // Compression Speed
-	128, // Decompression Speed
+	128, // Compression Accuracy
+            0, //128, // Decomression Accuracy
+	128, // Compression Speed
+            0, //128, // Decompression Speed
 	128, // Compression Level
 	0, // Reserved
 	16, // Minimum Height
@@ -110,40 +102,83 @@ resource 'cdci' (kTheoraDecoderResID) {
 	0 // Private Data
 };
 
-resource 'thng' (kTheoraDecoderResID) {
-    decompressorComponentType, kVideoFormatXiphTheora,
+resource 'thng' (kTheoraEncoderResID) {
+    compressorComponentType, kVideoFormatXiphTheora,
     kXiphComponentsManufacturer, // Manufacturer(??)
     0, 0, 0, 0,
-    'STR ', kTheoraDecoderNameStringResID,
-    'STR ', kTheoraDecoderInfoStringResID,
+    'STR ', kTheoraEncoderNameStringResID,
+    'STR ', kTheoraEncoderInfoStringResID,
     0, 0, // no icon
-    kTheora_imdc_Version,
-    componentDoAutoVersion|componentHasMultiplePlatforms, 0,
+    kTheora_imco_Version,
+    componentDoAutoVersion | componentHasMultiplePlatforms, 0,
     {
         // component platform information
-        kTheoraDecoderFlags,
+        kTheoraEncoderFlags,
         'dlle',
-        kTheoraDecoderResID,
+        kTheoraEncoderResID,
         Target_PlatformType,
 #if TARGET_REZ_FAT_COMPONENTS
-        kTheoraDecoderFlags,
+        kTheoraEncoderFlags,
         'dlle',
-        kTheoraDecoderResID,
+        kTheoraEncoderResID,
         Target_SecondPlatformType,
 #endif
     };
 };
 
 // Component Name
-resource 'STR ' (kTheoraDecoderNameStringResID) {
-	"Xiph Theora Decoder"
+resource 'STR ' (kTheoraEncoderNameStringResID) {
+	"Xiph Theora Encoder"
 };
 
 // Component Information
-resource 'STR ' (kTheoraDecoderInfoStringResID) {
-	"Decompresses image sequences stored in the Xiph Theora format."
+resource 'STR ' (kTheoraEncoderInfoStringResID) {
+	"Compresses into the Xiph Theora format."
 };
 
-resource 'dlle' (kTheoraDecoderResID) {
-    "Theora_ImageCodecComponentDispatch"
+resource 'dlle' (kTheoraEncoderResID) {
+    "Theora_ImageEncoderComponentDispatch"
+};
+
+
+/* ========= Settings dialog resources ========= */
+
+resource 'DITL' (kTheoraEncoderDITLResID, "Compressor Options", purgeable) {
+{
+ //{0, 0, TEXT_HEIGHT, 100}, CheckBox { enabled, "Checkbox" },
+ //{TEXT_HEIGHT + INTER_CONTROL_SPACING, 0, TEXT_HEIGHT + INTER_CONTROL_SPACING + POPUP_CONTROL_HEIGHT, 165}, Control { enabled, kTheoraEncoderPopupCNTLResID },
+ //{0, 0, TEXT_HEIGHT, 100}, Control { enabled, kTheoraEncoderPopupCNTLResID },
+ //{TEXT_HEIGHT + INTER_CONTROL_SPACING, 0, TEXT_HEIGHT + INTER_CONTROL_SPACING + POPUP_CONTROL_HEIGHT, 165}, CheckBox { enabled, "Checkbox" },
+ {0, 0, POPUP_CONTROL_HEIGHT, 205}, Control { enabled, kTheoraEncoderPopupCNTLResID },
+ {POPUP_CONTROL_HEIGHT + INTER_CONTROL_SPACING, 100, TEXT_HEIGHT + INTER_CONTROL_SPACING + POPUP_CONTROL_HEIGHT, 200}, CheckBox { enabled, "Optimize" },
+ }
+};
+
+resource 'CNTL' (kTheoraEncoderPopupCNTLResID, "Compressor Popup") {
+ {0, 0, 20, 205},
+ popupTitleRightJust,
+     //1,
+ visible,
+ 100,        /* title width */
+ kTheoraEncoderPopupMENUResID,
+ //popupMenuCDEFProc + popupFixedWidth,
+ popupMenuCDEFProc + popupFixedWidth,
+ 0,
+ "Sharpness:"
+};
+
+resource 'MENU' (kTheoraEncoderPopupMENUResID, "Compressor Popup") {
+ kTheoraEncoderPopupMENUResID,
+ textMenuProc,
+ allEnabled,       /* Enable flags */
+ enabled,
+ "Sharpness",
+ { /* array: 8 elements */
+  /* [1] */
+  "Low", noIcon, noKey, noMark, plain,
+  /* [2] */
+  "Medium", noIcon, noKey, noMark, plain,
+  /* [3] */
+  "High", noIcon, noKey, noMark, plain,
+ }
 };

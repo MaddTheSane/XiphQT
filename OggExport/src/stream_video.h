@@ -1,7 +1,7 @@
 /*
- *  stream_audio.h
+ *  stream_video.h
  *
- *    Declaration of audio stream related functions of OggExporter.
+ *    Declaration of video stream related functions of OggExporter.
  *
  *
  *  Copyright (c) 2006  Arek Korbik
@@ -28,40 +28,40 @@
  */
 
 
-#if !defined(__stream_audio_h__)
-#define __stream_audio_h__
+#if !defined(__stream_video_h__)
+#define __stream_video_h__
 
 #include "exporter_types.h"
 
 extern Boolean
-can_handle_track__audio(OSType trackType, TimeScale scale,
+can_handle_track__video(OSType trackType, TimeScale scale,
                         MovieExportGetPropertyUPP getPropertyProc,
                         void *refCon);
 extern ComponentResult
-validate_movie__audio(OggExportGlobals *globals, Movie theMovie,
+validate_movie__video(OggExportGlobals *globals, Movie theMovie,
                       Track onlyThisTrack, Boolean *valid);
 extern ComponentResult
-configure_stream__audio(OggExportGlobals *globals, StreamInfo *si);
+configure_stream__video(OggExportGlobals *globals, StreamInfo *si);
 
 extern ComponentResult
-write_i_header__audio(StreamInfoPtr si, DataHandler data_h,
+write_i_header__video(StreamInfoPtr si, DataHandler data_h,
                       wide *offset);
 extern ComponentResult
-write_headers__audio(StreamInfoPtr si, DataHandler data_h,
+write_headers__video(StreamInfoPtr si, DataHandler data_h,
                      wide *offset);
 extern ComponentResult
-fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
+fill_page__video(OggExportGlobalsPtr globals, StreamInfoPtr si,
                  Float64 max_duration);
 
-extern ComponentResult initialize_stream__audio(StreamInfo *si);
-extern void clear_stream__audio(StreamInfo *si);
+extern ComponentResult initialize_stream__video(StreamInfo *si);
+extern void clear_stream__video(StreamInfo *si);
 
 
-#define HANDLE_FUNCTIONS__AUDIO { &can_handle_track__audio,     \
-            &validate_movie__audio, &configure_stream__audio,   \
-            &write_i_header__audio, &write_headers__audio,      \
-            &fill_page__audio,                                  \
-            &initialize_stream__audio, &clear_stream__audio }
+#define HANDLE_FUNCTIONS__VIDEO { &can_handle_track__video,     \
+            &validate_movie__video, &configure_stream__video,   \
+            &write_i_header__video, &write_headers__video,      \
+            &fill_page__video,                                  \
+            &initialize_stream__video, &clear_stream__video }
 
 
-#endif /* __stream_audio_h__ */
+#endif /* __stream_video_h__ */

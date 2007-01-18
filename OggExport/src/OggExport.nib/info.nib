@@ -14,6 +14,18 @@
 	</array>
 	<key>IBSystem Version</key>
 	<string>8L127</string>
+	<key>IBUserGuides</key>
+	<dict>
+		<key>166</key>
+		<dict>
+			<key>guideLocations</key>
+			<array>
+				<string>Vertical:90.000000</string>
+			</array>
+			<key>guidesLocked</key>
+			<false/>
+		</dict>
+	</dict>
 	<key>targetFramework</key>
 	<string>IBCarbonFramework</string>
 </dict>

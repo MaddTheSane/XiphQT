@@ -54,10 +54,14 @@
 #define pascal
 #endif
 
-static OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy);
-static OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy);
-static OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy);
-static OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordPtr dataProc, UInt8 *baseAddr, long stride, long width, long height);
+static OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy,
+                                                 size_t offset_x, size_t offset_y);
+static OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy,
+                                                 size_t offset_x, size_t offset_y);
+static OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy,
+                                                 size_t offset_x, size_t offset_y);
+static OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordPtr dataProc, UInt8 *baseAddr, long stride, long width, long height,
+                                              size_t offset_x, size_t offset_y);
 
 // Setup required for ComponentDispatchHelper.c
 #define IMAGECODEC_BASENAME() 		Theora_ImageCodec
@@ -87,13 +91,12 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
 {
     OSErr err = noErr;
     Handle ext;
-    OggSerialNoAtom *atom;
-    Byte *ptrheader, *mCookie;
+    //OggSerialNoAtom *atom;
+    Byte *ptrheader, *mCookie, *cend;
     UInt32 mCookieSize;
     CookieAtomHeader *aheader;
     th_comment tc;
-    ogg_packet op;
-    int i = 0;
+    ogg_packet header, header_tc, header_cb;
 
     if (glob->info_initialised) {
         dbg_printf("--:Theora:- Decoder already initialised, skipping...\n");
@@ -102,49 +105,71 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
 
     err = GetImageDescriptionExtension(p->imageDescription, &ext, kSampleDescriptionExtensionTheora, 1);
     if (err != noErr) {
-        dbg_printf("XXX GetImageDescriptionExtension() failed!\n");
+        dbg_printf("XXX GetImageDescriptionExtension() failed! ('%4.4s')\n", &(*p->imageDescription)->cType);
         err = codecBadDataErr;
         return err;
     }
 
-    mCookie = *ext;
+    mCookie = (UInt8 *) *ext;
     mCookieSize = GetHandleSize(ext);
 
-    atom = (OggSerialNoAtom*)mCookie;
-    ptrheader = mCookie + EndianU32_BtoN(atom->size);
+    ptrheader = mCookie;
+    cend = mCookie + mCookieSize;
+
     aheader = (CookieAtomHeader*)ptrheader;
 
-    err = codecBadDataErr;
-    // scan quickly through the cookie, check types and packet sizes
-    if (EndianS32_BtoN(atom->type) != kCookieTypeOggSerialNo || (UInt32) (ptrheader - mCookie) > mCookieSize)
-        return err;
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeTheoraHeader || (UInt32) (ptrheader - mCookie) > mCookieSize)
-        return err;
-    aheader = (CookieAtomHeader*) ptrheader;
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeTheoraComments || (UInt32) (ptrheader - mCookie) > mCookieSize)
-        return err;
-    aheader = (CookieAtomHeader*) ptrheader;
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeTheoraCodebooks || (UInt32) (ptrheader - mCookie) > mCookieSize)
-        return err;
 
-    // all OK, back to the first theora packet
-    aheader = (CookieAtomHeader*) (mCookie + EndianU32_BtoN(atom->size));
+    header.bytes = header_tc.bytes = header_cb.bytes = 0;
+
+    while (ptrheader < cend) {
+        aheader = (CookieAtomHeader *) ptrheader;
+        ptrheader += EndianU32_BtoN(aheader->size);
+        if (ptrheader > cend || EndianU32_BtoN(aheader->size) <= 0)
+            break;
+
+        switch(EndianS32_BtoN(aheader->type)) {
+        case kCookieTypeTheoraHeader:
+            header.b_o_s = 1;
+            header.e_o_s = 0;
+            header.granulepos = 0;
+            header.packetno = 0;
+            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header.packet = aheader->data;
+            break;
+
+        case kCookieTypeTheoraComments:
+            header_tc.b_o_s = 0;
+            header_tc.e_o_s = 0;
+            header_tc.granulepos = 0;
+            header_tc.packetno = 1;
+            header_tc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_tc.packet = aheader->data;
+            break;
+
+        case kCookieTypeTheoraCodebooks:
+            header_cb.b_o_s = 0;
+            header_cb.e_o_s = 0;
+            header_cb.granulepos = 0;
+            header_cb.packetno = 2;
+            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_cb.packet = aheader->data;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    err = codecBadDataErr;
+
+    if (header.bytes == 0 || header_tc.bytes == 0 || header_cb.bytes == 0)
+        return err;
 
     th_info_init(&glob->ti);
     th_comment_init(&tc);
     glob->ts = NULL;
 
-    op.b_o_s = 1;
-    op.e_o_s = 0;
-    op.granulepos = 0;
-    op.packetno = 0;
-    op.bytes = EndianU32_BtoN(aheader->size) - 2 * sizeof(long); // FIXME??
-    op.packet = aheader->data;
-
-    if (th_decode_headerin(&glob->ti, &tc, &glob->ts, &op) < 0) {
+    if (th_decode_headerin(&glob->ti, &tc, &glob->ts, &header) < 0) {
 
         if (glob->ts != NULL)
             th_setup_free (glob->ts);
@@ -154,17 +179,8 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
         return err;
     }
 
-    op.b_o_s = 0;
-
-    while (i < 2) {
-        aheader = (CookieAtomHeader*) ((Byte*) (aheader) + EndianU32_BtoN(aheader->size));
-        op.packetno += 1;
-        op.bytes = EndianU32_BtoN(aheader->size) - 2 * sizeof(long); // FIXME??
-        op.packet = aheader->data;
-
-        th_decode_headerin(&glob->ti, &tc, &glob->ts, &op);
-        i++;
-    }
+    th_decode_headerin(&glob->ti, &tc, &glob->ts, &header_tc);
+    th_decode_headerin(&glob->ti, &tc, &glob->ts, &header_cb);
 
     err = noErr;
 
@@ -270,8 +286,8 @@ pascal ComponentResult Theora_ImageCodecPreflight(Theora_Globals glob, CodecDeco
     OSTypePtr         formats = *glob->wantedDestinationPixelTypeH;
     OSErr             ret = noErr;
 
-    dbg_printf("--:Theora:- CodecPreflight(%08lx) called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x, flags: %08lx, flags2: %08lx)\n",
-               (long)glob, p->sequenceID, p->frameNumber, (p->conditionFlags & codecConditionFirstFrame) != 1, p->bufferSize > 1 ? p->data[1] : 0,
+    dbg_printf("[TD  ]  >> [%08lx] :: CodecPreflight() called (seqid: %08lx, frN: %8ld, first: %d, data1: %02x, flags: %08lx, flags2: %08lx)\n",
+               (long) glob, p->sequenceID, p->frameNumber, (p->conditionFlags & codecConditionFirstFrame) != 1, p->bufferSize > 1 ? p->data[1] : 0,
                capabilities->flags, capabilities->flags2);
     dbg_printf("         :- image: %dx%d, pixform: %x\n", (**p->imageDescription).width, (**p->imageDescription).height, glob->ti.pixel_fmt);
 
@@ -294,6 +310,7 @@ pascal ComponentResult Theora_ImageCodecPreflight(Theora_Globals glob, CodecDeco
         *formats++	= 0;
     }
 
+    dbg_printf("[TD  ] <   [%08lx] :: CodecPreflight() = %ld\n", (long) glob, ret);
     return ret;
 }
 
@@ -486,17 +503,17 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
             th_decode_ycbcr_out(glob->td, ycbcrB);
             if (myDrp->pixelFormat == k422YpCbCr8PixelFormat) {
                 if (glob->ti.pixel_fmt == TH_PF_420) {
-                    err = CopyPlanarYCbCr420ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                    err = CopyPlanarYCbCr420ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes, glob->ti.pic_x, glob->ti.pic_y);
                 } else if (glob->ti.pixel_fmt == TH_PF_422) {
-                    err = CopyPlanarYCbCr422ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                    err = CopyPlanarYCbCr422ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes, glob->ti.pic_x, glob->ti.pic_y);
                 } else if (glob->ti.pixel_fmt == TH_PF_444) {
-                    err = CopyPlanarYCbCr444ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes);
+                    err = CopyPlanarYCbCr444ToChunkyYUV422(myDrp->width, myDrp->height, ycbcrB, (UInt8 *)drp->baseAddr, drp->rowBytes, glob->ti.pic_x, glob->ti.pic_y);
                 } else {
                     dbg_printf("--:Theora:-  'What PLANET is this!?' (%d)\n", glob->ti.pixel_fmt);
                     err = codecBadDataErr;
                 }
             } else if (myDrp->pixelFormat == kYUV420PixelFormat) {
-                err = CopyPlanarYCbCr422ToPlanarYUV422(ycbcrB, dataProc, (UInt8 *)drp->baseAddr, drp->rowBytes, myDrp->width, myDrp->height);
+                err = CopyPlanarYCbCr422ToPlanarYUV422(ycbcrB, dataProc, (UInt8 *)drp->baseAddr, drp->rowBytes, myDrp->width, myDrp->height, glob->ti.pic_x, glob->ti.pic_y);
             } else {
                 dbg_printf("--:Theora:-  'Again, What PLANET is this!?' (%lx)\n", myDrp->pixelFormat);
                 err = codecBadDataErr;
@@ -579,22 +596,27 @@ pascal ComponentResult Theora_ImageCodecGetCodecInfo(Theora_Globals glob, CodecI
 #define PACK_2VUY(Cb, Y1, Cr, Y2) ((UInt32) ((Cb) | ((Y1) << 8) | ((Cr) << 16) | ((Y2) << 24)))
 #endif /* TARGET_RT_BIG_ENDIAN */
 
-OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
+OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy, size_t offset_x, size_t offset_y)
 {
     size_t x, y;
-    const UInt8 *lineBase_Y  = pb[0].data;
-    const UInt8 *lineBase_Cb = pb[1].data;
-    const UInt8 *lineBase_Cr = pb[2].data;
+    size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
+    size_t off_x2 = offset_x >> 1, off_y2 = offset_y >> 1;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y2 * pb[1].ystride + off_x2;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y2 * pb[2].ystride + off_x2;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+    Boolean odd_rows = height & 0x01;
 
     dbg_printf("BLIT: Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
     dbg_printf("BLIT: Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
                pb[2].width, pb[2].height, pb[2].ystride);
 
+    height = height & ~0x01;
+
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
-        const UInt8 *pixelPtr_Y_bot  = lineBase_Y  + pb[0].ystride;
+        const UInt8 *pixelPtr_Y_bot  = lineBase_Y + pb[0].ystride;
         const UInt8 *pixelPtr_Cb = lineBase_Cb;
         const UInt8 *pixelPtr_Cr = lineBase_Cr;
         UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
@@ -614,20 +636,39 @@ OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
         lineBase_Cr += pb[2].ystride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
+
+    if (odd_rows) {
+        // The last, odd row.
+        const UInt8 *pixelPtr_Y_top  = lineBase_Y;
+        const UInt8 *pixelPtr_Cb = lineBase_Cb;
+        const UInt8 *pixelPtr_Cr = lineBase_Cr;
+        UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
+        for (x = 0; x < width; x += 2) {
+            *((UInt32 *) pixelPtr_2vuy_top) = PACK_2VUY(*pixelPtr_Cb++, *pixelPtr_Y_top, *pixelPtr_Cr++, *(pixelPtr_Y_top + 1));
+            pixelPtr_2vuy_top += 4;
+            pixelPtr_Y_top += 2;
+        }
+    }
+
     return noErr;
 }
 
-OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
+OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy, size_t offset_x, size_t offset_y)
 {
     size_t x, y;
-    const UInt8 *lineBase_Y  = pb[0].data;
-    const UInt8 *lineBase_Cb = pb[1].data;
-    const UInt8 *lineBase_Cr = pb[2].data;
+    size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
+    size_t off_x2 = offset_x >> 1;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].ystride + off_x2;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].ystride + off_x2;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+    Boolean odd_rows = height & 0x01;
 
     dbg_printf("BLIT> Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
     dbg_printf("BLIT> Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
                pb[2].width, pb[2].height, pb[2].ystride);
+
+    height = height & ~0x01;
 
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
@@ -656,23 +697,41 @@ OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
         lineBase_Cr += 2 * pb[2].ystride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
+
+    if (odd_rows) {
+        // The last, odd row.
+        const UInt8 *pixelPtr_Y_top  = lineBase_Y;
+        const UInt8 *pixelPtr_Cb_top = lineBase_Cb;
+        const UInt8 *pixelPtr_Cr_top = lineBase_Cr;
+        UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
+        for (x = 0; x < width; x += 2) {
+            *((UInt32 *) pixelPtr_2vuy_top) = PACK_2VUY(*pixelPtr_Cb_top++, *pixelPtr_Y_top, *pixelPtr_Cr_top++, *(pixelPtr_Y_top + 1));
+            pixelPtr_2vuy_top += 4;
+            pixelPtr_Y_top += 2;
+        }
+    }
+
     return noErr;
 }
 
 
 /* !!: At the moment this function does nice 'decimation' rather than subsampling!!(?)
    TODO: proper subsampling? */
-OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy)
+OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_buffer pb, UInt8 *baseAddr_2vuy, long rowBytes_2vuy, size_t offset_x, size_t offset_y)
 {
     size_t x, y;
-    const UInt8 *lineBase_Y  = pb[0].data;
-    const UInt8 *lineBase_Cb = pb[1].data;
-    const UInt8 *lineBase_Cr = pb[2].data;
+    size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].ystride + off_x;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].ystride + off_x;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
+    Boolean odd_rows = height & 0x01;
 
     dbg_printf("BLIT? Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
     dbg_printf("BLIT? Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
                pb[2].width, pb[2].height, pb[2].ystride);
+
+    height = height & ~0x01;
 
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
@@ -703,18 +762,37 @@ OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
         lineBase_Cr += 2 * pb[2].ystride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
+
+    if (odd_rows) {
+        // The last, odd row.
+        const UInt8 *pixelPtr_Y_top  = lineBase_Y;
+        const UInt8 *pixelPtr_Cb_top = lineBase_Cb;
+        const UInt8 *pixelPtr_Cr_top = lineBase_Cr;
+        UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
+        for (x = 0; x < width; x += 2) {
+            *((UInt32 *) pixelPtr_2vuy_top) = PACK_2VUY(*pixelPtr_Cb_top, *pixelPtr_Y_top, *pixelPtr_Cr_top, *(pixelPtr_Y_top + 1));
+            pixelPtr_2vuy_top += 4;
+            pixelPtr_Y_top += 2;
+            pixelPtr_Cb_top += 2;
+            pixelPtr_Cr_top += 2;
+        }
+    }
+
     return noErr;
 }
 
 /* Presently, This function assumes YCbCr 4:2:0 as input.
    TODO: take into account different subsampling types? */
-OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordPtr dataProc, UInt8 *baseAddr, long stride, long width, long height)
+OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordPtr dataProc, UInt8 *baseAddr, long stride, long width, long height,
+                                       size_t offset_x, size_t offset_y)
 {
     OSErr err = noErr;
     UInt8 *endOfScanLine, *dst_base, *src_base;
     PlanarPixmapInfoYUV420 *pinfo = (PlanarPixmapInfoYUV420 *) baseAddr;
     UInt32 lines;
     SInt32 dst_stride, src_stride;
+    size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
+    size_t off_x2 = offset_x >> 1;
     endOfScanLine = baseAddr + (width * 4);
 
     dbg_printf("BLIT= yw: %d, yh: %d, ys: %d; w: %ld, h: %ld; stride: %ld\n", ycbcr[0].width, ycbcr[0].height, ycbcr[0].ystride, width, height, stride);
@@ -724,7 +802,7 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     lines = height;
     dst_base = baseAddr + pinfo->componentInfoY.offset;
     dst_stride = pinfo->componentInfoY.rowBytes;
-    src_base = ycbcr[0].data;
+    src_base = ycbcr[0].data + off_y * ycbcr[0].ystride + off_x;
     src_stride = ycbcr[0].ystride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);
@@ -735,7 +813,7 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     lines = height / 2;
     dst_base = baseAddr + pinfo->componentInfoCb.offset;
     dst_stride = pinfo->componentInfoCb.rowBytes;
-    src_base = ycbcr[1].data;
+    src_base = ycbcr[1].data + off_y * ycbcr[1].ystride + off_x2;
     src_stride = ycbcr[1].ystride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);
@@ -746,7 +824,7 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     lines = height / 2;
     dst_base = baseAddr + pinfo->componentInfoCr.offset;
     dst_stride = pinfo->componentInfoCr.rowBytes;
-    src_base = ycbcr[2].data;
+    src_base = ycbcr[2].data + off_y * ycbcr[2].ystride + off_x2;;
     src_stride = ycbcr[2].ystride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);

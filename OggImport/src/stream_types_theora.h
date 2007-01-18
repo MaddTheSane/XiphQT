@@ -33,10 +33,10 @@
 
 
 #if !defined(_NO_THEORA_SUPPORT)
-#if defined(__APPLE_CC__)
+#if defined(__APPLE_CC__) && defined(XIPHQT_USE_FRAMEWORKS)
 #include <TheoraExp/theoradec.h>
 #else
-#include <theoradec.h>
+#include <theora/theoradec.h>
 #endif
 
 typedef enum TheoraImportStates {

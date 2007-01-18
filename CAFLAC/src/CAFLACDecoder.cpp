@@ -536,7 +536,7 @@ void CAFLACDecoder::DFPclear()
 
 #pragma mark Callbacks
 
-::FLAC__StreamDecoderReadStatus CAFLACDecoder::read_callback(FLAC__byte buffer[], unsigned *bytes)
+::FLAC__StreamDecoderReadStatus CAFLACDecoder::read_callback(FLAC__byte buffer[], size_t *bytes)
 {
     dbg_printf(" | -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
     FLAC__StreamDecoderReadStatus ret = FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;

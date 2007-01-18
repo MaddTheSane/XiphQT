@@ -41,6 +41,8 @@
 #include "data_types.h"
 #include "utils.h"
 
+#undef INCOMPLETE_PAGE_DURATION
+#define INCOMPLETE_PAGE_DURATION 10
 
 int recognize_header__flac(ogg_page *op)
 {
@@ -73,11 +75,24 @@ int initialize_stream__flac(StreamInfo *si)
     si->si_flac.skipped = 0;
     si->si_flac.state = kFStateInitial;
 
+    si->si_flac.sample_refs_count = 0;
+    si->si_flac.sample_refs_duration = 0;
+    //si->si_flac.sample_refs_size = kSRefsInitial;
+    //si->si_flac.sample_refs_size = 64;
+    si->si_flac.sample_refs_size = 1;
+    si->si_flac.sample_refs = calloc(si->si_flac.sample_refs_size, sizeof(SampleReference64Record));
+
+    if (si->si_flac.sample_refs == NULL)
+        return -1;
+
     return 0;
 };
 
 void clear_stream__flac(StreamInfo *si)
 {
+    if (si->si_flac.sample_refs != NULL)
+        free(si->si_flac.sample_refs);
+
     vorbis_comment_clear(&si->si_flac.vc);
 };
 
@@ -103,16 +118,31 @@ ComponentResult create_sample_description__flac(StreamInfo *si)
     asbd.mBitsPerChannel = si->si_flac.bps;
     asbd.mReserved = 0;
 
-    if (si->numChannels == 1)
+    acl.mChannelBitmap = 0;
+    acl.mNumberChannelDescriptions = 0;
+    switch (si->numChannels) {
+    case 1:
         acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
-    else if (si->numChannels == 2)
+        break;
+    case 2:
         acl.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
-    else {
+        break;
+    case 3:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_ITU_3_0;
+        break;
+    case 4:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_Quadraphonic;
+        break;
+    case 5:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_ITU_3_2;
+        break;
+    case 6:
+        acl.mChannelLayoutTag = kAudioChannelLayoutTag_ITU_3_2_1;
+        break;
+    default:
         pacl = NULL;
         acl_size = 0;
     }
-    acl.mChannelBitmap = 0;
-    acl.mNumberChannelDescriptions = 0;
 
     err = QTSoundDescriptionCreate(&asbd, pacl, acl_size, NULL, 0, kQTSoundDescriptionKind_Movie_Version2, (SoundDescriptionHandle*) &desc);
 
@@ -320,6 +350,89 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                     duration += si->streamOffsetSamples;
                 }
 
+                
+                if (si->si_flac.sample_refs_count >= si->si_flac.sample_refs_size) {
+                    //resize the sample_refs array
+                    SampleReference64Record *srptr = NULL;
+                    si->si_flac.sample_refs_size += kSRefsIncrement;
+                    srptr = realloc(si->si_flac.sample_refs, si->si_flac.sample_refs_size * sizeof(SampleReference64Record));
+                    //if (srptr == NULL)
+                    //    ; // signal error here
+                    si->si_flac.sample_refs = srptr;
+                }
+
+                {
+                    SampleReference64Record *srptr = &si->si_flac.sample_refs[si->si_flac.sample_refs_count];
+                    memset(srptr, 0, sizeof(SampleReference64Record));
+                    srptr->dataOffset = SInt64ToWide(globals->dataOffset);
+                    srptr->dataSize = len;
+                    srptr->durationPerSample = duration;
+                    srptr->numberOfSamples = 1;
+                    srptr->sampleFlags = smp_flags;
+
+                    dbg_printf("   -   :++: storing sampleRef: %lld, len: %d, dur: %d [%08lx, %08lx]\n", globals->dataOffset, len, duration,
+                               (UInt32) si->si_flac.sample_refs, (UInt32) srptr);
+                    si->si_flac.sample_refs_count += 1;
+                    si->si_flac.sample_refs_duration += duration;
+                }
+
+                // change the condition...?
+                //if (si->si_flac.sample_refs_count >= si->si_flac.sample_refs_size || ogg_page_eos(opg)) {
+                if (/*si->si_flac.sample_refs_count >= si->si_flac.sample_refs_size ||*/ ogg_page_eos(opg)) {
+                    dbg_printf("   -   :++: adding sampleRefs: %lld, count: %ld, dur: %ld\n", globals->dataOffset, si->si_flac.sample_refs_count,
+                               si->si_flac.sample_refs_duration);
+                    ret = AddMediaSampleReferences64(si->theMedia, si->sampleDesc, si->si_flac.sample_refs_count, si->si_flac.sample_refs, &inserted);
+
+                    if (ret == noErr) {
+                        TimeValue timeLoaded;
+                        Float64 timeLoadedSubSecond;
+
+                        si->mediaLength += si->si_flac.sample_refs_duration;
+
+                        dbg_printf("   -   :><: added page %04ld at %14ld, f: %d\n",
+                                   ogg_page_pageno(opg), inserted, !logg_page_last_packet_incomplete(opg));
+                        dbg_printf("   -   :><: d:%ld, dd:%lld, ds:%ld\n", GetMediaDuration(si->theMedia), GetMediaDecodeDuration(si->theMedia),
+                                   GetMediaDataSize(si->theMedia, 0, inserted + duration));
+                        dbg_printf("   -   :/>: inserting media: %ld, mt: %ld, dur: %d\n", si->insertTime, /* si->lastGranulePos */ inserted,
+                                   si->si_flac.sample_refs_duration);
+                        ret = InsertMediaIntoTrack(si->theTrack, si->insertTime /*inserted*/, /* si->lastGranulePos */ inserted,
+                                                   si->si_flac.sample_refs_duration, fixed1);
+                        if (si->insertTime == 0) {
+                            if (si->streamOffset != 0) {
+                                SetTrackOffset(si->theTrack, si->streamOffset);
+                                dbg_printf("   # -- SetTrackOffset(%ld) = %ld --> %ld\n",
+                                           si->streamOffset, GetMoviesError(),
+                                           GetTrackOffset(si->theTrack));
+                                if (globals->dataIsStream) {
+                                    SetTrackEnabled(si->theTrack, false);
+                                    SetTrackEnabled(si->theTrack, true);
+                                }
+                            }
+                        }
+                        si->insertTime = -1;
+
+                        mediaTS = GetMediaTimeScale(si->theMedia);
+                        mediaTS_fl = (Float64) mediaTS;
+                        timeLoaded = si->streamOffset + si->mediaLength / mediaTS * movieTS + (si->mediaLength % mediaTS) * movieTS / mediaTS;
+                        timeLoadedSubSecond = (Float64) ((si->streamOffset % movieTS * mediaTS / movieTS + si->mediaLength) % mediaTS) / mediaTS_fl;
+
+                        dbg_printf("   -   :><: added page %04ld at %14ld; offset: %ld, duration: %ld (%ld(%lg); %ld; ml: %ld), mediats: %ld; moviets: %ld, ret = %ld\n",
+                                   ogg_page_pageno(opg), inserted,
+                                   GetTrackOffset(si->theTrack), GetTrackDuration(si->theTrack), timeLoaded, timeLoadedSubSecond,
+                                   (duration * movieTS) / mediaTS, si->mediaLength,
+                                   mediaTS, movieTS, ret);
+                        if (globals->timeLoaded < timeLoaded || (globals->timeLoaded == timeLoaded && globals->timeLoadedSubSecond < timeLoadedSubSecond)) {
+                            globals->timeLoaded = timeLoaded;
+                            globals->timeLoadedSubSecond = timeLoadedSubSecond;
+                        }
+
+                        movie_changed = true;
+
+                        si->si_flac.sample_refs_duration = 0;
+                        si->si_flac.sample_refs_count = 0;
+                    }
+                }
+#if 0
                 dbg_printf("   -   :++: adding sampleRef: %lld, len: %d, dur: %d\n", globals->dataOffset, len, duration);
                 ret = AddMediaSampleReference(si->theMedia, S32Set(globals->dataOffset),
                                               len, duration, si->sampleDesc, 1, smp_flags, &inserted); //@@@@ 64-bit enable
@@ -332,7 +445,9 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                     dbg_printf("   -   :><: added page %04ld at %14ld (size: %5ld, tsize: %6d), f: %d\n",
                                ogg_page_pageno(opg), inserted,
                                opg->header_len + opg->body_len, len, !logg_page_last_packet_incomplete(opg));
-                    dbg_printf("   -   :/>: inserting media: %ld, mt: %lld, dur: %d\n", si->insertTime, si->lastGranulePos, duration);
+                    dbg_printf("   -   :><: d:%ld, dd:%lld, ds:%ld\n", GetMediaDuration(si->theMedia), GetMediaDecodeDuration(si->theMedia),
+                               GetMediaDataSize(si->theMedia, 0, inserted + duration));
+                    dbg_printf("   -   :/>: inserting media: %ld, mt: %ld, dur: %d\n", si->insertTime, /* si->lastGranulePos */ inserted, duration);
                     ret = InsertMediaIntoTrack(si->theTrack, si->insertTime /*inserted*/, /* si->lastGranulePos */ inserted,
                                                duration, fixed1);
                     if (si->insertTime == 0) {
@@ -366,6 +481,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
 
                     movie_changed = true;
                 }
+#endif
 
                 if (pos != -1)
                     si->lastGranulePos = pos;

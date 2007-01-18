@@ -31,9 +31,15 @@
 #ifndef __OGGEXPORT_H__
 #define __OGGEXPORT_H__ 1
 
+#include "config.h"
 #include "oggexport_versions.h"
 
+#if !defined(XIPHQT_BUNDLE_ID)
 #define kOggExportBundleID "org.xiph.xiph-qt.oggexport"
+#else
+//#define kOggExportBundleID kXiphQTBundleID
+#define kOggExportBundleID XIPHQT_BUNDLE_ID
+#endif  /* XIPHQT_BUNDLE_ID */
 
 #define kExporterResID                  4040
 #define kExporterNameStringResID        4040
