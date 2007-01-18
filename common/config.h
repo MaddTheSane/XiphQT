@@ -32,6 +32,10 @@
 #define __xiphqt_config_h__
 
 
+#if !defined(XIPHQT_NO_ENCODERS)
 #define kXiphQTBundleID "org.xiph.xiph-qt.xiphqt"
+#else
+#define kXiphQTBundleID "org.xiph.xiph-qt.xiphqt-decoders"
+#endif
 
 #endif /* __data_types_h__ */

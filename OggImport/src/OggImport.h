@@ -37,8 +37,7 @@
 #if !defined(XIPHQT_BUNDLE_ID)
 #define kOggVorbisBundleID "org.xiph.xiph-qt.oggimport"
 #else
-//#define kOggVorbisBundleID kXiphQTBundleID
-#define kOggVorbisBundleID XIPHQT_BUNDLE_ID
+#define kOggVorbisBundleID kXiphQTBundleID
 #endif  /* XIPHQT_BUNDLE_ID */
 
 #define kImporterResID                  4000

@@ -37,8 +37,7 @@
 #if !defined(XIPHQT_BUNDLE_ID)
 #define kOggExportBundleID "org.xiph.xiph-qt.oggexport"
 #else
-//#define kOggExportBundleID kXiphQTBundleID
-#define kOggExportBundleID XIPHQT_BUNDLE_ID
+#define kOggExportBundleID kXiphQTBundleID
 #endif  /* XIPHQT_BUNDLE_ID */
 
 #define kExporterResID                  4040
