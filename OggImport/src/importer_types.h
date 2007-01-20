@@ -220,6 +220,7 @@ typedef ComponentResult (*create_track_media) (OggImportGlobals *globals, Stream
 
 typedef int (*process_first_packet) (StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 typedef ComponentResult (*process_stream_page) (OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
+typedef ComponentResult (*finish_stream) (OggImportGlobals *globals, StreamInfo *si);
 
 
 typedef struct stream_format_handle_funcs {
@@ -234,9 +235,10 @@ typedef struct stream_format_handle_funcs {
     create_track_media                  track_media;
 
     initialize_stream                   initialize;
+    finish_stream                       finish;
     clear_stream                        clear;
 } stream_format_handle_funcs;
 
-#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 
 #endif /* __importer_types_h__ */

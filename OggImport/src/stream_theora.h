@@ -51,7 +51,7 @@ extern ComponentResult process_stream_page__theora(OggImportGlobals *globals, St
 
 #define HANDLE_FUNCTIONS__THEORA { &process_stream_page__theora, &recognize_header__theora, \
             &verify_header__theora, &process_first_packet__theora, &create_sample_description__theora, \
-            &create_track__theora, &create_track_media__theora, &initialize_stream__theora, &clear_stream__theora }
+            &create_track__theora, &create_track_media__theora, &initialize_stream__theora, NULL, &clear_stream__theora }
 
 
 #endif /* __stream_theora_h__ */

@@ -53,6 +53,7 @@
 		7326B5480B5AC44B004CE9D3 /* TheoraDecoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744A870B1A0AFF002B059E /* TheoraDecoder.r */; };
 		7326B54A0B5AC44B004CE9D3 /* CAFLACDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744C6C0B1A2B78002B059E /* CAFLACDecoderPublic.r */; };
 		7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
+		73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73271C830B610B2400175874 /* RingBufferTests.cpp */; };
 		737448B60B19EC05002B059E /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		737448B70B19EC05002B059E /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
 		737448B80B19EC05002B059E /* rb.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A50B19EC05002B059E /* rb.c */; };
@@ -106,6 +107,20 @@
 		73744CB20B1A3D07002B059E /* stream_video.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744CA70B1A3D07002B059E /* stream_video.c */; };
 		73744CB70B1A3D5E002B059E /* OggExport.nib in Resources */ = {isa = PBXBuildFile; fileRef = 73744CB50B1A3D5E002B059E /* OggExport.nib */; };
 		73744CB80B1A3D5E002B059E /* OggExport.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744CB60B1A3D5E002B059E /* OggExport.r */; };
+		73C752A90B5FB82C00615F6C /* OggFLACTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */; };
+		73C752E40B5FC02D00615F6C /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */; };
+		73C752E60B5FD84400615F6C /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A030B1A0270002B059E /* ACBaseCodec.cpp */; };
+		73C752E70B5FD84500615F6C /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A050B1A0270002B059E /* ACCodec.cpp */; };
+		73C752E90B5FD85400615F6C /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A1B0B1A0288002B059E /* CAStreamBasicDescription.cpp */; };
+		73C752EB0B5FD87000615F6C /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F50B1A0159002B059E /* wrap_ogg.cpp */; };
+		73C752EC0B5FD87400615F6C /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449EF0B1A012B002B059E /* XCACodec.cpp */; };
+		73C752EE0B5FD89100615F6C /* CAFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */; };
+		73C752F00B5FD8AD00615F6C /* CABundleLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A150B1A0288002B059E /* CABundleLocker.cpp */; };
+		73C752F10B5FD8BB00615F6C /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F30B1A0159002B059E /* ringbuffer.cpp */; };
+		73C752F30B5FD8D300615F6C /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */; };
+		73C752FA0B5FD91100615F6C /* libflac++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C420B1A25B2002B059E /* libflac++.a */; };
+		73C752FB0B5FD91200615F6C /* libflac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C400B1A25B2002B059E /* libflac.a */; };
+		73C752FD0B5FD92200615F6C /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CC80B19C38700E06B34 /* libogg.a */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
@@ -352,6 +367,8 @@
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
+		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBufferTests.h; path = ../tests/common/RingBufferTests.h; sourceTree = SOURCE_ROOT; };
+		73271C830B610B2400175874 /* RingBufferTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RingBufferTests.cpp; path = ../tests/common/RingBufferTests.cpp; sourceTree = SOURCE_ROOT; };
 		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../OggImport/src/common.c; sourceTree = SOURCE_ROOT; };
 		737448A00B19EC05002B059E /* common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../OggImport/src/common.h; sourceTree = SOURCE_ROOT; };
 		737448A10B19EC05002B059E /* importer_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = importer_types.h; path = ../OggImport/src/importer_types.h; sourceTree = SOURCE_ROOT; };
@@ -462,6 +479,10 @@
 		738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TheoraExp.xcodeproj; path = "../external-libs/theora-exp/macosx/TheoraExp.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738837DE0B1938DC005C7A69 /* Theora.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Theora.xcodeproj; path = "../external-libs/theora/macosx/Theora.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738A452D0B18659A00B43A0C /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		73C752920B5FB59100615F6C /* tests.cptest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.cptest; sourceTree = BUILT_PRODUCTS_DIR; };
+		73C752930B5FB59100615F6C /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "tests-Info.plist"; sourceTree = "<group>"; };
+		73C752A70B5FB82C00615F6C /* OggFLACTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggFLACTests.h; path = ../tests/CAFLAC/OggFLACTests.h; sourceTree = SOURCE_ROOT; };
+		73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggFLACTests.cpp; path = ../tests/CAFLAC/OggFLACTests.cpp; sourceTree = SOURCE_ROOT; };
 		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D01CCD20486CAD60068D4B7 /* XiphQT.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XiphQT.component; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -482,6 +503,16 @@
 				7326B5400B5AC44B004CE9D3 /* Carbon.framework in Frameworks */,
 				7326B5410B5AC44B004CE9D3 /* QuickTime.framework in Frameworks */,
 				7326B5420B5AC44B004CE9D3 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73C7528F0B5FB59100615F6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73C752FA0B5FD91100615F6C /* libflac++.a in Frameworks */,
+				73C752FB0B5FD91200615F6C /* libflac.a in Frameworks */,
+				73C752FD0B5FD92200615F6C /* libogg.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,9 +542,11 @@
 			children = (
 				08FB77ADFE841716C02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
+				73C752A30B5FB78300615F6C /* Tests */,
 				738A45290B18604100B43A0C /* libs */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB4FE9D528D11CA2CBB /* Products */,
+				73C752930B5FB59100615F6C /* tests-Info.plist */,
 			);
 			name = XiphQT;
 			sourceTree = "<group>";
@@ -566,6 +599,7 @@
 			children = (
 				8D01CCD20486CAD60068D4B7 /* XiphQT.component */,
 				7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */,
+				73C752920B5FB59100615F6C /* tests.cptest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -615,6 +649,15 @@
 				730B1CC80B19C38700E06B34 /* libogg.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		73271C7F0B610A9600175874 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				73271C820B610B2400175874 /* RingBufferTests.h */,
+				73271C830B610B2400175874 /* RingBufferTests.cpp */,
+			);
+			name = common;
 			sourceTree = "<group>";
 		};
 		737448880B19EAE7002B059E /* OggImport */ = {
@@ -920,6 +963,24 @@
 			name = libs;
 			sourceTree = "<group>";
 		};
+		73C752A30B5FB78300615F6C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				73C752A40B5FB79A00615F6C /* CAFLAC */,
+				73271C7F0B610A9600175874 /* common */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		73C752A40B5FB79A00615F6C /* CAFLAC */ = {
+			isa = PBXGroup;
+			children = (
+				73C752A70B5FB82C00615F6C /* OggFLACTests.h */,
+				73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */,
+			);
+			name = CAFLAC;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -947,6 +1008,24 @@
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = XiphQT;
 			productReference = 7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */;
+			productType = "com.apple.product-type.bundle";
+		};
+		73C752910B5FB59100615F6C /* tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 73C752940B5FB59200615F6C /* Build configuration list for PBXNativeTarget "tests" */;
+			buildPhases = (
+				73C7528D0B5FB59100615F6C /* Resources */,
+				73C7528E0B5FB59100615F6C /* Sources */,
+				73C7528F0B5FB59100615F6C /* Frameworks */,
+				73C752900B5FB59100615F6C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tests;
+			productName = tests;
+			productReference = 73C752920B5FB59100615F6C /* tests.cptest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		8D01CCC60486CAD60068D4B7 /* XiphQT */ = {
@@ -1015,6 +1094,7 @@
 			targets = (
 				8D01CCC60486CAD60068D4B7 /* XiphQT */,
 				7326B5010B5AC44B004CE9D3 /* XiphQT (decoders) */,
+				73C752910B5FB59100615F6C /* tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1143,6 +1223,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		73C7528D0B5FB59100615F6C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D01CCC90486CAD60068D4B7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1184,6 +1271,22 @@
 		};
 /* End PBXRezBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		73C752900B5FB59100615F6C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7326B5150B5AC44B004CE9D3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1217,6 +1320,25 @@
 				7326B5310B5AC44B004CE9D3 /* CAFLACDecoder.cpp in Sources */,
 				7326B5320B5AC44B004CE9D3 /* CAOggFLACDecoder.cpp in Sources */,
 				7326B5330B5AC44B004CE9D3 /* flac_entrypoints.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73C7528E0B5FB59100615F6C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73C752A90B5FB82C00615F6C /* OggFLACTests.cpp in Sources */,
+				73C752E40B5FC02D00615F6C /* CAOggFLACDecoder.cpp in Sources */,
+				73C752E60B5FD84400615F6C /* ACBaseCodec.cpp in Sources */,
+				73C752E70B5FD84500615F6C /* ACCodec.cpp in Sources */,
+				73C752E90B5FD85400615F6C /* CAStreamBasicDescription.cpp in Sources */,
+				73C752EB0B5FD87000615F6C /* wrap_ogg.cpp in Sources */,
+				73C752EC0B5FD87400615F6C /* XCACodec.cpp in Sources */,
+				73C752EE0B5FD89100615F6C /* CAFLACDecoder.cpp in Sources */,
+				73C752F00B5FD8AD00615F6C /* CABundleLocker.cpp in Sources */,
+				73C752F10B5FD8BB00615F6C /* ringbuffer.cpp in Sources */,
+				73C752F30B5FD8D300615F6C /* GetCodecBundle.cpp in Sources */,
+				73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1357,7 +1479,7 @@
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"XIPHQT_BUNDLE_ID=org.xiph.xiph-qt.xiphqt",
+					XIPHQT_BUNDLE_ID,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1389,7 +1511,7 @@
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"XIPHQT_BUNDLE_ID=org.xiph.xiph-qt.xiphqt",
+					XIPHQT_BUNDLE_ID,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1420,6 +1542,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					__MACOSX__,
+					QT_IA32__VBR_BROKEN,
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1436,6 +1559,7 @@
 					"$(inherited)",
 					__MACOSX__,
 					NDEBUG,
+					QT_IA32__VBR_BROKEN,
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1454,7 +1578,7 @@
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"XIPHQT_BUNDLE_ID=org.xiph.xiph-qt.xiphqt-decoders",
+					XIPHQT_BUNDLE_ID,
 					XIPHQT_NO_ENCODERS,
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1487,7 +1611,7 @@
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"XIPHQT_BUNDLE_ID=org.xiph.xiph-qt.xiphqt-decoders",
+					XIPHQT_BUNDLE_ID,
 					XIPHQT_NO_ENCODERS,
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1509,6 +1633,86 @@
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
+			};
+			name = Release;
+		};
+		73C752950B5FB59200615F6C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					NDEBUG,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../external-libs/ogg/include",
+					"../external-libs/vorbis/include",
+					"../external-libs/speex/include",
+					"../external-libs/theora-exp/include",
+					"../external-libs/theora/include",
+					"../external-libs/flac/include",
+					../CAFLAC/src,
+					../utils,
+				);
+				INFOPLIST_FILE = "tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+					"-framework",
+					CPlusTest,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tests;
+				WRAPPER_EXTENSION = cptest;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		73C752960B5FB59200615F6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					NDEBUG,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../external-libs/ogg/include",
+					"../external-libs/vorbis/include",
+					"../external-libs/speex/include",
+					"../external-libs/theora-exp/include",
+					"../external-libs/theora/include",
+					"../external-libs/flac/include",
+					../CAFLAC/src,
+					../utils,
+				);
+				INFOPLIST_FILE = "tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+					"-framework",
+					CPlusTest,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tests;
+				WRAPPER_EXTENSION = cptest;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -1538,6 +1742,15 @@
 			buildConfigurations = (
 				7326B54F0B5AC44B004CE9D3 /* Debug */,
 				7326B5500B5AC44B004CE9D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		73C752940B5FB59200615F6C /* Build configuration list for PBXNativeTarget "tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73C752950B5FB59200615F6C /* Debug */,
+				73C752960B5FB59200615F6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

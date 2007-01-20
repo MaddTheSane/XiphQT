@@ -44,8 +44,8 @@ typedef enum FLACImportStates {
 } FLACImportStates;
 
 enum {
-    kSRefsInitial = 32,
-    kSRefsIncrement = 8
+    kSRefsInitial = 4096,
+    kSRefsIncrement = 4096
 };
 
 typedef struct {

@@ -4,7 +4,7 @@
  *    XCACodec class implementation; shared packet i/o functionality.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005,2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -61,7 +61,7 @@ void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteS
             while (packet < ioNumberPackets) {
                 if (bytes + inPacketDescription[packet].mDataByteSize > bytesToCopy)
                     break;
-                dbg_printf("     ----  :: %ld: %ld [%ld]\n", packet, inPacketDescription[packet].mDataByteSize,
+                dbg_printf("[ XC ]                %ld: %ld [%ld]\n", packet, inPacketDescription[packet].mDataByteSize,
                            inPacketDescription[packet].mVariableFramesInPacket);
                 InPacket(inInputData, &inPacketDescription[packet]);
 
@@ -89,7 +89,7 @@ void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteS
     } else {
         CODEC_THROW(kAudioCodecNotEnoughBufferSpaceError);
     }
-    dbg_printf("[ XC ] <.. [%08lx] AppendInputData()\n", (UInt32) this);
+    dbg_printf("[ XC ] <.. [%08lx] AppendInputData(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioInputDataByteSize);
 }
 
 UInt32 XCACodec::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
@@ -190,8 +190,13 @@ void XCACodec::BDCReset()
 
 void XCACodec::BDCReallocate(UInt32 inInputBufferByteSize)
 {
-    mBDCBuffer.Uninitialize();
-    mBDCBuffer.Initialize(inInputBufferByteSize);
+    if (mBDCBuffer.GetBufferByteSize() < inInputBufferByteSize) {
+        mBDCBuffer.Reallocate(inInputBufferByteSize);
+    } else {
+        // temporary left here until reallocation allows decreasing buffer size
+        mBDCBuffer.Uninitialize();
+        mBDCBuffer.Initialize(inInputBufferByteSize);
+    }
 }
 
 

@@ -6,7 +6,7 @@
  *    for the actual decoding.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2005-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -42,7 +42,8 @@
 
 CAOggFLACDecoder::CAOggFLACDecoder() :
     CAFLACDecoder(true),
-    mFramesBufferedList()
+    mFramesBufferedList(),
+    complete_pages(0)
 {
     CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphOggFramedFLAC,
                                             kFLACBytesPerPacket, kFLACFramesPerPacket,
@@ -99,7 +100,7 @@ void CAOggFLACDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& 
 UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf(" >> [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
+    dbg_printf("[ oFD]  >> [%08lx] ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
@@ -111,26 +112,53 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
         return ret;
     }
 
-    UInt32 flac_frames = mFramesBufferedList.front();
+    OggPagePacket &opp = mFramesBufferedList.front();
+    UInt32 flac_frames = opp.packets;
+    UInt32 flac_bytes = opp.frames * mOutputFormat.mBytesPerFrame;
     UInt32 ogg_packets = 0;
     UInt32 flac_returned_data = ioOutputDataByteSize;
     UInt32 flac_total_returned_data = 0;
     Byte *the_data = static_cast<Byte*> (outOutputData);
+    Boolean empty_packet = false;
 
     while (true) {
-        UInt32 flac_return = CAFLACDecoder::ProduceOutputPackets(the_data, flac_returned_data, flac_frames, NULL);
+        UInt32 flac_return = kAudioCodecProduceOutputPacketSuccess;
+        empty_packet = false;
+        if (complete_pages < 1) {
+            flac_return = kAudioCodecProduceOutputPacketNeedsMoreInputData;
+            flac_frames = 0;
+            flac_returned_data = 0;
+        } else if (flac_frames == 0) {
+            UInt32 one_flac_frame = 1;
+            empty_packet = true;
+            if (flac_bytes < flac_returned_data) {
+                flac_returned_data = flac_bytes;
+            }
+            flac_return = CAFLACDecoder::ProduceOutputPackets(the_data, flac_returned_data, one_flac_frame, NULL);
+        } else {
+            flac_return = CAFLACDecoder::ProduceOutputPackets(the_data, flac_returned_data, flac_frames, NULL);
+        }
+
         if (flac_return == kAudioCodecProduceOutputPacketSuccess || flac_return == kAudioCodecProduceOutputPacketSuccessHasMore) {
             if (flac_frames > 0)
-                mFramesBufferedList.front() -= flac_frames;
+                opp.packets -= flac_frames;
 
-            if (mFramesBufferedList.front() <= 0) {
+            if (flac_returned_data > 0)
+                opp.frames -= flac_returned_data / mOutputFormat.mBytesPerFrame;
+
+            dbg_printf("[ oFD]     [%08lx] ProduceOutputPackets() p:%ld, f:%ld, c:%ld\n", (UInt32) this, opp.packets, opp.frames, complete_pages);
+            if (opp.packets <= 0 && opp.frames <= 0) {
                 ogg_packets++;
+                if (!empty_packet)
+                    complete_pages--;
                 mFramesBufferedList.erase(mFramesBufferedList.begin());
+                opp = mFramesBufferedList.front();
             }
 
             flac_total_returned_data += flac_returned_data;
 
-            if (flac_total_returned_data == ioOutputDataByteSize || flac_return == kAudioCodecProduceOutputPacketSuccess)
+            if (ogg_packets == ioNumberPackets || flac_total_returned_data == ioOutputDataByteSize ||
+                flac_return == kAudioCodecProduceOutputPacketSuccess)
             {
                 ioNumberPackets = ogg_packets;
                 ioOutputDataByteSize = flac_total_returned_data;
@@ -144,8 +172,28 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
             } else {
                 the_data += flac_returned_data;
                 flac_returned_data = ioOutputDataByteSize - flac_total_returned_data;
-                flac_frames = mFramesBufferedList.front();
+                flac_frames = opp.packets;
+                flac_bytes = opp.frames * mOutputFormat.mBytesPerFrame;
             }
+        } else if (flac_return == kAudioCodecProduceOutputPacketNeedsMoreInputData) {
+            if (flac_frames > 0)
+                opp.packets -= flac_frames;
+
+            if (flac_returned_data > 0)
+                opp.frames -= flac_returned_data / mOutputFormat.mBytesPerFrame;
+
+            if (opp.packets <= 0 && opp.frames <= 0) {
+                ogg_packets++;
+                if (!empty_packet)
+                    complete_pages--;
+                mFramesBufferedList.erase(mFramesBufferedList.begin());
+                //opp = mFramesBufferedList.front();
+            }
+
+            ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
+            ioOutputDataByteSize = flac_total_returned_data + flac_returned_data;
+            ioNumberPackets = ogg_packets;
+            break;
         } else {
             ret = kAudioCodecProduceOutputPacketFailure;
             ioOutputDataByteSize = flac_total_returned_data;
@@ -154,7 +202,7 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
         }
     }
 
-    dbg_printf("<.. [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
+    dbg_printf("[ oFD] <.. [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
                (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
@@ -168,12 +216,14 @@ void CAOggFLACDecoder::BDCInitialize(UInt32 inInputBufferByteSize)
 void CAOggFLACDecoder::BDCUninitialize()
 {
     mFramesBufferedList.clear();
+    complete_pages = 0;
     CAFLACDecoder::BDCUninitialize();
 }
 
 void CAOggFLACDecoder::BDCReset()
 {
     mFramesBufferedList.clear();
+    complete_pages = 0;
     if (mCompressionInitialized)
         ogg_stream_reset(&mO_st);
     CAFLACDecoder::BDCReset();
@@ -182,6 +232,7 @@ void CAOggFLACDecoder::BDCReset()
 void CAOggFLACDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 {
     mFramesBufferedList.clear();
+    complete_pages = 0;
     CAFLACDecoder::BDCReallocate(inInputBufferByteSize);
 }
 
@@ -193,8 +244,11 @@ void CAOggFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacket
 
     ogg_page op;
 
-    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize, inPacketDescription->mStartOffset))
+    if (!WrapOggPage(&op, static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset, inPacketDescription->mDataByteSize, 0))
         CODEC_THROW(kAudioCodecUnspecifiedError);
+
+    dbg_printf("[ oFD]   : [%08lx] InPacket() [%4.4s] %ld\n", (UInt32) this, (char *) (static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset),
+               ogg_page_pageno(&op));
 
     ogg_packet opk;
     SInt32 packet_count = 0;
@@ -216,7 +270,10 @@ void CAOggFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacket
         CAFLACDecoder::InPacket(opk.packet, &flac_packet_desc);
     }
 
-    mFramesBufferedList.push_back(packet_count);
+    if (packet_count > 0)
+        complete_pages += 1;
+
+    mFramesBufferedList.push_back(OggPagePacket(packet_count, inPacketDescription->mVariableFramesInPacket));
 }
 
 

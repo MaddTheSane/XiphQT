@@ -4,7 +4,7 @@
  *    CAOggFLACDecoder class definition.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2005-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -61,7 +61,20 @@ public CAFLACDecoder
     void                    InitializeCompressionSettings();
 
     ogg_stream_state        mO_st;
-    std::vector<SInt32>     mFramesBufferedList;
+
+    struct OggPagePacket {
+        UInt32 packets;
+        UInt32 frames;
+        //UInt32 left;
+
+        OggPagePacket() : packets(0), frames(0) {};
+        OggPagePacket(UInt32 inPackets, UInt32 inFrames) : packets(inPackets), frames(inFrames) {};
+    };
+
+    typedef std::vector<OggPagePacket> OggPagePacketList;
+    OggPagePacketList mFramesBufferedList;
+
+    UInt32 complete_pages;
 };
 
 

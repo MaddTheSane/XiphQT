@@ -341,8 +341,6 @@ void CAFLACDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UIn
             float* theOutputData = static_cast<float*> (outOutputData) + i + (inFramesOffset * mFLACchannels);
             const FLAC__int32* mono = static_cast<const FLAC__int32*> (mBPtrs[i] + mFrame.header.blocksize - mNumFrames);
 
-            float tempFloat = 0;
-
             for (j = 0; j < inNumberFrames; j++) {
                 *theOutputData = ((float)mono[j]) / cnvrtr;
                 theOutputData += mFLACchannels;
@@ -476,6 +474,15 @@ void CAFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacketDes
 {
     const Byte * theData = static_cast<const Byte *> (inInputData) + inPacketDescription->mStartOffset;
     UInt32 size = inPacketDescription->mDataByteSize;
+
+    if (mBDCBuffer.GetSpaceAvailable() <= size) {
+        UInt32 new_size_inc = kFLACDecoderInBufferSize;
+        UInt32 space_needed = size - mBDCBuffer.GetSpaceAvailable() + 1;
+        while (new_size_inc < space_needed)
+            new_size_inc += kFLACDecoderInBufferSize;
+        mBDCBuffer.Reallocate(mBDCBuffer.GetBufferByteSize() + new_size_inc);
+    }
+
     mBDCBuffer.In(theData, size);
     mFLACFPList.push_back(FLACFramePacket(inPacketDescription->mVariableFramesInPacket, inPacketDescription->mDataByteSize));
 };
@@ -496,6 +503,11 @@ Boolean CAFLACDecoder::GenerateFrames()
             mBDCStatus = kBDCStatusAbort;
             break;
         }
+    }
+
+    if (get_state() != FLAC__STREAM_DECODER_SEARCH_FOR_FRAME_SYNC && get_state() != FLAC__STREAM_DECODER_READ_FRAME) {
+        ret = false;
+        mBDCStatus = kBDCStatusAbort;
     }
 
     return ret;
@@ -538,7 +550,7 @@ void CAFLACDecoder::DFPclear()
 
 ::FLAC__StreamDecoderReadStatus CAFLACDecoder::read_callback(FLAC__byte buffer[], size_t *bytes)
 {
-    dbg_printf(" | -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
+    dbg_printf("[  FD]| -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
     FLAC__StreamDecoderReadStatus ret = FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 
     if (mFLACFPList.empty()) {
@@ -554,21 +566,21 @@ void CAFLACDecoder::DFPclear()
 
         BlockMoveData(mBDCBuffer.GetData(), buffer, *bytes);
 
-        if (*bytes == ffp.left) {
-            mBDCBuffer.Zap(ffp.bytes);
+        mBDCBuffer.Zap(*bytes);
+        ffp.left -= *bytes;
+        if (ffp.left == 0) {
             mFLACFPList.erase(mFLACFPList.begin());
-        } else
-            ffp.left -= *bytes;
+        }
     }
 
-    dbg_printf(" |<-. [%08lx] :: read_callback(%ld) = %ld\n", (UInt32) this, *bytes, ret);
+    dbg_printf("[  FD]|<-. [%08lx] :: read_callback(%ld) = %ld\n", (UInt32) this, *bytes, ret);
     return ret;
 }
 
 ::FLAC__StreamDecoderWriteStatus CAFLACDecoder::write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[])
 {
     ::FLAC__StreamDecoderWriteStatus ret = FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
-    dbg_printf(" | +> [%08lx] :: write_callback(%ld)\n", (UInt32) this, frame->header.blocksize);
+    dbg_printf("[  FD]| +> [%08lx] :: write_callback(%ld) [%ld]\n", (UInt32) this, frame->header.blocksize, frame->header.channels);
 
     FLAC__int32** lbuffer = new FLAC__int32*[frame->header.channels];
     for (unsigned int i = 0; i < frame->header.channels; i++) {
@@ -580,7 +592,7 @@ void CAFLACDecoder::DFPclear()
 
     DFPinit(*frame, lbuffer); //MFDFPacket will free the lbuffer on .clear() call
 
-    dbg_printf(" |<+. [%08lx] :: write_callback()\n", (UInt32) this);
+    dbg_printf("[  FD]|<+. [%08lx] :: write_callback()\n", (UInt32) this);
     return ret;
 }
 

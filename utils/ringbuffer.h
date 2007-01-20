@@ -4,7 +4,7 @@
  *    RingBuffer class definition. Simple ring buffer implementation.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005,2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -44,6 +44,7 @@ class RingBuffer
     virtual void   Initialize(UInt32 inBufferByteSize);
     virtual void   Uninitialize();
     virtual void   Reset();
+    virtual UInt32 Reallocate(UInt32 inBufferByteSize);
 
     virtual UInt32 GetBufferByteSize() const;
     virtual UInt32 GetDataAvailable() const;

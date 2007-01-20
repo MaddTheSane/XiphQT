@@ -347,6 +347,9 @@ static void _close_stream(OggImportGlobalsPtr globals, StreamInfoPtr si)
 {
     ogg_stream_clear(&si->os);
 
+    if (si->sfhf->finish != NULL)
+        /* ret = */ (*si->sfhf->finish)(globals, si);
+
     if (si->sfhf->clear != NULL)
         (*si->sfhf->clear)(si);
 
@@ -476,7 +479,7 @@ static int LookupTagUD(OggImportGlobalsPtr globals, StreamInfoPtr si, const char
     len = strcspn(str, "=");
 
     if (len > 0) {
-        CFStringRef tmpkstr = CFStringCreateWithBytes(NULL, str, len + 1, kCFStringEncodingUTF8, true);
+        CFStringRef tmpkstr = CFStringCreateWithBytes(NULL, (const UInt8 *) str, len + 1, kCFStringEncodingUTF8, true);
         if (tmpkstr != NULL) {
             CFMutableStringRef keystr = CFStringCreateMutableCopy(NULL, len + 1, tmpkstr);
             if (keystr != NULL) {
@@ -518,7 +521,7 @@ static int LookupTagMD(OggImportGlobalsPtr globals, StreamInfoPtr si, const char
     len = strcspn(str, "=");
 
     if (len > 0) {
-        CFStringRef tmpkstr = CFStringCreateWithBytes(NULL, str, len + 1, kCFStringEncodingUTF8, true);
+        CFStringRef tmpkstr = CFStringCreateWithBytes(NULL, (const UInt8 *) str, len + 1, kCFStringEncodingUTF8, true);
         if (tmpkstr != NULL) {
             CFMutableStringRef keystr = CFStringCreateMutableCopy(NULL, len + 1, tmpkstr);
             if (keystr != NULL) {
@@ -553,7 +556,7 @@ static ComponentResult ConvertUTF8toScriptCode(const char *str, Handle *h)
     CFIndex numberOfCharsConverted = 0, usedBufferLength = 0;
     OSStatus ret = noErr;
 
-    CFStringRef tmpstr = CFStringCreateWithBytes(NULL, str, strlen(str), kCFStringEncodingUTF8, true);
+    CFStringRef tmpstr = CFStringCreateWithBytes(NULL, (const UInt8 *) str, strlen(str), kCFStringEncodingUTF8, true);
     if (tmpstr == NULL)
         return  kTextUnsupportedEncodingErr; //!??!?!
 
@@ -569,7 +572,7 @@ static ComponentResult ConvertUTF8toScriptCode(const char *str, Handle *h)
                 HLock(*h);
 
                 numberOfCharsConverted = CFStringGetBytes(tmpstr, range, encoding, 0,
-                                                          false, **h, usedBufferLength,
+                                                          false, (UInt8 *) **h, usedBufferLength,
                                                           &usedBufferLength);
                 HUnlock(*h);
             } else {
@@ -596,7 +599,7 @@ static ComponentResult AddCommentToMetaData(OggImportGlobalsPtr globals, StreamI
         dbg_printf("-- TAG: %08lx\n", tag);
 
         ret = QTMetaDataAddItem(md, kQTMetaDataStorageFormatQuickTime, kQTMetaDataKeyFormatCommon,
-                                &tag, sizeof(tag), str + tagLen, len - tagLen, kQTMetaDataTypeUTF8, NULL);
+                                (UInt8 *) &tag, sizeof(tag), (UInt8 *) (str + tagLen), len - tagLen, kQTMetaDataTypeUTF8, NULL);
         dbg_printf("-- TAG: %4.4s :: QT    = %ld\n", (char *)&tag, (long)ret);
     }
 
@@ -615,7 +618,7 @@ static ComponentResult AddCommentToMetaData(OggImportGlobalsPtr globals, StreamI
         if (ret == noErr) {
             HLock(h);
             ret = QTMetaDataAddItem(md, kQTMetaDataStorageFormatUserData, kQTMetaDataKeyFormatUserData,
-                                    &tag, sizeof(tag), *h, GetHandleSize(h), kQTMetaDataTypeMacEncodedText, &mdi);
+                                    (UInt8 *) &tag, sizeof(tag), (UInt8 *) *h, GetHandleSize(h), kQTMetaDataTypeMacEncodedText, &mdi);
             dbg_printf("-- TAG: %4.4s :: QT[X] = %ld\n", (char *)&tag, (long)ret);
             HUnlock(h);
             if (ret == noErr) {

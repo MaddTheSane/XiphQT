@@ -5,7 +5,7 @@
  *    expressed as a c++ class.
  *
  *
- *  Copyright (c) 2005  Arek Korbik
+ *  Copyright (c) 2005,2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -77,6 +77,33 @@ void RingBuffer::Reset() {
     mNeedsWrapping = false;
 }
 
+UInt32 RingBuffer::Reallocate(UInt32 inBufferByteSize) {
+    Byte *bptr = NULL;
+    UInt32 data_size = 0;
+
+    // can't decrease the size at the moment
+    if (inBufferByteSize > mBSize) {
+        bptr = new Byte[inBufferByteSize * 2];
+        data_size = GetDataAvailable();
+        if (mNeedsWrapping) {
+            UInt32 headBytes = mBSize - mBStart;
+            BlockMoveData(mBuffer + mBStart, bptr, headBytes);
+            BlockMoveData(mBuffer, bptr + headBytes, mBEnd);
+            mNeedsWrapping = false;
+        } else {
+            BlockMoveData(mBuffer + mBStart, bptr, data_size);
+        }
+        mBEnd = data_size;
+        mBStart = 0;
+
+        delete[] mBuffer;
+        mBuffer = bptr;
+        mBSize = inBufferByteSize;
+    }
+
+    return mBSize;
+}
+
 UInt32 RingBuffer::GetBufferByteSize() const {
     return mBSize;
 }
@@ -118,9 +145,9 @@ void RingBuffer::In(const void* data, UInt32& ioBytes) {
     } else {
         UInt32 wrappedBytes = mBSize - mBEnd;
         const Byte* dataSplit = static_cast<const Byte*>(data) + wrappedBytes;
-        mBEnd = copiedBytes - wrappedBytes;
-
         BlockMoveData(data, mBuffer + mBEnd, wrappedBytes);
+
+        mBEnd = copiedBytes - wrappedBytes;
         BlockMoveData(dataSplit, mBuffer, mBEnd);
 
         mNeedsWrapping = true;
