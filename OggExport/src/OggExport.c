@@ -27,7 +27,6 @@
  *
  */
 
-#undef NDEBUG
 
 #if defined(__APPLE_CC__)
 #include <QuickTime/QuickTime.h>
@@ -1287,7 +1286,8 @@ ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h)
 
     Boolean progressOpen = false;
     wide data_h_offset = {0, 0};
-    TimeValue duration = 0;
+    double duration = 0.0;
+    double dtmp = 0.0;
     Float64 max_page_duration = 0.8; /* dynamically adapt to the
                                         bitrates of the streams? */
     StreamInfoPtr si = &(*globals->streamInfoHandle)[0];
@@ -1297,19 +1297,30 @@ ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h)
 
     dbg_printf("[  OE]  >> [%08lx] :: mux_streams()\n", (UInt32) globals);
 
+
+    HLock((Handle) globals->streamInfoHandle);
+
     if (globals->progressProc) {
         TimeRecord durationTimeRec;
 
-        // TODO: loop over all the data sources and find the max duration
+        // loop over all the data sources and find the max duration
+        for (i = 0; i < globals->streamCount; i++) {
+            si = &(*globals->streamInfoHandle)[i];
 
-        // Get the track duration if it is available
-        if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                            movieExportDuration,
-                                            &durationTimeRec,
-                                            si->getPropertyProc) == noErr) {
-            ConvertTimeScale(&durationTimeRec, si->sourceTimeScale);
-            duration = durationTimeRec.value.lo;
-            dbg_printf("[  OE]  <> [%08lx] :: mux_streams() = %ld\n",
+            // get the track duration if it is available
+            if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                                movieExportDuration,
+                                                &durationTimeRec,
+                                                si->getPropertyProc) == noErr) {
+                //ConvertTimeScale(&durationTimeRec, si->sourceTimeScale);
+                dtmp = (double) durationTimeRec.value.lo / (double) durationTimeRec.scale;
+                if (duration < dtmp)
+                    duration = dtmp;
+            }
+        }
+
+        if (duration > 0.0) {
+            dbg_printf("[  OE]  <> [%08lx] :: mux_streams() = %lf\n",
                        (UInt32) globals, duration);
 
             InvokeMovieProgressUPP(NULL, movieProgressOpen,
@@ -1319,8 +1330,6 @@ ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h)
             progressOpen = true;
         }
     }
-
-    HLock((Handle) globals->streamInfoHandle);
 
     // ident headers first
     // TODO: sort streams by type
@@ -1398,8 +1407,8 @@ ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h)
 
         if (progressOpen) {
             Fixed percentDone = 0x010000;
-            if (f_si)
-                percentDone = FixDiv(f_si->time, duration);
+            if (!all_streams_done)
+                percentDone = FloatToFixed(((double) earliest_sec + earliest_subsec) / duration);
 
             if (percentDone > 0x010000)
                 percentDone = 0x010000;
@@ -1417,7 +1426,7 @@ ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h)
 
     if (progressOpen)
         InvokeMovieProgressUPP(NULL, movieProgressClose,
-                               progressOpExportMovie, 0,
+                               progressOpExportMovie, 0x010000,
                                globals->progressRefcon,
                                globals->progressProc);
 
