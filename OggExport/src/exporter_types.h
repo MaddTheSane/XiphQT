@@ -4,7 +4,7 @@
  *    Definitions of OggExporter data structures.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -41,10 +41,9 @@
 #if defined(TARGET_OS_WIN32)
 #define _WINIOCTL_
 #include <windows.h>
-#endif
+#endif /* TARGET_OS_WIN32 */
 
-#endif
-//#include "rb.h"
+#endif /* __APPLE_CC__ */
 
 
 #include "stream_types_audio.h"
@@ -90,19 +89,11 @@ typedef struct {
     TimeScale sourceTimeScale;
 
     TimeValue time;
-    //long numOfFrames;
-
-    //Ptr compressBuffer;
-    //Size compressBufferSize;
 
     void * out_buffer;
     UInt32 out_buffer_size;
 
     long lastDescSeed;
-
-    //ImageSequence decompressSequence;
-    //GWorldPtr gw;
-    //PixMapHandle hPixMap;
 
     struct stream_format_handle_funcs *sfhf;
 
@@ -131,6 +122,8 @@ typedef struct {
 
     Boolean            use_hires_audio;
 
+    Fixed              movie_fps;
+
     /* settings */
     UInt16             set_v_disable;
     UInt16             set_a_disable;
@@ -141,6 +134,7 @@ typedef struct {
     UInt32             set_v_keyrate;
     QTAtomContainer    set_v_settings;
     Handle             set_v_custom;
+    ComponentInstance  set_v_ci;
 
     CodecQ             set_a_quality;
     UInt32             set_a_bitrate;

@@ -4,7 +4,7 @@
  *    Definition of video stream data structures for OggExport.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -35,6 +35,11 @@ enum {
     kOES_V_init_op_size = 1024,
 };
 
+enum {
+    kEOS_V_default_fps = 24 << 16,
+    kEOS_V_default_keyrate = 64,
+};
+
 typedef struct {
     ComponentInstance stdVideo;
 
@@ -48,11 +53,6 @@ typedef struct {
 
     float frames_time;
 
-    Fixed width;
-    Fixed height;
-    Fixed fps;
-    SInt16 depth;
-
     ogg_packet op;
     UInt32 op_duration;
     void * op_buffer;
@@ -62,6 +62,16 @@ typedef struct {
     UInt32 max_packet_size;
 
     UInt32 grpos_shift;
+
+    /* settings */
+    Fixed width;
+    Fixed height;
+    CodecQ quality;
+    Fixed fps;
+    UInt32 bitrate;
+    UInt32 keyrate;
+    SInt16 depth; // is this needed?
+    Handle custom;
 } StreamInfo__video;
 
 #define _HAVE__OE_VIDEO 1

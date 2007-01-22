@@ -133,6 +133,8 @@ static ComponentResult _get_std_video_config(OggExportGlobalsPtr globals, Compon
 static ComponentResult _video_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings);
 static ComponentResult _ac_to_video_settings(OggExportGlobalsPtr globals, QTAtomContainer settings);
 
+static ComponentResult _movie_fps(Movie theMovie, Fixed *fps);
+
 
 #define CALLCOMPONENT_BASENAME()        OggExport
 #define CALLCOMPONENT_GLOBALS()         OggExportGlobalsPtr storage
@@ -167,6 +169,7 @@ pascal ComponentResult OggExportOpen(OggExportGlobalsPtr globals, ComponentInsta
     if (!err) {
         globals->self = self;
         globals->use_hires_audio = false;
+        globals->movie_fps = 0;
 
         globals->set_v_disable = 0;
         globals->set_a_disable = 0;
@@ -177,6 +180,7 @@ pascal ComponentResult OggExportOpen(OggExportGlobalsPtr globals, ComponentInsta
         globals->set_v_keyrate = 64;
         globals->set_v_settings = NULL;
         globals->set_v_custom = NULL;
+        globals->set_v_ci = NULL;
 
         globals->set_a_quality = codecNormalQuality;
         globals->set_a_bitrate = 0;
@@ -216,6 +220,9 @@ pascal ComponentResult OggExportClose(OggExportGlobalsPtr globals, ComponentInst
                 CloseAllStreams(globals);
             DisposeHandle((Handle) globals->streamInfoHandle);
         }
+
+        if (globals->set_v_ci)
+            CloseComponent(globals->set_v_ci);
 
         if (globals->set_v_settings)
             QTDisposeAtomContainer(globals->set_v_settings);
@@ -380,44 +387,6 @@ pascal ComponentResult OggExportToDataRef(OggExportGlobalsPtr globals, Handle da
 
     // TODO: loop for all tracks
 
-#if 0
-    {
-        SCSpatialSettings ss = {k422YpCbCr8PixelFormat, NULL, 32, 512};
-        ComponentInstance stdcomp = NULL;
-        QTAtomContainer mes = NULL;
-        ComponentResult terr;
-
-        terr = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubType, &stdcomp);
-        if (terr)
-            goto tbail;
-
-        //ss.codecType = k422YpCbCr8PixelFormat;
-        ss.codecType = 'XiVs';
-        terr = SCSetInfo(stdcomp, scSpatialSettingsType, &ss);
-        if (terr)
-            goto tbail;
-
-        terr = SCGetSettingsAsAtomContainer(stdcomp, &mes);
-        if (terr)
-            goto tbail;
-
-        terr = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, mes);
-        if (terr)
-            goto tbail;
-
-        dbg_printf("[ vOE]  ss [%08lx] :: configure_stream() = %ld, ['%4.4s', %08lx, %d, %ld]\n", (UInt32) globals, err,
-                   (char *) &ss.codecType, (UInt32) ss.codec, ss.depth, ss.spatialQuality);
-
-    tbail:
-        dbg_printf("[  OE]  ?? [%08lx] :: ToDataRef() = %ld\n", (UInt32) globals, terr);
-        if (stdcomp)
-            CloseComponent(stdcomp);
-
-        if (mes)
-            DisposeHandle(mes);
-    }
-#endif
-
     if (globals->set_v_disable != 1) {
         err = MovieExportNewGetDataAndPropertiesProcs(globals->quickTimeMovieExporter, VideoMediaType, &scale, theMovie,
                                                       onlyThisTrack, startTime, duration, &getVideoPropertyProc,
@@ -429,6 +398,8 @@ pascal ComponentResult OggExportToDataRef(OggExportGlobalsPtr globals, Handle da
             if (!err)
                 have_sources = true;
         }
+        if (globals->movie_fps == 0)
+            _movie_fps(theMovie, &globals->movie_fps);
     }
 
     if (globals->set_a_disable != 1) {
@@ -545,15 +516,14 @@ pascal ComponentResult OggExportSetProgressProc(OggExportGlobalsPtr globals, Mov
 ComponentResult ConfigAndShowStdVideoDlg(OggExportGlobalsPtr globals, WindowRef window)
 {
     ComponentResult err = noErr;
-    SCExtendedProcs xProcs;
-    ComponentInstance stdVideo;
+    ComponentInstance stdVideo = globals->set_v_ci;
     PicHandle ph = NULL;
     long sc_prefs;
-    Boolean full_cfg = true;
 
     dbg_printf("[  OE]  >> [%08lx] :: ConfigAndShowStdVideoDlg()\n", (UInt32) globals);
 
-    err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubType, &stdVideo);
+    if (stdVideo == NULL)
+        err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubType, &stdVideo);
 
     if (!err) {
         sc_prefs = scAllowZeroFrameRate | scAllowZeroKeyFrameRate | scShowDataRateAsKilobits;
@@ -613,159 +583,11 @@ ComponentResult ConfigAndShowStdVideoDlg(OggExportGlobalsPtr globals, WindowRef 
             }
         }
 
-        CloseComponent(stdVideo);
+        //CloseComponent(stdVideo);
 
         if (ph != NULL)
             DisposeHandle((Handle) ph);
     }
-
-
-#if 0
-    
-    if (!err && globals->set_v_settings) {
-        err = SCSetSettingsFromAtomContainer(stdVideo, globals->set_v_settings);
-        dbg_printf("[  OE]  =S [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-        if (!err)
-            full_cfg = false;
-    }
-
-    if (!err) {
-        sc_prefs = scAllowZeroFrameRate | scAllowZeroKeyFrameRate | scShowDataRateAsKilobits;
-        //sc_prefs |= scDontDetermineSettingsFromTestImage;
-#if USE_VIDE_COMPONENT
-        sc_prefs |= scAllowEncodingWithCompressionSession; // Don't set with the StandardCompressionSubType
-#endif /* USE_VIDE_COMPONENT */
-
-        err = SCSetInfo(stdVideo, scPreferenceFlagsType, &sc_prefs);
-        dbg_printf("[  OE]  uS [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-
-        memset(&xProcs, 0, sizeof(xProcs));
-        strcpy((char*)xProcs.customName + 1, "Select Output Format");
-        xProcs.customName[0] = (unsigned char) strlen((char*) xProcs.customName + 1);
-        /*
-          (void) QTSetComponentProperty(stdVideo, kQTPropertyClass_SCAudio,
-                                        kQTSCAudioPropertyID_ExtendedProcs,
-                                        sizeof(xProcs), &xProcs);
-        */
-        err = SCSetInfo(stdVideo, scExtendedProcsType, &xProcs);
-        dbg_printf("[  OE]  pS [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-
-        if (!err)
-        {
-            Handle codec_types = NewHandleClear(sizeof(OSType));
-            SCSpatialSettings ss;
-            SCTemporalSettings ts = {codecNormalQuality, 0, 64};
-            SCDataRateSettings ds = {0, 0, 0, 0};
-
-
-            *(OSType *)*codec_types = kVideoFormatXiphTheora;
-            err = SCSetInfo(stdVideo, scCompressionListType, &codec_types);
-            dbg_printf("[  OE]  =L [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-
-            if (!err) {
-                *(OSType *)*codec_types = kXiphComponentsManufacturer;
-                err = SCSetInfo(stdVideo, scCodecManufacturerType, &codec_types);
-                dbg_printf("[  OE]  =M [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-            }
-
-            DisposeHandle(codec_types);
-
-            if (!err) {
-                if (full_cfg || SCGetInfo(stdVideo, scSpatialSettingsType, &ss)) {
-                    dbg_printf("[  OE]  sS [%08lx] :: ConfigAndShowStdVideoDlg() = %ld %d\n", (UInt32) globals, err, full_cfg);
-                    ss.depth = 0;
-                    ss.spatialQuality = codecNormalQuality;
-                }
-
-                ss.codecType = kVideoFormatXiphTheora;
-                ss.codec = NULL;
-
-                if (!full_cfg)
-                    SCGetInfo(stdVideo, scTemporalSettingsType, &ts);
-
-                if (!full_cfg)
-                    SCGetInfo(stdVideo, scDataRateSettingsType, &ds);
-
-                err = SCSetInfo(stdVideo, scSpatialSettingsType, &ss);
-                dbg_printf("[  OE]  _s [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-                if (!err) {
-                    err = SCSetInfo(stdVideo, scTemporalSettingsType, &ts);
-                    dbg_printf("[  OE]  _t [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-                }
-                if (!err) {
-                    err = SCSetInfo(stdVideo, scDataRateSettingsType, &ds);
-                    dbg_printf("[  OE]  _d [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-                }
-            }
-
-#if 0
-            if (!err) {
-                Handle custom = NewHandleClear(0);
-                err = SCGetInfo(stdVideo, scCodecSettingsType, &custom);
-                dbg_printf("[  OE]  cS [%08lx] :: ConfigAndShowStdVideoDlg() = %ld, %ld\n", (UInt32) globals, err, GetHandleSize(custom));
-
-                if (!IsHandleValid(custom))
-                    custom = NewHandleClear(0);
-                err = SCSetInfo(stdVideo, scCodecSettingsType, &custom);
-                dbg_printf("[  OE]  CS [%08lx] :: ConfigAndShowStdVideoDlg() = %ld %ld\n", (UInt32) globals, err, GetHandleSize(custom));
-
-                DisposeHandle(custom);
-            }
-#endif /* 0 */
-        }
-
-        if (!err && globals->setdlg_movie != NULL) {
-            TimeScale mt = GetMovieTime(globals->setdlg_movie, NULL);
-            Rect pr;
-
-            if (mt == 0)
-                mt = GetMoviePosterTime(globals->setdlg_movie);
-            err = GetMoviesError();
-            dbg_printf("[  OE] [ ] [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-            if (!err) {
-                ph = GetMoviePict(globals->setdlg_movie, mt);
-                if (ph != NULL) {
-                    QDGetPictureBounds(ph, &pr);
-                    //sc_prefs = scPreferScalingAnd;
-                    //sc_prefs = scPreferScalingAndCropping;
-                    sc_prefs = scPreferScalingAndCropping | scDontDetermineSettingsFromTestImage;
-                    err = SCSetTestImagePictHandle(stdVideo, ph, &pr, sc_prefs);
-                }
-            }
-        }
-
-        if (!err) {
-            QTAtomContainer std_v_settings = NULL;
-            err = SCGetSettingsAsAtomContainer(stdVideo, &std_v_settings);
-            dbg_printf("[  OE]  ?S [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-            if (!err) {
-                err = SCSetSettingsFromAtomContainer(stdVideo, std_v_settings);
-                dbg_printf("[  OE]  !S [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
-            }
-        }
-
-        if (!err)
-            err = SCRequestSequenceSettings(stdVideo);
-
-        if (!err) {
-            /* TODO: get config from the stdComp and store it */
-            if (globals->set_v_settings) {
-                QTDisposeAtomContainer(globals->set_v_settings);
-                globals->set_v_settings = NULL;
-            }
-            err = SCGetSettingsAsAtomContainer(stdVideo, &globals->set_v_settings);
-            if (err && globals->set_v_settings) {
-                QTDisposeAtomContainer(globals->set_v_settings);
-                globals->set_v_settings = NULL;
-            }
-        }
-
-        CloseComponent(stdVideo);
-
-        if (ph != NULL)
-            DisposeHandle((Handle) ph);
-    }
-#endif /* 0 */
 
     dbg_printf("[  OE] <   [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
     return err;
@@ -815,7 +637,9 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
             }
         }
 
-        if (globals->set_v_settings != NULL) {
+        if (globals->set_v_ci != NULL) {
+            /* result = */ _get_std_video_config(globals, globals->set_v_ci);
+        } else if (globals->set_v_settings != NULL) {
             /* result = */ _ac_to_video_settings(globals, globals->set_v_settings);
             //QTDisposeAtomContainer(globals->set_v_settings);
             //globals->set_v_settings = NULL;
@@ -901,8 +725,6 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
 pascal ComponentResult OggExportDoUserDialog(OggExportGlobalsPtr globals, Movie theMovie, Track onlyThisTrack,
                                              TimeValue startTime, TimeValue duration, Boolean *canceledPtr)
 {
-#pragma unused(theMovie, onlyThisTrack, startTime, duration)
-
     CFBundleRef bundle = NULL;
     IBNibRef    nibRef = NULL;
     WindowRef   window = NULL;
@@ -936,10 +758,12 @@ pascal ComponentResult OggExportDoUserDialog(OggExportGlobalsPtr globals, Movie 
 
     if (theMovie != NULL) {
         if (onlyThisTrack == NULL) {
-            if (GetMovieIndTrackType(theMovie, 1, VisualMediaCharacteristic, movieTrackCharacteristic | movieTrackEnabledOnly) == NULL)
+            if (GetMovieIndTrackType(theMovie, 1, VisualMediaCharacteristic, movieTrackCharacteristic | movieTrackEnabledOnly) == NULL) {
                 globals->setdlg_v_allow = false;
-            else
+            } else {
                 globals->setdlg_v_allow = true;
+                _movie_fps(theMovie, &globals->movie_fps);
+            }
 
             if (GetMovieIndTrackType(theMovie, 1, AudioMediaCharacteristic, movieTrackCharacteristic | movieTrackEnabledOnly) == NULL)
                 globals->setdlg_a_allow = false;
@@ -950,10 +774,12 @@ pascal ComponentResult OggExportDoUserDialog(OggExportGlobalsPtr globals, Movie 
             Boolean has_char = false;
 
             MediaHasCharacteristic(mh, VisualMediaCharacteristic, &has_char);
-            if (has_char)
+            if (has_char) {
                 globals->setdlg_v_allow = true;
-            else
+                _movie_fps(theMovie, &globals->movie_fps);
+            } else {
                 globals->setdlg_v_allow = false;
+            }
 
             MediaHasCharacteristic(mh, AudioMediaCharacteristic, &has_char);
             if (has_char)
@@ -1038,7 +864,7 @@ pascal ComponentResult OggExportDoUserDialog(OggExportGlobalsPtr globals, Movie 
 
 pascal ComponentResult OggExportGetSettingsAsAtomContainer(OggExportGlobalsPtr globals, QTAtomContainer *settings)
 {
-    QTAtom atom;
+    //QTAtom atom;
     QTAtomContainer ac = NULL;
     ComponentResult err;
     Boolean b_true = true;
@@ -1087,13 +913,17 @@ pascal ComponentResult OggExportGetSettingsAsAtomContainer(OggExportGlobalsPtr g
         HUnlock((Handle) globals->set_v_settings);
         */
         QTAtomContainer vs = NULL;
-        if (globals->set_v_settings != NULL)
+        err = noErr;
+        if (globals->set_v_settings != NULL) {
             vs = globals->set_v_settings;
-        else
+        } else {
             err = QTNewAtomContainer(&vs);
+            if (!err)
+                err = _video_settings_to_ac(globals, &vs);
+        }
 
         if (!err) {
-            err = _video_settings_to_ac(globals, &vs);
+            //err = _video_settings_to_ac(globals, &vs);
             dbg_printf("[  OE] vAC [%08lx] :: GetSettingsAsAtomContainer() = %ld %ld\n", (UInt32) globals, err, GetHandleSize(vs));
 
             if (!err)
@@ -1709,5 +1539,59 @@ static ComponentResult _ac_to_video_settings(OggExportGlobalsPtr globals, QTAtom
 
     dbg_printf("[  OE] <   [%08lx] :: _ac_to_video_settings() = %ld\n", (UInt32) globals, err);
 
+    return err;
+}
+
+static ComponentResult _movie_fps(Movie theMovie, Fixed *fps)
+{
+    ComponentResult err = noErr;
+    UInt32 frames = 0;
+    TimeValue m_time = 0;
+    TimeValue m_time_tmp = 0;
+    TimeValue m_time_start = 0;
+    TimeValue m_time_end = 0;
+    TimeValue ts = 0;
+    OSType vis_type = VisualMediaCharacteristic;
+
+    dbg_printf("[  OE]  >> [%08lx] _movie_fps()\n", (UInt32) -1);
+
+    // seems it's not needed in QuickTime 7...?
+    //MoviesTask(theMovie, 0);
+
+    GetMovieNextInterestingTime(theMovie, nextTimeStep, 1, &vis_type, m_time, fixed1, &m_time_start, NULL);
+    if (m_time_start > 0) {
+        m_time = m_time_start;
+        frames = 1;
+
+        while (m_time >= 0) {
+            GetMovieNextInterestingTime(theMovie, nextTimeStep, 1, &vis_type, m_time, fixed1, &m_time_tmp, NULL);
+            if (m_time_tmp > 0)
+                m_time_end = m_time;
+            m_time = m_time_tmp;
+            //dbg_printf("[  OE]     [%08lx] _movie_frame_count() = %ld [%ld]\n", (UInt32) -1, m_time, ret);
+            frames++;
+        }
+        frames--;
+
+        if (m_time_end > m_time_start) {
+            m_time = m_time_end - m_time_start;
+            frames -= 2;
+        }
+    }
+
+    if (m_time > 0) {
+        ts = GetMovieTimeScale(theMovie);
+        err = GetMoviesError();
+        if (!err) {
+            // nominator = (double) (frames * ts * ts) / (double) m_time;
+            // denominator = ts;
+            *fps = FloatToFixed((double) (frames * ts) / (double) m_time);
+        }
+    } else {
+        err = GetMoviesError();
+    }
+
+    dbg_printf("[  OE] <   [%08lx] _movie_fps() = %ld (%ld.%04ld) [%ld, %ld, %ld, %ld, %ld]\n", (UInt32) -1, err, *fps >> 16, (*fps & 0xffff) * 10000 / 65536, m_time, ts,
+               m_time_start, m_time_end, frames, *fps);
     return err;
 }

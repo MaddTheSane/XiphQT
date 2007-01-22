@@ -4,7 +4,7 @@
  *    Audio tracks related part of OggExporter.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -66,7 +66,8 @@ _frame_decompressed(void *decompressionTrackingRefCon, OSStatus err,
                        CVPixelBufferGetDataSize(pixelBuffer), (char *) &pf,
                        CVPixelBufferGetWidth(pixelBuffer),
                        CVPixelBufferGetHeight(pixelBuffer));
-            displayDuration = 25;
+
+            displayDuration = 25; //?
 
             // Feed the frame to the compression session.
             err = ICMCompressionSessionEncodeFrame(si->si_v.cs, pixelBuffer,
@@ -86,14 +87,11 @@ _setup_ds(StreamInfoPtr si, ImageDescriptionHandle imgDesc)
     ComponentResult err = noErr;
     CFNumberRef number = NULL;
     CFMutableDictionaryRef pba = NULL;
-    //ICMDecompressionSessionOptionsRef sessionOptions = NULL;
     ICMDecompressionTrackingCallbackRecord dtcr;
     SInt32 w, h;
     OSType pbf = k422YpCbCr8PixelFormat;
 
     dbg_printf("[ vOE]  >> [%08lx] :: _setup_ds()\n", (UInt32) -1);
-
-    // via the kICMCompressionSessionPropertyID_CompressorPixelBufferAttributes
 
     if (si->si_v.ds) {
         ICMDecompressionSessionFlush(si->si_v.ds);
@@ -107,10 +105,6 @@ _setup_ds(StreamInfoPtr si, ImageDescriptionHandle imgDesc)
     w = si->si_v.width >> 16;
     h = si->si_v.height >> 16;
 
-    // TMP:
-    //w = 480;
-    //h = 260;
-
     number = CFNumberCreate(NULL, kCFNumberSInt32Type, &w);
     CFDictionaryAddValue(pba, kCVPixelBufferWidthKey, number);
     CFRelease(number);
@@ -123,11 +117,6 @@ _setup_ds(StreamInfoPtr si, ImageDescriptionHandle imgDesc)
     CFDictionaryAddValue(pba, kCVPixelBufferPixelFormatTypeKey, number);
     CFRelease(number);
 
-    //CFDictionaryAddValue(pba, kCVPixelBufferCGBitmapContextCompatibilityKey,
-    // kCFBooleanTrue );
-    //CFDictionaryAddValue(pba, kCVPixelBufferCGImageCompatibilityKey,
-    // kCFBooleanTrue );
-
     dtcr.decompressionTrackingCallback = _frame_decompressed;
     dtcr.decompressionTrackingRefCon = (void *) si;
 
@@ -138,7 +127,6 @@ _setup_ds(StreamInfoPtr si, ImageDescriptionHandle imgDesc)
                                         &si->si_v.ds);
 
     CFRelease(pba);
-    //ICMDecompressionSessionOptionsRelease( sessionOptions );
 
     dbg_printf("[ vOE] <   [%08lx] :: _setup_ds() = %ld\n", (UInt32) -1, err);
     return err;
@@ -197,8 +185,7 @@ static ComponentResult _setup_cs(StreamInfoPtr si)
 {
     ComponentResult err = noErr;
     ICMEncodedFrameOutputRecord efor;
-    //long sc_prefs;
-    SInt32 averageDataRate = 819200;
+    SInt32 tmpval = 0;
 
     dbg_printf("[ vOE]  >> [%08lx] :: _setup_cs()\n", (UInt32) -1);
 
@@ -208,66 +195,55 @@ static ComponentResult _setup_cs(StreamInfoPtr si)
         si->si_v.cs = NULL;
     }
 
-#if 0
-    {
-    long sc_prefs;
-    sc_prefs = scAllowEncodingWithCompressionSession;
-    err = SCSetInfo(si->si_v.stdVideo, scPreferenceFlagsType, &sc_prefs);
-    dbg_printf("[ vOE]  .? [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-
-    err = SCCopyCompressionSessionOptions(si->si_v.stdVideo, &si->si_v.cs_opts);
-    dbg_printf("[ vOE]  +? [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    }
-#else
     err = ICMCompressionSessionOptionsCreate(NULL, &si->si_v.cs_opts);
     if (err)
         goto bail;
 
 
     // We must set this flag to enable P or B frames.
-    err = ICMCompressionSessionOptionsSetAllowTemporalCompression( si->si_v.cs_opts, true );
+    err = ICMCompressionSessionOptionsSetAllowTemporalCompression(si->si_v.cs_opts,
+                                                                  true);
     dbg_printf("[ vOE]  ?1 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
+    if (err)
         goto bail;
-    }
 
     // We must set this flag to enable B frames.
-    err = ICMCompressionSessionOptionsSetAllowFrameReordering(si->si_v.cs_opts, true);
+    err = ICMCompressionSessionOptionsSetAllowFrameReordering(si->si_v.cs_opts,
+                                                              true);
     dbg_printf("[ vOE]  ?2 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
+    if (err)
         goto bail;
-    }
 
-    // Set the maximum key frame interval, also known as the key frame rate.
-    err = ICMCompressionSessionOptionsSetMaxKeyFrameInterval( si->si_v.cs_opts, 30 );
+    // Set the maximum key frame rate.
+    err = ICMCompressionSessionOptionsSetMaxKeyFrameInterval(si->si_v.cs_opts,
+                                                             si->si_v.keyrate);
     dbg_printf("[ vOE]  ?3 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
+    if (err)
         goto bail;
-    }
 
-    // This allows the compressor more flexibility (ie, dropping and coalescing frames).
-    err = ICMCompressionSessionOptionsSetAllowFrameTimeChanges( si->si_v.cs_opts, true );
+    // This allows the compressor more flexibility
+    //  (ie, dropping and coalescing frames).
+    err = ICMCompressionSessionOptionsSetAllowFrameTimeChanges(si->si_v.cs_opts,
+                                                               true);
     dbg_printf("[ vOE]  ?4 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
-        fprintf( stderr, "ICMCompressionSessionOptionsSetAllowFrameTimeChanges() failed (%ld)\n", err );
+    if (err)
         goto bail;
-    }
 
     // We need durations when we store frames.
-    err = ICMCompressionSessionOptionsSetDurationsNeeded( si->si_v.cs_opts, true );
+    err = ICMCompressionSessionOptionsSetDurationsNeeded(si->si_v.cs_opts, true);
     dbg_printf("[ vOE]  ?5 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
-        fprintf( stderr, "ICMCompressionSessionOptionsSetDurationsNeeded() failed (%ld)\n", err );
+    if (err)
         goto bail;
-    }
 
-    averageDataRate = 480;
+    tmpval = si->si_v.quality;
     err = ICMCompressionSessionOptionsSetProperty(si->si_v.cs_opts,
                                                   kQTPropertyClass_ICMCompressionSessionOptions,
                                                   kICMCompressionSessionOptionsPropertyID_Quality,
-                                                  sizeof( averageDataRate ),
-                                                  &averageDataRate );
+                                                  sizeof(tmpval),
+                                                  &tmpval);
     dbg_printf("[ vOE]  ?6 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
+    if (err)
+        goto bail;
 
     err = ICMCompressionSessionOptionsSetProperty(si->si_v.cs_opts,
                                                   kQTPropertyClass_ICMCompressionSessionOptions,
@@ -275,40 +251,41 @@ static ComponentResult _setup_cs(StreamInfoPtr si)
                                                   sizeof(si->si_v.fps),
                                                   &si->si_v.fps);
     dbg_printf("[ vOE]  ?7 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-
-    // Set the average data rate.
-    averageDataRate = 0; //819200;
-    err = ICMCompressionSessionOptionsSetProperty( si->si_v.cs_opts,
-                                                   kQTPropertyClass_ICMCompressionSessionOptions,
-                                                   kICMCompressionSessionOptionsPropertyID_AverageDataRate,
-                                                   sizeof( averageDataRate ),
-                                                   &averageDataRate );
-    dbg_printf("[ vOE]  ?8 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
-    if( err ) {
-        fprintf( stderr, "ICMCompressionSessionOptionsSetProperty(AverageDataRate) failed (%ld)\n", err );
+    if (err)
         goto bail;
+
+    tmpval = si->si_v.bitrate;
+    err = ICMCompressionSessionOptionsSetProperty(si->si_v.cs_opts,
+                                                  kQTPropertyClass_ICMCompressionSessionOptions,
+                                                  kICMCompressionSessionOptionsPropertyID_AverageDataRate,
+                                                  sizeof(tmpval),
+                                                  &tmpval);
+    dbg_printf("[ vOE]  ?8 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
+    if (err)
+        goto bail;
+
+    if (si->si_v.custom != NULL) {
+        err = ICMCompressionSessionOptionsSetProperty(si->si_v.cs_opts,
+                                                      kQTPropertyClass_ICMCompressionSessionOptions,
+                                                      kICMCompressionSessionOptionsPropertyID_CompressorSettings,
+                                                      sizeof(si->si_v.custom),
+                                                      &si->si_v.custom);
+        dbg_printf("[ vOE]  ?9 [%08lx] :: _setup_cs() = %ld\n", (UInt32) -1, err);
+        if (err)
+            goto bail;
     }
-#endif
 
     if (!err) {
         efor.encodedFrameOutputCallback = _frame_compressed;
         efor.encodedFrameOutputRefCon = (void *) si;
         efor.frameDataAllocator = NULL;
 
-#if 1
         err = ICMCompressionSessionCreate(NULL, si->si_v.width >> 16,
                                           si->si_v.height >> 16,
-                                          'XiTh', /* !!! :P */
+                                          kVideoFormatXiphTheora, /* fixed for now... */
                                           si->sourceTimeScale, si->si_v.cs_opts,
                                           NULL, &efor, &si->si_v.cs);
-#else
-        err = ICMCompressionSessionCreate(NULL, 320,
-                                          240,
-                                          'XiTh', /* !!! :P */
-                                          si->sourceTimeScale, si->si_v.cs_opts,
-                                          NULL, &efor, &si->si_v.cs);
-#endif
-        dbg_printf("[ vOE]  ?9 [%08lx] :: _setup_cs() = %ld [%lx x %lx]\n",
+        dbg_printf("[ vOE]  ?A [%08lx] :: _setup_cs() = %ld [%lx x %lx]\n",
                    (UInt32) -1, err, si->si_v.width, si->si_v.height);
     }
 
@@ -390,167 +367,9 @@ static void _ready_page(StreamInfoPtr si)
         si->eos = true;
 }
 
-/*
-static ComponentResult
-_get_frame_old(OggExportGlobalsPtr globals, StreamInfoPtr si)
-{
-    ComponentResult err = noErr;
-    CodecFlags whoCares;
-
-    if (!si->src_extract_complete) {
-        si->gdp.recordSize = sizeof(MovieExportGetDataParams);
-        si->gdp.trackID = si->trackID;
-        si->gdp.requestedTime = si->time;
-        si->gdp.sourceTimeScale = si->sourceTimeScale;
-        si->gdp.actualTime = 0;
-        si->gdp.dataPtr = NULL;
-        si->gdp.dataSize = 0;
-        si->gdp.desc = NULL;
-        si->gdp.descType = 0;
-        si->gdp.descSeed = 0;
-        si->gdp.requestedSampleCount = 0;
-        si->gdp.actualSampleCount = 0;
-        si->gdp.durationPerSample = 1;
-        si->gdp.sampleFlags = 0;
-
-        err = InvokeMovieExportGetDataUPP(si->refCon, &si->gdp,
-                                          si->getDataProc);
-        dbg_printf("[ vOE]  D> [%08lx] :: _get_frame() = %ld; %ld [%ld] %ld [%ld] [%ld @ %ld] %ld '%4.4s'\n",
-                   (UInt32) globals, err, si->gdp.requestedSampleCount,
-                   si->gdp.actualSampleCount, si->gdp.requestedTime,
-                   si->gdp.actualTime, si->gdp.durationPerSample,
-                   si->gdp.sourceTimeScale, si->gdp.dataSize, (char *) &si->gdp.descType);
-
-        if (!err)
-            //si->time += si->gdp.durationPerSample * si->gdp.actualSampleCount;
-            si->time += si->gdp.durationPerSample;
-
-        if (err == eofErr) {
-            err = noErr;
-            si->src_extract_complete = true;
-        }
-
-        if (!err && si->gdp.descType == VideoMediaType) {
-            ImageDescription *id = *(ImageDescriptionHandle) si->gdp.desc;
-            dbg_printf("[ vOE]  I> [%08lx] :: _get_frame() = '%4.4s' %08lx %08lx"
-                       " [%d x %d] [%f x %f] %ld %d %d %d\n",
-                       (UInt32) globals, (char *) &id->cType, id->temporalQuality,
-                       id->spatialQuality, id->width, id->height,
-                       id->hRes / 65536.0, id->vRes / 65536.0,
-                       id->dataSize, id->frameCount, id->depth, id->clutID);
-
-            if (si->gdp.actualSampleCount == 0) {
-                //si->src_extract_complete = true;
-            } else {
-                if (si->gdp.descType != VideoMediaType) {
-                    err = paramErr;
-                    goto bail;
-                }
-                                                        
-                if (si->gdp.descSeed != si->lastDescSeed) {
-                    MatrixRecord mr;
-                    SInt16 depth;
-                    short width, height;
-                    Rect dstRect, srcRect;
-
-                    // Initialize outputTrack...
-                    if (si->out_buffer) {
-                        free(si->out_buffer);
-                        si->out_buffer = NULL;
-                        si->out_buffer_size = 0;
-                    }
-
-                    if (si->si_v.decompressSequence) {
-                        CDSequenceEnd(si->si_v.decompressSequence);
-                        si->si_v.decompressSequence = 0;
-                    }
-
-                    if (si->si_v.gw) {
-                        DisposeGWorld(si->si_v.gw);
-                        si->si_v.gw = NULL;
-                        si->si_v.hPixMap = NULL;
-                    }
-
-                    if (si->si_v.width == 0)
-                        width = (**(ImageDescriptionHandle) si->gdp.desc).width;
-                    else
-                        width = FixRound(si->si_v.width);
-
-                    if (si->si_v.height == 0)
-                        height = (**(ImageDescriptionHandle) si->gdp.desc).height;
-                    else
-                        height = FixRound(si->si_v.height);
-
-                    dstRect.left = 0;
-                    dstRect.top = 0;
-                    dstRect.right = width;
-                    dstRect.bottom = height;
-
-                    srcRect.left = 0;
-                    srcRect.top = 0;
-                    srcRect.right = (**(ImageDescriptionHandle) si->gdp.desc).width;
-                    srcRect.bottom = (**(ImageDescriptionHandle)
-                                      si->gdp.desc).height;
-
-                    RectMatrix(&mr, &srcRect, &dstRect);
-
-                    if (si->si_v.depth == 0)
-                        depth = (**(ImageDescriptionHandle) si->gdp.desc).depth;
-                    else
-                        depth = si->si_v.depth;
-
-                    // for k32ARGBPixelFormat when presented with 24.
-                    if (k24RGBPixelFormat == depth)
-                        depth = k32ARGBPixelFormat;
-
-                    // Create a GWorld for the approprate depth property
-                    err = QTNewGWorld(&si->si_v.gw, depth, &dstRect,
-                                      NULL, NULL, kICMTempThenAppMemory);
-                    if (err || NULL == si->si_v.gw) goto bail;
-
-                    si->si_v.hPixMap = GetGWorldPixMap(si->si_v.gw);
-
-                    LockPixels(si->si_v.hPixMap);
-
-                    err =
-                        DecompressSequenceBeginS(&si->si_v.decompressSequence,
-                                                 (ImageDescriptionHandle)
-                                                 si->gdp.desc, si->gdp.dataPtr,
-                                                 si->gdp.dataSize, si->si_v.gw,
-                                                 NULL, NULL, &mr, ditherCopy,
-                                                 NULL, 0, codecHighQuality, NULL);
-                    if (err) goto bail;
-
-                    // Allocate memory enough to store maximum compressed data
-                    si->out_buffer_size = width * height * depth * 2;
-                    si->out_buffer = calloc(1, si->out_buffer_size);
-
-                    err = MemError();
-                    if (err) goto bail;
-
-                    si->lastDescSeed = si->gdp.descSeed;
-                }
-
-                err = DecompressSequenceFrameS(si->si_v.decompressSequence,
-                                               si->gdp.dataPtr, si->gdp.dataSize,
-                                               0, &whoCares, NULL);
-                if (err) goto bail;
-                                                        
-            }
-
-            si->gdp.actualSampleCount = 0;
-        }
-    }
-
- bail:
-    return err;
-}
-*/
-
 static ComponentResult _get_frame(StreamInfoPtr si)
 {
     ComponentResult err = noErr;
-    //CodecFlags whoCares;
     ICMFrameTimeRecord ft;
 
     dbg_printf("[ vOE]  >> [%08lx] :: _get_frame()\n", (UInt32) -1);
@@ -670,13 +489,6 @@ static ComponentResult _get_frame(StreamInfoPtr si)
                                si->si_v.height / 65536.0, si->si_v.depth);
                 }
 
-                /*
-                err = DecompressSequenceFrameS(si->si_v.decompressSequence,
-                                               si->gdp.dataPtr, si->gdp.dataSize,
-                                               0, &whoCares, NULL);
-                if (err) goto bail;
-                */
-
                 memset(&ft, 0, sizeof(ICMFrameTimeRecord));
                 ft.recordSize = sizeof(ICMFrameTimeRecord);
                 *(TimeValue64 *) &ft.value = si->time;
@@ -747,18 +559,19 @@ ComponentResult initialize_stream__video(StreamInfo *si)
 
     si->si_v.width = 0;
     si->si_v.height = 0;
-    si->si_v.fps = 24 << 16; //0;
-    // si->si_v.depth = 0;
+    si->si_v.fps = kEOS_V_default_fps;
+    si->si_v.quality = 0;
+    si->si_v.bitrate = 0;
+    si->si_v.keyrate = kEOS_V_default_keyrate;
+    si->si_v.custom = NULL;
 
-    si->si_v.grpos_shift = 6; //0;
+    si->si_v.grpos_shift = 0;
     si->si_v.op_flags = 0;
-    //si->last_grpos = -1;
     si->si_v.frames_time = 0;
 
     si->stream_type = VideoMediaType;
 
     // allocate initial space for ogg_package
-    //si->si_v.op_buffer = NULL;
     si->si_v.op_buffer_size = kOES_V_init_op_size;
     si->si_v.op_buffer = calloc(1, kOES_V_init_op_size);
 
@@ -766,11 +579,12 @@ ComponentResult initialize_stream__video(StreamInfo *si)
 
     if (!err) {
         si->si_v.stdVideo = NULL;
-#if 0
+#if 1
         err = OpenADefaultComponent(StandardCompressionType,
                                     StandardCompressionSubType,
                                     &si->si_v.stdVideo);
 #else
+        // the 'vide' one is not documented :/
         err = OpenADefaultComponent(StandardCompressionType,
                                     'vide',
                                     &si->si_v.stdVideo);
@@ -812,123 +626,84 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
                                         StreamInfo *si)
 {
     ComponentResult err = noErr;
+    SCSpatialSettings ss = {0, NULL, 0, 0};
+    SCTemporalSettings ts = {0, 0, 0};
+    SCDataRateSettings ds = {0, 0, 0, 0};
+    UInt32 tmp = 0;
+    Fixed tmp_fixed = 0;
 
     dbg_printf("[ vOE]  >> [%08lx] :: configure_stream()\n", (UInt32) globals);
 
-    {
-        SCSpatialSettings ss = {k422YpCbCr8PixelFormat, NULL, 32, 512};
-        //SCSpatialSettings ss = {0, NULL, 0, 0};
-        SCTemporalSettings ts = {0, 0, 0};
-        SCDataRateSettings ds = {0, 0, 0, 0};
-        ComponentInstance stdcomp = NULL;
-        QTAtomContainer mes = NULL;
-        Fixed tmp_fixed = 0;
+    err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                          scTemporalSettingsType, &ts,
+                                          si->getPropertyProc);
+    dbg_printf("[ vOE]  ts [%08lx] :: configure_stream() = %ld, [%ld, %f, %ld]\n", (UInt32) globals, err,
+               ts.temporalQuality, ts.frameRate / 65536.0, ts.keyFrameRate);
+    if (!err) {
+        if (ts.frameRate != 0)
+            si->si_v.fps = ts.frameRate;
+        else if (globals->set_v_fps != 0)
+            si->si_v.fps = globals->set_v_fps;
+        else if (globals->movie_fps != 0)
+            si->si_v.fps = globals->movie_fps;
+        //else leave the default setting
 
-        err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubType, &stdcomp);
-        if (err)
-            goto bail;
-
-        ts.frameRate = 12 << 16;
-        //err = SCSetInfo(stdcomp, scTemporalSettingsType, &ts);
-        if (err)
-            goto bail;
-
-        ss.codecType = 'XiVs';
-        //err = SCSetInfo(stdcomp, scSpatialSettingsType, &ss);
-        if (err)
-            goto bail;
-
-        err = SCGetSettingsAsAtomContainer(stdcomp, &mes);
-        if (err)
-            goto bail;
-
-        //err = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, mes);
-        if (err)
-            goto bail;
-
-        err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                              scTemporalSettingsType, &ts,
-                                              si->getPropertyProc);
-        dbg_printf("[ vOE]  ts [%08lx] :: configure_stream() = %ld, [%ld, %f, %ld]\n", (UInt32) globals, err,
-                   ts.temporalQuality, ts.frameRate / 65536.0, ts.keyFrameRate);
-
-        err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                              scSpatialSettingsType, &ss,
-                                              si->getPropertyProc);
-        dbg_printf("[ vOE]  ss [%08lx] :: configure_stream() = %ld, ['%4.4s', %08lx, %d, %ld]\n", (UInt32) globals, err,
-                   (char *) &ss.codecType, (UInt32) ss.codec, ss.depth, ss.spatialQuality);
-
-        err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                              scDataRateSettingsType, &ds,
-                                              si->getPropertyProc);
-        dbg_printf("[ vOE]  ds [%08lx] :: configure_stream() = %ld, [%ld, %ld, %ld, %ld]\n", (UInt32) globals, err,
-                   ds.dataRate, ds.frameDuration, ds.minSpatialQuality, ds.minTemporalQuality);
-
-        if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                            movieExportWidth, &tmp_fixed,
-                                            si->getPropertyProc) == noErr)
-            si->si_v.width = tmp_fixed;
-
-        if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
-                                            movieExportHeight, &tmp_fixed,
-                                            si->getPropertyProc) == noErr)
-            si->si_v.height = tmp_fixed;
-
-        dbg_printf("[ vOE]   x [%08lx] :: configure_stream() = [%f x %f]\n",
-                   (UInt32) globals, si->si_v.width / 65536.0,
-                   si->si_v.height / 65536.0);
-
-        /*
-    if (InvokeMovieExportGetPropertyUPP(outputTrack->refCon, outputTrack->trackID, scSpatialSettingsType, &spatialSettings, outputTrack->getPropertyProc) == noErr)
-        outputTrack->depth = spatialSettings.depth;
-
-        */
-
-    bail:
-        if (stdcomp)
-            CloseComponent(stdcomp);
-
-        if (mes)
-            DisposeHandle(mes);
+        if (ts.keyFrameRate != 0)
+            si->si_v.keyrate = ts.keyFrameRate;
+        else if (globals->set_v_keyrate != 0)
+            si->si_v.keyrate = globals->set_v_keyrate;
+        //else leave the default setting
     }
 
+    err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                          scSpatialSettingsType, &ss,
+                                          si->getPropertyProc);
+    dbg_printf("[ vOE]  ss [%08lx] :: configure_stream() = %ld, ['%4.4s', %08lx, %d, %ld]\n", (UInt32) globals, err,
+               (char *) &ss.codecType, (UInt32) ss.codec, ss.depth, ss.spatialQuality);
+    if (!err) {
+        si->si_v.quality = ss.spatialQuality;
+    }
+
+    err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                          scDataRateSettingsType, &ds,
+                                          si->getPropertyProc);
+    dbg_printf("[ vOE]  ds [%08lx] :: configure_stream() = %ld, [%ld, %ld, %ld, %ld]\n", (UInt32) globals, err,
+               ds.dataRate, ds.frameDuration, ds.minSpatialQuality, ds.minTemporalQuality);
+    if (!err) {
+        if (ds.dataRate != 0)
+            si->si_v.bitrate = ds.dataRate;
+        else if (globals->set_v_bitrate != 0)
+            si->si_v.bitrate = globals->set_v_bitrate;
+    }
+
+    if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                        movieExportWidth, &tmp_fixed,
+                                        si->getPropertyProc) == noErr)
+        si->si_v.width = tmp_fixed;
+
+    if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                        movieExportHeight, &tmp_fixed,
+                                        si->getPropertyProc) == noErr)
+        si->si_v.height = tmp_fixed;
+
+    tmp = si->si_v.keyrate - 1;
+    si->si_v.grpos_shift = 0;
+    while (tmp > 0) {
+        si->si_v.grpos_shift += 1;
+        tmp >>= 1;
+    }
+
+    if (globals->set_v_custom != NULL)
+        si->si_v.custom = globals->set_v_custom;
+
+    dbg_printf("[ vOE]   x [%08lx] :: configure_stream() = [%f x %f]\n",
+               (UInt32) globals, si->si_v.width / 65536.0,
+               si->si_v.height / 65536.0);
 
     dbg_printf("[ vOE] <   [%08lx] :: configure_stream() = %ld\n", (UInt32) globals, err);
     return err;
 }
 
-
-/*
-ComponentResult
-fill_page__video(OggExportGlobalsPtr globals, StreamInfoPtr si,
-                 Float64 max_duration, UInt32 *pos_sec, Float64 *pos_subsec)
-{
-    ComponentResult err = noErr;
-
-    Boolean eos_hit = false;
-    Boolean do_loop = true;
-
-
-    UInt32 max_page_duration = (UInt32) (max_duration *
-                                         si->si_a.stda_asbd.mSampleRate);
-
-    dbg_printf("[ vOE]  >> [%08lx] :: fill_page__video(%lf)\n",
-               (UInt32) globals, max_duration);
-
-    _get_frame(globals, si);
-
-    if (si->src_extract_complete) {
-        si->eos = true;
-    } else {
-        si->og.header_len = 0;
-        si->og.body_len = 0;
-        si->og_ready = true;
-    }
-    dbg_printf("[ vOE] <   [%08lx] :: fill_page__video() = %ld (%ld, %lf)\n",
-               (UInt32) globals, err, *pos_sec, *pos_subsec);
-    return err;
-}
-*/
 
 ComponentResult
 fill_page__video(OggExportGlobalsPtr globals, StreamInfoPtr si,
@@ -981,7 +756,7 @@ fill_page__video(OggExportGlobalsPtr globals, StreamInfoPtr si,
                 si->si_v.op.granulepos = si->last_grpos;
                 result = ogg_stream_packetin(&si->os, &si->si_v.op);
                 dbg_printf("[ vOE] _i  [%08lx] :: fill_page(): "
-                           "ogg_stream_packetin(%lld, %ld, %lld) = %d\n",
+                           "ogg_stream_packetin(%lld, %ld, %016llx) = %d\n",
                            (UInt32) globals, si->si_v.op.packetno,
                            si->si_v.op.bytes, si->si_v.op.granulepos,
                            result);
@@ -1023,7 +798,7 @@ ComponentResult write_i_header__video(StreamInfoPtr si, DataHandler data_h,
     ComponentResult err = noErr;
     Handle ext;
 
-    /* pull frames until we got one, thus being able to get
+    /* pull frames until we get one, thus being able to get
        video-encoded frame's sample description and the magic
        cookie */
 
