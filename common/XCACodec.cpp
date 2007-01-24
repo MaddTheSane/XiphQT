@@ -72,6 +72,10 @@ void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteS
         } else {
             if (ioInputDataByteSize < bytesToCopy)
                 bytesToCopy = ioInputDataByteSize;
+
+            // align the data on a frame boundary
+            bytesToCopy -= bytesToCopy % mInputFormat.mBytesPerFrame;
+
             AudioStreamPacketDescription gen_pd = {0, bytesToCopy / mInputFormat.mBytesPerFrame, bytesToCopy};
             dbg_printf("     -__-  :: %d: %ld [%ld]\n", 0, gen_pd.mDataByteSize, gen_pd.mVariableFramesInPacket);
             InPacket(inInputData, &gen_pd);
