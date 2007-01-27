@@ -182,7 +182,7 @@ ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
     UInt32 frame_width = si->si_theora.ti.pic_width;
     UInt32 frame_width_fraction = 0;
 
-    if (si->si_theora.ti.aspect_numerator != si->si_theora.ti.aspect_denominator) {
+    if (si->si_theora.ti.aspect_denominator != 0 && si->si_theora.ti.aspect_numerator != si->si_theora.ti.aspect_denominator) {
         frame_width_fraction = (frame_width * si->si_theora.ti.aspect_numerator % si->si_theora.ti.aspect_denominator) * 0x10000 / si->si_theora.ti.aspect_denominator;
         frame_width = frame_width * si->si_theora.ti.aspect_numerator / si->si_theora.ti.aspect_denominator;
     }
