@@ -138,8 +138,12 @@ typedef struct {
 
     CodecQ             set_a_rquality;        /**< processing chain's render quality */
     AudioStreamBasicDescription set_a_asbd;   /**< audio codec's target output format settings */
+    AudioChannelLayout *set_a_layout;         /**< audio codec's target output channel layout  */
+    UInt32             set_a_layout_size;
     QTAtomContainer    set_a_settings;        /**< all audio codec's settings */
     CFArrayRef         set_a_custom;          /**< specific codec-only settings */
+    QTAtomContainer    set_a_settings_dlg;
+    CFArrayRef         set_a_custom_dlg;
     ComponentInstance  set_a_ci;
 
     /* settings dialog vars */

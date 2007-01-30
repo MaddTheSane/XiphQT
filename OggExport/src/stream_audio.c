@@ -4,7 +4,7 @@
  *    Audio tracks related part of OggExporter.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -346,8 +346,6 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                 err = paramErr;
             } else {
                 AudioStreamBasicDescription *asbd = &si->si_a.qte_out_asbd;
-                UInt32 acl_size = 0;
-                AudioChannelLayout *acl = NULL;
 
                 asbd->mFormatID = kAudioFormatLinearPCM;
                 asbd->mFormatFlags = sd->formatSpecificFlags;
@@ -379,8 +377,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
 
             DisposeHandle((Handle) sdh);
 
-#if 0
-            if (!acl) {
+            if (!acl && si->si_a.qte_out_asbd.mChannelsPerFrame < 3) {
                 acl_size = sizeof(AudioChannelLayout);
                 acl = (AudioChannelLayout *) calloc(1, acl_size);
                 acl->mChannelLayoutTag =
@@ -389,18 +386,12 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                 acl->mChannelBitmap = 0;
                 acl->mNumberChannelDescriptions = 0;
             }
-#endif
 
             err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_InputBasicDescription,
                                          sizeof(si->si_a.qte_out_asbd), &si->si_a.qte_out_asbd);
             dbg_printf("[ aOE]  iD [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
-            {
-                AudioStreamBasicDescription *asbd = &si->si_a.qte_out_asbd;
-                dbg_printf("[ aOE]  iD [%08lx] :: configure_stream__audio() = %ld, {%lf, '%4.4s', %04lx, %ld, %ld, %ld, %ld, %ld}\n", (UInt32) globals, err,
-                           asbd->mSampleRate, (char *) &asbd->mFormatID, asbd->mFormatFlags, asbd->mBytesPerPacket, asbd->mFramesPerPacket,
-                           asbd->mBytesPerFrame, asbd->mChannelsPerFrame, asbd->mBitsPerChannel);
-            }
-            if (!err && acl != NULL && false) {
+
+            if (!err && acl != NULL) {
                 err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_InputChannelLayout,
                                              acl_size, acl);
                 dbg_printf("[ aOE]  iL [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
@@ -428,6 +419,16 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                                          kQTSCAudioPropertyID_RenderQuality,
                                          sizeof(UInt32), &globals->set_a_rquality);
             dbg_printf("[ aOE]  rq [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (!err && globals->set_a_layout != NULL) {
+            err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_ChannelLayout,
+                                         globals->set_a_layout_size, globals->set_a_layout);
+            dbg_printf("[ aOE] ocl [%08lx] :: configure_stream__audio() = %ld, {0x%08lx, %ld, %ld}\n",
+                       (UInt32) globals, err, globals->set_a_layout->mChannelLayoutTag,
+                       globals->set_a_layout->mChannelBitmap, globals->set_a_layout->mNumberChannelDescriptions);
+            err = noErr;
         }
 
         if (!err && globals->set_a_custom != NULL) {

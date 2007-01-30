@@ -190,11 +190,16 @@ pascal ComponentResult OggExportOpen(OggExportGlobalsPtr globals, ComponentInsta
         globals->set_a_rquality = 0x40; //!kRenderQuality_Medium;
         globals->set_a_settings = NULL;
         globals->set_a_custom = NULL;
+        globals->set_a_settings_dlg = NULL;
+        globals->set_a_custom_dlg = NULL;
         globals->set_a_ci = NULL;
 
         memset(&globals->set_a_asbd, 0, sizeof(AudioStreamBasicDescription));
         globals->set_a_asbd.mFormatID = kAudioFormatXiphVorbis;
         globals->set_a_asbd.mChannelsPerFrame = 6;
+
+        globals->set_a_layout = NULL;
+        globals->set_a_layout_size = 0;
 
 
         globals->setdlg_a_allow = true;
@@ -240,6 +245,15 @@ pascal ComponentResult OggExportClose(OggExportGlobalsPtr globals, ComponentInst
 
         if (globals->set_a_ci)
             CloseComponent(globals->set_a_ci);
+
+        if (globals->set_a_layout != NULL)
+            free(globals->set_a_layout);
+
+        if (globals->set_a_custom_dlg)
+            CFRelease(globals->set_a_custom_dlg);
+
+        if (globals->set_a_settings_dlg)
+            QTDisposeAtomContainer(globals->set_a_settings_dlg);
 
         if (globals->set_a_custom)
             CFRelease(globals->set_a_custom);
@@ -640,7 +654,7 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
                                       kQTSCAudioPropertyID_ExtendedProcs,
                                       sizeof(xProcs), &xProcs);
 
-        if (globals->set_a_settings == NULL) {
+        if (globals->set_a_settings == NULL && globals->set_a_settings_dlg == NULL) {
             err = _setup_std_audio(globals, stdAudio);
             dbg_printf("[  OE]  ?' [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
         }
@@ -659,13 +673,6 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
                 GetMediaSampleDescription(media, 1, (SampleDescriptionHandle) sdh);
 
             if (GetHandleSize((Handle) sdh) > 0) {
-                /*
-                SoundDescriptionV2Handle sd2h;
-                QTSoundDescriptionConvert(kQTSoundDescriptionKind_Movie_AnyVersion,
-                                          (SoundDescriptionHandle) sdh,
-                                          kQTSoundDescriptionKind_Movie_Version2,
-                                          &sdh);
-                */
                 err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
                                              kQTSCAudioPropertyID_InputSoundDescription,
                                              sizeof(SoundDescriptionHandle), &sdh);
@@ -673,20 +680,31 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
             }
             DisposeHandle((Handle) sdh);
         } else {
-            /*
-            AudioStreamBasicDescription asbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
-
-            err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
-                                         kQTSCAudioPropertyID_InputBasicDescription,
-                                         sizeof(AudioStreamBasicDescription), &asbd);
-            */
             err = _preconfig_stdaudio(stdAudio);
             dbg_printf("[  OE]  bd [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
         }
 
-        if (globals->set_a_settings != NULL) {
-            err = SCSetSettingsFromAtomContainer(stdAudio, globals->set_a_settings);
+        if (globals->set_a_settings != NULL || globals->set_a_settings_dlg != NULL) {
+            if (globals->set_a_settings_dlg != NULL)
+                err = SCSetSettingsFromAtomContainer(stdAudio, globals->set_a_settings_dlg);
+            else
+                err = SCSetSettingsFromAtomContainer(stdAudio, globals->set_a_settings);
             dbg_printf("[  OE]  ?\" [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+
+            /* If the current input/output format doesn't match exactly saved settings stdAudio component will reset
+               codec custom settings when set all-together using SCSetSettingsFromAtomContainer - we need to set those
+               custom settings again seperately */
+            if (!err) {
+                CFArrayRef custom = globals->set_a_custom_dlg;
+                if (custom == NULL)
+                    custom = globals->set_a_custom;
+                if (custom != NULL) {
+                    err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                                 kQTSCAudioPropertyID_CodecSpecificSettingsArray,
+                                                 sizeof(CFArrayRef), &custom);
+                    dbg_printf("[  OE] *cs [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+                }
+            }
         }
 
         if (!err) {
@@ -711,14 +729,30 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
             err = SCRequestImageSettings(stdAudio);
 
         if (!err) {
-            if (globals->set_a_settings) {
-                QTDisposeAtomContainer(globals->set_a_settings);
-                globals->set_a_settings = NULL;
+            if (globals->set_a_settings_dlg) {
+                QTDisposeAtomContainer(globals->set_a_settings_dlg);
+                globals->set_a_settings_dlg = NULL;
             }
-            err = SCGetSettingsAsAtomContainer(stdAudio, &globals->set_a_settings);
-            if (err && globals->set_a_settings) {
-                QTDisposeAtomContainer(globals->set_a_settings);
-                globals->set_a_settings = NULL;
+            err = SCGetSettingsAsAtomContainer(stdAudio, &globals->set_a_settings_dlg);
+            if (err && globals->set_a_settings_dlg) {
+                QTDisposeAtomContainer(globals->set_a_settings_dlg);
+                globals->set_a_settings_dlg = NULL;
+            }
+            if (!err) {
+                if (globals->set_a_custom_dlg != NULL) {
+                    CFRelease(globals->set_a_custom_dlg);
+                    globals->set_a_custom_dlg = NULL;
+                }
+                err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                             kQTSCAudioPropertyID_CodecSpecificSettingsArray,
+                                             sizeof(CFArrayRef),
+                                             &globals->set_a_custom_dlg, NULL);
+                if (err && globals->set_a_custom_dlg != NULL) {
+                    globals->set_a_custom_dlg = NULL;
+                } else if (!err) {
+                    CFRetain(globals->set_a_custom_dlg);
+                }
+
             }
         }
 
@@ -783,10 +817,18 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
 
         if (globals->set_a_ci != NULL) {
             /* result = */ _get_std_audio_config(globals, globals->set_a_ci);
-        } else if (globals->set_a_settings != NULL) {
+        } else if (globals->set_a_settings_dlg != NULL) {
+            if (globals->set_a_settings != NULL) {
+                QTDisposeAtomContainer(globals->set_a_settings);
+                globals->set_a_settings = NULL;
+            }
+            globals->set_a_settings = globals->set_a_settings_dlg;
+            globals->set_a_settings_dlg = NULL;
             /* result = */ _ac_to_audio_settings(globals, globals->set_a_settings);
-            //QTDisposeAtomContainer(globals->set_v_settings);
-            //globals->set_v_settings = NULL;
+        }
+        if (globals->set_a_custom_dlg != NULL) {
+            CFRelease(globals->set_a_custom_dlg);
+            globals->set_a_custom_dlg = NULL;
         }
 
         QuitAppModalLoopForWindow(window);
@@ -795,6 +837,15 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
 
     case kHICommandCancel:
         globals->canceled = true;
+        if (globals->set_a_settings_dlg != NULL) {
+            QTDisposeAtomContainer(globals->set_a_settings_dlg);
+            globals->set_a_settings_dlg = NULL;
+        }
+        if (globals->set_a_custom_dlg != NULL) {
+            CFRelease(globals->set_a_custom_dlg);
+            globals->set_a_custom_dlg = NULL;
+        }
+
         QuitAppModalLoopForWindow(window);
         result = noErr;
         break;
@@ -1624,23 +1675,24 @@ static ComponentResult _setup_std_video(OggExportGlobalsPtr globals, ComponentIn
 static ComponentResult _setup_std_audio(OggExportGlobalsPtr globals, ComponentInstance stdAudio)
 {
     ComponentResult err = noErr;
-    /* isbd's mChannelsPerFrame should be set to the highest number of
-       channels supported by the supported audio encoder, and mSampleRate should be non-zero */
-    AudioStreamBasicDescription isbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
 
     dbg_printf("[  OE]  >> [%08lx] :: _setup_std_audio()\n", (UInt32) globals);
 
-    /* Can't set output description (if it contains 0.0 samplerate?) without input format set :( */
-    err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
-                                 kQTSCAudioPropertyID_InputBasicDescription,
-                                 sizeof(isbd), &isbd);
-    dbg_printf("[  OE]  i? [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+    err = _preconfig_stdaudio(stdAudio);
 
     if (!err) {
         err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
                                      kQTSCAudioPropertyID_BasicDescription,
                                      sizeof(AudioStreamBasicDescription), &globals->set_a_asbd);
         dbg_printf("[  OE]  o! [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+    }
+
+    if (!err && globals->set_a_layout != NULL) {
+        err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_ChannelLayout,
+                                     globals->set_a_layout_size, globals->set_a_layout);
+        dbg_printf("[  OE]  cl [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+        //err = noErr;
     }
 
     if (!err) {
@@ -1721,6 +1773,41 @@ static ComponentResult _get_std_audio_config(OggExportGlobalsPtr globals, Compon
     }
 
     if (!err) {
+        err = QTGetComponentPropertyInfo(stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_ChannelLayout,
+                                         NULL, &globals->set_a_layout_size, NULL);
+
+        if (err) {
+            globals->set_a_layout_size = 0;
+            if (globals->set_a_layout != NULL) {
+                free(globals->set_a_layout);
+                globals->set_a_layout = NULL;
+            }
+        } else if (globals->set_a_layout_size > 0) {
+            // TODO: realloc?
+            if (globals->set_a_layout != NULL) {
+                free(globals->set_a_layout);
+                globals->set_a_layout = NULL;
+            }
+            globals->set_a_layout = calloc(1, globals->set_a_layout_size);
+            if (globals->set_a_layout == NULL) {
+                globals->set_a_layout_size = 0;
+            } else {
+                err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                             kQTSCAudioPropertyID_ChannelLayout,
+                                             globals->set_a_layout_size,
+                                             globals->set_a_layout, NULL);
+                if (err) {
+                    free(globals->set_a_layout);
+                    globals->set_a_layout = NULL;
+                    globals->set_a_layout_size = 0;
+                }
+            }
+            //err = noErr;
+        }
+    }
+
+    if (!err) {
         err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
                                      kQTSCAudioPropertyID_RenderQuality,
                                      sizeof(UInt32),
@@ -1737,7 +1824,6 @@ static ComponentResult _get_std_audio_config(OggExportGlobalsPtr globals, Compon
                                      sizeof(CFArrayRef),
                                      &globals->set_a_custom, NULL);
         if (err && globals->set_a_custom != NULL) {
-            CFRelease(globals->set_a_custom);
             globals->set_a_custom = NULL;
         } else if (!err) {
             CFRetain(globals->set_a_custom);
@@ -1844,6 +1930,8 @@ static ComponentResult _preconfig_stdaudio(ComponentInstance stdAudio)
 {
     ComponentResult err = noErr;
     /* Can't set output description (if it contains 0.0 samplerate?) without input format set :( */
+    /* isbd's mChannelsPerFrame should be set to the highest number of
+       channels supported by the supported audio encoder, and mSampleRate should be non-zero */
     AudioStreamBasicDescription isbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
 
     err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,

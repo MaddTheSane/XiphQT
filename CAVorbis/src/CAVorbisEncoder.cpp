@@ -5,7 +5,7 @@
  *    encoding functionality.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -1126,20 +1126,18 @@ Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
             dbg_printf("[  VE]   Q [%08lx] :: ApplySettings() :: %1.1f\n", (UInt32) this, mCfgQuality);
         } else if (CFStringCompare(key, CFSTR("Target Bitrate"), 0) == kCFCompareEqualTo) {
             nval = (CFNumberRef) CFArrayGetValueAtIndex(available, current);
-            SInt32 br = 4;
-            CFNumberGetValue(nval, kCFNumberLongType, &br);
-            if (br < BitrateMin())
-                br = BitrateMin();
-            else if (br > BitrateMax())
-                br = BitrateMax();
-            mCfgBitrate = br;
+            CFNumberGetValue(nval, kCFNumberLongType, &mCfgBitrate);
             dbg_printf("[  VE]   B [%08lx] :: ApplySettings() :: %ld\n", (UInt32) this, mCfgBitrate);
         }
     }
 
     if (mOutputFormat.mSampleRate < 8000.0 || mOutputFormat.mSampleRate > 50000.0)
         mCfgMode = kVorbisEncoderModeQuality;
-    dbg_printf("[  VE]  !M [%08lx] :: ApplySettings() :: %d\n", (UInt32) this, mCfgMode);
+    if (mCfgBitrate < BitrateMin())
+        mCfgBitrate = BitrateMin();
+    else if (mCfgBitrate > BitrateMax())
+       mCfgBitrate = BitrateMax();
+    dbg_printf("[  VE]  != [%08lx] :: ApplySettings() :: %d [br: %ld]\n", (UInt32) this, mCfgMode, mCfgBitrate);
 
     ret = true;
     dbg_printf("[  VE] <   [%08lx] :: ApplySettings() = %d\n", (UInt32) this, ret);
