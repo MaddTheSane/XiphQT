@@ -128,9 +128,15 @@ static ComponentResult ConfigureStdComponents(OggExportGlobalsPtr globals);
 static ComponentResult mux_streams(OggExportGlobalsPtr globals, DataHandler data_h);
 
 static ComponentResult _setup_std_video(OggExportGlobalsPtr globals, ComponentInstance stdVideo);
+static ComponentResult _setup_std_audio(OggExportGlobalsPtr globals, ComponentInstance stdAudio);
 static ComponentResult _get_std_video_config(OggExportGlobalsPtr globals, ComponentInstance stdVideo);
+static ComponentResult _get_std_audio_config(OggExportGlobalsPtr globals, ComponentInstance stdAudio);
 static ComponentResult _video_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings);
+static ComponentResult _audio_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings);
 static ComponentResult _ac_to_video_settings(OggExportGlobalsPtr globals, QTAtomContainer settings);
+static ComponentResult _ac_to_audio_settings(OggExportGlobalsPtr globals, QTAtomContainer settings);
+
+static ComponentResult _preconfig_stdaudio(ComponentInstance stdAudio);
 
 static ComponentResult _movie_fps(Movie theMovie, Fixed *fps);
 
@@ -181,9 +187,15 @@ pascal ComponentResult OggExportOpen(OggExportGlobalsPtr globals, ComponentInsta
         globals->set_v_custom = NULL;
         globals->set_v_ci = NULL;
 
-        globals->set_a_quality = codecNormalQuality;
-        globals->set_a_bitrate = 0;
-        globals->set_a_samplerate = 0;
+        globals->set_a_rquality = 0x40; //!kRenderQuality_Medium;
+        globals->set_a_settings = NULL;
+        globals->set_a_custom = NULL;
+        globals->set_a_ci = NULL;
+
+        memset(&globals->set_a_asbd, 0, sizeof(AudioStreamBasicDescription));
+        globals->set_a_asbd.mFormatID = kAudioFormatXiphVorbis;
+        globals->set_a_asbd.mChannelsPerFrame = 6;
+
 
         globals->setdlg_a_allow = true;
         globals->setdlg_v_allow = true;
@@ -225,6 +237,15 @@ pascal ComponentResult OggExportClose(OggExportGlobalsPtr globals, ComponentInst
 
         if (globals->set_v_settings)
             QTDisposeAtomContainer(globals->set_v_settings);
+
+        if (globals->set_a_ci)
+            CloseComponent(globals->set_a_ci);
+
+        if (globals->set_a_custom)
+            CFRelease(globals->set_a_custom);
+
+        if (globals->set_a_settings)
+            QTDisposeAtomContainer(globals->set_a_settings);
 
         DisposePtr((Ptr) globals);
     }
@@ -301,13 +322,19 @@ pascal ComponentResult OggExportSetComponentProperty(OggExportGlobalsPtr  global
             break;
 
         default:
-            err = kQTPropertyNotSupportedErr;
+            //err = kQTPropertyNotSupportedErr;
+            err = QTSetComponentProperty(globals->quickTimeMovieExporter, inPropClass,
+                                         inPropID, inPropValueSize, inPropValueAddress);
+
             break;
         }
         break;
 
     default:
-        err = kQTPropertyNotSupportedErr;
+        //err = kQTPropertyNotSupportedErr;
+        err = QTSetComponentProperty(globals->quickTimeMovieExporter, inPropClass,
+                                     inPropID, inPropValueSize, inPropValueAddress);
+
         break;
     }
 
@@ -384,7 +411,7 @@ pascal ComponentResult OggExportToDataRef(OggExportGlobalsPtr globals, Handle da
 
     dbg_printf("[  OE]  >> [%08lx] :: ToDataRef(%d, %ld, %ld)\n", (UInt32) globals, onlyThisTrack != NULL, startTime, duration);
 
-    // TODO: loop for all tracks
+    // TODO: loop for all tracks...?
 
     if (globals->set_v_disable != 1) {
         err = MovieExportNewGetDataAndPropertiesProcs(globals->quickTimeMovieExporter, VideoMediaType, &scale, theMovie,
@@ -570,7 +597,6 @@ ComponentResult ConfigAndShowStdVideoDlg(OggExportGlobalsPtr globals, WindowRef 
             err = SCRequestSequenceSettings(stdVideo);
 
         if (!err) {
-            /* TODO: get config from the stdComp and store it */
             if (globals->set_v_settings) {
                 QTDisposeAtomContainer(globals->set_v_settings);
                 globals->set_v_settings = NULL;
@@ -582,13 +608,124 @@ ComponentResult ConfigAndShowStdVideoDlg(OggExportGlobalsPtr globals, WindowRef 
             }
         }
 
-        //CloseComponent(stdVideo);
+        if (globals->set_v_ci == NULL)
+            CloseComponent(stdVideo);
 
         if (ph != NULL)
             DisposeHandle((Handle) ph);
     }
 
     dbg_printf("[  OE] <   [%08lx] :: ConfigAndShowStdVideoDlg() = %ld\n", (UInt32) globals, err);
+    return err;
+}
+
+ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef window)
+{
+    ComponentResult err = noErr;
+    ComponentInstance stdAudio = globals->set_a_ci;
+    SCExtendedProcs xProcs;
+
+    dbg_printf("[  OE]  >> [%08lx] :: ConfigAndShowStdAudioDlg() [%08lx, %08lx]\n", (UInt32) globals, (UInt32) stdAudio, (UInt32) globals->set_a_settings);
+
+    if (stdAudio == NULL) {
+        err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &stdAudio);
+        dbg_printf("[  OE]  !a [%08lx] :: ConfigAndShowStdAudioDlg() = %ld [%08lx]\n", (UInt32) globals, err, (UInt32) stdAudio);
+    }
+
+    if (!err) {
+        memset(&xProcs, 0, sizeof(xProcs));
+        strcpy((char*)xProcs.customName + 1, "Select Output Format");
+        xProcs.customName[0] = (unsigned char) strlen((char*) xProcs.customName + 1);
+        (void) QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                      kQTSCAudioPropertyID_ExtendedProcs,
+                                      sizeof(xProcs), &xProcs);
+
+        if (globals->set_a_settings == NULL) {
+            err = _setup_std_audio(globals, stdAudio);
+            dbg_printf("[  OE]  ?' [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (!err && globals->setdlg_movie != NULL) {
+            SoundDescriptionHandle sdh = (SoundDescriptionHandle) NewHandle(0);
+            Media media;
+            Track track = globals->setdlg_track;
+            if (track == NULL)
+                track = GetMovieIndTrackType(globals->setdlg_movie, 1, AudioMediaCharacteristic,
+                                             movieTrackCharacteristic | movieTrackEnabledOnly);
+            if (track != NULL)
+                media = GetTrackMedia(track);
+
+            if (media != NULL)
+                GetMediaSampleDescription(media, 1, (SampleDescriptionHandle) sdh);
+
+            if (GetHandleSize((Handle) sdh) > 0) {
+                /*
+                SoundDescriptionV2Handle sd2h;
+                QTSoundDescriptionConvert(kQTSoundDescriptionKind_Movie_AnyVersion,
+                                          (SoundDescriptionHandle) sdh,
+                                          kQTSoundDescriptionKind_Movie_Version2,
+                                          &sdh);
+                */
+                err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                             kQTSCAudioPropertyID_InputSoundDescription,
+                                             sizeof(SoundDescriptionHandle), &sdh);
+                dbg_printf("[  OE]  sd [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+            }
+            DisposeHandle((Handle) sdh);
+        } else {
+            /*
+            AudioStreamBasicDescription asbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
+
+            err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_InputBasicDescription,
+                                         sizeof(AudioStreamBasicDescription), &asbd);
+            */
+            err = _preconfig_stdaudio(stdAudio);
+            dbg_printf("[  OE]  bd [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (globals->set_a_settings != NULL) {
+            err = SCSetSettingsFromAtomContainer(stdAudio, globals->set_a_settings);
+            dbg_printf("[  OE]  ?\" [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (!err) {
+            OSType formats[1] = { kAudioFormatXiphVorbis };
+            err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_ClientRestrictedCompressionFormatList,
+                                         sizeof(OSType) * 1, formats);
+            dbg_printf("[  OE]  fl [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (!err) {
+            QTAtomContainer std_a_settings = NULL;
+            err = SCGetSettingsAsAtomContainer(stdAudio, &std_a_settings);
+            dbg_printf("[  OE]  ?S [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+            if (!err) {
+                err = SCSetSettingsFromAtomContainer(stdAudio, std_a_settings);
+                dbg_printf("[  OE]  !S [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+            }
+        }
+
+        if (!err)
+            err = SCRequestImageSettings(stdAudio);
+
+        if (!err) {
+            if (globals->set_a_settings) {
+                QTDisposeAtomContainer(globals->set_a_settings);
+                globals->set_a_settings = NULL;
+            }
+            err = SCGetSettingsAsAtomContainer(stdAudio, &globals->set_a_settings);
+            if (err && globals->set_a_settings) {
+                QTDisposeAtomContainer(globals->set_a_settings);
+                globals->set_a_settings = NULL;
+            }
+        }
+
+        if (globals->set_a_ci == NULL)
+            CloseComponent(stdAudio);
+    }
+
     return err;
 }
 
@@ -644,6 +781,14 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
             //globals->set_v_settings = NULL;
         }
 
+        if (globals->set_a_ci != NULL) {
+            /* result = */ _get_std_audio_config(globals, globals->set_a_ci);
+        } else if (globals->set_a_settings != NULL) {
+            /* result = */ _ac_to_audio_settings(globals, globals->set_a_settings);
+            //QTDisposeAtomContainer(globals->set_v_settings);
+            //globals->set_v_settings = NULL;
+        }
+
         QuitAppModalLoopForWindow(window);
         result = noErr;
         break;
@@ -662,25 +807,9 @@ static pascal OSStatus SettingsWindowEventHandler(EventHandlerCallRef inHandler,
         break;
 
     case 'OEca':                /* O(gg)E(xport)c(onfigure)a(udio) */
-        {
-            SCExtendedProcs xProcs;
-            ComponentInstance stdAudio;
-
-            result = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &stdAudio);
-            if (result == noErr) {
-                memset(&xProcs, 0, sizeof(xProcs));
-                strcpy((char*)xProcs.customName + 1, "Select Output Format");
-                xProcs.customName[0] = (unsigned char) strlen((char*) xProcs.customName + 1);
-                (void) QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
-                                              kQTSCAudioPropertyID_ExtendedProcs,
-                                              sizeof(xProcs), &xProcs);
-
-                result = SCRequestImageSettings(stdAudio);
-                if (result == userCanceledErr)
-                    result = noErr; // User cancelling is ok.
-                CloseComponent(stdAudio);
-            }
-        }
+        result = ConfigAndShowStdAudioDlg(globals, window);
+        if (result == userCanceledErr || result == scUserCancelled)
+            result = noErr;
 
         break;
 
@@ -936,6 +1065,30 @@ pascal ComponentResult OggExportGetSettingsAsAtomContainer(OggExportGlobalsPtr g
             goto bail;
     }
 
+    if (globals->set_a_disable == 0) {
+        QTAtomContainer as = NULL;
+        err = noErr;
+        if (globals->set_a_settings != NULL) {
+            as = globals->set_a_settings;
+        } else {
+            err = QTNewAtomContainer(&as);
+            if (!err)
+                err = _audio_settings_to_ac(globals, &as);
+        }
+
+        if (!err) {
+            dbg_printf("[  OE] aAC [%08lx] :: GetSettingsAsAtomContainer() = %ld %ld\n", (UInt32) globals, err, GetHandleSize(as));
+
+            err = QTInsertChildren(ac, kParentAtomIsContainer, as);
+
+            if (globals->set_a_settings == NULL)
+                QTDisposeAtomContainer(as);
+        }
+
+        if (err)
+            goto bail;
+    }
+
  bail:
     if (err && ac) {
         QTDisposeAtomContainer(ac);
@@ -1001,6 +1154,24 @@ pascal ComponentResult OggExportSetSettingsFromAtomContainer(OggExportGlobalsPtr
             goto bail;
     }
 
+    atom = QTFindChildByID(settings, kParentAtomIsContainer, kQTSettingsSound, 1, NULL);
+    if (atom) {
+        if (globals->set_a_settings) {
+            QTDisposeAtomContainer(globals->set_a_settings);
+            globals->set_a_settings = NULL;
+        }
+        err = QTCopyAtom(settings, atom, &globals->set_a_settings);
+        if (err)
+            goto bail;
+        err = _ac_to_audio_settings(globals, globals->set_a_settings);
+
+        //QTDisposeAtomContainer(globals->set_a_settings);
+        //globals->set_a_settings = NULL;
+
+        if (err)
+            goto bail;
+    }
+
  bail:
     dbg_printf("[  OE] <   [%08lx] :: SetSettingsFromAtomContainer() = %d\n", (UInt32) globals, err);
     return err;
@@ -1051,54 +1222,35 @@ pascal ComponentResult OggExportGetSourceMediaType(OggExportGlobalsPtr globals, 
 
 static OSErr ConfigureQuickTimeMovieExporter(OggExportGlobalsPtr globals)
 {
-    ComponentInstance  stdComp = NULL;
-    QTAtomContainer    movieExporterSettings = NULL;
+    QTAtomContainer    settings = NULL;
     OSErr              err;
 
     dbg_printf("[  OE]  >> [%08lx] :: ConfigureQuickTimeMovieExporter()\n", (UInt32) globals);
 
-    /* TODO: make this function do something */
-
-    /*
-    // Open the Standard Compression component
-    err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &stdAudioCompression);
-    if (err)
-        goto bail;
-
-    // Get the settings atom
-    err = SCGetSettingsAsAtomContainer(stdAudioCompression, &movieExporterSettings);
-    if (err)
-        goto bail;
-
-    // Set the compression settings for the QT Movie Exporter
-    //err = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, movieExporterSettings);
-    */
-
-    /*
-    if (globals->set_v_settings) {
-        err = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, globals->set_v_settings);
-        dbg_printf("[  OE]  =S [%08lx] :: ConfigureQuickTimeMovieExporter() = %ld\n", (UInt32) globals, err);
-    } else {
-        err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubType, &stdComp);
-        if (!err) {
-        }
-    }
-    */
-
-    err = MovieExportGetSettingsAsAtomContainer(globals->self, &movieExporterSettings);
+    err = MovieExportGetSettingsAsAtomContainer(globals->self, &settings);
     dbg_printf("[  OE]  gO [%08lx] :: ConfigureQuickTimeMovieExporter() = %ld\n", (UInt32) globals, err);
     if (!err) {
-        err = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, movieExporterSettings);
+        /* quicktime movie exporter seems to have problems with 0.0/recommended sample rates in output -
+           removing all the audio atoms for now */
+        QTAtom atom = QTFindChildByID(settings, kParentAtomIsContainer, kQTSettingsSound, 1, NULL);
+        if (atom) {
+            QTRemoveAtom(settings, atom);
+        }
+
+        err = MovieExportSetSettingsFromAtomContainer(globals->quickTimeMovieExporter, settings);
         dbg_printf("[  OE]  sE [%08lx] :: ConfigureQuickTimeMovieExporter() = %ld\n", (UInt32) globals, err);
+
+        if (!err) {
+            err = QTSetComponentProperty(globals->quickTimeMovieExporter, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_RenderQuality,
+                                         sizeof(UInt32), &globals->set_a_rquality);
+            dbg_printf("[  OE]  Rq [%08lx] :: ConfigureQuickTimeMovieExporter() = %ld [%08lx]\n", (UInt32) globals, err, (UInt32) globals->set_a_rquality);
+            err = noErr;
+        }
     }
 
-
- bail:
-    if (stdComp)
-        CloseComponent(stdComp);
-
-    if (movieExporterSettings)
-        DisposeHandle(movieExporterSettings);
+    if (settings)
+        DisposeHandle(settings);
 
     dbg_printf("[  OE] <   [%08lx] :: ConfigureQuickTimeMovieExporter() = %ld\n", (UInt32) globals, err);
     return err;
@@ -1449,7 +1601,9 @@ static ComponentResult _setup_std_video(OggExportGlobalsPtr globals, ComponentIn
 
     if (!err) {
         *(OSType *)*codec_types = kXiphComponentsManufacturer;
-        err = SCSetInfo(stdVideo, scCodecManufacturerType, &codec_types);
+        HLock(codec_types);
+        err = SCSetInfo(stdVideo, scCodecManufacturerType, *codec_types);
+        HUnlock(codec_types);
     }
 
     DisposeHandle(codec_types);
@@ -1464,6 +1618,46 @@ static ComponentResult _setup_std_video(OggExportGlobalsPtr globals, ComponentIn
         err = SCSetInfo(stdVideo, scCodecSettingsType, &globals->set_v_custom);
     }
 
+    return err;
+}
+
+static ComponentResult _setup_std_audio(OggExportGlobalsPtr globals, ComponentInstance stdAudio)
+{
+    ComponentResult err = noErr;
+    /* isbd's mChannelsPerFrame should be set to the highest number of
+       channels supported by the supported audio encoder, and mSampleRate should be non-zero */
+    AudioStreamBasicDescription isbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
+
+    dbg_printf("[  OE]  >> [%08lx] :: _setup_std_audio()\n", (UInt32) globals);
+
+    /* Can't set output description (if it contains 0.0 samplerate?) without input format set :( */
+    err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                 kQTSCAudioPropertyID_InputBasicDescription,
+                                 sizeof(isbd), &isbd);
+    dbg_printf("[  OE]  i? [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+
+    if (!err) {
+        err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_BasicDescription,
+                                     sizeof(AudioStreamBasicDescription), &globals->set_a_asbd);
+        dbg_printf("[  OE]  o! [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+    }
+
+    if (!err) {
+        err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_RenderQuality,
+                                     sizeof(UInt32), &globals->set_a_rquality);
+        dbg_printf("[  OE]  rq [%08lx] :: _setup_std_audio() = %ld [%08lx]\n", (UInt32) globals, err, (UInt32) globals->set_a_rquality);
+    }
+
+    if (!err && globals->set_a_custom != NULL) {
+        err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_CodecSpecificSettingsArray,
+                                     sizeof(CFArrayRef), &globals->set_a_custom);
+        dbg_printf("[  OE]  cs [%08lx] :: _setup_std_audio() = %ld\n", (UInt32) globals, err);
+    }
+
+    dbg_printf("[  OE] <   [%08lx] :: _setup_std_audio() = %ld [%08lx]\n", (UInt32) globals, err, (UInt32) stdAudio);
     return err;
 }
 
@@ -1506,6 +1700,53 @@ static ComponentResult _get_std_video_config(OggExportGlobalsPtr globals, Compon
     return err;
 }
 
+static ComponentResult _get_std_audio_config(OggExportGlobalsPtr globals, ComponentInstance stdAudio)
+{
+    ComponentResult err = noErr;
+    Boolean tmpbool = false;
+
+    err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                 kQTSCAudioPropertyID_BasicDescription,
+                                 sizeof(AudioStreamBasicDescription),
+                                 &globals->set_a_asbd, NULL);
+
+    if (!err) {
+        err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_SampleRateIsRecommended,
+                                     sizeof(Boolean),
+                                     &tmpbool, NULL);
+        if (!err && tmpbool)
+            globals->set_a_asbd.mSampleRate = 0.0;
+        dbg_printf("[  OE] rec [%08lx] :: _get_std_audio_config() = %ld, %d\n", (UInt32) globals, err, tmpbool);
+    }
+
+    if (!err) {
+        err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_RenderQuality,
+                                     sizeof(UInt32),
+                                     &globals->set_a_rquality, NULL);
+    }
+
+    if (!err) {
+        if (globals->set_a_custom != NULL) {
+            CFRelease(globals->set_a_custom);
+            globals->set_a_custom = NULL;
+        }
+        err = QTGetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                     kQTSCAudioPropertyID_CodecSpecificSettingsArray,
+                                     sizeof(CFArrayRef),
+                                     &globals->set_a_custom, NULL);
+        if (err && globals->set_a_custom != NULL) {
+            CFRelease(globals->set_a_custom);
+            globals->set_a_custom = NULL;
+        } else if (!err) {
+            CFRetain(globals->set_a_custom);
+        }
+    }
+
+    return err;
+}
+
 static ComponentResult _video_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings)
 {
     ComponentResult err = noErr;
@@ -1525,6 +1766,29 @@ static ComponentResult _video_settings_to_ac(OggExportGlobalsPtr globals, QTAtom
     }
 
     dbg_printf("[  OE] <   [%08lx] :: _video_settings_to_ac() = %d [%ld]\n", (UInt32) globals, err, GetHandleSize(*settings));
+    return err;
+}
+
+static ComponentResult _audio_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings)
+{
+    ComponentResult err = noErr;
+    ComponentInstance stdAudio = NULL;
+
+    dbg_printf("[  OE]  >> [%08lx] :: _audio_settings_to_ac()\n", (UInt32) globals);
+
+    err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &stdAudio);
+
+    if (!err) {
+        err = _setup_std_audio(globals, stdAudio);
+        dbg_printf("[  OE]  .? [%08lx] :: _audio_settings_to_ac() = %ld\n", (UInt32) globals, err);
+
+        if (!err)
+            err = SCGetSettingsAsAtomContainer(stdAudio, settings);
+
+        CloseComponent(stdAudio);
+    }
+
+    dbg_printf("[  OE] <   [%08lx] :: _audio_settings_to_ac() = %d [%ld]\n", (UInt32) globals, err, GetHandleSize(*settings));
     return err;
 }
 
@@ -1548,6 +1812,45 @@ static ComponentResult _ac_to_video_settings(OggExportGlobalsPtr globals, QTAtom
 
     dbg_printf("[  OE] <   [%08lx] :: _ac_to_video_settings() = %ld\n", (UInt32) globals, err);
 
+    return err;
+}
+
+static ComponentResult _ac_to_audio_settings(OggExportGlobalsPtr globals, QTAtomContainer settings)
+{
+    ComponentResult err = noErr;
+    ComponentInstance stdAudio = NULL;
+
+    dbg_printf("[  OE]  >> [%08lx] :: _ac_to_audio_settings() [%ld]\n", (UInt32) globals, GetHandleSize(settings));
+
+    err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &stdAudio);
+
+    if (!err)
+        err = _preconfig_stdaudio(stdAudio);
+
+    if (!err) {
+        err = SCSetSettingsFromAtomContainer(stdAudio, settings);
+
+        if (!err)
+            err = _get_std_audio_config(globals, stdAudio);
+
+        CloseComponent(stdAudio);
+    }
+
+    dbg_printf("[  OE] <   [%08lx] :: _ac_to_audio_settings() = %ld\n", (UInt32) globals, err);
+    return err;
+}
+
+static ComponentResult _preconfig_stdaudio(ComponentInstance stdAudio)
+{
+    ComponentResult err = noErr;
+    /* Can't set output description (if it contains 0.0 samplerate?) without input format set :( */
+    AudioStreamBasicDescription isbd = { 44100.0, kAudioFormatLinearPCM, kAudioFormatFlagsNativeFloatPacked, 24, 1, 24, 6, 32, 0 };
+
+    err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                 kQTSCAudioPropertyID_InputBasicDescription,
+                                 sizeof(isbd), &isbd);
+
+    dbg_printf("[  OE]   = [%08lx] :: _preconfig_stdaudio() = %ld\n", (UInt32) -1, err);
     return err;
 }
 

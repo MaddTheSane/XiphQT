@@ -89,8 +89,19 @@ public XCACodec
 
     virtual void        FixFormats();
 
+    SInt32              BitrateMin();
+    SInt32              BitrateMax();
+    SInt32              BitrateMid();
+
+    /* bitrate-series generator and inverse generator functions */
+    static UInt32       brn(UInt32 n, UInt32 bs) { return (4 + n % 4) << ((n >> 2) + bs); };
+    static UInt32       ibrn(UInt32 br, UInt32 bs);
+
+    static void         fill_channel_layout(UInt32 nch, AudioChannelLayout *acl);
+
  private:
     Boolean             BuildSettings(void *outSettingsDict);
+    Boolean             ApplySettings(CFDictionaryRef sd);
 
  protected:
     Byte* mCookie;
@@ -136,8 +147,27 @@ public XCACodec
         /* Just a funny number, and only roughly valid for the 'Xiph (Ogg-Framed) Vorbis'. */
         kVorbisFormatMaxBytesPerPacket = 255 * 255,
 
-        kVorbisEncoderBufferSize = 256 * 1024
+        kVorbisEncoderBufferSize = 256 * 1024,
+
+        kVorbisEncoderOutChannelLayouts = 5,
+
+        kVorbisEncoderBitrateSeriesLength = 23,
+        kVorbisEncoderBitrateSeriesBase = 1,
     };
+
+    static AudioChannelLayoutTag gOutChannelLayouts[kVorbisEncoderOutChannelLayouts];
+
+    /* settings */
+    enum VorbisEncoderMode {
+        kVorbisEncoderModeQuality = 0,
+        kVorbisEncoderModeAverage,
+        kVorbisEncoderModeQualityByBitrate,
+    };
+    VorbisEncoderMode mCfgMode;
+    float mCfgQuality; // [-0.1; 1.0] quality range
+    SInt32 mCfgBitrate; // in kbits
+
+    CFMutableDictionaryRef mCfgDict;
 };
 
 #endif /* __CAVorbisEncoder_h__ */

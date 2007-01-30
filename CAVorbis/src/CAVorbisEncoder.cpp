@@ -44,10 +44,6 @@
 #include "debug.h"
 
 
-#if !defined(NO_ACS)
-#define NO_ACS 1
-#endif /* defined(NO_ACS) */
-
 #if !defined(NO_ADV_PROPS)
 #define NO_ADV_PROPS 1
 #endif /* defined(NO_ADV_PROPS) */
@@ -57,9 +53,19 @@
         (x)->mFormatFlags, (x)->mBytesPerPacket, (x)->mFramesPerPacket, (x)->mBytesPerPacket, \
         (x)->mChannelsPerFrame, (x)->mBitsPerChannel
 
+AudioChannelLayoutTag CAVorbisEncoder::gOutChannelLayouts[kVorbisEncoderOutChannelLayouts] = {
+    kAudioChannelLayoutTag_Mono,
+    kAudioChannelLayoutTag_Stereo,
+    //kAudioChannelLayoutTag_ITU_2_1, // there's no tag for [L, C, R] layout!! :(
+    kAudioChannelLayoutTag_Quadraphonic,
+    kAudioChannelLayoutTag_MPEG_5_0_C,
+    kAudioChannelLayoutTag_MPEG_5_1_C,
+};
+
 CAVorbisEncoder::CAVorbisEncoder() :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false), mEOSHit(false),
-    last_granulepos(0), last_packetno(0), mVorbisFPList(), mProducedPList()
+    last_granulepos(0), last_packetno(0), mVorbisFPList(), mProducedPList(),
+    mCfgMode(kVorbisEncoderModeQuality), mCfgQuality(0.4), mCfgBitrate(128), mCfgDict(NULL)
 {
     CAStreamBasicDescription theInputFormat1(kAudioStreamAnyRate, kAudioFormatLinearPCM,
                                              0, 1, 0, 0, 32, kAudioFormatFlagsNativeFloatPacked);
@@ -109,6 +115,9 @@ CAVorbisEncoder::~CAVorbisEncoder()
 
         vorbis_info_clear(&mV_vi);
     }
+
+    if (mCfgDict != NULL)
+        CFRelease(mCfgDict);
 }
 
 void CAVorbisEncoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -171,17 +180,38 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     {
 
         /*
-    case kAudioCodecPropertyInputChannelLayout :
     case kAudioCodecPropertyOutputChannelLayout :
         // by default a codec doesn't support channel layouts.
         CODEC_THROW(kAudioCodecIllegalOperationError);
         break;
     case kAudioCodecPropertyAvailableInputChannelLayouts :
-    case kAudioCodecPropertyAvailableOutputChannelLayouts :
-        // by default a codec doesn't support channel layouts.
-        CODEC_THROW(kAudioCodecIllegalOperationError);
-        break;
 	*/
+
+    case kAudioCodecPropertyInputChannelLayout:
+        if (ioPropertyDataSize >= sizeof(AudioChannelLayout)) {
+            fill_channel_layout(mInputFormat.mChannelsPerFrame, reinterpret_cast<AudioChannelLayout*>(outPropertyData));
+        } else {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
+
+    case kAudioCodecPropertyOutputChannelLayout:
+        if (ioPropertyDataSize >= sizeof(AudioChannelLayout)) {
+            fill_channel_layout(mOutputFormat.mChannelsPerFrame, reinterpret_cast<AudioChannelLayout*>(outPropertyData));
+        } else {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
+
+    case kAudioCodecPropertyAvailableOutputChannelLayouts:
+        if (ioPropertyDataSize == sizeof(AudioChannelLayoutTag) * kVorbisEncoderOutChannelLayouts) {
+            for (int i = 0; i < kVorbisEncoderOutChannelLayouts; i++) {
+                (reinterpret_cast<AudioChannelLayoutTag*>(outPropertyData))[i] = gOutChannelLayouts[i];
+            }
+        } else {
+            CODEC_THROW(kAudioCodecBadPropertySizeError);
+        }
+        break;
 
     case kAudioCodecPropertyAvailableNumberChannels:
         if(ioPropertyDataSize == sizeof(UInt32) * 1) {
@@ -193,8 +223,8 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
 
     case kAudioCodecPropertyAvailableBitRateRange:
         if (ioPropertyDataSize == sizeof(AudioValueRange) * 1) {
-            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMinimum = 1.0;
-            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 480.0;
+            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMinimum = 8.0;
+            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 384.0;
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
@@ -240,7 +270,7 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     case kAudioCodecPropertyAvailableInputSampleRates:
         if (ioPropertyDataSize == sizeof(AudioValueRange)) {
             (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMinimum = 0.0;
-            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 0.0;
+            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 200000.0;
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
@@ -249,23 +279,22 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     case kAudioCodecPropertyAvailableOutputSampleRates:
         if (ioPropertyDataSize == sizeof(AudioValueRange)) {
             (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMinimum = 0.0;
-            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 0.0;
+            (reinterpret_cast<AudioValueRange*>(outPropertyData))->mMaximum = 200000.0;
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
 
-#if !defined(NO_ACS) || NO_ACS == 0
     case kAudioCodecPropertySettings:
         if (ioPropertyDataSize == sizeof(CFDictionaryRef)) {
             
-            BuildSettings(outPropertyData);
+            if (!BuildSettings(outPropertyData))
+                CODEC_THROW(kAudioCodecUnspecifiedError);
             
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
-#endif
 
         
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -294,6 +323,8 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
             } else {
                 *reinterpret_cast<UInt32*>(outPropertyData) = 0;
             }
+            dbg_printf("[  VE]   . [%08lx] :: GetProperty('%4.4s') = %ld\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID),
+                       *reinterpret_cast<UInt32*>(outPropertyData));
         }
         else
         {
@@ -384,17 +415,23 @@ void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
     switch(inPropertyID)
     {
         /*
-    case kAudioCodecPropertyInputChannelLayout :
-    case kAudioCodecPropertyOutputChannelLayout :
-        // by default a codec doesn't support channel layouts.
-        CODEC_THROW(kAudioCodecIllegalOperationError);
-        break;
     case kAudioCodecPropertyAvailableInputChannelLayouts :
-    case kAudioCodecPropertyAvailableOutputChannelLayouts :
         // by default a codec doesn't support channel layouts.
         CODEC_THROW(kAudioCodecIllegalOperationError);
         break;
         */
+
+    case kAudioCodecPropertyOutputChannelLayout:
+    case kAudioCodecPropertyInputChannelLayout:
+        outPropertyDataSize = sizeof(AudioChannelLayout);
+        outWritable = false;
+        break;
+
+    case kAudioCodecPropertyAvailableOutputChannelLayouts:
+        outPropertyDataSize = sizeof(AudioChannelLayoutTag) * kVorbisEncoderOutChannelLayouts;
+        outWritable = false;
+        break;
+
     case kAudioCodecPropertyAvailableNumberChannels:
         outPropertyDataSize = sizeof(UInt32) * 1; // [0xffffffff - any number]
         outWritable = false;
@@ -420,12 +457,10 @@ void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
         outWritable = false;
         break;
 
-#if !defined(NO_ACS) || NO_ACS == 0
     case kAudioCodecPropertySettings:
         outPropertyDataSize = sizeof(CFDictionaryRef);
         outWritable = true;
         break;
-#endif
 
         
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -477,15 +512,14 @@ void CAVorbisEncoder::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPr
     dbg_printf("[  VE]  >> [%08lx] :: SetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
 
     switch(inPropertyID) {
-#if !defined(NO_ACS) || NO_ACS == 0
     case kAudioCodecPropertySettings:
         if (inPropertyDataSize == sizeof(CFDictionaryRef)) {
-            ApplySettings(inPropertyData);
+            if (inPropertyData != NULL)
+                ApplySettings(*reinterpret_cast<const CFDictionaryRef*>(inPropertyData));
         } else {
             CODEC_THROW(kAudioCodecBadPropertySizeError);
         }
         break;
-#endif
 
     default:
         ACBaseCodec::SetProperty(inPropertyID, inPropertyDataSize, inPropertyData);
@@ -514,12 +548,12 @@ void CAVorbisEncoder::SetCurrentInputFormat(const AudioStreamBasicDescription& i
     if (!mIsInitialized) {
         //	check to make sure the input format is legal
         if ((inInputFormat.mFormatID != kAudioFormatLinearPCM) ||
+            (inInputFormat.mSampleRate > 200000.0) ||
             !(((inInputFormat.mFormatFlags == kAudioFormatFlagsNativeFloatPacked) &&
                (inInputFormat.mBitsPerChannel == 32)) ||
               ((inInputFormat.mFormatFlags == (kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked)) &&
                (inInputFormat.mBitsPerChannel == 16))))
         {
-            dbg_printf("CAVorbisEncoder::SetFormats: only supports either 16 bit native endian signed integer or 32 bit native endian Core Audio floats for input\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
@@ -534,13 +568,19 @@ void CAVorbisEncoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& 
 {
     if (!mIsInitialized) {
         //	check to make sure the output format is legal
-        if (inOutputFormat.mFormatID != kAudioFormatXiphVorbis) {
-            dbg_printf("CAVorbisEncoder::SetFormats: only supports Xiph Vorbis for output\n");
+        if (inOutputFormat.mFormatID != kAudioFormatXiphVorbis ||
+            inOutputFormat.mSampleRate > 200000.0) {
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
         //	tell our base class about the new format
         XCACodec::SetCurrentOutputFormat(inOutputFormat);
+
+        // adjust the default config parameters
+        mCfgBitrate = BitrateMid();
+        if (mOutputFormat.mSampleRate < 8000.0 || mOutputFormat.mSampleRate > 50000.0)
+            mCfgMode = kVorbisEncoderModeQuality;
+        dbg_printf("[  VE]  of [%08lx] :: InitializeCompressionSettings() = br:%ld, m:%d\n", (UInt32) this, mCfgBitrate, mCfgMode);
     } else {
         CODEC_THROW(kAudioCodecStateError);
     }
@@ -600,210 +640,6 @@ void CAVorbisEncoder::FixFormats()
     dbg_printf("[  VE] <.. [%08lx] :: FixFormats()\n", (UInt32) this);
 }
 
-
-Boolean CAVorbisEncoder::BuildSettings(void *outSettingsDict)
-{
-    const char *buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        "<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
-        "<plist version=\"1.0\">"
-        "<dict>"
-        "	<key>name</key>"
-        "	<string>Xiph Vorbis Encoder</string>"
-        "	<key>parameters</key>"
-        "	<array>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>Variable Bit Rate (target quality)</string>"
-        "				<string>Average Bit Rate</string>"
-        "				<string>Variable Bit Rate (target bit rate)</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>0</integer>"
-        "			<key>hint</key>"
-        "			<integer>5</integer>"
-        "			<key>key</key>"
-        "			<string>Target Format</string>"
-        "			<key>name</key>"
-        "			<string>Bit Rate Format</string>"
-        "			<key>summary</key>"
-        "			<string>Vorbis encoding bit rate management mode</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>16</string>"
-        "				<string>20</string>"
-        "				<string>24</string>"
-        "				<string>28</string>"
-        "				<string>32</string>"
-        "				<string>40</string>"
-        "				<string>48</string>"
-        "				<string>56</string>"
-        "				<string>64</string>"
-        "				<string>80</string>"
-        "				<string>96</string>"
-        "				<string>112</string>"
-        "				<string>128</string>"
-        "				<string>160</string>"
-        "				<string>192</string>"
-        "				<string>224</string>"
-        "				<string>256</string>"
-        "				<string>320</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>12</integer>"
-        "			<key>hint</key>"
-        "			<integer>4</integer>"
-        "			<key>key</key>"
-        "			<string>Bit Rate</string>"
-        "			<key>limited values</key>"
-        "			<array>"
-        "				<string>16</string>"
-        "				<string>20</string>"
-        "				<string>24</string>"
-        "				<string>28</string>"
-        "				<string>32</string>"
-        "				<string>40</string>"
-        "				<string>48</string>"
-        "				<string>56</string>"
-        "				<string>64</string>"
-        "				<string>80</string>"
-        "				<string>96</string>"
-        "				<string>112</string>"
-        "				<string>128</string>"
-        "				<string>160</string>"
-        "				<string>192</string>"
-        "				<string>224</string>"
-        "				<string>256</string>"
-        "				<string>320</string>"
-        "			</array>"
-        "			<key>name</key>"
-        "			<string>Target Bit Rate</string>"
-        "			<key>summary</key>"
-        "			<string>The bit rate of the Vorbis bitstream produced by the encoder</string>"
-        "			<key>unit</key>"
-        "			<string>kbps</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>Recommended</string>"
-        "				<string>8.000</string>"
-        "				<string>11.025</string>"
-        "				<string>12.000</string>"
-        "				<string>16.000</string>"
-        "				<string>22.050</string>"
-        "				<string>24.000</string>"
-        "				<string>32.000</string>"
-        "				<string>44.100</string>"
-        "				<string>48.000</string>"
-        "				<string>52.000</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>8</integer>"
-        "			<key>hint</key>"
-        "			<integer>6</integer>"
-        "			<key>key</key>"
-        "			<string>Sample Rate</string>"
-        "			<key>limited values</key>"
-        "			<array>"
-        "				<string>Recommended</string>"
-        "				<string>32.000</string>"
-        "				<string>44.100</string>"
-        "			</array>"
-        "			<key>name</key>"
-        "			<string>Sample Rate</string>"
-        "			<key>summary</key>"
-        "			<string>The sample rate of the Vorbis bitstream produced by the encoder</string>"
-        "			<key>unit</key>"
-        "			<string>kHz</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>None</string>"
-        "				<string>Bit Rate</string>"
-        "				<string>Sample Rate</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>1</integer>"
-        "			<key>hint</key>"
-        "			<integer>13</integer>"
-        "			<key>key</key>"
-        "			<string>Precedence</string>"
-        "			<key>name</key>"
-        "			<string>Precedence</string>"
-        "			<key>summary</key>"
-        "			<string>If either the bit rate or sample rate is allowed to override the other setting</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>Good</string>"
-        "				<string>Better</string>"
-        "				<string>Best</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>1</integer>"
-        "			<key>hint</key>"
-        "			<integer>1</integer>"
-        "			<key>key</key>"
-        "			<string>Quality</string>"
-        "			<key>name</key>"
-        "			<string>Quality</string>"
-        "			<key>summary</key>"
-        "			<string>The quality of the encoded Vorbis bitstream</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "		<dict>"
-        "			<key>available values</key>"
-        "			<array>"
-        "				<string>Mono</string>"
-        "				<string>Stereo</string>"
-        "				<string>2.0 (2.1?!)</string>"
-        "				<string>Quadraphonic</string>"
-        "				<string>5.0</string>"
-        "				<string>5.1</string>"
-        "			</array>"
-        "			<key>current value</key>"
-        "			<integer>1</integer>"
-        "			<key>hint</key>"
-        "			<integer>5</integer>"
-        "			<key>key</key>"
-        "			<string>Channel Configuration</string>"
-        "			<key>limited values</key>"
-        "			<array>"
-        "				<string>Stereo</string>"
-        "			</array>"
-        "			<key>name</key>"
-        "			<string>Channel Configuration</string>"
-        "			<key>summary</key>"
-        "			<string>The channel layout of the Vorbis bitstream produced by the encoder</string>"
-        "			<key>value type</key>"
-        "			<integer>10</integer>"
-        "		</dict>"
-        "	</array>"
-        "</dict>"
-        "</plist>";
-    CFDataRef data = CFDataCreate(NULL, (UInt8 *) buffer, strlen(buffer));
-    CFDictionaryRef dict = (CFDictionaryRef) CFPropertyListCreateFromXMLData(NULL, data, kCFPropertyListImmutable, NULL);
-    if (dict != NULL) {
-        *reinterpret_cast<CFDictionaryRef*>(outSettingsDict) = dict;
-        return true;
-    }
-    return false;
-}
-
 void CAVorbisEncoder::InitializeCompressionSettings()
 {
     int ret = 0;
@@ -825,10 +661,35 @@ void CAVorbisEncoder::InitializeCompressionSettings()
 
     vorbis_info_init(&mV_vi);
 
-    ret = vorbis_encode_init_vbr(&mV_vi, mOutputFormat.mChannelsPerFrame, lround(mOutputFormat.mSampleRate), 0.4);
+    UInt32 sample_rate = lround(mOutputFormat.mSampleRate);
 
-    if (ret)
+    if (mCfgMode == kVorbisEncoderModeQuality) {
+        ret = vorbis_encode_init_vbr(&mV_vi, mOutputFormat.mChannelsPerFrame, sample_rate, mCfgQuality);
+    } else {
+        UInt32 total_bitrate = mCfgBitrate * 1000;
+        if (mOutputFormat.mChannelsPerFrame > 2)
+            total_bitrate *= mOutputFormat.mChannelsPerFrame;
+
+        dbg_printf("[  VE]  .? [%08lx] :: InitializeCompressionSettings() = br:%ld\n", (UInt32) this, total_bitrate);
+
+        if (mCfgMode == kVorbisEncoderModeAverage) {
+            ret = vorbis_encode_init(&mV_vi, mOutputFormat.mChannelsPerFrame, sample_rate, -1, total_bitrate, -1);
+        } else if (mCfgMode == kVorbisEncoderModeQualityByBitrate) {
+            ret = vorbis_encode_setup_managed(&mV_vi, mOutputFormat.mChannelsPerFrame, sample_rate, -1, total_bitrate, -1);
+            if (!ret)
+                ret = vorbis_encode_ctl(&mV_vi, OV_ECTL_RATEMANAGE2_SET, NULL);
+            if (!ret)
+                ret = vorbis_encode_setup_init(&mV_vi);
+        }
+        if (ret)
+            mCfgBitrate = 128;
+    }
+
+    if (ret) {
+        vorbis_info_clear(&mV_vi);
+        dbg_printf("[  VE] <!! [%08lx] :: InitializeCompressionSettings() = %ld\n", (UInt32) this, ret);
         CODEC_THROW(kAudioCodecUnspecifiedError);
+    }
 
     vorbis_comment_init(&mV_vc);
     vorbis_comment_add_tag(&mV_vc, "ENCODER", "XiphQT, CAVorbisEncoder.cpp $Rev$");
@@ -920,7 +781,6 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
     if (!mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
-    UInt32 frames = 0;
     UInt32 fout = 0; //frames produced
     UInt32 bout = 0; //bytes produced
     UInt32 bspace = ioOutputDataByteSize;
@@ -1036,4 +896,414 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
     dbg_printf("[  VE] <.. [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n",
                (UInt32) this, ioNumberPackets, ioOutputDataByteSize, theAnswer);
     return theAnswer;
+}
+
+/* ======================== Settings ======================= */
+Boolean CAVorbisEncoder::BuildSettings(void *outSettingsDict)
+{
+    Boolean ret = false;
+    SInt32 n, ln;
+    CFNumberRef cf_n;
+    CFMutableDictionaryRef sd;
+    CFMutableDictionaryRef eltd;
+    CFMutableArrayRef params;
+
+    if (mCfgDict == NULL) {
+        sd = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        if (sd == NULL)
+            return ret;
+        CFDictionaryAddValue(sd, CFSTR(kAudioSettings_TopLevelKey), CFSTR("Xiph Vorbis Encoder"));
+    }
+
+    params = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
+
+    {
+        eltd = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingKey), CFSTR("Encoding Mode"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingName), CFSTR("Encoding Mode"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Summary), CFSTR("Vorbis encoding mode."));
+        n = kAudioSettingsFlags_ExpertParameter | kAudioSettingsFlags_MetaParameter;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Hint), cf_n);
+        CFRelease(cf_n);
+        n = 0;
+        ln = 3;
+        if (mOutputFormat.mSampleRate >= 8000.0 && mOutputFormat.mSampleRate <= 50000.0) {
+            if (mCfgMode == kVorbisEncoderModeAverage)
+                n = 1;
+            else if (mCfgMode == kVorbisEncoderModeQualityByBitrate)
+                n = 2;
+        } else {
+            ln = 1;
+        }
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_CurrentValue), cf_n);
+        CFRelease(cf_n);
+        n = kCFNumberLongType;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_ValueType), cf_n);
+        CFRelease(cf_n);
+
+        CFStringRef values[4] = {CFSTR("Target Quality"),
+                                 CFSTR("Average Bit Rate"),
+                                 CFSTR("Target Bit Rate Quality"),
+                                 CFSTR("Managed Bit Rate")};
+        CFArrayRef varr = CFArrayCreate(NULL, reinterpret_cast<const void**>(&values), 4, &kCFTypeArrayCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_AvailableValues), varr);
+        CFRelease(varr);
+
+        varr = CFArrayCreate(NULL, reinterpret_cast<const void**>(&values), ln, &kCFTypeArrayCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_LimitedValues), varr);
+        CFRelease(varr);
+
+        CFArrayAppendValue(params, eltd);
+        CFRelease(eltd);
+    }
+
+    if (mCfgMode == kVorbisEncoderModeQuality) {
+        eltd = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingKey), CFSTR("Encoding Quality"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingName), CFSTR("Encoding Quality"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Summary), CFSTR("Vorbis encoding quality."));
+        n = 0; // no flags - basic parameter
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Hint), cf_n);
+        CFRelease(cf_n);
+
+        n = lroundf(mCfgQuality * 10.0) + 1;
+        if (n < 0)
+            n = 0;
+        else if (n > 11)
+            n = 11;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_CurrentValue), cf_n);
+        CFRelease(cf_n);
+
+        n = kCFNumberLongType;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_ValueType), cf_n);
+        CFRelease(cf_n);
+
+        CFNumberRef values[12];
+        for (UInt32 i = 0; i < 12; i++) {
+            n = i - 1;
+            values[i] = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        }
+        CFArrayRef varr = CFArrayCreate(NULL, reinterpret_cast<const void**>(&values), 12, &kCFTypeArrayCallBacks);
+        for (UInt32 i = 0; i < 12; i++) {
+            CFRelease(values[i]);
+        }
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_AvailableValues), varr);
+        CFRelease(varr);
+
+        CFArrayAppendValue(params, eltd);
+        CFRelease(eltd);
+    } else {
+        eltd = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingKey), CFSTR("Target Bitrate"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_SettingName), CFSTR("Target Bitrate"));
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Summary), CFSTR("Target bitrate."));
+        n = 0; // no flags - basic parameter
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Hint), cf_n);
+        CFRelease(cf_n);
+
+        n = ibrn(mCfgBitrate, kVorbisEncoderBitrateSeriesBase);
+        if (n < 0)
+            n = 0;
+        else if (n >= kVorbisEncoderBitrateSeriesLength)
+            n = kVorbisEncoderBitrateSeriesLength - 1;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_CurrentValue), cf_n);
+        CFRelease(cf_n);
+
+        n = kCFNumberLongType;
+        cf_n = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_ValueType), cf_n);
+        CFRelease(cf_n);
+
+        CFNumberRef values[kVorbisEncoderBitrateSeriesLength];
+        SInt32 brs_min = ibrn(BitrateMin(), kVorbisEncoderBitrateSeriesBase);
+        SInt32 brs_max = ibrn(BitrateMax(), kVorbisEncoderBitrateSeriesBase) - 1;
+        if (brs_max >= kVorbisEncoderBitrateSeriesLength)
+            brs_max = kVorbisEncoderBitrateSeriesLength - 1;
+        if (brs_max < brs_min) {
+            CFRelease(eltd);
+            CFRelease(params);
+            return false;
+        }
+
+        for (UInt32 i = 0; i < kVorbisEncoderBitrateSeriesLength; i++) {
+            n = brn(i, kVorbisEncoderBitrateSeriesBase);
+            values[i] = CFNumberCreate(NULL, kCFNumberLongType, &n);
+        }
+        CFArrayRef varr = CFArrayCreate(NULL, reinterpret_cast<const void**>(&values), kVorbisEncoderBitrateSeriesLength, &kCFTypeArrayCallBacks);
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_AvailableValues), varr);
+        CFRelease(varr);
+
+        if (brs_min > 0 || brs_max < kVorbisEncoderBitrateSeriesLength - 1) {
+            CFNumberRef *limited = &values[brs_min];
+            brs_max = brs_max + 1 - brs_min;
+            if (brs_max > 0) {
+                varr = CFArrayCreate(NULL, reinterpret_cast<const void**>(limited), brs_max, &kCFTypeArrayCallBacks);
+                CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_LimitedValues), varr);
+                CFRelease(varr);
+            }
+        }
+        for (UInt32 i = 0; i < kVorbisEncoderBitrateSeriesLength; i++) {
+            CFRelease(values[i]);
+        }
+
+        CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Unit), mOutputFormat.mChannelsPerFrame > 2 ? CFSTR("kbps/chan.") : CFSTR("kbps"));
+
+        CFArrayAppendValue(params, eltd);
+        CFRelease(eltd);
+    }
+
+    CFDictionarySetValue(sd, CFSTR(kAudioSettings_Parameters), params);
+    CFRelease(params);
+
+    *reinterpret_cast<CFDictionaryRef*>(outSettingsDict) = sd;
+    ret = true;
+
+    return ret;
+}
+
+Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
+{
+    Boolean ret = false;
+    CFArrayRef params = NULL;
+    CFStringRef name = NULL;
+    CFIndex i, cf_l;
+
+    dbg_printf("[  VE]  >> [%08lx] :: ApplySettings()\n", (UInt32) this);
+
+    name = (CFStringRef) CFDictionaryGetValue(sd, CFSTR(kAudioSettings_TopLevelKey));
+    if (name == NULL || CFStringCompare(name, CFSTR("Xiph Vorbis Encoder"), 0) != kCFCompareEqualTo)
+        return ret;
+
+    params = (CFArrayRef) CFDictionaryGetValue(sd, CFSTR(kAudioSettings_Parameters));
+    if (params == NULL)
+        return ret;
+
+    cf_l = CFArrayGetCount(params);
+    for (i = 0; i < cf_l; i++) {
+        CFDictionaryRef eltd = (CFDictionaryRef) CFArrayGetValueAtIndex(params, i);
+        CFStringRef key = (CFStringRef) CFDictionaryGetValue(eltd, CFSTR(kAudioSettings_SettingKey));
+        CFArrayRef available;
+        CFIndex current;
+        CFNumberRef nval;
+
+        if (key == NULL)
+            continue;
+
+        nval = (CFNumberRef) CFDictionaryGetValue(eltd, CFSTR(kAudioSettings_CurrentValue));
+        available = (CFArrayRef) CFDictionaryGetValue(eltd, CFSTR(kAudioSettings_AvailableValues));
+
+        if (nval == NULL || available == NULL)
+            continue;
+
+        if (!CFNumberGetValue(nval, kCFNumberLongType, &current))
+            continue;
+
+        if (CFStringCompare(key, CFSTR("Encoding Mode"), 0) == kCFCompareEqualTo) {
+            if (current == 0)
+                mCfgMode = kVorbisEncoderModeQuality;
+            else if (current == 1)
+                mCfgMode = kVorbisEncoderModeAverage;
+            else if (current == 2)
+                mCfgMode = kVorbisEncoderModeQualityByBitrate;
+            else
+                return ret;
+            dbg_printf("[  VE]   M [%08lx] :: ApplySettings() :: %d\n", (UInt32) this, mCfgMode);
+        } else if (CFStringCompare(key, CFSTR("Encoding Quality"), 0) == kCFCompareEqualTo) {
+            nval = (CFNumberRef) CFArrayGetValueAtIndex(available, current);
+            SInt32 q = 4;
+            CFNumberGetValue(nval, kCFNumberLongType, &q);
+            if (q < -1 || q > 10)
+                continue;
+            mCfgQuality = (float) q / 10.0;
+            dbg_printf("[  VE]   Q [%08lx] :: ApplySettings() :: %1.1f\n", (UInt32) this, mCfgQuality);
+        } else if (CFStringCompare(key, CFSTR("Target Bitrate"), 0) == kCFCompareEqualTo) {
+            nval = (CFNumberRef) CFArrayGetValueAtIndex(available, current);
+            SInt32 br = 4;
+            CFNumberGetValue(nval, kCFNumberLongType, &br);
+            if (br < BitrateMin())
+                br = BitrateMin();
+            else if (br > BitrateMax())
+                br = BitrateMax();
+            mCfgBitrate = br;
+            dbg_printf("[  VE]   B [%08lx] :: ApplySettings() :: %ld\n", (UInt32) this, mCfgBitrate);
+        }
+    }
+
+    if (mOutputFormat.mSampleRate < 8000.0 || mOutputFormat.mSampleRate > 50000.0)
+        mCfgMode = kVorbisEncoderModeQuality;
+    dbg_printf("[  VE]  !M [%08lx] :: ApplySettings() :: %d\n", (UInt32) this, mCfgMode);
+
+    ret = true;
+    dbg_printf("[  VE] <   [%08lx] :: ApplySettings() = %d\n", (UInt32) this, ret);
+    return ret;
+}
+
+
+UInt32 CAVorbisEncoder::ibrn(UInt32 br, UInt32 bs)
+{
+    UInt32 n = -3; // number of bits - 3
+    UInt32 bn = (br - 1) >> bs;
+    UInt32 _br = bn;
+
+    while (bn) {
+        n++;
+        bn >>= 1;
+    };
+
+    if (n < 0)
+        return 0;
+
+    return (n << 2) + ((_br >> n) & 0x03) + 1;
+}
+
+void CAVorbisEncoder::fill_channel_layout(UInt32 nch, AudioChannelLayout *acl)
+{
+    acl->mChannelBitmap = 0;
+    acl->mNumberChannelDescriptions = 0;
+    switch (nch) {
+    case 1:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
+        break;
+    case 2:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+        break;
+    case 3:
+        /* ITU_2_1 used a.t.m, but 3-channel layout shouldn't be
+           accessible, as it's not the proper layout for vorbis */
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_ITU_2_1;
+        break;
+    case 4:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_Quadraphonic;
+        break;
+    case 5:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_MPEG_5_0_C;
+        break;
+    case 6:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_MPEG_5_1_C;
+        break;
+    default:
+        acl->mChannelLayoutTag = kAudioChannelLayoutTag_DiscreteInOrder | nch;
+        break;
+    }
+}
+
+
+/*
+ * Vorbis bitrate limits depend on modes (sample rate + channel
+ * (un)coupling). The values in the following methods are taken from
+ * the current libvorbis sources, and may need to be changed if they
+ * change in libvorbis.
+ */
+
+SInt32 CAVorbisEncoder::BitrateMin()
+{
+    SInt32 br = -1;
+
+    if (mOutputFormat.mChannelsPerFrame == 2) {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 12;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 16;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 24;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 30;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 36;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 45;
+    } else {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 8;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 12;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 16;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 16;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 30;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 32;
+    }
+
+    return br;
+}
+
+SInt32 CAVorbisEncoder::BitrateMax()
+{
+    SInt32 br = 0;
+
+    if (mOutputFormat.mChannelsPerFrame == 2) {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 64;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 88;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 192;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 192;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 380;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 500;
+    } else {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 42;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 50;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 100;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 90;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 190;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 240;
+    }
+
+    return br;
+}
+
+SInt32 CAVorbisEncoder::BitrateMid()
+{
+    SInt32 br = 128;
+
+    if (mOutputFormat.mChannelsPerFrame == 2) {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 32;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 48;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 86;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 86;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 128;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 128;
+    } else {
+        if (mOutputFormat.mSampleRate < 9000.0)
+            br = 20;
+        else if (mOutputFormat.mSampleRate < 15000.0)
+            br = 24;
+        else if (mOutputFormat.mSampleRate < 19000.0)
+            br = 48;
+        else if (mOutputFormat.mSampleRate < 26000.0)
+            br = 48;
+        else if (mOutputFormat.mSampleRate < 40000.0)
+            br = 96;
+        else if (mOutputFormat.mSampleRate < 50000.0)
+            br = 96;
+    }
+
+    return br;
 }

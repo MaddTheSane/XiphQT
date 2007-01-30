@@ -37,6 +37,9 @@
 
 #include "debug.h"
 
+extern ComponentResult _audio_settings_to_ac(OggExportGlobalsPtr globals, QTAtomContainer *settings);
+
+
 static ComponentResult
 _flush_ogg(StreamInfoPtr si, DataHandler data_h, wide *offset)
 {
@@ -114,7 +117,7 @@ _InputDataProc__audio(ComponentInstance ci, UInt32 *ioNumberDataPackets,
     StreamInfoPtr si = (StreamInfoPtr) inRefCon;
     ComponentResult err = noErr;
 
-    dbg_printf("[  OE]  >> [%08lx] :: _InputDataProc__audio(%ld)\n",
+    dbg_printf("[ aOE]  >> [%08lx] :: _InputDataProc__audio(%ld)\n",
                (UInt32) -1, *ioNumberDataPackets);
 
     *ioNumberDataPackets = 0;
@@ -138,7 +141,7 @@ _InputDataProc__audio(ComponentInstance ci, UInt32 *ioNumberDataPackets,
 
             err = InvokeMovieExportGetDataUPP(si->refCon, &si->gdp,
                                               si->getDataProc);
-            dbg_printf("[  OE]  <  [%08lx] :: _InputDataProc__audio() = %ld; "
+            dbg_printf("[ aOE]  <  [%08lx] :: _InputDataProc__audio() = %ld; "
                        "%ld, %ld, %ld, %ld, %ld)\n",
                        (UInt32) -1, err, *ioNumberDataPackets, si->gdp.dataSize,
                        si->gdp.requestedTime, si->gdp.actualTime, ioData->mNumberBuffers);
@@ -172,7 +175,7 @@ _InputDataProc__audio(ComponentInstance ci, UInt32 *ioNumberDataPackets,
         si->gdp.requestedTime = si->gdp.actualTime = 0;
     }
 
-    dbg_printf("[  OE] <   [%08lx] :: _InputDataProc__audio(%ld, "
+    dbg_printf("[ aOE] <   [%08lx] :: _InputDataProc__audio(%ld, "
                "%ld, %ld, %ld, %ld, %d) = %ld\n",
                (UInt32) -1, *ioNumberDataPackets, si->gdp.dataSize,
                si->gdp.requestedTime, si->gdp.actualTime, ioData->mNumberBuffers,
@@ -332,7 +335,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
 
         if (!err) {
             sd = (SoundDescriptionV2Ptr) *sdh;
-            dbg_printf("[  OE]   i [%08lx] :: configure_stream__audio() = %ld, '%4.4s' ('%4.4s', %d, %d, '%4.4s', [%ld, %ld, %lf] [%ld, %ld, %ld, %ld])\n",
+            dbg_printf("[ aOE]   i [%08lx] :: configure_stream__audio() = %ld, '%4.4s' ('%4.4s', %d, %d, '%4.4s', [%ld, %ld, %lf] [%ld, %ld, %ld, %ld])\n",
                        (UInt32) globals, err, (char *) &si->gdp.descType,
                        (char *) &sd->dataFormat, sd->version, sd->revlevel, (char *) &sd->vendor,
                        sd->numAudioChannels, sd->constBitsPerChannel, sd->audioSampleRate,
@@ -359,14 +362,14 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                 err = QTSoundDescriptionGetPropertyInfo(sdh, kQTPropertyClass_SoundDescription,
                                                         kQTSoundDescriptionPropertyID_AudioChannelLayout,
                                                         NULL, &acl_size, NULL);
-                dbg_printf("[  OE]  cl [%08lx] :: configure_stream__audio() = %ld, %ld\n",
+                dbg_printf("[ aOE]  cl [%08lx] :: configure_stream__audio() = %ld, %ld\n",
                            (UInt32) globals, err, acl_size);
                 if (!err) {
                     acl = (AudioChannelLayout *) calloc(1, acl_size);
                     err = QTSoundDescriptionGetProperty(sdh, kQTPropertyClass_SoundDescription,
                                                         kQTSoundDescriptionPropertyID_AudioChannelLayout,
                                                         acl_size, acl, NULL);
-                    dbg_printf("[  OE]  CL [%08lx] :: configure_stream__audio() = %ld, {0x%08lx, %ld, %ld}\n",
+                    dbg_printf("[ aOE]  CL [%08lx] :: configure_stream__audio() = %ld, {0x%08lx, %ld, %ld}\n",
                                (UInt32) globals, err, acl->mChannelLayoutTag,
                                acl->mChannelBitmap, acl->mNumberChannelDescriptions);
                 } else {
@@ -376,6 +379,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
 
             DisposeHandle((Handle) sdh);
 
+#if 0
             if (!acl) {
                 acl_size = sizeof(AudioChannelLayout);
                 acl = (AudioChannelLayout *) calloc(1, acl_size);
@@ -385,20 +389,21 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                 acl->mChannelBitmap = 0;
                 acl->mNumberChannelDescriptions = 0;
             }
+#endif
 
             err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_InputBasicDescription,
                                          sizeof(si->si_a.qte_out_asbd), &si->si_a.qte_out_asbd);
-            dbg_printf("[  OE]  iD [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+            dbg_printf("[ aOE]  iD [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
             {
                 AudioStreamBasicDescription *asbd = &si->si_a.qte_out_asbd;
-                dbg_printf("[  OE]  iD [%08lx] :: configure_stream__audio() = %ld, {%lf, '%4.4s', %04lx, %ld, %ld, %ld, %ld, %ld}\n", (UInt32) globals, err,
+                dbg_printf("[ aOE]  iD [%08lx] :: configure_stream__audio() = %ld, {%lf, '%4.4s', %04lx, %ld, %ld, %ld, %ld, %ld}\n", (UInt32) globals, err,
                            asbd->mSampleRate, (char *) &asbd->mFormatID, asbd->mFormatFlags, asbd->mBytesPerPacket, asbd->mFramesPerPacket,
                            asbd->mBytesPerFrame, asbd->mChannelsPerFrame, asbd->mBitsPerChannel);
             }
-            if (!err) {
+            if (!err && acl != NULL && false) {
                 err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_InputChannelLayout,
                                              acl_size, acl);
-                dbg_printf("[  OE]  iL [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+                dbg_printf("[ aOE]  iL [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
                 if (err)
                     err = noErr;
             }
@@ -406,16 +411,31 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
     }
 
     if (!err) {
-        /* TODO: this config should be taken from saved settings or user
-         * dialog (efectively, that's saved settings as well)
-         */
-        AudioStreamBasicDescription asbd = {si->si_a.qte_out_asbd.mSampleRate,
-                                            kAudioFormatXiphVorbis, 0, 0, 0, 0,
-                                            si->si_a.qte_out_asbd.mChannelsPerFrame, 0};
+        AudioStreamBasicDescription asbd = {globals->set_a_asbd.mSampleRate, globals->set_a_asbd.mFormatID,
+                                            globals->set_a_asbd.mFormatFlags, globals->set_a_asbd.mBytesPerPacket,
+                                            globals->set_a_asbd.mFramesPerPacket, globals->set_a_asbd.mBytesPerFrame,
+                                            //si->si_a.qte_out_asbd.mChannelsPerFrame,
+                                            globals->set_a_asbd.mChannelsPerFrame,
+                                            0};
+
         err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
                                      kQTSCAudioPropertyID_BasicDescription,
                                      sizeof(asbd), &asbd);
-        dbg_printf("[  OE]  iO [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+        dbg_printf("[  aOE]  iO [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+
+        if (!err) {
+            err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_RenderQuality,
+                                         sizeof(UInt32), &globals->set_a_rquality);
+            dbg_printf("[ aOE]  rq [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+        }
+
+        if (!err && globals->set_a_custom != NULL) {
+            err = QTSetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
+                                         kQTSCAudioPropertyID_CodecSpecificSettingsArray,
+                                         sizeof(CFArrayRef), &globals->set_a_custom);
+            dbg_printf("[ aOE]  cs [%08lx] :: configure_stream__audio() = %ld\n", (UInt32) globals, err);
+        }
 
         if (!err) {
             err = QTGetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
@@ -425,7 +445,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
 
         if (!err) {
             if (si->si_a.stda_asbd.mBytesPerPacket) {
-                si->si_a.max_packet_size = asbd.mBytesPerPacket;
+                si->si_a.max_packet_size = si->si_a.stda_asbd.mBytesPerPacket;
             } else {
                 err = QTGetComponentProperty(si->si_a.stdAudio, kQTPropertyClass_SCAudio,
                                              kQTSCAudioPropertyID_MaximumOutputPacketSize,
@@ -433,7 +453,7 @@ ComponentResult configure_stream__audio(OggExportGlobals *globals,
                                              &si->si_a.max_packet_size, NULL);
             }
         }
-        dbg_printf("[  OE]  xp [%08lx] :: configure_stream__audio()  (%ld)\n", (UInt32) globals, si->si_a.max_packet_size);
+        dbg_printf("[ aOE]  xp [%08lx] :: configure_stream__audio()  (%ld)\n", (UInt32) globals, si->si_a.max_packet_size);
     }
 
     if (acl) {
@@ -460,7 +480,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
     UInt32 max_page_duration = (UInt32) (max_duration *
                                          si->si_a.stda_asbd.mSampleRate);
 
-    dbg_printf("[  OE]  >> [%08lx] :: fill_page__audio(%lf)\n",
+    dbg_printf("[ aOE]  >> [%08lx] :: fill_page__audio(%lf)\n",
                (UInt32) globals, max_duration);
 
     if (ogg_stream_pageout(&si->os, &si->og) > 0) {
@@ -514,7 +534,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
             err = SCAudioFillBuffer(si->si_a.stdAudio, _InputDataProc__audio,
                                     (void *) si, (UInt32 *) &pull_packets,
                                     abl, aspds);
-            dbg_printf("[  OE]  .  [%08lx] :: fill_page__audio(): "
+            dbg_printf("[ aOE]  .  [%08lx] :: fill_page__audio(): "
                        "SCAudioFillBuffer(%ld) = %ld, eos: %d\n",
                        (UInt32) globals, pull_packets, err,
                        pull_packets == 0 &&
@@ -540,7 +560,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
                 si->acc_packets++;
                 si->acc_duration += si->si_a.op_duration;
                 result = ogg_stream_packetin(&si->os, &si->si_a.op);
-                dbg_printf("[  OE] _i  [%08lx] :: fill_page__audio(): "
+                dbg_printf("[ aOE] _i  [%08lx] :: fill_page__audio(): "
                            "ogg_stream_packetin(%lld, %ld, %lld) = %d\n",
                            (UInt32) globals, si->si_a.op.packetno,
                            si->si_a.op.bytes, si->si_a.op.granulepos,
@@ -563,7 +583,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
                     si->si_a.op.packet = (UInt8 *) abl->mBuffers[0].mData +
                         aspds[i].mStartOffset;
                     result = ogg_stream_packetin(&si->os, &si->si_a.op);
-                    dbg_printf("[  OE]  i  [%08lx] :: fill_page__audio(): "
+                    dbg_printf("[ aOE]  i  [%08lx] :: fill_page__audio(): "
                                "ogg_stream_packetin(%lld, %ld, %lld) = %d\n",
                                (UInt32) globals, si->si_a.op.packetno,
                                si->si_a.op.bytes, si->si_a.op.granulepos,
@@ -600,7 +620,7 @@ fill_page__audio(OggExportGlobalsPtr globals, StreamInfoPtr si,
         }
     }
 
-    dbg_printf("[  OE] <   [%08lx] :: fill_page__audio() = %ld (%ld, %lf)\n",
+    dbg_printf("[ aOE] <   [%08lx] :: fill_page__audio() = %ld (%ld, %lf)\n",
                (UInt32) globals, err, si->og_ts_sec, si->og_ts_subsec);
     return err;
 }
