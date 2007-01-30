@@ -2,35 +2,41 @@ XiphQT
 ======
 
 XiphQT, the Xiph QuickTime Components, is a collection of QuickTime
-and MacOS X 'plug-ins' providing support for the Xiph.Org Foundation's
-(http://www.xiph.org/) multimedia compression formats.
+and Mac OS X 'plug-ins' providing support for the Xiph.Org Foundation's
+(http://xiph.org/) multimedia compression formats.
 
 
 Building
 ========
 
 The XiphQT source code is accompanied by a set of Xcode project files,
-and can be built easily using Xcode GUI or 'xcodebuild' command line tool.
-The only additional requirement besides the developer tools, is set of
-Xiph frameworks for particular compression formats, installed where Xcode
-can find them (preferably - /Library/Frameworks).
+and can be built easily using Xcode GUI or 'xcodebuild' command line
+tool. To build from sources source codes of a number of additional
+libraries need to be placed in the ./external-libs folder (see below).
+
+The latest version of XiphQT makes use of the following libraries:
+ogg, vorbis, flac, speex, theora and theora-exp. Their source code can
+be found on http://xiph.org/ .
+
+To build using Xcode's xcodebuild command-line tool type with the
+./build-macosx as the current working directory:
+
+    > xcodebuild -target XiphQT -configuration Release
+
+That should produce statically linked XiphQT.component bundle in the
+./build-macosx/build/Release directory.
+
+To only build decoder and importer components use type:
+
+    > xcodebuild -target 'XiphQT (decoders)' -configuration Release
 
 
 Installing
 ==========
 
-The binary component bundles need to be installed in specific locations
-on your hard drive. Bundles with names starting with 'CA' go to
-/Library/Components (or ~/Library/Components) and all other go to
-/Library/QuickTime (or ~/Library/QuickTime).
-You will also need to install Xiph library frameworks in either
-/Library/Frameworks (or ~/Library/Frameworks).
-
-The lastest version of XiphQT makes use of the following frameworks:
-Ogg, Vorbis, FLAC, FLAC++, Speex and TheoraExp. Those can be build
-from the corresponding Xiph format libraries, or the binary versions
-can be obtained from the project downloads page:
-http://www.xiph.org/quicktime/download.html .
+The binary component bundle needs to be installed in
+~/Library/QuickTime (or /Library/QuickTime for system-wide
+installation).
 
 
 Source code organisation
@@ -60,6 +66,18 @@ Source code organisation
 
 ./common, ./utils and ./resources
 	Functions, definition and resources shared between several components
+
+./external-libs
+        Source code of the external libraries should be placed here in
+        the corresponding subfolders: ogg, speex, theora, theora-exp,
+        vorbis, flac (using SVN repository all libraries except flac
+        can be pulled automatically)
+
+./build-macosx
+        Xcode project files, for building for Mac OS X
+
+./build-win32
+        Win32 build files
 
 
 Copying
@@ -93,4 +111,4 @@ More Information
 ================
 
 More information can be found on the project webpages at:
-http://www.xiph.org/quicktime/
+http://xiph.org/quicktime/
