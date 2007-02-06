@@ -126,7 +126,7 @@ resource 'dlle' (kExporterResID, OggExporterName) {
 
 resource 'STR ' (kExporterNameStringResID, OggExporterName, purgeable) {
     /* "Ogg Multimedia Bitstream (OGG)" */
-    "OGG"
+    "Ogg"
 };
 
 resource 'STR ' (kExporterInfoStringResID, OggExporterName, purgeable) {
