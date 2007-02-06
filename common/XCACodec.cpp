@@ -69,7 +69,10 @@ void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteS
                 packet++;
                 packets_added++;
             }
-        } else {
+        } else if (mInputFormat.mBytesPerFrame != 0) { /* inPacketDescription == NULL here, but it's and error condition
+                                                          if we're doing decoding (mInputFormat.mBytesPerFrame == 0), so
+                                                          skip this branch -- thanks to Jan Gerber for spotting it. */
+
             if (ioInputDataByteSize < bytesToCopy)
                 bytesToCopy = ioInputDataByteSize;
 
