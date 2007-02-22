@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		73744B060B1A1925002B059E /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744B050B1A1925002B059E /* window.c */; };
-		73744B1F0B1A1D3A002B059E /* bitbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963D0A0D1AB900D40234 /* bitbuffer.c */; };
 		73744B200B1A1D3A002B059E /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963E0A0D1AB900D40234 /* bitmath.c */; };
 		73744B210B1A1D3B002B059E /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963F0A0D1AB900D40234 /* cpu.c */; };
 		73744B220B1A1D3C002B059E /* crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E196400A0D1AB900D40234 /* crc.c */; };
@@ -27,6 +26,12 @@
 		73744B530B1A2205002B059E /* metadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E196A50A0D277600D40234 /* metadata.cpp */; };
 		73744B540B1A2205002B059E /* stream_decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E196A80A0D277600D40234 /* stream_decoder.cpp */; };
 		73744B550B1A2206002B059E /* stream_encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E196A90A0D277600D40234 /* stream_encoder.cpp */; };
+		738C0AF50B8D4BF40010DDDC /* bitreader.h in Headers */ = {isa = PBXBuildFile; fileRef = 738C0AF30B8D4BF40010DDDC /* bitreader.h */; };
+		738C0AF60B8D4BF40010DDDC /* bitwriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 738C0AF40B8D4BF40010DDDC /* bitwriter.h */; };
+		738C0AF90B8D4CFB0010DDDC /* bitreader.c in Sources */ = {isa = PBXBuildFile; fileRef = 738C0AF70B8D4CFB0010DDDC /* bitreader.c */; };
+		738C0AFA0B8D4CFB0010DDDC /* bitwriter.c in Sources */ = {isa = PBXBuildFile; fileRef = 738C0AF80B8D4CFB0010DDDC /* bitwriter.c */; };
+		738C0AFB0B8D4CFB0010DDDC /* bitreader.c in Sources */ = {isa = PBXBuildFile; fileRef = 738C0AF70B8D4CFB0010DDDC /* bitreader.c */; };
+		738C0AFC0B8D4CFB0010DDDC /* bitwriter.c in Sources */ = {isa = PBXBuildFile; fileRef = 738C0AF80B8D4CFB0010DDDC /* bitwriter.c */; };
 		73E1961C0A0D19CE00D40234 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E195D40A0D189900D40234 /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1961D0A0D19CE00D40234 /* assert.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E195D50A0D189900D40234 /* assert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1961E0A0D19CE00D40234 /* callback.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E195D60A0D189900D40234 /* callback.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,7 +45,6 @@
 		73E1962E0A0D1A1E00D40234 /* stream_decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E195F90A0D191000D40234 /* stream_decoder.h */; };
 		73E1962F0A0D1A1E00D40234 /* stream_encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E195FA0A0D191000D40234 /* stream_encoder.h */; };
 		73E196300A0D1A1E00D40234 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E196020A0D193600D40234 /* all.h */; };
-		73E196310A0D1A1E00D40234 /* bitbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E196030A0D193700D40234 /* bitbuffer.h */; };
 		73E196320A0D1A1E00D40234 /* bitmath.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E196040A0D193700D40234 /* bitmath.h */; };
 		73E196330A0D1A1E00D40234 /* cpu.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E196050A0D193700D40234 /* cpu.h */; };
 		73E196340A0D1A1E00D40234 /* crc.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E196060A0D193700D40234 /* crc.h */; };
@@ -52,7 +56,6 @@
 		73E1963A0A0D1A1E00D40234 /* memory.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E1960C0A0D193700D40234 /* memory.h */; };
 		73E1963B0A0D1A1E00D40234 /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E1960D0A0D193700D40234 /* metadata.h */; };
 		73E1963C0A0D1A1E00D40234 /* stream_encoder_framing.h in Headers */ = {isa = PBXBuildFile; fileRef = 73E1960E0A0D193700D40234 /* stream_encoder_framing.h */; };
-		73E196500A0D1AB900D40234 /* bitbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963D0A0D1AB900D40234 /* bitbuffer.c */; };
 		73E196510A0D1AB900D40234 /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963E0A0D1AB900D40234 /* bitmath.c */; };
 		73E196520A0D1AB900D40234 /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963F0A0D1AB900D40234 /* cpu.c */; };
 		73E196530A0D1AB900D40234 /* crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E196400A0D1AB900D40234 /* crc.c */; };
@@ -97,6 +100,10 @@
 		73744B050B1A1925002B059E /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = window.c; path = "../../external-libs/flac/src/libFLAC/window.c"; sourceTree = SOURCE_ROOT; };
 		73744B1B0B1A1C43002B059E /* libflac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libflac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B520B1A21DA002B059E /* libflac++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libflac++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		738C0AF30B8D4BF40010DDDC /* bitreader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bitreader.h; path = "../../external-libs/flac/src/libFLAC/include/private/bitreader.h"; sourceTree = SOURCE_ROOT; };
+		738C0AF40B8D4BF40010DDDC /* bitwriter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bitwriter.h; path = "../../external-libs/flac/src/libFLAC/include/private/bitwriter.h"; sourceTree = SOURCE_ROOT; };
+		738C0AF70B8D4CFB0010DDDC /* bitreader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitreader.c; path = "../../external-libs/flac/src/libFLAC/bitreader.c"; sourceTree = SOURCE_ROOT; };
+		738C0AF80B8D4CFB0010DDDC /* bitwriter.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitwriter.c; path = "../../external-libs/flac/src/libFLAC/bitwriter.c"; sourceTree = SOURCE_ROOT; };
 		73E195D40A0D189900D40234 /* all.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = all.h; path = "../../external-libs/flac/include/FLAC/all.h"; sourceTree = SOURCE_ROOT; };
 		73E195D50A0D189900D40234 /* assert.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = assert.h; path = "../../external-libs/flac/include/FLAC/assert.h"; sourceTree = SOURCE_ROOT; };
 		73E195D60A0D189900D40234 /* callback.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = callback.h; path = "../../external-libs/flac/include/FLAC/callback.h"; sourceTree = SOURCE_ROOT; };
@@ -110,7 +117,6 @@
 		73E195F90A0D191000D40234 /* stream_decoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_decoder.h; path = "../../external-libs/flac/src/libFLAC/include/protected/stream_decoder.h"; sourceTree = SOURCE_ROOT; };
 		73E195FA0A0D191000D40234 /* stream_encoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_encoder.h; path = "../../external-libs/flac/src/libFLAC/include/protected/stream_encoder.h"; sourceTree = SOURCE_ROOT; };
 		73E196020A0D193600D40234 /* all.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = all.h; path = "../../external-libs/flac/src/libFLAC/include/private/all.h"; sourceTree = SOURCE_ROOT; };
-		73E196030A0D193700D40234 /* bitbuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bitbuffer.h; path = "../../external-libs/flac/src/libFLAC/include/private/bitbuffer.h"; sourceTree = SOURCE_ROOT; };
 		73E196040A0D193700D40234 /* bitmath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bitmath.h; path = "../../external-libs/flac/src/libFLAC/include/private/bitmath.h"; sourceTree = SOURCE_ROOT; };
 		73E196050A0D193700D40234 /* cpu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cpu.h; path = "../../external-libs/flac/src/libFLAC/include/private/cpu.h"; sourceTree = SOURCE_ROOT; };
 		73E196060A0D193700D40234 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = crc.h; path = "../../external-libs/flac/src/libFLAC/include/private/crc.h"; sourceTree = SOURCE_ROOT; };
@@ -122,7 +128,6 @@
 		73E1960C0A0D193700D40234 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = memory.h; path = "../../external-libs/flac/src/libFLAC/include/private/memory.h"; sourceTree = SOURCE_ROOT; };
 		73E1960D0A0D193700D40234 /* metadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = metadata.h; path = "../../external-libs/flac/src/libFLAC/include/private/metadata.h"; sourceTree = SOURCE_ROOT; };
 		73E1960E0A0D193700D40234 /* stream_encoder_framing.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_encoder_framing.h; path = "../../external-libs/flac/src/libFLAC/include/private/stream_encoder_framing.h"; sourceTree = SOURCE_ROOT; };
-		73E1963D0A0D1AB900D40234 /* bitbuffer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitbuffer.c; path = "../../external-libs/flac/src/libFLAC/bitbuffer.c"; sourceTree = SOURCE_ROOT; };
 		73E1963E0A0D1AB900D40234 /* bitmath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitmath.c; path = "../../external-libs/flac/src/libFLAC/bitmath.c"; sourceTree = SOURCE_ROOT; };
 		73E1963F0A0D1AB900D40234 /* cpu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cpu.c; path = "../../external-libs/flac/src/libFLAC/cpu.c"; sourceTree = SOURCE_ROOT; };
 		73E196400A0D1AB900D40234 /* crc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = crc.c; path = "../../external-libs/flac/src/libFLAC/crc.c"; sourceTree = SOURCE_ROOT; };
@@ -247,8 +252,9 @@
 		73E195CF0A0D175400D40234 /* FLAC */ = {
 			isa = PBXGroup;
 			children = (
+				738C0AF70B8D4CFB0010DDDC /* bitreader.c */,
+				738C0AF80B8D4CFB0010DDDC /* bitwriter.c */,
 				73744B050B1A1925002B059E /* window.c */,
-				73E1963D0A0D1AB900D40234 /* bitbuffer.c */,
 				73E1963E0A0D1AB900D40234 /* bitmath.c */,
 				73E1963F0A0D1AB900D40234 /* cpu.c */,
 				73E196400A0D1AB900D40234 /* crc.c */,
@@ -319,8 +325,9 @@
 		73E195EE0A0D18B600D40234 /* private */ = {
 			isa = PBXGroup;
 			children = (
+				738C0AF30B8D4BF40010DDDC /* bitreader.h */,
+				738C0AF40B8D4BF40010DDDC /* bitwriter.h */,
 				73E196020A0D193600D40234 /* all.h */,
-				73E196030A0D193700D40234 /* bitbuffer.h */,
 				73E196040A0D193700D40234 /* bitmath.h */,
 				73E196050A0D193700D40234 /* cpu.h */,
 				73E196060A0D193700D40234 /* crc.h */,
@@ -394,7 +401,6 @@
 				73E1962E0A0D1A1E00D40234 /* stream_decoder.h in Headers */,
 				73E1962F0A0D1A1E00D40234 /* stream_encoder.h in Headers */,
 				73E196300A0D1A1E00D40234 /* all.h in Headers */,
-				73E196310A0D1A1E00D40234 /* bitbuffer.h in Headers */,
 				73E196320A0D1A1E00D40234 /* bitmath.h in Headers */,
 				73E196330A0D1A1E00D40234 /* cpu.h in Headers */,
 				73E196340A0D1A1E00D40234 /* crc.h in Headers */,
@@ -406,6 +412,8 @@
 				73E1963A0A0D1A1E00D40234 /* memory.h in Headers */,
 				73E1963B0A0D1A1E00D40234 /* metadata.h in Headers */,
 				73E1963C0A0D1A1E00D40234 /* stream_encoder_framing.h in Headers */,
+				738C0AF50B8D4BF40010DDDC /* bitreader.h in Headers */,
+				738C0AF60B8D4BF40010DDDC /* bitwriter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,7 +545,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73744B1F0B1A1D3A002B059E /* bitbuffer.c in Sources */,
 				73744B200B1A1D3A002B059E /* bitmath.c in Sources */,
 				73744B210B1A1D3B002B059E /* cpu.c in Sources */,
 				73744B220B1A1D3C002B059E /* crc.c in Sources */,
@@ -553,6 +560,8 @@
 				73744B2C0B1A1D43002B059E /* stream_encoder.c in Sources */,
 				73744B2D0B1A1D44002B059E /* stream_encoder_framing.c in Sources */,
 				73744B2E0B1A1D45002B059E /* window.c in Sources */,
+				738C0AFB0B8D4CFB0010DDDC /* bitreader.c in Sources */,
+				738C0AFC0B8D4CFB0010DDDC /* bitwriter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,7 +589,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73E196500A0D1AB900D40234 /* bitbuffer.c in Sources */,
 				73E196510A0D1AB900D40234 /* bitmath.c in Sources */,
 				73E196520A0D1AB900D40234 /* cpu.c in Sources */,
 				73E196530A0D1AB900D40234 /* crc.c in Sources */,
@@ -596,6 +604,8 @@
 				73E196610A0D1AB900D40234 /* stream_encoder_framing.c in Sources */,
 				73E196620A0D1AB900D40234 /* stream_encoder.c in Sources */,
 				73744B060B1A1925002B059E /* window.c in Sources */,
+				738C0AF90B8D4CFB0010DDDC /* bitreader.c in Sources */,
+				738C0AFA0B8D4CFB0010DDDC /* bitwriter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
