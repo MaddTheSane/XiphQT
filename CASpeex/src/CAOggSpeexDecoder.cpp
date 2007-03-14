@@ -196,7 +196,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
 
     ogg_page op;
 
-    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize, inPacketDescription->mStartOffset))
+    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize + inPacketDescription->mStartOffset, inPacketDescription->mStartOffset))
         CODEC_THROW(kAudioCodecUnspecifiedError);
 
     ogg_packet opk;

@@ -107,7 +107,7 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
 UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf(" >> [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) (%ld, %ld, %ld; %ld[%ld])\n",
+    dbg_printf("[VDO ]  >> [%08lx] :: ProduceOutputPackets(%ld [%ld]) (%ld, %ld, %ld; %ld[%ld])\n",
                (UInt32) this, ioNumberPackets, ioOutputDataByteSize, mSOBufferSize, mSOBufferUsed, mSOReturned, mSOBufferPages, mSOBufferPackets);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
@@ -115,7 +115,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("<!E [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+        dbg_printf("[VDO ] <!E [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
                    ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
@@ -127,7 +127,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
     Byte *the_data = static_cast<Byte*> (outOutputData);
 
     if (mSOBuffer != NULL) {
-        dbg_printf("  + SOBuffering output\n");
+        dbg_printf("[VDO ]   + SOBuffering output\n");
         /* stream/sample offset buffer not empty - must be beginning of the stream */
         if (mSOBufferUsed == 0) {
             /* fill the buffer first */
@@ -256,7 +256,11 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
         }
     }
 
-    dbg_printf("<.. [%08lx] CAOggVorbisDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
+    if (ret == kAudioCodecProduceOutputPacketSuccess || ret == kAudioCodecProduceOutputPacketSuccessHasMore) {
+        ioNumberPackets = ioOutputDataByteSize / mOutputFormat.mBytesPerFrame;
+    }
+
+    dbg_printf("[VDO ] <.. [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
                (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
@@ -300,14 +304,18 @@ void CAOggVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 
 void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
-    dbg_printf(" >> [%08lx] CAOggVorbisDecoder :: InPacket({%ld, %ld})\n", (UInt32) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
-    if (!mCompressionInitialized)
+    dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%ld, %ld})\n", (UInt32) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
+    if (!mCompressionInitialized) {
+        dbg_printf("[VDO ] <!I [%08lx] :: InPacket()\n", (UInt32) this);
         CODEC_THROW(kAudioCodecUnspecifiedError);
+    }
 
     ogg_page op;
 
-    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize, inPacketDescription->mStartOffset))
+    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize + inPacketDescription->mStartOffset, inPacketDescription->mStartOffset)) {
+        dbg_printf("[VDO ] <!O [%08lx] :: InPacket()\n", (UInt32) this);
         CODEC_THROW(kAudioCodecUnspecifiedError);
+    }
 
     ogg_packet opk;
     SInt32 packet_count = 0;
@@ -349,7 +357,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
         mSOReturned = 0;
     }
 
-    dbg_printf("<.. [%08lx] CAOggVorbisDecoder :: InPacket(pn: %ld)\n", (UInt32) this, ogg_page_pageno (&op));
+    dbg_printf("[VDO ] <.. [%08lx] :: InPacket(pn: %ld)\n", (UInt32) this, ogg_page_pageno (&op));
 }
 
 
@@ -374,7 +382,7 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
 
             if (EndianS32_BtoN(aheader->type) == kCookieTypeVorbisFirstPageNo && ptrheader <= cend) {
                 mFirstPageNo = EndianU32_BtoN((reinterpret_cast<OggSerialNoAtom*> (aheader))->serialno);
-                dbg_printf("  = [%08lx] CAOggVorbisDecoder :: InitializeCompressionSettings(fpn: %ld)\n", (UInt32) this, mFirstPageNo);
+                dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %ld)\n", (UInt32) this, mFirstPageNo);
                 break;
             }
         }

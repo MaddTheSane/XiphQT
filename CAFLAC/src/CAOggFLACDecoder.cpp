@@ -244,7 +244,7 @@ void CAOggFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacket
 
     ogg_page op;
 
-    if (!WrapOggPage(&op, static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset, inPacketDescription->mDataByteSize, 0))
+    if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize + inPacketDescription->mStartOffset, inPacketDescription->mStartOffset))
         CODEC_THROW(kAudioCodecUnspecifiedError);
 
     dbg_printf("[ oFD]   : [%08lx] InPacket() [%4.4s] %ld\n", (UInt32) this, (char *) (static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset),

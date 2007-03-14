@@ -45,10 +45,11 @@ extern ComponentResult create_sample_description__vorbis(StreamInfo *si);
 
 extern int process_first_packet__vorbis(StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 extern ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
+extern ComponentResult flush_stream__vorbis(OggImportGlobals *globals, StreamInfo *si, Boolean notify);
 
 #define HANDLE_FUNCTIONS__VORBIS { &process_stream_page__vorbis, &recognize_header__vorbis, \
             &verify_header__vorbis, &process_first_packet__vorbis, &create_sample_description__vorbis, \
-            NULL, NULL, &initialize_stream__vorbis, NULL, &clear_stream__vorbis }
+            NULL, NULL, &initialize_stream__vorbis, &flush_stream__vorbis, &clear_stream__vorbis, NULL }
 
 
 #endif /* __stream_vorbis_h__ */

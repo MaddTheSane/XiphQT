@@ -48,10 +48,14 @@ extern ComponentResult create_track_media__theora(OggImportGlobals *globals, Str
 
 extern int process_first_packet__theora(StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 extern ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
+extern ComponentResult flush_stream__theora(OggImportGlobals *globals, StreamInfo *si, Boolean notify);
+
+extern ComponentResult granulepos_to_time__theora(StreamInfo *si, ogg_int64_t *gp, TimeRecord *time);
 
 #define HANDLE_FUNCTIONS__THEORA { &process_stream_page__theora, &recognize_header__theora, \
             &verify_header__theora, &process_first_packet__theora, &create_sample_description__theora, \
-            &create_track__theora, &create_track_media__theora, &initialize_stream__theora, NULL, &clear_stream__theora }
+            &create_track__theora, &create_track_media__theora, &initialize_stream__theora, flush_stream__theora, \
+            &clear_stream__theora, &granulepos_to_time__theora }
 
 
 #endif /* __stream_theora_h__ */

@@ -47,11 +47,11 @@ extern ComponentResult create_sample_description__flac(StreamInfo *si);
 
 extern int process_first_packet__flac(StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 extern ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
-extern ComponentResult finish_stream__flac(OggImportGlobals *globals, StreamInfo *si);
+extern ComponentResult flush_stream__flac(OggImportGlobals *globals, StreamInfo *si, Boolean notify);
 
 #define HANDLE_FUNCTIONS__FLAC { &process_stream_page__flac, &recognize_header__flac, \
             &verify_header__flac, &process_first_packet__flac, &create_sample_description__flac, \
-            NULL, NULL, &initialize_stream__flac, &finish_stream__flac, &clear_stream__flac }
+            NULL, NULL, &initialize_stream__flac, &flush_stream__flac, &clear_stream__flac, NULL }
 
 
 #endif /* __stream_flac_h__ */

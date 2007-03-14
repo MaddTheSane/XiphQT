@@ -55,6 +55,9 @@
 		7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
 		73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73271C830B610B2400175874 /* RingBufferTests.cpp */; };
 		734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734716820B77F72E001F439D /* XCACodecTests.cpp */; };
+		7373EDD00B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
+		7373EDD20B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
+		7373EDD30B7BDCAA00591836 /* samplerefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7373EDCF0B7BDCAA00591836 /* samplerefs.h */; };
 		737448B60B19EC05002B059E /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		737448B70B19EC05002B059E /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
 		737448B80B19EC05002B059E /* rb.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A50B19EC05002B059E /* rb.c */; };
@@ -347,6 +350,7 @@
 			dstSubfolderSpec = 7;
 			files = (
 				7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */,
+				7373EDD30B7BDCAA00591836 /* samplerefs.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +376,8 @@
 		73271C830B610B2400175874 /* RingBufferTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RingBufferTests.cpp; path = ../tests/common/RingBufferTests.cpp; sourceTree = SOURCE_ROOT; };
 		734716820B77F72E001F439D /* XCACodecTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodecTests.cpp; path = ../tests/common/XCACodecTests.cpp; sourceTree = SOURCE_ROOT; };
 		734716830B77F72E001F439D /* XCACodecTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodecTests.h; path = ../tests/common/XCACodecTests.h; sourceTree = SOURCE_ROOT; };
+		7373EDCE0B7BDCAA00591836 /* samplerefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = samplerefs.c; path = ../OggImport/src/samplerefs.c; sourceTree = SOURCE_ROOT; };
+		7373EDCF0B7BDCAA00591836 /* samplerefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = samplerefs.h; path = ../OggImport/src/samplerefs.h; sourceTree = SOURCE_ROOT; };
 		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../OggImport/src/common.c; sourceTree = SOURCE_ROOT; };
 		737448A00B19EC05002B059E /* common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../OggImport/src/common.h; sourceTree = SOURCE_ROOT; };
 		737448A10B19EC05002B059E /* importer_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = importer_types.h; path = ../OggImport/src/importer_types.h; sourceTree = SOURCE_ROOT; };
@@ -668,6 +674,8 @@
 		737448880B19EAE7002B059E /* OggImport */ = {
 			isa = PBXGroup;
 			children = (
+				7373EDCE0B7BDCAA00591836 /* samplerefs.c */,
+				7373EDCF0B7BDCAA00591836 /* samplerefs.h */,
 				737448C10B19EC3E002B059E /* vorbis */,
 				737448C00B19EC37002B059E /* speex */,
 				737448BF0B19EC2C002B059E /* flac */,
@@ -1325,6 +1333,7 @@
 				7326B5310B5AC44B004CE9D3 /* CAFLACDecoder.cpp in Sources */,
 				7326B5320B5AC44B004CE9D3 /* CAOggFLACDecoder.cpp in Sources */,
 				7326B5330B5AC44B004CE9D3 /* flac_entrypoints.cpp in Sources */,
+				7373EDD20B7BDCAA00591836 /* samplerefs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1385,6 +1394,7 @@
 				73744CAB0B1A3D07002B059E /* OggExport.c in Sources */,
 				73744CAE0B1A3D07002B059E /* stream_audio.c in Sources */,
 				73744CB20B1A3D07002B059E /* stream_video.c in Sources */,
+				7373EDD00B7BDCAA00591836 /* samplerefs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

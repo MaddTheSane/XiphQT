@@ -44,6 +44,11 @@ typedef enum VorbisImportStates {
     kVStateReadingPackets
 } VorbisImportStates;
 
+enum {
+    kVSRefsInitial = 2048,
+    kVSRefsIncrement = 2048
+};
+
 typedef struct {
     VorbisImportStates state;
 

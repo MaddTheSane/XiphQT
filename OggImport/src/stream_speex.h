@@ -45,10 +45,11 @@ extern ComponentResult create_sample_description__speex(StreamInfo *si);
 
 extern int process_first_packet__speex(StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 extern ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
+extern ComponentResult flush_stream__speex(OggImportGlobals *globals, StreamInfo *si, Boolean notify);
 
 #define HANDLE_FUNCTIONS__SPEEX { &process_stream_page__speex, &recognize_header__speex, \
             &verify_header__speex, &process_first_packet__speex, &create_sample_description__speex, \
-            NULL, NULL, &initialize_stream__speex, NULL, &clear_stream__speex }
+            NULL, NULL, &initialize_stream__speex, &flush_stream__speex, &clear_stream__speex, NULL }
 
 
 #endif /* __stream_vorbis_h__ */

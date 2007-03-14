@@ -45,6 +45,11 @@ typedef enum SpeexImportStates {
     kSStateReadingPackets
 } SpeexImportStates;
 
+enum {
+    kSSRefsInitial = 2048,
+    kSSRefsIncrement = 2048
+};
+
 typedef struct {
     SpeexImportStates state;
 

@@ -1,10 +1,10 @@
 /*
- *  speex_versions.h
+ *  samplerefs.h
  *
- *    The current version of the Speex component.
+ *    SampleReference arrays handling utilities header file.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,15 +28,14 @@
  */
 
 
-#if !defined(__speex_versions_h__)
-#define __speex_versions_h__
+#if !defined(__samplerefs_h__)
+#define __samplerefs_h__
+
+#include "importer_types.h"
 
 
-#ifdef DEBUG
-#define kCASpeex_adec_Version		(0x00FF0104)
-#else
-#define kCASpeex_adec_Version		(0x00000104)
-#endif /* DEBUG */
+extern ComponentResult _store_sample_reference(StreamInfo *si, SInt64 *dataOffset, int size, TimeValue duration, short smp_flags);
+extern ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean *movie_changed);
 
 
-#endif /* __speex_versions_h__ */
+#endif /* __samplerefs_h__ */

@@ -48,6 +48,11 @@ typedef enum TheoraImportStates {
     kTStateReadingPackets
 } TheoraImportStates;
 
+enum {
+    kTSRefsInitial = 8192,
+    kTSRefsIncrement = 4096
+};
+
 typedef struct {
     TheoraImportStates state;
 

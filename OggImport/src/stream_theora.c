@@ -43,6 +43,8 @@
 #include "fccs.h"
 #include "data_types.h"
 
+#include "samplerefs.h"
+
 
 #define MAX_FPS_DENOMINATOR 198
 #define DESIRED_MULTIPLIER 197
@@ -80,7 +82,6 @@ UInt32 gcd(UInt32 a, UInt32 b)
 
     return a;
 }
-
 
 int recognize_header__theora(ogg_page *op)
 {
@@ -128,6 +129,15 @@ int verify_header__theora(ogg_page *op) //?
 
 int initialize_stream__theora(StreamInfo *si)
 {
+    si->sample_refs_count = 0;
+    si->sample_refs_duration = 0;
+    si->sample_refs_size = kTSRefsInitial;
+    si->sample_refs_increment = kTSRefsIncrement;
+    si->sample_refs = calloc(si->sample_refs_size, sizeof(SampleReference64Record));
+
+    if (si->sample_refs == NULL)
+        return -1;
+
     th_info_init(&si->si_theora.ti);
     th_comment_init(&si->si_theora.tc);
     si->si_theora.ts = NULL;
@@ -140,6 +150,7 @@ int initialize_stream__theora(StreamInfo *si)
     si->si_theora.lpkt_flags = 0;
 
     si->si_theora.psegment_ratio = SEGMENT_RATIO_DENOM;
+
     return 0;
 };
 
@@ -149,6 +160,9 @@ void clear_stream__theora(StreamInfo *si)
         th_setup_free(si->si_theora.ts);
     th_info_clear(&si->si_theora.ti);
     th_comment_clear(&si->si_theora.tc);
+
+    if (si->sample_refs != NULL)
+        free(si->sample_refs);
 };
 
 ComponentResult create_sample_description__theora(StreamInfo *si)
@@ -356,37 +370,20 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
         case kTStateReadingPackets:
             {
                 ogg_int64_t pos       = ogg_page_granulepos(opg);
-                int         len       = opg->header_len + opg->body_len;
-                TimeValue   duration  = 0;
-                TimeValue   inserted  = -1;
                 short       smp_flags = 0;
 
-                int packet_count = 0;
                 long psize = 0, poffset = 0;
                 int i, segments;
                 Boolean continued = ogg_page_continued(opg);
-                SampleReference64Record sampleRec;
-                SInt64 tmp = 0;
+                TimeValue durationPerSample = 0;
                 ogg_int64_t last_packet_pos = si->lastGranulePos >> si->si_theora.granulepos_shift;
                 last_packet_pos += si->lastGranulePos - (last_packet_pos << si->si_theora.granulepos_shift);
 
-#if 0
-                if (ogg_page_continued(opg) || si->incompleteCompensation != 0)
-                    smp_flags |= mediaSampleNotSync;
-
-                if (duration <= 0) {
-                    duration = INCOMPLETE_PAGE_DURATION;
-                    si->incompleteCompensation -= INCOMPLETE_PAGE_DURATION;
-                } else if (si->incompleteCompensation != 0) {
-                    duration += si->incompleteCompensation;
-                    si->incompleteCompensation = 0;
-                    if (duration <= 0) {
-                        ret = badFileFormat;
-                        loop = false;
-                        break;
-                    }
+                loop = false;
+                if (ovret < 0) {
+                    ret = invalidMedia;
+                    break;
                 }
-#endif /* 0 */
 
                 if (continued)
                     smp_flags |= mediaSampleNotSync;
@@ -407,39 +404,31 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
 
                         if (si->si_theora.lpkt_data_size != 0) {
                             /* add last packet to media */
-                            memset(&sampleRec, 0, sizeof(sampleRec));
-                            sampleRec.dataOffset = SInt64ToWide(si->si_theora.lpkt_data_offset);
-                            sampleRec.dataSize = si->si_theora.lpkt_data_size;
-                            sampleRec.sampleFlags = si->si_theora.lpkt_flags;
-                            sampleRec.numberOfSamples = 1;
+                            durationPerSample = 0;
                             if (!incomplete) {
                                 /* packet finishes here */
                                 if (si->si_theora.lpkt_duration > 0) {
-                                    sampleRec.durationPerSample = si->si_theora.lpkt_duration;
+                                    durationPerSample = si->si_theora.lpkt_duration;
                                 } else {
-                                    sampleRec.durationPerSample = 1;
+                                    durationPerSample = 1;
                                     pduration += si->si_theora.lpkt_duration - 1;
                                 }
                             } else {
                                 /* segmented packet */
                                 if (si->si_theora.lpkt_duration > 0) {
-                                    sampleRec.durationPerSample = si->si_theora.lpkt_duration / si->si_theora.psegment_ratio;
-                                    if (sampleRec.durationPerSample == 0)
-                                        sampleRec.durationPerSample = 1;
-                                    pduration = si->si_theora.lpkt_duration - sampleRec.durationPerSample;
+                                    durationPerSample = si->si_theora.lpkt_duration / si->si_theora.psegment_ratio;
+                                    if (durationPerSample == 0)
+                                        durationPerSample = 1;
+                                    pduration = si->si_theora.lpkt_duration - durationPerSample;
                                 } else {
-                                    sampleRec.durationPerSample = 1;
-                                    pduration = si->si_theora.lpkt_duration - 1 /* sampleRec.durationPerSample */;
+                                    durationPerSample = 1;
+                                    pduration = si->si_theora.lpkt_duration - 1 /* durationPerSample */;
                                 }
                             }
-                            dbg_printf("   T   :++: adding sampleRef: %8lld, len: %8d, dur: %8d, fl: %08x\n",
-                                       sampleRec.dataOffset, sampleRec.dataSize, sampleRec.durationPerSample, sampleRec.sampleFlags);
-                            ret = AddMediaSampleReferences64(si->theMedia, si->sampleDesc, 1, &sampleRec, inserted == -1 ? &inserted : NULL);
+                            ret = _store_sample_reference(si, &si->si_theora.lpkt_data_offset, si->si_theora.lpkt_data_size,
+                                                          durationPerSample, si->si_theora.lpkt_flags);
                             if (ret != noErr)
                                 break;
-
-                            duration += sampleRec.durationPerSample;
-                            packet_count += 1;
                         } else if (si->streamOffsetSamples > 0) {
                             /* first packet (and stream has a sample offset) */
                             dbg_printf("   -   :++: increasing duration (%ld) by sampleOffset: %ld\n", pduration, si->streamOffsetSamples);
@@ -459,82 +448,28 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                     }
                 }
 
-                loop = false;
-                if (ovret < 0) {
-                    ret = invalidMedia;
-                    break;
-                }
-
                 if (ret == noErr && si->si_theora.lpkt_data_size != 0 && ogg_page_eos(opg)) {
                     /* it's EOS here, flush */
-                    memset(&sampleRec, 0, sizeof(sampleRec));
-                    sampleRec.dataOffset = SInt64ToWide(si->si_theora.lpkt_data_offset);
-                    sampleRec.dataSize = si->si_theora.lpkt_data_size;
-                    sampleRec.sampleFlags = si->si_theora.lpkt_flags;
-                    sampleRec.numberOfSamples = 1;
+                    durationPerSample = 0;
 
                     /* this the last page of the stream, packet SHOULD finish here */
                     if (si->si_theora.lpkt_duration > 0) {
-                        sampleRec.durationPerSample = si->si_theora.lpkt_duration;
+                        durationPerSample = si->si_theora.lpkt_duration;
                     } else {
-                        sampleRec.durationPerSample = 1;
+                        durationPerSample = 1;
                     }
 
-                    dbg_printf("   T   :++: adding sampleRef! %8lld, len: %8d, dur: %8d, fl: %08x\n",
-                               sampleRec.dataOffset, sampleRec.dataSize, sampleRec.durationPerSample, sampleRec.sampleFlags);
-                    ret = AddMediaSampleReferences64(si->theMedia, si->sampleDesc, 1, &sampleRec, inserted == -1 ? &inserted : NULL);
+                    ret = _store_sample_reference(si, &si->si_theora.lpkt_data_offset, si->si_theora.lpkt_data_size,
+                                                  durationPerSample, si->si_theora.lpkt_flags);
                     if (ret != noErr)
                         break;
-
-                    duration += sampleRec.durationPerSample;
-                    packet_count += 1;
                 }
 
-                
-                if (ret == noErr && packet_count > 0) {
-                    TimeValue timeLoaded;
-                    Float64 timeLoadedSubSecond;
-
-                    si->mediaLength += duration;
-
-                    dbg_printf("   -   :><: added page %04ld at %14ld (size: %5ld, tsize: %6d), f: %d\n",
-                               ogg_page_pageno(opg), inserted,
-                               opg->body_len, len, !logg_page_last_packet_incomplete(opg));
-                    dbg_printf("   -   :/>: inserting media: %ld, mt: %ld, dur: %ld\n", si->insertTime, inserted, duration);
-                    ret = InsertMediaIntoTrack(si->theTrack, si->insertTime /*inserted*/, /* si->lastGranulePos */ inserted,
-                                               duration, fixed1);
-                    if (si->insertTime == 0) {
-                        if (si->streamOffset != 0) {
-                            SetTrackOffset(si->theTrack, si->streamOffset);
-                            dbg_printf("   # -- SetTrackOffset(%ld) = %ld --> %ld\n",
-                                       si->streamOffset, GetMoviesError(),
-                                       GetTrackOffset(si->theTrack));
-                            if (globals->dataIsStream) {
-                                SetTrackEnabled(si->theTrack, false);
-                                SetTrackEnabled(si->theTrack, true);
-                            }
-                        }
-                    }
-                    si->insertTime = -1;
-
-                    mediaTS = GetMediaTimeScale(si->theMedia);
-                    mediaTS_fl = (Float64) mediaTS;
-                    timeLoaded = si->streamOffset + si->mediaLength / mediaTS * movieTS + (si->mediaLength % mediaTS) * movieTS / mediaTS;
-                    timeLoadedSubSecond = (Float64) ((si->streamOffset % movieTS * mediaTS / movieTS + si->mediaLength) % mediaTS) / mediaTS_fl;
-
-                    dbg_printf("   -   :><: added page %04ld at %14ld; offset: %ld, duration: %ld (%ld(%lg); %ld; ml: %ld), mediats: %ld; moviets: %ld, ret = %ld\n",
-                               ogg_page_pageno(opg), inserted,
-                               GetTrackOffset(si->theTrack), GetTrackDuration(si->theTrack), timeLoaded, timeLoadedSubSecond,
-                               (duration * movieTS) / mediaTS, si->mediaLength,
-                               mediaTS, movieTS, ret);
-                    if (globals->timeLoaded < timeLoaded || (globals->timeLoaded == timeLoaded && globals->timeLoadedSubSecond < timeLoadedSubSecond)) {
-                        globals->timeLoaded = timeLoaded;
-                        globals->timeLoadedSubSecond = timeLoadedSubSecond;
-                    }
-
-                    movie_changed = true;
+                if (!globals->usingIdle) {
+                    if (si->sample_refs_count >= kTSRefsInitial)
+                        ret = _commit_srefs(globals, si, &movie_changed);
                 }
-                
+
                 if (pos != -1)
                     si->lastGranulePos = pos;
             }
@@ -547,7 +482,34 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
     } while(loop);
 
     if (movie_changed)
-        NotifyMovieChanged(globals);
+        NotifyMovieChanged(globals, false);
 
     return ret;
+};
+
+ComponentResult flush_stream__theora(OggImportGlobals *globals, StreamInfo *si, Boolean notify)
+{
+    ComponentResult err = noErr;
+    Boolean movie_changed = false;
+
+    err = _commit_srefs(globals, si, &movie_changed);
+
+    if (movie_changed && notify)
+        NotifyMovieChanged(globals, true);
+
+    return err;
+};
+
+ComponentResult granulepos_to_time__theora(StreamInfo *si, ogg_int64_t *gp, TimeRecord *time)
+{
+    ComponentResult err = noErr;
+
+    ogg_int64_t frames = *gp >> si->si_theora.granulepos_shift;
+    frames += *gp - (frames << si->si_theora.granulepos_shift);
+
+    time->value = SInt64ToWide(frames);
+    time->scale = si->rate;
+    time->base = NULL;
+
+    return err;
 };

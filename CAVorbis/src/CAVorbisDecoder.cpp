@@ -159,7 +159,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %ld)\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID), ioPropertyDataSize);
     switch(inPropertyID)
     {
-    case kAudioCodecPropertyRequiresPacketDescription:
+    case kAudioCodecPropertyRequiresPacketDescription: // 'pakd'
         if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = 1;
         } else {
@@ -167,7 +167,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         }
         break;
 
-    case kAudioCodecPropertyHasVariablePacketByteSizes:
+    case kAudioCodecPropertyHasVariablePacketByteSizes: // 'vpk?'
         if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = 1;
         } else {
@@ -175,7 +175,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         }
         break;
 
-    case kAudioCodecPropertyPacketFrameSize:
+    case kAudioCodecPropertyPacketFrameSize: // 'pakf'
         if(ioPropertyDataSize == sizeof(UInt32))
         {
             /* The following line has been changed according to Apple engineers' suggestion
@@ -193,7 +193,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         }
         break;
 
-    case kAudioCodecPropertyMaximumPacketByteSize:
+    case kAudioCodecPropertyMaximumPacketByteSize: // 'pakb'
         if(ioPropertyDataSize == sizeof(UInt32)) {
             *reinterpret_cast<UInt32*>(outPropertyData) = kVorbisFormatMaxBytesPerPacket;
         } else {
@@ -201,7 +201,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         }
         break;
 
-    case kAudioCodecPropertyCurrentInputSampleRate:
+    case kAudioCodecPropertyCurrentInputSampleRate: // 'cisr'
         if (ioPropertyDataSize == sizeof(Float64)) {
             *reinterpret_cast<Float64*>(outPropertyData) = mInputFormat.mSampleRate;
         } else if (ioPropertyDataSize == sizeof(UInt32)) {
@@ -211,7 +211,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         }
         break;
 
-    case kAudioCodecPropertyCurrentOutputSampleRate:
+    case kAudioCodecPropertyCurrentOutputSampleRate: // 'cosr'
         if (ioPropertyDataSize == sizeof(Float64)) {
             *reinterpret_cast<Float64*>(outPropertyData) = mOutputFormat.mSampleRate;
         } else if (ioPropertyDataSize == sizeof(UInt32)) {
@@ -223,7 +223,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
 
         //case kAudioCodecPropertyQualitySetting: ???
 #if TARGET_OS_MAC
-    case kAudioCodecPropertyNameCFString:
+    case kAudioCodecPropertyNameCFString: // 'lnam'
         {
             if (ioPropertyDataSize != sizeof(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 
@@ -246,28 +246,28 @@ void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
     dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
-    case kAudioCodecPropertyRequiresPacketDescription:
+    case kAudioCodecPropertyRequiresPacketDescription: // 'pakd'
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
 
-    case kAudioCodecPropertyHasVariablePacketByteSizes:
+    case kAudioCodecPropertyHasVariablePacketByteSizes: // 'vpk?'
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
 
-    case kAudioCodecPropertyPacketFrameSize:
+    case kAudioCodecPropertyPacketFrameSize: // 'pakf'
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
 
-    case kAudioCodecPropertyMaximumPacketByteSize:
+    case kAudioCodecPropertyMaximumPacketByteSize: // 'pakb'
         outPropertyDataSize = sizeof(UInt32);
         outWritable = false;
         break;
 
-    case kAudioCodecPropertyCurrentInputSampleRate:
-    case kAudioCodecPropertyCurrentOutputSampleRate:
+    case kAudioCodecPropertyCurrentInputSampleRate:  // 'cisr'
+    case kAudioCodecPropertyCurrentOutputSampleRate: // 'cosr'
         outPropertyDataSize = sizeof(Float64);
         outWritable = false;
         break;

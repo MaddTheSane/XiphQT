@@ -41,62 +41,7 @@
 #include "data_types.h"
 #include "utils.h"
 
-static ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean *movie_changed)
-{
-    ComponentResult ret = noErr;
-    TimeValue inserted  = 0;
-
-    TimeValue movieTS = GetMovieTimeScale(globals->theMovie);
-    TimeValue mediaTS = 0;
-    TimeValue mediaTS_fl = 0.0;
-
-    if (si->si_flac.sample_refs_count < 1)
-        return ret;
-
-    dbg_printf("   -   :++: adding sampleRefs: %lld, count: %ld, dur: %ld\n", globals->dataOffset, si->si_flac.sample_refs_count,
-               si->si_flac.sample_refs_duration);
-    ret = AddMediaSampleReferences64(si->theMedia, si->sampleDesc, si->si_flac.sample_refs_count, si->si_flac.sample_refs, &inserted);
-
-    if (ret == noErr) {
-        TimeValue timeLoaded;
-        Float64 timeLoadedSubSecond;
-
-        si->mediaLength += si->si_flac.sample_refs_duration;
-
-        ret = InsertMediaIntoTrack(si->theTrack, si->insertTime, inserted,
-                                   si->si_flac.sample_refs_duration, fixed1);
-        if (si->insertTime == 0) {
-            if (si->streamOffset != 0) {
-                SetTrackOffset(si->theTrack, si->streamOffset);
-                dbg_printf("   # -- SetTrackOffset(%ld) = %ld --> %ld\n",
-                           si->streamOffset, GetMoviesError(),
-                           GetTrackOffset(si->theTrack));
-                if (globals->dataIsStream) {
-                    SetTrackEnabled(si->theTrack, false);
-                    SetTrackEnabled(si->theTrack, true);
-                }
-            }
-        }
-        si->insertTime = -1;
-
-        mediaTS = GetMediaTimeScale(si->theMedia);
-        mediaTS_fl = (Float64) mediaTS;
-        timeLoaded = si->streamOffset + si->mediaLength / mediaTS * movieTS + (si->mediaLength % mediaTS) * movieTS / mediaTS;
-        timeLoadedSubSecond = (Float64) ((si->streamOffset % movieTS * mediaTS / movieTS + si->mediaLength) % mediaTS) / mediaTS_fl;
-
-        if (globals->timeLoaded < timeLoaded || (globals->timeLoaded == timeLoaded && globals->timeLoadedSubSecond < timeLoadedSubSecond)) {
-            globals->timeLoaded = timeLoaded;
-            globals->timeLoadedSubSecond = timeLoadedSubSecond;
-        }
-
-        *movie_changed = true;
-
-        si->si_flac.sample_refs_duration = 0;
-        si->si_flac.sample_refs_count = 0;
-    }
-
-    return ret;
-};
+#include "samplerefs.h"
 
 
 int recognize_header__flac(ogg_page *op)
@@ -124,27 +69,28 @@ int verify_header__flac(ogg_page *op)
 
 int initialize_stream__flac(StreamInfo *si)
 {
+    si->sample_refs_count = 0;
+    si->sample_refs_duration = 0;
+    si->sample_refs_size = kFSRefsInitial;
+    si->sample_refs_increment = kFSRefsIncrement;
+    si->sample_refs = calloc(si->sample_refs_size, sizeof(SampleReference64Record));
+
+    if (si->sample_refs == NULL)
+        return -1;
+
     vorbis_comment_init(&si->si_flac.vc);
 
     si->si_flac.metablocks = 0;
     si->si_flac.skipped = 0;
     si->si_flac.state = kFStateInitial;
 
-    si->si_flac.sample_refs_count = 0;
-    si->si_flac.sample_refs_duration = 0;
-    si->si_flac.sample_refs_size = kSRefsInitial;
-    si->si_flac.sample_refs = calloc(si->si_flac.sample_refs_size, sizeof(SampleReference64Record));
-
-    if (si->si_flac.sample_refs == NULL)
-        return -1;
-
     return 0;
 };
 
 void clear_stream__flac(StreamInfo *si)
 {
-    if (si->si_flac.sample_refs != NULL)
-        free(si->si_flac.sample_refs);
+    if (si->sample_refs != NULL)
+        free(si->sample_refs);
 
     vorbis_comment_clear(&si->si_flac.vc);
 };
@@ -402,38 +348,20 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                     duration += si->streamOffsetSamples;
                 }
 
-                
-                if (si->si_flac.sample_refs_count >= si->si_flac.sample_refs_size) {
-                    //resize the sample_refs array
-                    SampleReference64Record *srptr = NULL;
-                    si->si_flac.sample_refs_size += kSRefsIncrement;
-                    srptr = realloc(si->si_flac.sample_refs, si->si_flac.sample_refs_size * sizeof(SampleReference64Record));
-                    //if (srptr == NULL)
-                    //    ; // signal error here
-                    si->si_flac.sample_refs = srptr;
+                ret = _store_sample_reference(si, &globals->dataOffset, len, duration, smp_flags);
+                if (ret != noErr) {
+                    loop = false;
+                    break;
                 }
 
-                {
-                    SampleReference64Record *srptr = &si->si_flac.sample_refs[si->si_flac.sample_refs_count];
-                    memset(srptr, 0, sizeof(SampleReference64Record));
-                    srptr->dataOffset = SInt64ToWide(globals->dataOffset);
-                    srptr->dataSize = len;
-                    srptr->durationPerSample = duration;
-                    srptr->numberOfSamples = 1;
-                    srptr->sampleFlags = smp_flags;
-
-                    dbg_printf("   -   :++: storing sampleRef: %lld, len: %d, dur: %d [%08lx, %08lx]\n", globals->dataOffset, len, duration,
-                               (UInt32) si->si_flac.sample_refs, (UInt32) srptr);
-                    si->si_flac.sample_refs_count += 1;
-                    si->si_flac.sample_refs_duration += duration;
-                }
-
-                // change the condition...?
+                if (!globals->usingIdle) {
 #if !defined(XIPHQT_FORCE_SINGLE_SAMPLE_REF)
-                if (si->si_flac.sample_refs_count >= si->si_flac.sample_refs_size)
+                    if (si->sample_refs_count >= si->sample_refs_size)
+                    //if (si->sample_refs_count >= kFSRefsInitial)
 #endif
-                {
-                    ret = _commit_srefs(globals, si, &movie_changed);
+                    {
+                        ret = _commit_srefs(globals, si, &movie_changed);
+                    }
                 }
 
                 if (pos != -1)
@@ -448,20 +376,20 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
     } while(loop);
 
     if (movie_changed)
-        NotifyMovieChanged(globals);
+        NotifyMovieChanged(globals, false);
 
     return ret;
 };
 
-ComponentResult finish_stream__flac(OggImportGlobals *globals, StreamInfo *si)
+ComponentResult flush_stream__flac(OggImportGlobals *globals, StreamInfo *si, Boolean notify)
 {
     ComponentResult ret = noErr;
     Boolean movie_changed = false;
 
     ret = _commit_srefs(globals, si, &movie_changed);
 
-    if (movie_changed)
-        NotifyMovieChanged(globals);
+    if (movie_changed && notify)
+        NotifyMovieChanged(globals, true);
 
     return ret;
 };

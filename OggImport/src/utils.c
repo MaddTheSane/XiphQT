@@ -4,7 +4,7 @@
  *    Small support functions for ogg processing.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006,2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -30,6 +30,9 @@
 
 #include "debug.h"
 #include "utils.h"
+
+extern Boolean FindPage(unsigned char **data, const unsigned char *end,
+                        ogg_page *og);
 
 int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size)
 {
@@ -62,4 +65,22 @@ int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_siz
     }
 
     return 0;
+}
+
+void find_last_page_GP(const unsigned char *data, UInt32 data_size,
+                       ogg_int64_t *gp, long *serialno)
+{
+    unsigned char *ptr = (unsigned char *) data;
+    const unsigned char *end = data + data_size;
+    ogg_page op;
+
+    *gp = -1;
+    *serialno = 0;
+
+    while (FindPage(&ptr, end, &op)) {
+        if (ogg_page_granulepos(&op) > 0) {
+            *gp = ogg_page_granulepos(&op);
+            *serialno = ogg_page_serialno(&op);
+        }
+    }
 }

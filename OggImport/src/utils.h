@@ -4,7 +4,7 @@
  *    Support functions header file.
  *
  *
- *  Copyright (c) 2006  Arek Korbik
+ *  Copyright (c) 2006,2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -32,9 +32,12 @@
 #define __ogg_utils_h__
 
 #include "config.h"
+#include <ogg/ogg.h>
 #include <Vorbis/codec.h>
 
 extern int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size);
+extern void find_last_page_GP(const unsigned char *data, UInt32 data_size,
+                              ogg_int64_t *gp, long *serialno);
 
 
 #endif /* __ogg_utils_h__ */

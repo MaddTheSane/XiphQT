@@ -4,7 +4,7 @@
  *    Definitions of OggImporter data structures.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2005-2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -108,6 +108,13 @@ typedef struct {
     TimeValue           mediaLength;
     TimeValue           insertTime;
 
+    //SampleReference array
+    SampleReference64Record *sample_refs;
+    UInt32              sample_refs_size;
+    UInt32              sample_refs_count;
+    TimeValue           sample_refs_duration;
+    UInt32              sample_refs_increment;
+
     TimeValue           streamOffset;
     SInt32              streamOffsetSamples;
 
@@ -196,9 +203,14 @@ typedef struct {
     TimeValue               timeLoaded;
     Float64                 timeLoadedSubSecond;        // last second fraction remainder
 
+    UInt32                  tickFlushed;
+    UInt32                  flushStep;
+    UInt32                  tickNotified;
+    UInt32                  notifyStep;
+
     unsigned long           startTickCount;
 
-    //    Track                   ghostTrack;
+    Track                   phTrack; /**< placeholder track for async importing */
 
     int                     streamCount;
     StreamInfo              **streamInfoHandle;
@@ -206,6 +218,12 @@ typedef struct {
     Boolean					dataRequested;
     Boolean					sizeInitialised;
 
+    long                lp_serialno;
+    ogg_int64_t         lp_GP;
+    TimeValue           totalTime;
+    Boolean             calcTotalTime;
+
+    TimeBase            idleTimeBase;
 } OggImportGlobals, *OggImportGlobalsPtr;
 
 
@@ -220,7 +238,9 @@ typedef ComponentResult (*create_track_media) (OggImportGlobals *globals, Stream
 
 typedef int (*process_first_packet) (StreamInfo *si, ogg_page *op, ogg_packet *opckt);
 typedef ComponentResult (*process_stream_page) (OggImportGlobals *globals, StreamInfo *si, ogg_page *opg);
-typedef ComponentResult (*finish_stream) (OggImportGlobals *globals, StreamInfo *si);
+typedef ComponentResult (*flush_stream) (OggImportGlobals *globals, StreamInfo *si, Boolean notify);
+
+typedef ComponentResult (*granulepos_to_time) (StreamInfo *si, ogg_int64_t *gp, TimeRecord *time);
 
 
 typedef struct stream_format_handle_funcs {
@@ -235,10 +255,12 @@ typedef struct stream_format_handle_funcs {
     create_track_media                  track_media;
 
     initialize_stream                   initialize;
-    finish_stream                       finish;
+    flush_stream                        flush;
     clear_stream                        clear;
+
+    granulepos_to_time                  gp_to_time;
 } stream_format_handle_funcs;
 
-#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 
 #endif /* __importer_types_h__ */
