@@ -199,26 +199,22 @@ static void _debug_idles(OggImportGlobalsPtr globals) {
 
     if (globals->idleManager != NULL) {
         QTIdleManagerNeedsAnIdle(globals->idleManager, &needs);
-        if (needs) {
-            QTIdleManagerGetNextIdleTime(globals->idleManager, &ni);
-            dbg_printf("[OI  ]   i [%08lx] idles: requested: base: %ld, scale: %ld, value: %ld %ld [%ld]\n",
-                       (UInt32) globals, (long) ni.base, ni.scale, ni.value.hi, ni.value.lo,
-                       GetTimeBaseTime(ni.base, 1000000, NULL));
-        } else {
-            dbg_printf("[OI  ]  !i [%08lx] idles: not needed\n", (UInt32) globals);
-        }
+        QTIdleManagerGetNextIdleTime(globals->idleManager, &ni);
+        dbg_printf("[OI  ]  %ci [%08lx] idles: requested: base: %ld, scale: %ld, value: %lld [%ld]\n",
+                   needs ? ' ' : '!',
+                   (UInt32) globals, (long) ni.base, ni.scale,
+                   (ni.value.hi == 2047 && ni.value.lo == 0xffffffff) ? -1LL : WideToSInt64(ni.value),
+                   GetTimeBaseTime(ni.base, ni.scale, NULL));
     }
 
     if (globals->dataIdleManager != NULL) {
         QTIdleManagerNeedsAnIdle(globals->dataIdleManager, &needs);
-        if (needs) {
-            QTIdleManagerGetNextIdleTime(globals->dataIdleManager, &ni);
-            dbg_printf("[OI  ]   d [%08lx] idles: requested: base: %ld, scale: %ld, value: %ld %ld [%ld]\n",
-                       (UInt32) globals, (long) ni.base, ni.scale, ni.value.hi, ni.value.lo,
-                       GetTimeBaseTime(ni.base, 1000000, NULL));
-        } else {
-            dbg_printf("[OI  ]  !d [%08lx] idles: not needed\n", (UInt32) globals);
-        }
+        QTIdleManagerGetNextIdleTime(globals->dataIdleManager, &ni);
+        dbg_printf("[OI  ]  %cd [%08lx] idles: requested: base: %ld, scale: %ld, value: %lld [%ld]\n",
+                   needs ? ' ' : '!',
+                   (UInt32) globals, (long) ni.base, ni.scale,
+                   (ni.value.hi == 2047 && ni.value.lo == 0xffffffff) ? -1LL : WideToSInt64(ni.value),
+                   GetTimeBaseTime(ni.base, ni.scale, NULL));
     }
 #endif /* NDEBUG */
 }
@@ -240,7 +236,9 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
                globals->dataCanDoScheduleData, globals->dataCanDoGetFileSize64);
 
     if (globals->usingIdle && globals->dataCanDoAsyncRead) {
-        wide read_time = {0, 2};
+        wide read_time = {0, 1};
+        TimeValue idle_delay = 4;
+
         if (globals->idleTimeBase == NULL) {
             globals->idleTimeBase = NewTimeBase();
             SetTimeBaseRate(globals->idleTimeBase, fixed1);
@@ -250,7 +248,7 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         const_ref = (long) globals;
         compl_upp = globals->dataReadCompletion;
 
-        GetTimeBaseTime(globals->idleTimeBase, 20, &sched_rec.timeNeededBy);
+        GetTimeBaseTime(globals->idleTimeBase, 60, &sched_rec.timeNeededBy);
         WideAdd(&sched_rec.timeNeededBy.value, &read_time);
         sched_rec.extendedID = 0;
         sched_rec.extendedVers = 0;
@@ -258,12 +256,11 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
 
         sched_rec_ptr = &sched_rec;
 
+        if (globals->idleManagersLinked)
+            idle_delay = 15;
         _debug_idles(globals);
-        err = QTIdleManagerSetNextIdleTimeNever(globals->idleManager);
-        dbg_printf("----: Disabling Idles: %ld\n", err);
-        _debug_idles(globals);
-        err = QTIdleManagerSetNextIdleTimeNever(globals->dataIdleManager);
-        dbg_printf("----: Disabling (data) Idles: %ld\n", err);
+        err = QTIdleManagerSetNextIdleTimeDelta(globals->idleManager, idle_delay, 60);
+        dbg_printf("----: Delaying Idles: %ld\n", err);
         _debug_idles(globals);
     }
 
@@ -275,11 +272,8 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         dbg_printf("[OI  ]  sr [%08lx] :: DoRead() = %ld\n", (UInt32) globals, err);
     } else {
         err = badComponentSelector;
-        //err = DataHGetData(globals->dataReader, buffer, 0, wideOffset.lo, size);
     }
 
-    //if (err == badComponentSelector)
-    //    err = DataHScheduleData(globals->dataReader, buffer, offset, size, const_ref, sched_rec_ptr, compl_upp);
     dbg_printf("----: READ: %ld [%08lx]\n", err, err);
     if (err == noErr && compl_upp == NULL)
         rb_sync_reserved(&globals->dataRB);
@@ -1176,19 +1170,15 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
         case kStateReadingPages:
             dbg_printf("   - (:kStateReadingPages:)\n");
             if (globals->dataRequested) {
-                
                 _debug_idles(globals);
                 result = DataHTask(globals->dataReader);
-                {
+                if (globals->dataIsStream) {
                     Boolean needs = false;
                     QTIdleManagerNeedsAnIdle(globals->dataIdleManager, &needs);
-                    if (needs) {
+                    if (needs)
                         QTIdleManagerSetNextIdleTimeDelta(globals->idleManager, 1, 4); // delay 1/4s
-                        QTIdleManagerSetNextIdleTimeDelta(globals->dataIdleManager, 1, 4); // delay 1/4s
-                    }
                 }
                 _debug_idles(globals);
-                
                 dbg_printf("[OI  ]  dT [%08lx] :: StateProcess() = %ld\n", (UInt32) globals, result);
                 if (result != noErr || globals->dataRequested || true) {
                     process = false;
@@ -1309,11 +1299,7 @@ static void ReadCompletion(Ptr request, long refcon, OSErr readErr)
             dbg_printf("--2- ReadCompletion() :: requesting Idle\n");
             _debug_idles(globals);
             QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
-            {
-                Boolean needs = false;
-                QTIdleManagerNeedsAnIdle(globals->idleManager, &needs);
-                dbg_printf("--2= ReadCompletion() :: requesting Idle = %d\n", needs);
-            }
+            _debug_idles(globals);
         }
     }
 
@@ -1565,6 +1551,7 @@ COMPONENTFUNC OggImportOpen(OggImportGlobalsPtr globals, ComponentInstance self)
         globals->sizeInitialised = false;
         globals->idleManager = NULL;
         globals->dataIdleManager = NULL;
+        globals->idleManagersLinked = false;
         globals->idleTimeBase = NULL;
 
         globals->totalTime = 0;
@@ -1805,6 +1792,7 @@ COMPONENTFUNC OggImportIdle(OggImportGlobalsPtr globals,
     if (globals->state == kStateImportComplete) {
         *outFlags |= movieImportResultComplete;
     } else {
+        /* err = */ QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
         err = StateProcess(globals);
     }
 
@@ -1979,22 +1967,22 @@ COMPONENTFUNC OggImportSetIdleManager(OggImportGlobalsPtr globals, IdleManager i
     dbg_printf("-- SetIdleManager() called\n");
     globals->idleManager = im;
 
-    if (globals->dataReader)
-    {
-        if (CallComponentCanDo(globals->dataReader, kDataHSetIdleManagerSelect) == true)
-        {
+    if (globals->dataReader) {
+        if (CallComponentCanDo(globals->dataReader, kDataHSetIdleManagerSelect) == true) {
             globals->dataIdleManager = QTIdleManagerOpen();
             if (globals->dataIdleManager != NULL) {
-                //err = DataHSetIdleManager(globals->dataReader, im);
                 err = DataHSetIdleManager(globals->dataReader, globals->dataIdleManager);
                 dbg_printf("--  -- SetIdleManager(dataReader) = %ld\n", (long)err);
-                if (err != noErr) {
+                if (err) {
                     QTIdleManagerClose(globals->dataIdleManager);
+                    globals->dataIdleManager = NULL;
                     err = noErr;
-                } else {
+                } else if (!globals->dataIsStream) {
                     err = QTIdleManagerSetParent(globals->dataIdleManager, globals->idleManager);
                     dbg_printf("--  -- SetParentIdleManager() = %ld\n", (long)err);
-                    err = noErr;
+                    if (!err)
+                        globals->idleManagersLinked = true;
+                    //err = noErr;
                 }
             }
         } else {
@@ -2002,7 +1990,11 @@ COMPONENTFUNC OggImportSetIdleManager(OggImportGlobalsPtr globals, IdleManager i
         }
     }
 
-    QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
+    if (!err) {
+        QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
+        _debug_idles(globals);
+    }
+
     return err;
 }
 

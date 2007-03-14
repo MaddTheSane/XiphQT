@@ -160,6 +160,7 @@ typedef struct {
 
     IdleManager             idleManager;
     IdleManager             dataIdleManager;
+    Boolean                 idleManagersLinked;
 
     // ogg grouped and chained streams support variables
     Boolean                 groupStreamsFound;
