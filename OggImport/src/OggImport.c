@@ -236,7 +236,7 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
                globals->dataCanDoScheduleData, globals->dataCanDoGetFileSize64);
 
     if (globals->usingIdle && globals->dataCanDoAsyncRead) {
-        wide read_time = {0, 10};
+        wide read_time = SInt64ToWide(S64Set(10));
         TimeValue idle_delay = 80;
 
         if (globals->idleTimeBase == NULL) {
@@ -1340,7 +1340,7 @@ static ComponentResult XQTGetFileSize(OggImportGlobalsPtr globals)
 
     dbg_printf("---> XQTGetFileSize() called\n");
     if (globals->dataCanDoGetFileSize64) {
-        wide size = {0, -1};
+        wide size = SInt64ToWide(S64Set(-1));
         err = DataHGetFileSize64(globals->dataReader, &size);
         size64 = WideToSInt64(size);
         dbg_printf("---- :: size: %ld%ld, err: %ld (%lx)\n", size.hi, size.lo, (long)err, (long)err);
