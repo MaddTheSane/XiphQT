@@ -507,7 +507,7 @@ ComponentResult granulepos_to_time__theora(StreamInfo *si, ogg_int64_t *gp, Time
     ogg_int64_t frames = *gp >> si->si_theora.granulepos_shift;
     frames += *gp - (frames << si->si_theora.granulepos_shift);
 
-    time->value = SInt64ToWide(frames);
+    time->value = SInt64ToWide(S64Multiply(frames, S64Set(si->si_theora.fps_framelen)));
     time->scale = si->rate;
     time->base = NULL;
 
