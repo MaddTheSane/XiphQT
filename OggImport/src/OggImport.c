@@ -236,8 +236,8 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
                globals->dataCanDoScheduleData, globals->dataCanDoGetFileSize64);
 
     if (globals->usingIdle && globals->dataCanDoAsyncRead) {
-        wide read_time = {0, 1};
-        TimeValue idle_delay = 4;
+        wide read_time = {0, 10};
+        TimeValue idle_delay = 80;
 
         if (globals->idleTimeBase == NULL) {
             globals->idleTimeBase = NewTimeBase();
@@ -248,7 +248,7 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         const_ref = (long) globals;
         compl_upp = globals->dataReadCompletion;
 
-        GetTimeBaseTime(globals->idleTimeBase, 60, &sched_rec.timeNeededBy);
+        GetTimeBaseTime(globals->idleTimeBase, 1000, &sched_rec.timeNeededBy);
         WideAdd(&sched_rec.timeNeededBy.value, &read_time);
         sched_rec.extendedID = 0;
         sched_rec.extendedVers = 0;
@@ -257,9 +257,11 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         sched_rec_ptr = &sched_rec;
 
         if (globals->idleManagersLinked)
-            idle_delay = 15;
+            idle_delay = 250;
+        else if (globals->dataIdleManager == NULL)
+            idle_delay = 8;
         _debug_idles(globals);
-        err = QTIdleManagerSetNextIdleTimeDelta(globals->idleManager, idle_delay, 60);
+        err = QTIdleManagerSetNextIdleTimeDelta(globals->idleManager, idle_delay, 1000);
         dbg_printf("----: Delaying Idles: %ld\n", err);
         _debug_idles(globals);
     }
@@ -972,8 +974,12 @@ ComponentResult CreatePlaceholderTrack(OggImportGlobalsPtr globals)
     ComponentResult err = noErr;
     Track track = NULL;
     Media media = NULL;
-    SampleDescriptionHandle sd =
-        (SampleDescriptionHandle) NewHandleClear(sizeof(SampleDescription));
+    SampleDescriptionHandle sd;
+
+    if (globals->sizeInitialised && S64Compare(globals->dataEndOffset, S64Set(-1)) == 0)
+        return err;
+
+    sd = (SampleDescriptionHandle) NewHandleClear(sizeof(SampleDescription));
 
     if (sd == NULL)
         err = MemError();
@@ -1174,9 +1180,12 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
                 result = DataHTask(globals->dataReader);
                 if (globals->dataIsStream) {
                     Boolean needs = false;
-                    QTIdleManagerNeedsAnIdle(globals->dataIdleManager, &needs);
-                    if (needs)
+                    if (globals->dataIdleManager != NULL)
+                        QTIdleManagerNeedsAnIdle(globals->dataIdleManager, &needs);
+                    if (needs || globals->dataRequested) {
+                        dbg_printf("   - delaying idle, no data\n");
                         QTIdleManagerSetNextIdleTimeDelta(globals->idleManager, 1, 4); // delay 1/4s
+                    }
                 }
                 _debug_idles(globals);
                 dbg_printf("[OI  ]  dT [%08lx] :: StateProcess() = %ld\n", (UInt32) globals, result);
@@ -1189,7 +1198,6 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->validDataEnd = globals->currentData + rb_data_available(&globals->dataRB);
 
             while (result == noErr && FindPage(&globals->currentData, globals->validDataEnd, &og)) {
-            //while (result == noErr && FindPageNoCRC(&globals->currentData, globals->validDataEnd, &og)) {
                 result = ProcessPage(globals, &og);
                 dbg_printf("   - << (:kStateReadingPages:) :: ProcessPage() = %ld\n", (long) result);
             }
@@ -1272,6 +1280,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
 
         case kStateImportComplete:
             dbg_printf("   - (:kStateImportComplete:)\n");
+            RemovePlaceholderTrack(globals);
             process = false;
             break;
         }
@@ -1791,6 +1800,7 @@ COMPONENTFUNC OggImportIdle(OggImportGlobalsPtr globals,
 
     if (globals->state == kStateImportComplete) {
         *outFlags |= movieImportResultComplete;
+        RemovePlaceholderTrack(globals);
     } else {
         /* err = */ QTIdleManagerSetNextIdleTimeNow(globals->idleManager);
         err = StateProcess(globals);
@@ -1883,6 +1893,8 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState)
 {
+    ComponentResult err = noErr;
+
     dbg_printf("-- GetLoadState() called\n");
     switch (globals->state)
     {
@@ -1891,13 +1903,39 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
         break;
 
     case kStateReadingPages:
-        if (globals->timeLoaded > 0)
-            if (globals->sizeInitialised && S64Compare(globals->dataEndOffset, S64Set(-1)) == 0)
+        if (globals->timeLoaded > 0) {
+            if (globals->sizeInitialised && S64Compare(globals->dataEndOffset, S64Set(-1)) == 0) {
                 *loadState = kMovieLoadStatePlaythroughOK;
-            else
+            } else if (globals->sizeInitialised && globals->totalTime > 0) {
+                TimeBase wctb;
                 *loadState = kMovieLoadStatePlayable;
-        else
+
+                if (!QTGetWallClockTimeBase(&wctb)) {
+                    TimeRecord dl_tr;
+                    TimeRecord wc_tr;
+                    TimeValue mt;
+                    wide mt_wide;
+                    TimeScale ts = GetMovieTimeScale(globals->theMovie);
+
+                    err = OggImportEstimateCompletionTime(globals, &dl_tr);
+                    if (!err) {
+                        mt = GetMovieDuration(globals->theMovie) - GetMovieTime(globals->theMovie, NULL);
+                        mt_wide = SInt64ToWide(S64Set(mt));
+                        ConvertTimeScale(&dl_tr, ts);
+                        GetTimeBaseTime(wctb, ts, &wc_tr);
+                        WideAdd(&wc_tr.value, &mt_wide);
+                        if (WideCompare(&wc_tr.value, &dl_tr.value) > 0)
+                            *loadState = kMovieLoadStatePlaythroughOK;
+                    } else {
+                        err = noErr;
+                    }
+                }
+            } else {
+                *loadState = kMovieLoadStatePlayable;
+            }
+        } else {
             *loadState = kMovieLoadStateLoading;
+        }
 
         break;
 
@@ -1912,7 +1950,7 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
 
     dbg_printf("-- GetLoadState returning %ld\n", *loadState);
 
-    return noErr;
+    return err;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1967,7 +2005,11 @@ COMPONENTFUNC OggImportSetIdleManager(OggImportGlobalsPtr globals, IdleManager i
     dbg_printf("-- SetIdleManager() called\n");
     globals->idleManager = im;
 
-    if (globals->dataReader) {
+    if (globals->dataReader
+#if defined(XIPHQT_DATAH_IDLEMANAGER_NET_ONLY)
+        && globals->dataIsStream
+#endif /* XIPHQT_DATAH_IDLEMANAGER_NET_ONLY */
+        ) {
         if (CallComponentCanDo(globals->dataReader, kDataHSetIdleManagerSelect) == true) {
             globals->dataIdleManager = QTIdleManagerOpen();
             if (globals->dataIdleManager != NULL) {
