@@ -1509,7 +1509,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				PER_ARCH_CFLAGS_i386 = "-D XIPHQT_DATAH_IDLEMANAGER_NET_ONLY";
 				PRODUCT_NAME = XiphQT;
 				WRAPPER_EXTENSION = component;
 				ZERO_LINK = YES;
@@ -1547,7 +1546,6 @@
 					"-ffast-math",
 				);
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				PER_ARCH_CFLAGS_i386 = "-D XIPHQT_DATAH_IDLEMANAGER_NET_ONLY";
 				PRODUCT_NAME = XiphQT;
 				WRAPPER_EXTENSION = component;
 			};
@@ -1611,7 +1609,6 @@
 				INFOPLIST_FILE = "Info (decoders).plist";
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				PER_ARCH_CFLAGS_i386 = "-D XIPHQT_DATAH_IDLEMANAGER_NET_ONLY";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
 				ZERO_LINK = YES;
@@ -1650,7 +1647,6 @@
 					"-ffast-math",
 				);
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				PER_ARCH_CFLAGS_i386 = "-D XIPHQT_DATAH_IDLEMANAGER_NET_ONLY";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
 			};

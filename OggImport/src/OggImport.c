@@ -926,8 +926,6 @@ ComponentResult GetFileDurationFromGP(OggImportGlobalsPtr globals)
         if (si != NULL && si->sfhf->gp_to_time != NULL) {
             err = (*si->sfhf->gp_to_time)(si, &globals->lp_GP, &tr);
         } else if (si != NULL) {
-            //TimeRecord tr = {SInt64ToWide(globals->lp_GP),
-            //                 si->rate, NULL};
             tr.value = SInt64ToWide(globals->lp_GP);
             tr.scale = si->rate;
             tr.base = NULL;
@@ -2005,11 +2003,7 @@ COMPONENTFUNC OggImportSetIdleManager(OggImportGlobalsPtr globals, IdleManager i
     dbg_printf("-- SetIdleManager() called\n");
     globals->idleManager = im;
 
-    if (globals->dataReader
-#if defined(XIPHQT_DATAH_IDLEMANAGER_NET_ONLY)
-        && globals->dataIsStream
-#endif /* XIPHQT_DATAH_IDLEMANAGER_NET_ONLY */
-        ) {
+    if (globals->dataReader) {
         if (CallComponentCanDo(globals->dataReader, kDataHSetIdleManagerSelect) == true) {
             globals->dataIdleManager = QTIdleManagerOpen();
             if (globals->dataIdleManager != NULL) {
