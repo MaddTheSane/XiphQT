@@ -36,7 +36,7 @@
 #include <Ogg/ogg.h>
 #else
 #include <QuickTimeComponents.h>
-#include <ogg.h>
+#include <ogg/ogg.h>
 
 #if defined(TARGET_OS_WIN32)
 #define _WINIOCTL_

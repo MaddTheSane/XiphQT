@@ -35,7 +35,8 @@
 #include <CoreServices/CoreServices.h>
 #include <CoreFoundation/CoreFoundation.h>
 #else
-#include <CoreServices.h>
+#include <ConditionalMacros.h>
+#include <MacTypes.h>
 #include <CoreFoundation.h>
 #endif
 

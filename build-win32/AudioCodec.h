@@ -54,14 +54,6 @@ extern "C"
 {
 #endif
 
-struct AudioStreamPacketDescription
-{
-    SInt64  mStartOffset;
-    UInt32  mVariableFramesInPacket;
-    UInt32  mDataByteSize;
-};
-typedef struct AudioStreamPacketDescription AudioStreamPacketDescription;
-
 typedef ComponentInstance  AudioCodec;
 typedef UInt32             AudioCodecPropertyID;
 
