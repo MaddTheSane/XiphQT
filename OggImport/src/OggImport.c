@@ -236,7 +236,7 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
                globals->dataCanDoScheduleData, globals->dataCanDoGetFileSize64);
 
     if (globals->usingIdle && globals->dataCanDoAsyncRead) {
-        wide read_time = SInt64ToWide(S64Set(10));
+        SInt64 read_time = S64Set(10);
         TimeValue idle_delay = 80;
 
         if (globals->idleTimeBase == NULL) {
@@ -249,7 +249,8 @@ static ComponentResult DoRead(OggImportGlobalsPtr globals, Ptr buffer, SInt64 of
         compl_upp = globals->dataReadCompletion;
 
         GetTimeBaseTime(globals->idleTimeBase, 1000, &sched_rec.timeNeededBy);
-        WideAdd(&sched_rec.timeNeededBy.value, &read_time);
+        read_time = S64Add(WideToSInt64(sched_rec.timeNeededBy.value), read_time);
+        sched_rec.timeNeededBy.value = SInt64ToWide(read_time);
         sched_rec.extendedID = 0;
         sched_rec.extendedVers = 0;
         sched_rec.priority = 0x00640000; // (Fixed) 100.0
@@ -871,7 +872,7 @@ ComponentResult GetLastFileGP(OggImportGlobalsPtr globals)
     unsigned char *buffer = NULL, *p = NULL;
     UInt32 size = 8192, i = 16;
     UInt32 ssize = 0;
-    wide wideSize = SInt64ToWide(S64SetU(size));
+    SInt64 tmp;
 
     dbg_printf("[OI  ]  >> [%08lx] :: GetLastFileGP(%lld)\n", (UInt32) globals, globals->dataEndOffset);
 
@@ -884,7 +885,8 @@ ComponentResult GetLastFileGP(OggImportGlobalsPtr globals)
         p = buffer + size * 16;
 
         while (i-- > 0) {
-            wideOffset = *WideSubtract(&wideOffset, &wideSize);
+            tmp = S64Subtract(WideToSInt64(wideOffset), S64SetU(size));
+            wideOffset = SInt64ToWide(tmp);
             p -= size;
             ssize += size;
 
@@ -1338,7 +1340,8 @@ static ComponentResult XQTGetFileSize(OggImportGlobalsPtr globals)
 
     dbg_printf("---> XQTGetFileSize() called\n");
     if (globals->dataCanDoGetFileSize64) {
-        wide size = SInt64ToWide(S64Set(-1));
+        SInt64 tmp = S64Set(-1);
+        wide size = SInt64ToWide(tmp);
         err = DataHGetFileSize64(globals->dataReader, &size);
         size64 = WideToSInt64(size);
         dbg_printf("---- :: size: %ld%ld, err: %ld (%lx)\n", size.hi, size.lo, (long)err, (long)err);
@@ -1376,7 +1379,8 @@ static ComponentResult StartImport(OggImportGlobalsPtr globals, Handle dataRef, 
 
 static ComponentResult JustStartImport(OggImportGlobalsPtr globals, Handle dataRef, OSType dataRefType) {
     ComponentResult ret = noErr;
-    Boolean do_idles = globals->usingIdle;
+    Boolean using_idles_p = globals->usingIdle;
+    Boolean dont_idle = false;
 
     globals->state = kStateInitial;
     globals->usingIdle = false;
@@ -1390,12 +1394,14 @@ static ComponentResult JustStartImport(OggImportGlobalsPtr globals, Handle dataR
     if (ret != noErr) {
         return ret;
     } else if (S64Compare(globals->dataEndOffset, S64Set(0)) > 0) {
+        if (S64Compare(S64Subtract(globals->dataEndOffset, globals->dataStartOffset), S64Set(kNoIdlingFileSizeLimit)) < 0 && !globals->dataIsStream)
+            dont_idle = true;
         /* ret = */ GetLastFileGP(globals);
     }
 
     while (true) {
         ret = StateProcess(globals);
-        if ((ret != noErr && ret != eofErr) || globals->dataIsStream || globals->state == kStateImportComplete || !globals->calcTotalTime) {
+        if ((ret != noErr && ret != eofErr) || globals->dataIsStream || globals->state == kStateImportComplete || (!dont_idle && !globals->calcTotalTime)) {
             break;
         }
     }
@@ -1403,7 +1409,7 @@ static ComponentResult JustStartImport(OggImportGlobalsPtr globals, Handle dataR
     if (ret == eofErr)
         ret = noErr;
 
-    globals->usingIdle = do_idles;
+    globals->usingIdle = using_idles_p;
 
     if (ret == noErr) {
         FlushAllStreams(globals, true);
@@ -1462,7 +1468,7 @@ static ComponentResult SetupDataHandler(OggImportGlobalsPtr globals, Handle data
                 err = DataHOpenForRead(globals->dataReader);
 
             //DataHPlaybackHints(globals->dataReader, 0, 0, -1, 49152);  // Don't care if it fails
-            DataHPlaybackHints(globals->dataReader, 0, 0, -1, 256 * 1024);  // Don't care if it fails
+            DataHPlaybackHints(globals->dataReader, 0, 0, -1, 2 * 1024 * 1024);  // Don't care if it fails
 
             if (err == noErr)
             {
@@ -1912,17 +1918,17 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
                     TimeRecord dl_tr;
                     TimeRecord wc_tr;
                     TimeValue mt;
-                    wide mt_wide;
+                    SInt64 mt_64;
                     TimeScale ts = GetMovieTimeScale(globals->theMovie);
 
                     err = OggImportEstimateCompletionTime(globals, &dl_tr);
                     if (!err) {
                         mt = GetMovieDuration(globals->theMovie) - GetMovieTime(globals->theMovie, NULL);
-                        mt_wide = SInt64ToWide(S64Set(mt));
+                        mt_64 = S64Set(mt);
                         ConvertTimeScale(&dl_tr, ts);
                         GetTimeBaseTime(wctb, ts, &wc_tr);
-                        WideAdd(&wc_tr.value, &mt_wide);
-                        if (WideCompare(&wc_tr.value, &dl_tr.value) > 0)
+                        mt_64 = S64Add(WideToSInt64(wc_tr.value), mt_64);
+                        if (S64Compare(mt_64, WideToSInt64(dl_tr.value)) > 0)
                             *loadState = kMovieLoadStatePlaythroughOK;
                     } else {
                         err = noErr;

@@ -503,11 +503,13 @@ ComponentResult flush_stream__theora(OggImportGlobals *globals, StreamInfo *si, 
 ComponentResult granulepos_to_time__theora(StreamInfo *si, ogg_int64_t *gp, TimeRecord *time)
 {
     ComponentResult err = noErr;
+    SInt64 tmp;
 
     ogg_int64_t frames = *gp >> si->si_theora.granulepos_shift;
     frames += *gp - (frames << si->si_theora.granulepos_shift);
 
-    time->value = SInt64ToWide(S64Multiply(frames, S64Set(si->si_theora.fps_framelen)));
+    tmp = S64Multiply(frames, S64Set(si->si_theora.fps_framelen));
+    time->value = SInt64ToWide(tmp);
     time->scale = si->rate;
     time->base = NULL;
 
