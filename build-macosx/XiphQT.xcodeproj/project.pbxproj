@@ -36,12 +36,10 @@
 		7326B5310B5AC44B004CE9D3 /* CAFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */; };
 		7326B5320B5AC44B004CE9D3 /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */; };
 		7326B5330B5AC44B004CE9D3 /* flac_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C640B1A2AD8002B059E /* flac_entrypoints.cpp */; };
-		7326B5380B5AC44B004CE9D3 /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1C960B19C33B00E06B34 /* libtheora.a */; };
 		7326B5390B5AC44B004CE9D3 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CA10B19C35300E06B34 /* libtheoradec.a */; };
 		7326B53A0B5AC44B004CE9D3 /* libflac++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C420B1A25B2002B059E /* libflac++.a */; };
 		7326B53B0B5AC44B004CE9D3 /* libflac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C400B1A25B2002B059E /* libflac.a */; };
 		7326B53C0B5AC44B004CE9D3 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CAC0B19C36500E06B34 /* libspeex.a */; };
-		7326B53D0B5AC44B004CE9D3 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CBB0B19C37600E06B34 /* libvorbisenc.a */; };
 		7326B53E0B5AC44B004CE9D3 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CB90B19C37600E06B34 /* libvorbis.a */; };
 		7326B53F0B5AC44B004CE9D3 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CC80B19C38700E06B34 /* libogg.a */; };
 		7326B5400B5AC44B004CE9D3 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
@@ -57,7 +55,6 @@
 		734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734716820B77F72E001F439D /* XCACodecTests.cpp */; };
 		7373EDD00B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
 		7373EDD20B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
-		7373EDD30B7BDCAA00591836 /* samplerefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7373EDCF0B7BDCAA00591836 /* samplerefs.h */; };
 		737448B60B19EC05002B059E /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		737448B70B19EC05002B059E /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
 		737448B80B19EC05002B059E /* rb.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A50B19EC05002B059E /* rb.c */; };
@@ -350,7 +347,6 @@
 			dstSubfolderSpec = 7;
 			files = (
 				7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */,
-				7373EDD30B7BDCAA00591836 /* samplerefs.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,12 +497,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7326B5380B5AC44B004CE9D3 /* libtheora.a in Frameworks */,
 				7326B5390B5AC44B004CE9D3 /* libtheoradec.a in Frameworks */,
 				7326B53A0B5AC44B004CE9D3 /* libflac++.a in Frameworks */,
 				7326B53B0B5AC44B004CE9D3 /* libflac.a in Frameworks */,
 				7326B53C0B5AC44B004CE9D3 /* libspeex.a in Frameworks */,
-				7326B53D0B5AC44B004CE9D3 /* libvorbisenc.a in Frameworks */,
 				7326B53E0B5AC44B004CE9D3 /* libvorbis.a in Frameworks */,
 				7326B53F0B5AC44B004CE9D3 /* libogg.a in Frameworks */,
 				7326B5400B5AC44B004CE9D3 /* Carbon.framework in Frameworks */,
