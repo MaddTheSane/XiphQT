@@ -139,10 +139,13 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
                 UInt32 vorbis_return = CAVorbisDecoder::ProduceOutputPackets(the_data, vorbis_returned_data, vorbis_packets, NULL);
                 if (vorbis_return == kAudioCodecProduceOutputPacketSuccess ||
                     vorbis_return == kAudioCodecProduceOutputPacketSuccessHasMore ||
-                    vorbis_return == kAudioCodecProduceOutputPacketNeedsMoreInputData) {
+                    vorbis_return == kAudioCodecProduceOutputPacketNeedsMoreInputData)
+                {
                     vorbis_total_returned_data += vorbis_returned_data;
 
-                    if (vorbis_return == kAudioCodecProduceOutputPacketSuccess || vorbis_return == kAudioCodecProduceOutputPacketNeedsMoreInputData)
+                    if (vorbis_return == kAudioCodecProduceOutputPacketSuccess ||
+                        vorbis_return == kAudioCodecProduceOutputPacketNeedsMoreInputData ||
+                        vorbis_packets == mSOBufferPackets)
                     {
                         /* ok, all data decoded */
                         mSOBufferUsed = vorbis_total_returned_data;

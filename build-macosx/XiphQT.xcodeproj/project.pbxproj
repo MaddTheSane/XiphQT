@@ -53,6 +53,10 @@
 		7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
 		73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73271C830B610B2400175874 /* RingBufferTests.cpp */; };
 		734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734716820B77F72E001F439D /* XCACodecTests.cpp */; };
+		736266AB0BB9502C006BE1C2 /* OggVorbisTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */; };
+		736266AC0BB950A0006BE1C2 /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A250B1A031D002B059E /* CAOggVorbisDecoder.cpp */; };
+		736266AD0BB950AD006BE1C2 /* CAVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A270B1A031D002B059E /* CAVorbisDecoder.cpp */; };
+		736266B80BB95199006BE1C2 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CB90B19C37600E06B34 /* libvorbis.a */; };
 		7373EDD00B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
 		7373EDD20B7BDCAA00591836 /* samplerefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 7373EDCE0B7BDCAA00591836 /* samplerefs.c */; };
 		737448B60B19EC05002B059E /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
@@ -253,6 +257,34 @@
 			remoteGlobalIDString = 7388363F0B191426005C7A69;
 			remoteInfo = "libtheoradec (static)";
 		};
+		736266B00BB95163006BE1C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 738A452D0B18659A00B43A0C /* Ogg.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 734FB2E40B18B33E00D561D7 /* libogg (static) */;
+			remoteInfo = "libogg (static)";
+		};
+		736266B20BB95163006BE1C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 738837B00B19386C005C7A69 /* Vorbis.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 738835E30B18F870005C7A69 /* libvorbis (static) */;
+			remoteInfo = "libvorbis (static)";
+		};
+		736266B40BB95163006BE1C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 73744C260B1A25A2002B059E /* FLAC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 73744B1A0B1A1C43002B059E /* libflac (static) */;
+			remoteInfo = "libflac (static)";
+		};
+		736266B60BB95163006BE1C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 73744C260B1A25A2002B059E /* FLAC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 73744B510B1A21DA002B059E /* libflac++ (static) */;
+			remoteInfo = "libflac++ (static)";
+		};
 		737449200B19F043002B059E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 738A452D0B18659A00B43A0C /* Ogg.xcodeproj */;
@@ -372,6 +404,8 @@
 		73271C830B610B2400175874 /* RingBufferTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RingBufferTests.cpp; path = ../tests/common/RingBufferTests.cpp; sourceTree = SOURCE_ROOT; };
 		734716820B77F72E001F439D /* XCACodecTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodecTests.cpp; path = ../tests/common/XCACodecTests.cpp; sourceTree = SOURCE_ROOT; };
 		734716830B77F72E001F439D /* XCACodecTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodecTests.h; path = ../tests/common/XCACodecTests.h; sourceTree = SOURCE_ROOT; };
+		736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OggVorbisTests.cpp; path = ../tests/CAVorbis/OggVorbisTests.cpp; sourceTree = SOURCE_ROOT; };
+		736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggVorbisTests.h; path = ../tests/CAVorbis/OggVorbisTests.h; sourceTree = SOURCE_ROOT; };
 		7373EDCE0B7BDCAA00591836 /* samplerefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = samplerefs.c; path = ../OggImport/src/samplerefs.c; sourceTree = SOURCE_ROOT; };
 		7373EDCF0B7BDCAA00591836 /* samplerefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = samplerefs.h; path = ../OggImport/src/samplerefs.h; sourceTree = SOURCE_ROOT; };
 		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../OggImport/src/common.c; sourceTree = SOURCE_ROOT; };
@@ -513,6 +547,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				736266B80BB95199006BE1C2 /* libvorbis.a in Frameworks */,
 				73C752FA0B5FD91100615F6C /* libflac++.a in Frameworks */,
 				73C752FB0B5FD91200615F6C /* libflac.a in Frameworks */,
 				73C752FD0B5FD92200615F6C /* libogg.a in Frameworks */,
@@ -663,6 +698,15 @@
 				73271C830B610B2400175874 /* RingBufferTests.cpp */,
 			);
 			name = common;
+			sourceTree = "<group>";
+		};
+		736266A80BB9500B006BE1C2 /* CAVorbis */ = {
+			isa = PBXGroup;
+			children = (
+				736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */,
+				736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */,
+			);
+			name = CAVorbis;
 			sourceTree = "<group>";
 		};
 		737448880B19EAE7002B059E /* OggImport */ = {
@@ -973,6 +1017,7 @@
 		73C752A30B5FB78300615F6C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				736266A80BB9500B006BE1C2 /* CAVorbis */,
 				73C752A40B5FB79A00615F6C /* CAFLAC */,
 				73271C7F0B610A9600175874 /* common */,
 			);
@@ -1029,6 +1074,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				736266B10BB95163006BE1C2 /* PBXTargetDependency */,
+				736266B30BB95163006BE1C2 /* PBXTargetDependency */,
+				736266B50BB95163006BE1C2 /* PBXTargetDependency */,
+				736266B70BB95163006BE1C2 /* PBXTargetDependency */,
 			);
 			name = tests;
 			productName = tests;
@@ -1348,6 +1397,9 @@
 				73C752F30B5FD8D300615F6C /* GetCodecBundle.cpp in Sources */,
 				73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */,
 				734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */,
+				736266AB0BB9502C006BE1C2 /* OggVorbisTests.cpp in Sources */,
+				736266AC0BB950A0006BE1C2 /* CAOggVorbisDecoder.cpp in Sources */,
+				736266AD0BB950AD006BE1C2 /* CAVorbisDecoder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1424,6 +1476,26 @@
 			isa = PBXTargetDependency;
 			name = "libtheoradec (static)";
 			targetProxy = 7326B50F0B5AC44B004CE9D3 /* PBXContainerItemProxy */;
+		};
+		736266B10BB95163006BE1C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libogg (static)";
+			targetProxy = 736266B00BB95163006BE1C2 /* PBXContainerItemProxy */;
+		};
+		736266B30BB95163006BE1C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libvorbis (static)";
+			targetProxy = 736266B20BB95163006BE1C2 /* PBXContainerItemProxy */;
+		};
+		736266B50BB95163006BE1C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libflac (static)";
+			targetProxy = 736266B40BB95163006BE1C2 /* PBXContainerItemProxy */;
+		};
+		736266B70BB95163006BE1C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libflac++ (static)";
+			targetProxy = 736266B60BB95163006BE1C2 /* PBXContainerItemProxy */;
 		};
 		737449210B19F043002B059E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1657,10 +1729,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"../external-libs/ogg/include",
@@ -1670,6 +1739,7 @@
 					"../external-libs/theora/include",
 					"../external-libs/flac/include",
 					../CAFLAC/src,
+					../CAVorbis/src,
 					../utils,
 				);
 				INFOPLIST_FILE = "tests-Info.plist";
@@ -1696,10 +1766,7 @@
 				GCC_MODEL_TUNING = G4;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"../external-libs/ogg/include",
@@ -1709,6 +1776,7 @@
 					"../external-libs/theora/include",
 					"../external-libs/flac/include",
 					../CAFLAC/src,
+					../CAVorbis/src,
 					../utils,
 				);
 				INFOPLIST_FILE = "tests-Info.plist";

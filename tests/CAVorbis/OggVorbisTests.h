@@ -1,10 +1,10 @@
 /*
- *  vorbis_versions.h
+ *  OggVorbisTests.h
  *
- *    The current version of the Vorbis component.
+ *    CAOggVorbisDecoder class test cases header file.
  *
  *
- *  Copyright (c) 2005-2006  Arek Korbik
+ *  Copyright (c) 2007  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,17 +28,23 @@
  */
 
 
-#if !defined(__vorbis_versions_h__)
-#define __vorbis_versions_h__
+#include <CPlusTest/CPlusTest.h>
+#include "CAOggVorbisDecoder.h"
 
+class OggVorbisTests : public TestCase {
+public:
+    OggVorbisTests(TestInvocation* invocation);
+    virtual ~OggVorbisTests();
 
-#ifdef DEBUG
-#define kCAVorbis_adec_Version		(0x00FF0109)
-#define kCAVorbis_aenc_Version		(0x00FF0101)
-#else
-#define kCAVorbis_adec_Version		(0x00000109)
-#define kCAVorbis_aenc_Version		(0x00000101)
-#endif /* DEBUG */
+    void setUp();
+    void tearDown();
 
+    CAOggVorbisDecoder *mOggDecoder;
 
-#endif /* __vorbis_versions_h__ */
+    void noop();
+    void append_uninitialized();
+    void init_cookie();
+    void append_single();
+    void append_multiple();
+    void audio_offset();
+};
