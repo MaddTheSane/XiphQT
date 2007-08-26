@@ -1,0 +1,10 @@
+2007-08-26  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/OggImport.c:
+	* OggImport/src/importer_types.h:
+	* OggImport/src/stream_theora.c:
+	Improve idle loading of files with video - uses slightly more
+	memory but all avoidable stalling is being avoided.  Fixes #1151.
+
+	* ChangeLog:
+	Add the ChangeLog file.

@@ -204,6 +204,8 @@ ComponentResult create_track__theora(OggImportGlobals *globals, StreamInfo *si)
     si->theTrack = NewMovieTrack(globals->theMovie,
                                  frame_width << 16 | (frame_width_fraction & 0xffff),
                                  si->si_theora.ti.pic_height << 16, 0);
+    if (si->theTrack)
+        globals->hasVideoTrack = true;
 
     return ret;
 };

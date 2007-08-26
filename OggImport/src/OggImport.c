@@ -1134,6 +1134,29 @@ static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
     return ret;
 }
 
+static Boolean ShouldFlush(OggImportGlobals *globals)
+{
+    Boolean ret = false;
+    UInt32 now = TickCount();
+
+    if (now > globals->tickFlushed + globals->flushStepCheck && GetMovieRate(globals->theMovie) != 0) {
+        // movie is currently playing:
+        // - if video is present don't commit sample refs until
+        //   less than 5 seconds of playtime is left (QT will reset video decoder
+        //   every time samples are added, QT is just nice like that)
+        // - if we only have audio - commit every flushStepNormal ticks, unless near the end of the
+        //   currently loaded data - then just commit (practically - every flushStepCheck ticks)
+        if ((globals->timeLoaded - GetMovieTime(globals->theMovie, NULL) < globals->flushMinTimeLeft) ||
+            (!globals->hasVideoTrack && now > globals->tickFlushed + globals->flushStepNormal))
+            ret = true;
+    } else if (now > globals->tickFlushed + globals->flushStepNormal) {
+        // movie is not playing - commit sample refs every 'flushStepNormal' ticks
+        ret = true;
+    }
+
+    return ret;
+}
+
 static ComponentResult XQTGetFileSize(OggImportGlobalsPtr globals);
 
 static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
@@ -1148,6 +1171,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             dbg_printf("   - (:kStateInitial:)\n");
             globals->dataOffset = globals->dataStartOffset;
             globals->numTracksSeen = 0;
+            globals->hasVideoTrack = false;
             globals->timeLoaded = 0;
             globals->timeLoadedSubSecond = 0.0;
             globals->tickFlushed = 0;
@@ -1244,7 +1268,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
                 }
 
                 if (globals->usingIdle) {
-                    if (TickCount() > globals->tickFlushed + globals->flushStep)
+                    if (ShouldFlush(globals))
                         FlushAllStreams(globals, false);
                 }
             }
@@ -1868,7 +1892,10 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
 
     if (globals->usingIdle) {
         globals->notifyStep = 420; // ~60 ticks per second
-        globals->flushStep = 60;
+        globals->flushStepNormal = 90;
+        globals->flushStepCheck = 30;
+        // 5 seconds, assuming movie timescale is static
+        globals->flushMinTimeLeft = 5 * GetMovieTimeScale(globals->theMovie);
 #if 1
         err = JustStartImport(globals, dataRef, dataRefType);
 #else
@@ -1907,7 +1934,7 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
         break;
 
     case kStateReadingPages:
-        if (globals->timeLoaded > 0) {
+        if (globals->timeLoaded > globals->flushMinTimeLeft) {
             if (globals->sizeInitialised && S64Compare(globals->dataEndOffset, S64Set(-1)) == 0) {
                 *loadState = kMovieLoadStatePlaythroughOK;
             } else if (globals->sizeInitialised && globals->totalTime > 0) {
@@ -1937,6 +1964,8 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
             } else {
                 *loadState = kMovieLoadStatePlayable;
             }
+        } else if (globals->timeLoaded > 0) {
+            *loadState = kMovieLoadStatePlayable;
         } else {
             *loadState = kMovieLoadStateLoading;
         }

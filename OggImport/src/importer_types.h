@@ -200,12 +200,15 @@ typedef struct {
     int                     numTracksStarted;
     int                     numTracksSeen;		// completed tracks
     Track                   firstTrack;
+    Boolean                 hasVideoTrack;
 
     TimeValue               timeLoaded;
     Float64                 timeLoadedSubSecond;        // last second fraction remainder
 
     UInt32                  tickFlushed;
-    UInt32                  flushStep;
+    UInt32                  flushStepCheck;
+    UInt32                  flushStepNormal;
+    UInt32                  flushMinTimeLeft;
     UInt32                  tickNotified;
     UInt32                  notifyStep;
 
