@@ -1,5 +1,14 @@
 2007-08-26  Arek Korbik  <arkadini@gmail.com>
 
+	patch by: mobodo at metakine dot com
+
+	* OggExport/src/stream_video.c:
+	Make OggExport use default/pre-configured settings when source
+	video component doesn't specify any; don't treat paramErr as error
+	while configuring video streams.
+
+2007-08-26  Arek Korbik  <arkadini@gmail.com>
+
 	* OggImport/src/OggImport.c:
 	* OggImport/src/importer_types.h:
 	* OggImport/src/stream_theora.c:

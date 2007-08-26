@@ -631,8 +631,39 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
     SCDataRateSettings ds = {0, 0, 0, 0};
     UInt32 tmp = 0;
     Fixed tmp_fixed = 0;
+    Boolean useConfiguredSettings;
 
     dbg_printf("[ vOE]  >> [%08lx] :: configure_stream()\n", (UInt32) globals);
+
+    err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
+                                          movieExportUseConfiguredSettings, &useConfiguredSettings,
+                                          si->getPropertyProc);
+    if (!err && useConfiguredSettings)
+    {
+        // useConfiguredSettings -> if this is set to true, the current settings
+        // should be used as a starting point.  Otherwise,  we should use
+        // default settings as the starting point.  Current settings would
+        // originate, for example, from MovieExportSetSettingsFromAtomContainer
+        // or from doing a MovieExportDoUserDialog
+
+        si->si_v.quality = globals->set_v_quality;
+        si->si_v.bitrate = globals->set_v_bitrate;
+        if (globals->set_v_keyrate != 0)
+            si->si_v.keyrate = globals->set_v_keyrate;
+
+        if (globals->set_v_fps != 0)
+            si->si_v.fps = globals->set_v_fps;
+        else if (globals->movie_fps != 0)
+            si->si_v.fps = globals->movie_fps;
+
+    }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Temporal Settings
+
+    ts.temporalQuality = codecNormalQuality;
+    ts.frameRate = si->si_v.fps;
+    ts.frameRate = si->si_v.keyrate;
 
     err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
                                           scTemporalSettingsType, &ts,
@@ -655,6 +686,12 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
         //else leave the default setting
     }
 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Spatial Settings
+
+    ss.spatialQuality = si->si_v.quality;
+    ss.depth = 24;
+
     err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
                                           scSpatialSettingsType, &ss,
                                           si->getPropertyProc);
@@ -663,6 +700,14 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
     if (!err) {
         si->si_v.quality = ss.spatialQuality;
     }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Data Rate Settings
+
+    ds.dataRate = globals->set_v_bitrate;
+    ds.frameDuration = -1;
+    ds.minSpatialQuality = codecMinQuality;
+    ds.minTemporalQuality = codecMinQuality;
 
     err = InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
                                           scDataRateSettingsType, &ds,
@@ -676,11 +721,13 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
             si->si_v.bitrate = globals->set_v_bitrate;
     }
 
+    tmp_fixed = si->si_v.width;
     if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
                                         movieExportWidth, &tmp_fixed,
                                         si->getPropertyProc) == noErr)
         si->si_v.width = tmp_fixed;
 
+    tmp_fixed = si->si_v.height;
     if (InvokeMovieExportGetPropertyUPP(si->refCon, si->trackID,
                                         movieExportHeight, &tmp_fixed,
                                         si->getPropertyProc) == noErr)
@@ -699,6 +746,13 @@ ComponentResult configure_stream__video(OggExportGlobals *globals,
     dbg_printf("[ vOE]   x [%08lx] :: configure_stream() = [%f x %f]\n",
                (UInt32) globals, si->si_v.width / 65536.0,
                si->si_v.height / 65536.0);
+
+    if (err == paramErr) {
+        // don't return the last error from InvokeMovieExportGetPropertyUPP
+        // since it is allowed to return paramErr when it does not want to
+        // specify a parameter...
+        err = noErr;
+    }
 
     dbg_printf("[ vOE] <   [%08lx] :: configure_stream() = %ld\n", (UInt32) globals, err);
     return err;
