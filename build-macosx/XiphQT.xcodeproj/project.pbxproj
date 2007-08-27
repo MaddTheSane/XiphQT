@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09C8F66C0C82FC7D00F72188 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
 		7326B5130B5AC44B004CE9D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		7326B5160B5AC44B004CE9D3 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		7326B5170B5AC44B004CE9D3 /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
@@ -36,7 +37,6 @@
 		7326B5310B5AC44B004CE9D3 /* CAFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */; };
 		7326B5320B5AC44B004CE9D3 /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */; };
 		7326B5330B5AC44B004CE9D3 /* flac_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C640B1A2AD8002B059E /* flac_entrypoints.cpp */; };
-		7326B5390B5AC44B004CE9D3 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CA10B19C35300E06B34 /* libtheoradec.a */; };
 		7326B53A0B5AC44B004CE9D3 /* libflac++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C420B1A25B2002B059E /* libflac++.a */; };
 		7326B53B0B5AC44B004CE9D3 /* libflac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744C400B1A25B2002B059E /* libflac.a */; };
 		7326B53C0B5AC44B004CE9D3 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CAC0B19C36500E06B34 /* libspeex.a */; };
@@ -70,7 +70,6 @@
 		737448DD0B19EF3D002B059E /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737448DC0B19EF3D002B059E /* QuickTime.framework */; };
 		737448E10B19EF8D002B059E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CC80B19C38700E06B34 /* libogg.a */; };
 		737449320B19F317002B059E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CB90B19C37600E06B34 /* libvorbis.a */; };
-		737449340B19F32D002B059E /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CA10B19C35300E06B34 /* libtheoradec.a */; };
 		737449490B19F67A002B059E /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CAC0B19C36500E06B34 /* libspeex.a */; };
 		737449910B19F922002B059E /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
 		737449BD0B19F99D002B059E /* OggImport.r in Rez */ = {isa = PBXBuildFile; fileRef = 737449AF0B19F93E002B059E /* OggImport.r */; };
@@ -131,6 +130,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		09C8F6450C82FBE500F72188 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 09C8F6430C82FBE500F72188 /* libtheoradec.a */;
+			remoteInfo = libtheoradec;
+		};
+		09C8F66A0C82FC7200F72188 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 09C8F6420C82FBE500F72188 /* libtheoradec (static) */;
+			remoteInfo = "libtheoradec (static)";
+		};
 		730B1C930B19C33B00E06B34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
@@ -144,20 +157,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 738837100B192732005C7A69;
 			remoteInfo = "libtheora (static)";
-		};
-		730B1C9E0B19C35300E06B34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
-			remoteInfo = TheoraExp;
-		};
-		730B1CA00B19C35300E06B34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 738836400B191426005C7A69;
-			remoteInfo = "libtheoradec (static)";
 		};
 		730B1CA90B19C36500E06B34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -250,39 +249,32 @@
 			remoteGlobalIDString = 73744B510B1A21DA002B059E;
 			remoteInfo = "libflac++ (static)";
 		};
-		7326B50F0B5AC44B004CE9D3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 7388363F0B191426005C7A69;
-			remoteInfo = "libtheoradec (static)";
-		};
 		736266B00BB95163006BE1C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 738A452D0B18659A00B43A0C /* Ogg.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 734FB2E40B18B33E00D561D7 /* libogg (static) */;
+			remoteGlobalIDString = 734FB2E40B18B33E00D561D7;
 			remoteInfo = "libogg (static)";
 		};
 		736266B20BB95163006BE1C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837B00B19386C005C7A69 /* Vorbis.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 738835E30B18F870005C7A69 /* libvorbis (static) */;
+			remoteGlobalIDString = 738835E30B18F870005C7A69;
 			remoteInfo = "libvorbis (static)";
 		};
 		736266B40BB95163006BE1C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 73744C260B1A25A2002B059E /* FLAC.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 73744B1A0B1A1C43002B059E /* libflac (static) */;
+			remoteGlobalIDString = 73744B1A0B1A1C43002B059E;
 			remoteInfo = "libflac (static)";
 		};
 		736266B60BB95163006BE1C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 73744C260B1A25A2002B059E /* FLAC.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 73744B510B1A21DA002B059E /* libflac++ (static) */;
+			remoteGlobalIDString = 73744B510B1A21DA002B059E;
 			remoteInfo = "libflac++ (static)";
 		};
 		737449200B19F043002B059E /* PBXContainerItemProxy */ = {
@@ -305,13 +297,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 738837760B193667005C7A69;
 			remoteInfo = "libspeex (static)";
-		};
-		737449460B19F662002B059E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 7388363F0B191426005C7A69;
-			remoteInfo = "libtheoradec (static)";
 		};
 		73744A3F0B1A045B002B059E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -515,7 +500,6 @@
 		73744CB60B1A3D5E002B059E /* OggExport.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = OggExport.r; path = ../OggExport/src/OggExport.r; sourceTree = SOURCE_ROOT; };
 		738837B00B19386C005C7A69 /* Vorbis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Vorbis.xcodeproj; path = "../external-libs/vorbis/macosx/Vorbis.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738837C50B193896005C7A69 /* Speex.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Speex.xcodeproj; path = "../external-libs/speex/macosx/Speex.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TheoraExp.xcodeproj; path = "../external-libs/theora-exp/macosx/TheoraExp.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738837DE0B1938DC005C7A69 /* Theora.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Theora.xcodeproj; path = "../external-libs/theora/macosx/Theora.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738A452D0B18659A00B43A0C /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		73C752920B5FB59100615F6C /* tests.cptest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.cptest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -531,7 +515,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7326B5390B5AC44B004CE9D3 /* libtheoradec.a in Frameworks */,
 				7326B53A0B5AC44B004CE9D3 /* libflac++.a in Frameworks */,
 				7326B53B0B5AC44B004CE9D3 /* libflac.a in Frameworks */,
 				7326B53C0B5AC44B004CE9D3 /* libspeex.a in Frameworks */,
@@ -540,6 +523,7 @@
 				7326B5400B5AC44B004CE9D3 /* Carbon.framework in Frameworks */,
 				7326B5410B5AC44B004CE9D3 /* QuickTime.framework in Frameworks */,
 				7326B5420B5AC44B004CE9D3 /* QuartzCore.framework in Frameworks */,
+				09C8F66C0C82FC7D00F72188 /* libtheoradec.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,7 +543,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				73744ABC0B1A0CC4002B059E /* libtheora.a in Frameworks */,
-				737449340B19F32D002B059E /* libtheoradec.a in Frameworks */,
 				73744C920B1A3661002B059E /* libflac++.a in Frameworks */,
 				73744C970B1A36D8002B059E /* libflac.a in Frameworks */,
 				737449490B19F67A002B059E /* libspeex.a in Frameworks */,
@@ -647,15 +630,7 @@
 			children = (
 				730B1C940B19C33B00E06B34 /* Theora.framework */,
 				730B1C960B19C33B00E06B34 /* libtheora.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		730B1C9A0B19C35300E06B34 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				730B1C9F0B19C35300E06B34 /* TheoraExp.framework */,
-				730B1CA10B19C35300E06B34 /* libtheoradec.a */,
+				09C8F6460C82FBE500F72188 /* libtheoradec.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1006,7 +981,6 @@
 			children = (
 				73744C260B1A25A2002B059E /* FLAC.xcodeproj */,
 				738837DE0B1938DC005C7A69 /* Theora.xcodeproj */,
-				738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */,
 				738837C50B193896005C7A69 /* Speex.xcodeproj */,
 				738837B00B19386C005C7A69 /* Vorbis.xcodeproj */,
 				738A452D0B18659A00B43A0C /* Ogg.xcodeproj */,
@@ -1054,7 +1028,7 @@
 				7326B5080B5AC44B004CE9D3 /* PBXTargetDependency */,
 				7326B50A0B5AC44B004CE9D3 /* PBXTargetDependency */,
 				7326B50C0B5AC44B004CE9D3 /* PBXTargetDependency */,
-				7326B50E0B5AC44B004CE9D3 /* PBXTargetDependency */,
+				09C8F66B0C82FC7200F72188 /* PBXTargetDependency */,
 			);
 			name = "XiphQT (decoders)";
 			productInstallPath = "$(HOME)/Library/Bundles";
@@ -1103,7 +1077,6 @@
 				737449450B19F653002B059E /* PBXTargetDependency */,
 				73744C750B1A2D44002B059E /* PBXTargetDependency */,
 				73744C770B1A2D44002B059E /* PBXTargetDependency */,
-				737449470B19F662002B059E /* PBXTargetDependency */,
 				73744A990B1A0BEA002B059E /* PBXTargetDependency */,
 			);
 			name = XiphQT;
@@ -1139,10 +1112,6 @@
 					ProjectRef = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
 				},
 				{
-					ProductGroup = 730B1C9A0B19C35300E06B34 /* Products */;
-					ProjectRef = 738837D00B1938B1005C7A69 /* TheoraExp.xcodeproj */;
-				},
-				{
 					ProductGroup = 730B1CB00B19C37600E06B34 /* Products */;
 					ProjectRef = 738837B00B19386C005C7A69 /* Vorbis.xcodeproj */;
 				},
@@ -1156,6 +1125,14 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		09C8F6460C82FBE500F72188 /* libtheoradec.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			name = libtheoradec.a;
+			path = build/Release/libtheoradec.a;
+			remoteRef = 09C8F6450C82FBE500F72188 /* PBXContainerItemProxy */;
+			sourceTree = "<group>";
+		};
 		730B1C940B19C33B00E06B34 /* Theora.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1168,20 +1145,6 @@
 			fileType = archive.ar;
 			path = libtheora.a;
 			remoteRef = 730B1C950B19C33B00E06B34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		730B1C9F0B19C35300E06B34 /* TheoraExp.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = TheoraExp.framework;
-			remoteRef = 730B1C9E0B19C35300E06B34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		730B1CA10B19C35300E06B34 /* libtheoradec.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libtheoradec.a;
-			remoteRef = 730B1CA00B19C35300E06B34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		730B1CAA0B19C36500E06B34 /* Speex.framework */ = {
@@ -1447,6 +1410,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		09C8F66B0C82FC7200F72188 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libtheoradec (static)";
+			targetProxy = 09C8F66A0C82FC7200F72188 /* PBXContainerItemProxy */;
+		};
 		7326B5020B5AC44B004CE9D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "libogg (static)";
@@ -1471,11 +1439,6 @@
 			isa = PBXTargetDependency;
 			name = "libflac++ (static)";
 			targetProxy = 7326B50D0B5AC44B004CE9D3 /* PBXContainerItemProxy */;
-		};
-		7326B50E0B5AC44B004CE9D3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "libtheoradec (static)";
-			targetProxy = 7326B50F0B5AC44B004CE9D3 /* PBXContainerItemProxy */;
 		};
 		736266B10BB95163006BE1C2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1511,11 +1474,6 @@
 			isa = PBXTargetDependency;
 			name = "libspeex (static)";
 			targetProxy = 737449440B19F653002B059E /* PBXContainerItemProxy */;
-		};
-		737449470B19F662002B059E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "libtheoradec (static)";
-			targetProxy = 737449460B19F662002B059E /* PBXContainerItemProxy */;
 		};
 		73744A400B1A045B002B059E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1568,7 +1526,6 @@
 					"../external-libs/ogg/include",
 					"../external-libs/vorbis/include",
 					"../external-libs/speex/include",
-					"../external-libs/theora-exp/include",
 					"../external-libs/theora/include",
 					"../external-libs/flac/include",
 				);
@@ -1600,7 +1557,6 @@
 					"../external-libs/ogg/include",
 					"../external-libs/vorbis/include",
 					"../external-libs/speex/include",
-					"../external-libs/theora-exp/include",
 					"../external-libs/theora/include",
 					"../external-libs/flac/include",
 				);
@@ -1611,6 +1567,7 @@
 					"-falign-loops=16",
 					"-ffast-math",
 				);
+				OTHER_LDFLAGS_i386 = "-Wl,-read_only_relocs,suppress";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				PRODUCT_NAME = XiphQT;
 				WRAPPER_EXTENSION = component;
@@ -1674,6 +1631,11 @@
 				);
 				INFOPLIST_FILE = "Info (decoders).plist";
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../external-libs/theora/macosx/build/Release\"";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
@@ -1701,12 +1663,16 @@
 					"../external-libs/ogg/include",
 					"../external-libs/vorbis/include",
 					"../external-libs/speex/include",
-					"../external-libs/theora-exp/include",
 					"../external-libs/theora/include",
 					"../external-libs/flac/include",
 				);
 				INFOPLIST_FILE = "Info (decoders).plist";
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../external-libs/theora/macosx/build/Release\"";
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-falign-loops=16",
