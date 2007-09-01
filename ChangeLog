@@ -1,3 +1,10 @@
+2007-09-01  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/OggImport.r:
+	Add the new proposed file extensions and MIME types (from
+	http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions) to
+	the OggImport component.
+
 2007-08-26  Arek Korbik  <arkadini@gmail.com>
 
 	patch by: mobodo at metakine dot com
