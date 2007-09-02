@@ -134,14 +134,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 09C8F6430C82FBE500F72188 /* libtheoradec.a */;
+			remoteGlobalIDString = 09C8F6430C82FBE500F72188;
 			remoteInfo = libtheoradec;
 		};
 		09C8F66A0C82FC7200F72188 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 09C8F6420C82FBE500F72188 /* libtheoradec (static) */;
+			remoteGlobalIDString = 09C8F6420C82FBE500F72188;
 			remoteInfo = "libtheoradec (static)";
 		};
 		730B1C930B19C33B00E06B34 /* PBXContainerItemProxy */ = {
@@ -1128,10 +1128,9 @@
 		09C8F6460C82FBE500F72188 /* libtheoradec.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = libtheoradec.a;
-			path = build/Release/libtheoradec.a;
+			path = libtheoradec.a;
 			remoteRef = 09C8F6450C82FBE500F72188 /* PBXContainerItemProxy */;
-			sourceTree = "<group>";
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		730B1C940B19C33B00E06B34 /* Theora.framework */ = {
 			isa = PBXReferenceProxy;
