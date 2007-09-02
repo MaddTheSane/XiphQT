@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>XiphQT</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Xiph QuickTime Components 0.1.8svn, Copyright © 2005-2007 Arek Korbik</string>
+	<string>Xiph QuickTime Components 0.1.8, Copyright © 2005-2007 Arek Korbik</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -19,11 +19,11 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.1.8svn</string>
+	<string>0.1.8</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.8svn</string>
+	<string>0.1.8</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Xiph QuickTime Components 0.1.8svn, Copyright © 2005-2007 Arek Korbik</string>
+	<string>Xiph QuickTime Components 0.1.8, Copyright © 2005-2007 Arek Korbik</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>

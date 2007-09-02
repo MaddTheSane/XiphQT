@@ -69,9 +69,9 @@ Source code organisation
 
 ./external-libs
         Source code of the external libraries should be placed here in
-        the corresponding subfolders: ogg, speex, theora, theora-exp,
-        vorbis, flac (using SVN repository all libraries except flac
-        can be pulled automatically)
+        the corresponding subfolders: ogg, speex, theora, vorbis, flac
+        (using SVN repository all libraries except flac can be pulled
+        automatically)
 
 ./build-macosx
         Xcode project files, for building for Mac OS X
