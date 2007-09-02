@@ -1049,6 +1049,7 @@ ComponentResult FlushAllStreams(OggImportGlobalsPtr globals, Boolean notify)
     }
 
     if (!err) {
+        globals->timeFlushed = globals->timeLoaded;
         globals->tickFlushed = TickCount();
         NotifyMovieChanged(globals, notify);
     }
@@ -1174,6 +1175,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->hasVideoTrack = false;
             globals->timeLoaded = 0;
             globals->timeLoadedSubSecond = 0.0;
+            globals->timeFlushed = 0;
             globals->tickFlushed = 0;
             globals->tickNotified = 0;
             globals->dataRequested = false;
@@ -1297,6 +1299,7 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
                 break;
             }
 
+            FlushAllStreams(globals, true);
             RemovePlaceholderTrack(globals);
             NotifyMovieChanged(globals, true);
             globals->state = kStateImportComplete;
@@ -1433,13 +1436,13 @@ static ComponentResult JustStartImport(OggImportGlobalsPtr globals, Handle dataR
     if (ret == eofErr)
         ret = noErr;
 
-    globals->usingIdle = using_idles_p;
-
     if (ret == noErr) {
         FlushAllStreams(globals, true);
     }
 
-    dbg_printf("-<<- JustStartImport(): %ld\n", (long) ret);
+    globals->usingIdle = using_idles_p;
+
+    dbg_printf("-<<- JustStartImport(): %ld [mt: %8ld]\n", (long) ret, (long) GetMovieTime(globals->theMovie, NULL));
     return ret;
 }
 
@@ -1901,8 +1904,16 @@ COMPONENTFUNC OggImportDataRef(OggImportGlobalsPtr globals, Handle dataRef,
 #else
         err = StartImport(globals, dataRef, dataRefType);
 #endif /* 1 */
-        *outFlags |= movieImportResultNeedIdles;
-        *durationAdded = 0;
+        if (err == noErr && globals->state == kStateImportComplete) {
+            *outFlags &= !movieImportResultNeedIdles;
+            *outFlags |= movieImportResultComplete;
+            *durationAdded = globals->timeLoaded;
+            if (globals->numTracksSeen == 1)
+                *usedTrack = globals->firstTrack;
+        } else {
+            *outFlags |= movieImportResultNeedIdles;
+            *durationAdded = 0;
+        }
     } else {
         err = JustImport(globals, dataRef, dataRefType);
         *outFlags &= !movieImportResultNeedIdles;
@@ -1934,7 +1945,8 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
         break;
 
     case kStateReadingPages:
-        if (globals->timeLoaded > globals->flushMinTimeLeft) {
+    case kStateReadingLastPages:
+        if (globals->timeFlushed > globals->flushMinTimeLeft) {
             if (globals->sizeInitialised && S64Compare(globals->dataEndOffset, S64Set(-1)) == 0) {
                 *loadState = kMovieLoadStatePlaythroughOK;
             } else if (globals->sizeInitialised && globals->totalTime > 0) {
@@ -1964,16 +1976,12 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
             } else {
                 *loadState = kMovieLoadStatePlayable;
             }
-        } else if (globals->timeLoaded > 0) {
+        } else if (globals->timeFlushed > 0) {
             *loadState = kMovieLoadStatePlayable;
         } else {
             *loadState = kMovieLoadStateLoading;
         }
 
-        break;
-
-    case kStateReadingLastPages:
-        *loadState = kMovieLoadStatePlaythroughOK;
         break;
 
     case kStateImportComplete:
@@ -1989,9 +1997,9 @@ COMPONENTFUNC OggImportGetLoadState(OggImportGlobalsPtr globals, long *loadState
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 COMPONENTFUNC OggImportGetMaxLoadedTime(OggImportGlobalsPtr globals, TimeValue *time)
 {
-    dbg_printf("-- GetMaxLoadedTime() called: %8ld (at: %ld)\n", globals->timeLoaded, TickCount());
+    dbg_printf("-- GetMaxLoadedTime() called: %8ld [%8ld] (at: %ld)\n", globals->timeFlushed, globals->timeLoaded, TickCount());
 
-    *time = globals->timeLoaded;
+    *time = globals->timeFlushed;
 
     return noErr;
 }

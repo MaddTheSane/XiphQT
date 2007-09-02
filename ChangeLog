@@ -1,3 +1,10 @@
+2007-09-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/OggImport.c:
+	* OggImport/src/importer_types.h:
+	Completely avoid idling for small files; keep track of the actual
+	duration of sample references inserted into the movie, for stats.
+
 2007-09-01  Arek Korbik  <arkadini@gmail.com>
 
 	* OggImport/src/OggImport.r:

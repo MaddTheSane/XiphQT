@@ -204,6 +204,7 @@ typedef struct {
 
     TimeValue               timeLoaded;
     Float64                 timeLoadedSubSecond;        // last second fraction remainder
+    TimeValue               timeFlushed;                // movie timescale precision only
 
     UInt32                  tickFlushed;
     UInt32                  flushStepCheck;
