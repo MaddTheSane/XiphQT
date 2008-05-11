@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		09C8F66C0C82FC7D00F72188 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
+		37CA8E6D0DD74A65005C8CB6 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
 		7326B5130B5AC44B004CE9D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		7326B5160B5AC44B004CE9D3 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		7326B5170B5AC44B004CE9D3 /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
@@ -99,7 +100,7 @@
 		73744A890B1A0AFF002B059E /* TheoraDecoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744A870B1A0AFF002B059E /* TheoraDecoder.r */; };
 		73744A8A0B1A0AFF002B059E /* TheoraEncoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744A880B1A0AFF002B059E /* TheoraEncoder.r */; };
 		73744A910B1A0BB0002B059E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73744A900B1A0BB0002B059E /* QuartzCore.framework */; };
-		73744ABC0B1A0CC4002B059E /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1C960B19C33B00E06B34 /* libtheora.a */; };
+		73744ABC0B1A0CC4002B059E /* libtheoraenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1C960B19C33B00E06B34 /* libtheoraenc.a */; };
 		73744C660B1A2AD8002B059E /* CAFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */; };
 		73744C680B1A2AD8002B059E /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */; };
 		73744C6A0B1A2AD8002B059E /* flac_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C640B1A2AD8002B059E /* flac_entrypoints.cpp */; };
@@ -142,6 +143,13 @@
 			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 09C8F6420C82FBE500F72188;
+			remoteInfo = "libtheoradec (static)";
+		};
+		37CA8E6B0DD74A10005C8CB6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 09C8F6420C82FBE500F72188 /* libtheoradec (static) */;
 			remoteInfo = "libtheoradec (static)";
 		};
 		730B1C930B19C33B00E06B34 /* PBXContainerItemProxy */ = {
@@ -542,7 +550,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73744ABC0B1A0CC4002B059E /* libtheora.a in Frameworks */,
+				37CA8E6D0DD74A65005C8CB6 /* libtheoradec.a in Frameworks */,
+				73744ABC0B1A0CC4002B059E /* libtheoraenc.a in Frameworks */,
 				73744C920B1A3661002B059E /* libflac++.a in Frameworks */,
 				73744C970B1A36D8002B059E /* libflac.a in Frameworks */,
 				737449490B19F67A002B059E /* libspeex.a in Frameworks */,
@@ -629,7 +638,7 @@
 			isa = PBXGroup;
 			children = (
 				730B1C940B19C33B00E06B34 /* Theora.framework */,
-				730B1C960B19C33B00E06B34 /* libtheora.a */,
+				730B1C960B19C33B00E06B34 /* libtheoraenc.a */,
 				09C8F6460C82FBE500F72188 /* libtheoradec.a */,
 			);
 			name = Products;
@@ -1077,6 +1086,7 @@
 				737449450B19F653002B059E /* PBXTargetDependency */,
 				73744C750B1A2D44002B059E /* PBXTargetDependency */,
 				73744C770B1A2D44002B059E /* PBXTargetDependency */,
+				37CA8E6C0DD74A10005C8CB6 /* PBXTargetDependency */,
 				73744A990B1A0BEA002B059E /* PBXTargetDependency */,
 			);
 			name = XiphQT;
@@ -1091,6 +1101,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "XiphQT" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* XiphQT */;
 			projectDirPath = "";
@@ -1116,6 +1127,7 @@
 					ProjectRef = 738837B00B19386C005C7A69 /* Vorbis.xcodeproj */;
 				},
 			);
+			projectRoot = ..;
 			targets = (
 				8D01CCC60486CAD60068D4B7 /* XiphQT */,
 				7326B5010B5AC44B004CE9D3 /* XiphQT (decoders) */,
@@ -1139,10 +1151,10 @@
 			remoteRef = 730B1C930B19C33B00E06B34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		730B1C960B19C33B00E06B34 /* libtheora.a */ = {
+		730B1C960B19C33B00E06B34 /* libtheoraenc.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libtheora.a;
+			path = libtheoraenc.a;
 			remoteRef = 730B1C950B19C33B00E06B34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1414,6 +1426,11 @@
 			name = "libtheoradec (static)";
 			targetProxy = 09C8F66A0C82FC7200F72188 /* PBXContainerItemProxy */;
 		};
+		37CA8E6C0DD74A10005C8CB6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libtheoradec (static)";
+			targetProxy = 37CA8E6B0DD74A10005C8CB6 /* PBXContainerItemProxy */;
+		};
 		7326B5020B5AC44B004CE9D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "libogg (static)";
@@ -1532,6 +1549,7 @@
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				PRODUCT_NAME = XiphQT;
+				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = component;
 				ZERO_LINK = YES;
 			};
@@ -1540,10 +1558,6 @@
 		4FADC23508B4156C00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
@@ -1569,6 +1583,7 @@
 				OTHER_LDFLAGS_i386 = "-Wl,-read_only_relocs,suppress";
 				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
 				PRODUCT_NAME = XiphQT;
+				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = component;
 			};
 			name = Release;
@@ -1592,6 +1607,8 @@
 		4FADC23908B4156C00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1687,6 +1704,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(value)",
+					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -1726,6 +1747,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(value)",
+					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G4;
