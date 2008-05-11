@@ -601,22 +601,22 @@ OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
     size_t x, y;
     size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
     size_t off_x2 = offset_x >> 1, off_y2 = offset_y >> 1;
-    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
-    const UInt8 *lineBase_Cb = pb[1].data + off_y2 * pb[1].ystride + off_x2;
-    const UInt8 *lineBase_Cr = pb[2].data + off_y2 * pb[2].ystride + off_x2;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].stride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y2 * pb[1].stride + off_x2;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y2 * pb[2].stride + off_x2;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
     Boolean odd_rows = height & 0x01;
 
-    dbg_printf("BLIT: Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT: Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
+    dbg_printf("BLIT: Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].stride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT: Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].stride,
+               pb[2].width, pb[2].height, pb[2].stride);
 
     height = height & ~0x01;
 
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
-        const UInt8 *pixelPtr_Y_bot  = lineBase_Y + pb[0].ystride;
+        const UInt8 *pixelPtr_Y_bot  = lineBase_Y + pb[0].stride;
         const UInt8 *pixelPtr_Cb = lineBase_Cb;
         const UInt8 *pixelPtr_Cr = lineBase_Cr;
         UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
@@ -631,9 +631,9 @@ OSStatus CopyPlanarYCbCr420ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
             pixelPtr_Y_bot += 2;
         }
 
-        lineBase_Y += 2 * pb[0].ystride;
-        lineBase_Cb += pb[1].ystride;
-        lineBase_Cr += pb[2].ystride;
+        lineBase_Y += 2 * pb[0].stride;
+        lineBase_Cb += pb[1].stride;
+        lineBase_Cr += pb[2].stride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
 
@@ -658,26 +658,26 @@ OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
     size_t x, y;
     size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
     size_t off_x2 = offset_x >> 1;
-    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
-    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].ystride + off_x2;
-    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].ystride + off_x2;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].stride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].stride + off_x2;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].stride + off_x2;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
     Boolean odd_rows = height & 0x01;
 
-    dbg_printf("BLIT> Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT> Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
+    dbg_printf("BLIT> Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].stride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT> Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].stride,
+               pb[2].width, pb[2].height, pb[2].stride);
 
     height = height & ~0x01;
 
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
-        const UInt8 *pixelPtr_Y_bot  = lineBase_Y  + pb[0].ystride;
+        const UInt8 *pixelPtr_Y_bot  = lineBase_Y  + pb[0].stride;
         const UInt8 *pixelPtr_Cb_top = lineBase_Cb;
-        const UInt8 *pixelPtr_Cb_bot = lineBase_Cb + pb[1].ystride;
+        const UInt8 *pixelPtr_Cb_bot = lineBase_Cb + pb[1].stride;
         const UInt8 *pixelPtr_Cr_top = lineBase_Cr;
-        const UInt8 *pixelPtr_Cr_bot = lineBase_Cr + pb[2].ystride;
+        const UInt8 *pixelPtr_Cr_bot = lineBase_Cr + pb[2].stride;
         UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
         UInt8 *pixelPtr_2vuy_bot = lineBase_2vuy + rowBytes_2vuy;
         for( x = 0; x < width; x += 2 ) {
@@ -692,9 +692,9 @@ OSStatus CopyPlanarYCbCr422ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
             pixelPtr_Y_bot += 2;
         }
 
-        lineBase_Y += 2 * pb[0].ystride;
-        lineBase_Cb += 2 * pb[1].ystride;
-        lineBase_Cr += 2 * pb[2].ystride;
+        lineBase_Y += 2 * pb[0].stride;
+        lineBase_Cb += 2 * pb[1].stride;
+        lineBase_Cr += 2 * pb[2].stride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
 
@@ -721,26 +721,26 @@ OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
 {
     size_t x, y;
     size_t off_x = offset_x & ~0x01, off_y = offset_y & ~0x01;
-    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].ystride + off_x;
-    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].ystride + off_x;
-    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].ystride + off_x;
+    const UInt8 *lineBase_Y  = pb[0].data + off_y * pb[0].stride + off_x;
+    const UInt8 *lineBase_Cb = pb[1].data + off_y * pb[1].stride + off_x;
+    const UInt8 *lineBase_Cr = pb[2].data + off_y * pb[2].stride + off_x;
     UInt8 *lineBase_2vuy = baseAddr_2vuy;
     Boolean odd_rows = height & 0x01;
 
-    dbg_printf("BLIT? Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].ystride, width, height, rowBytes_2vuy);
-    dbg_printf("BLIT? Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].ystride,
-               pb[2].width, pb[2].height, pb[2].ystride);
+    dbg_printf("BLIT? Yw: %d, Yh: %d, Ys: %d;  w: %ld,  h: %ld; stride: %ld\n", pb[0].width, pb[0].height, pb[0].stride, width, height, rowBytes_2vuy);
+    dbg_printf("BLIT? Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", pb[1].width, pb[1].height, pb[1].stride,
+               pb[2].width, pb[2].height, pb[2].stride);
 
     height = height & ~0x01;
 
     for( y = 0; y < height; y += 2 ) {
         // Take two lines at a time.
         const UInt8 *pixelPtr_Y_top  = lineBase_Y;
-        const UInt8 *pixelPtr_Y_bot  = lineBase_Y  + pb[0].ystride;
+        const UInt8 *pixelPtr_Y_bot  = lineBase_Y  + pb[0].stride;
         const UInt8 *pixelPtr_Cb_top = lineBase_Cb;
-        const UInt8 *pixelPtr_Cb_bot = lineBase_Cb + pb[1].ystride;
+        const UInt8 *pixelPtr_Cb_bot = lineBase_Cb + pb[1].stride;
         const UInt8 *pixelPtr_Cr_top = lineBase_Cr;
-        const UInt8 *pixelPtr_Cr_bot = lineBase_Cr + pb[2].ystride;
+        const UInt8 *pixelPtr_Cr_bot = lineBase_Cr + pb[2].stride;
         UInt8 *pixelPtr_2vuy_top = lineBase_2vuy;
         UInt8 *pixelPtr_2vuy_bot = lineBase_2vuy + rowBytes_2vuy;
         for( x = 0; x < width; x += 2 ) {
@@ -757,9 +757,9 @@ OSStatus CopyPlanarYCbCr444ToChunkyYUV422(size_t width, size_t height, th_ycbcr_
             pixelPtr_Cr_bot += 2;
         }
 
-        lineBase_Y += 2 * pb[0].ystride;
-        lineBase_Cb += 2 * pb[1].ystride;
-        lineBase_Cr += 2 * pb[2].ystride;
+        lineBase_Y += 2 * pb[0].stride;
+        lineBase_Cb += 2 * pb[1].stride;
+        lineBase_Cr += 2 * pb[2].stride;
         lineBase_2vuy += 2 * rowBytes_2vuy;
     }
 
@@ -795,15 +795,15 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     size_t off_x2 = offset_x >> 1;
     endOfScanLine = baseAddr + (width * 4);
 
-    dbg_printf("BLIT= yw: %d, yh: %d, ys: %d; w: %ld, h: %ld; stride: %ld\n", ycbcr[0].width, ycbcr[0].height, ycbcr[0].ystride, width, height, stride);
-    dbg_printf("BLIT= Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", ycbcr[1].width, ycbcr[1].height, ycbcr[1].ystride,
-               ycbcr[2].width, ycbcr[2].height, ycbcr[2].ystride);
+    dbg_printf("BLIT= yw: %d, yh: %d, ys: %d; w: %ld, h: %ld; stride: %ld\n", ycbcr[0].width, ycbcr[0].height, ycbcr[0].stride, width, height, stride);
+    dbg_printf("BLIT= Bw: %d, Bh: %d, Bs: %d; Rw: %d, Rh: %d;     Rs: %d\n", ycbcr[1].width, ycbcr[1].height, ycbcr[1].stride,
+               ycbcr[2].width, ycbcr[2].height, ycbcr[2].stride);
 
     lines = height;
     dst_base = baseAddr + pinfo->componentInfoY.offset;
     dst_stride = pinfo->componentInfoY.rowBytes;
-    src_base = ycbcr[0].data + off_y * ycbcr[0].ystride + off_x;
-    src_stride = ycbcr[0].ystride;
+    src_base = ycbcr[0].data + off_y * ycbcr[0].stride + off_x;
+    src_stride = ycbcr[0].stride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);
         src_base += src_stride;
@@ -813,8 +813,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     lines = height / 2;
     dst_base = baseAddr + pinfo->componentInfoCb.offset;
     dst_stride = pinfo->componentInfoCb.rowBytes;
-    src_base = ycbcr[1].data + off_y * ycbcr[1].ystride + off_x2;
-    src_stride = ycbcr[1].ystride;
+    src_base = ycbcr[1].data + off_y * ycbcr[1].stride + off_x2;
+    src_stride = ycbcr[1].stride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);
         src_base += src_stride;
@@ -824,8 +824,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     lines = height / 2;
     dst_base = baseAddr + pinfo->componentInfoCr.offset;
     dst_stride = pinfo->componentInfoCr.rowBytes;
-    src_base = ycbcr[2].data + off_y * ycbcr[2].ystride + off_x2;;
-    src_stride = ycbcr[2].ystride;
+    src_base = ycbcr[2].data + off_y * ycbcr[2].stride + off_x2;;
+    src_stride = ycbcr[2].stride;
     while (lines-- > 0) {
         BlockMoveData(src_base, dst_base, width);
         src_base += src_stride;

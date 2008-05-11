@@ -1,5 +1,8 @@
 2008-05-11  Arek Korbik  <arkadini@gmail.com>
 
+	* Theora/src/TheoraDecoder.c: Rename ystride -> stride in theora
+	structures.
+
 	* build-macosx/XiphQT.xcodeproj/project.pbxproj:
 	* build-macosx/flac-support/FLAC.xcodeproj/project.pbxproj:
 	Update Xcode project files - make it build again.
