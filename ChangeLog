@@ -1,3 +1,8 @@
+2008-06-17  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_theora.c: Don't feed ogg pages when not going
+	to extract packets! Fixes #1379.
+
 2008-05-11  Arek Korbik  <arkadini@gmail.com>
 
 	* Theora/src/TheoraDecoder.c: Rename ystride -> stride in theora

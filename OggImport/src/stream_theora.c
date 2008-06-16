@@ -283,7 +283,6 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
     switch(si->si_theora.state) {
     case kTStateReadingComments:
     case kTStateReadingCodebooks:
-    case kTStateReadingPackets:
         ogg_stream_pagein(&si->os, opg);
         break;
     default:
