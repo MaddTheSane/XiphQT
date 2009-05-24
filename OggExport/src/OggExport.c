@@ -89,6 +89,13 @@ pascal ComponentResult OggExportToFile(OggExportGlobalsPtr globals, const FSSpec
 pascal ComponentResult OggExportToDataRef(OggExportGlobalsPtr globals, Handle dataRef, OSType dataRefType,
                                           Movie theMovie, Track onlyThisTrack, TimeValue startTime, TimeValue duration);
 pascal ComponentResult OggExportFromProceduresToDataRef(OggExportGlobalsPtr globals, Handle dataRef, OSType dataRefType);
+pascal ComponentResult OggExportNewGetDataAndPropertiesProcs(OggExportGlobalsPtr globals, OSType trackType, TimeScale *scale, Movie theMovie,
+                                                             Track theTrack, TimeValue startTime, TimeValue duration,
+                                                             MovieExportGetPropertyUPP *getPropertyProc, MovieExportGetDataUPP *getDataProc,
+                                                             void **refcon);
+pascal ComponentResult OggExportDisposeGetDataAndPropertiesProcs(OggExportGlobalsPtr globals,
+                                                                 MovieExportGetPropertyUPP getPropertyProc, MovieExportGetDataUPP getDataProc,
+                                                                 void *refcon);
 pascal ComponentResult OggExportAddDataSource(OggExportGlobalsPtr globals, OSType trackType, TimeScale scale,
                                               long *trackIDPtr, MovieExportGetPropertyUPP getPropertyProc,
                                               MovieExportGetDataUPP getDataProc, void *refCon);
@@ -516,6 +523,42 @@ pascal ComponentResult OggExportFromProceduresToDataRef(OggExportGlobalsPtr glob
         CloseComponent(dataH);
 
     dbg_printf("[  OE] <   [%08lx] :: FromProceduresToDataRef() = %ld\n", (UInt32) globals, err);
+    return err;
+}
+
+/*
+ * We can't really extract the data and properties ourselves, but if
+ * someone insists we can delegate to the QuickTime movie exporter
+ * component - that's what the following two methods do.
+ *
+ * (at least, it seems to make iMovie'08 more happy)
+ */
+pascal ComponentResult OggExportNewGetDataAndPropertiesProcs(OggExportGlobalsPtr globals, OSType trackType, TimeScale *scale, Movie theMovie,
+                                                             Track theTrack, TimeValue startTime, TimeValue duration,
+                                                             MovieExportGetPropertyUPP *getPropertyProc, MovieExportGetDataUPP *getDataProc,
+                                                             void **refcon)
+{
+    ComponentResult err;
+    dbg_printf("[  OE]  >> [%08lx] :: NewGetDataAndPropertiesProcs(%4.4s, %ld, %ld)\n", (UInt32) globals, (char *) &trackType, startTime, duration);
+
+    err = MovieExportNewGetDataAndPropertiesProcs(globals->quickTimeMovieExporter, trackType, scale, theMovie, theTrack, startTime, duration,
+                                                  getPropertyProc, getDataProc, refcon);
+
+    dbg_printf("[  OE] <   [%08lx] :: NewGetDataAndPropertiesProcs() = %ld (refcon = %08lx)\n",
+               (UInt32) globals, err, (UInt32) (refcon != NULL ? *refcon : NULL));
+    return err;
+}
+
+pascal ComponentResult OggExportDisposeGetDataAndPropertiesProcs(OggExportGlobalsPtr globals,
+                                                                 MovieExportGetPropertyUPP getPropertyProc, MovieExportGetDataUPP getDataProc,
+                                                                 void *refcon)
+{
+    ComponentResult err;
+    dbg_printf("[  OE]  >> [%08lx] :: DisposeGetDataAndPropertiesProcs(%08lx)\n", (UInt32) globals, (UInt32) refcon);
+
+    err = MovieExportDisposeGetDataAndPropertiesProcs(globals->quickTimeMovieExporter, getPropertyProc, getDataProc, refcon);
+
+    dbg_printf("[  OE] <   [%08lx] :: DisposeGetDataAndPropertiesProcs() = %ld\n", (UInt32) globals, err);
     return err;
 }
 

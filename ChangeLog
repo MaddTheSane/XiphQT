@@ -1,3 +1,10 @@
+2009-05-24  Arek Korbik  <arkadini@gmail.com>
+
+	* OggExport/src/OggExport.c:
+	* OggExport/src/OggExportDispatch.h:
+	Add (delegated) support for NewGetDataAndPropertiesProcs - makes
+	OggExport component iMovie'08 "compatible".
+
 2008-06-17  Arek Korbik  <arkadini@gmail.com>
 
 	* OggImport/src/stream_theora.c: Don't feed ogg pages when not going

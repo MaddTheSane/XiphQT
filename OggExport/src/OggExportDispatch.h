@@ -84,6 +84,6 @@
 	ComponentRangeEnd (2)
 
 	ComponentRangeBegin (3)
-		ComponentError (NewGetDataAndPropertiesProcs)
-		ComponentError (DisposeGetDataAndPropertiesProcs)
+		ComponentCall (NewGetDataAndPropertiesProcs)
+		ComponentCall (DisposeGetDataAndPropertiesProcs)
 	ComponentRangeEnd (3)
