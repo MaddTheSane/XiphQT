@@ -32,9 +32,9 @@
 #define __oggexport_versions_h__
 
 #ifdef DEBUG
-#define kOgg_spit__Version		(0x00FF0101)
+#define kOgg_spit__Version		(0x00FF0102)
 #else
-#define kOgg_spit__Version		(0x00000101)
+#define kOgg_spit__Version		(0x00000102)
 #endif /* DEBUG */
 
 #endif /* __oggexport_versions_h__ */

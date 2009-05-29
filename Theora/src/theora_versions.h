@@ -33,10 +33,10 @@
 
 
 #ifdef DEBUG
-#define kTheora_imdc_Version		(0x00FF0102)
+#define kTheora_imdc_Version		(0x00FF0103)
 #define kTheora_imco_Version		(0x00FF0101)
 #else
-#define kTheora_imdc_Version		(0x00000102)
+#define kTheora_imdc_Version		(0x00000103)
 #define kTheora_imco_Version		(0x00000101)
 #endif /* DEBUG */
 
