@@ -87,6 +87,42 @@ static OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProc
 #endif /* __APPLE_CC__ */
 
 
+OSErr grow_buffer(Theora_Globals glob, UInt32 min_size) {
+    /* increase the size of the packet buffer, in
+       kPacketBufferAllocIncrement blocks, preserving the content of
+       the used part of the buffer */
+    OSErr err = noErr;
+    UInt32 new_size = glob->p_buffer_len;
+
+    dbg_printf("--:Theora:-  _grow_buffer(%08lx, %ld)\n", (long)glob, min_size);
+
+    while (new_size < min_size)
+        new_size += kPacketBufferAllocIncrement;
+
+    /* first try to resize in-place */
+    SetPtrSize((Ptr) glob->p_buffer, new_size);
+
+    if (err = MemError()) {
+        /* resizing failed: allocate new block, memcpy, release the old block */
+        Ptr p = NewPtr(new_size);
+        if (err = MemError()) goto bail;
+
+        BlockMoveData(glob->p_buffer, p, glob->p_buffer_used);
+
+        DisposePtr((Ptr) glob->p_buffer);
+        glob->p_buffer = (UInt8 *) p;
+    }
+
+    glob->p_buffer_len = new_size;
+
+ bail:
+    if (err)
+        dbg_printf("--:Theora:-  _grow_buffer(%08lx, %ld) failed = %d\n", (long)glob, min_size, err);
+
+    return err;
+}
+
+
 OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
 {
     OSErr err = noErr;
@@ -428,9 +464,10 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             if (!memcmp(dataPtr + myDrp->dataSize - 4, "OggS", 4)) {
                 do_decode = false;
                 if (myDrp->dataSize - 4 + glob->p_buffer_used > glob->p_buffer_len) {
-                    dbg_printf("         !!! CodecDecodeBand(): NOT IMPLEMENTED - reallocate with resize!\n");
-                    err = codecErr;
-                } else {
+                    err = grow_buffer(glob, myDrp->dataSize - 4 + glob->p_buffer_used);
+                }
+                /* if the we failed to resize, the "frame" will get dropped anyway, otherwise... */
+                if (!err) {
                     BlockMoveData(dataPtr, glob->p_buffer + glob->p_buffer_used, myDrp->dataSize - 4);
                     glob->p_buffer_used += myDrp->dataSize - 4;
                 }

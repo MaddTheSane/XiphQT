@@ -1,3 +1,14 @@
+2009-06-09  Arek Korbik  <arkadini@gmail.com>
+
+	* Theora/src/TheoraDecoder.c:
+	Properly resize the packet buffer when necessary - fixes playback
+	of HD content (or anything containing compressed Theora frames
+	bigger than 64kB).
+
+	* OggImport/src/stream_theora.c:
+	Tune the segmentation/duration hack values to handle HD content
+	better.
+
 2009-05-24  Arek Korbik  <arkadini@gmail.com>
 
 	* OggExport/src/OggExport.c:
