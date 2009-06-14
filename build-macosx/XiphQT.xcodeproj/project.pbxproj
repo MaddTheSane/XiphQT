@@ -149,7 +149,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837DE0B1938DC005C7A69 /* Theora.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 09C8F6420C82FBE500F72188 /* libtheoradec (static) */;
+			remoteGlobalIDString = 09C8F6420C82FBE500F72188;
 			remoteInfo = "libtheoradec (static)";
 		};
 		730B1C930B19C33B00E06B34 /* PBXContainerItemProxy */ = {
@@ -392,7 +392,7 @@
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
+		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
 		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBufferTests.h; path = ../tests/common/RingBufferTests.h; sourceTree = SOURCE_ROOT; };
 		73271C830B610B2400175874 /* RingBufferTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RingBufferTests.cpp; path = ../tests/common/RingBufferTests.cpp; sourceTree = SOURCE_ROOT; };
 		734716820B77F72E001F439D /* XCACodecTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodecTests.cpp; path = ../tests/common/XCACodecTests.cpp; sourceTree = SOURCE_ROOT; };
@@ -429,7 +429,7 @@
 		737448C50B19ECDC002B059E /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		737448C60B19ECF7002B059E /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../utils/debug.h; sourceTree = SOURCE_ROOT; };
 		737448DC0B19EF3D002B059E /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		737449730B19F922002B059E /* MetaDataConfig.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = MetaDataConfig.plist; path = ../OggImport/MetaDataConfig.plist; sourceTree = SOURCE_ROOT; };
+		737449730B19F922002B059E /* MetaDataConfig.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; name = MetaDataConfig.plist; path = ../OggImport/MetaDataConfig.plist; sourceTree = SOURCE_ROOT; };
 		737449AF0B19F93E002B059E /* OggImport.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = OggImport.r; path = ../OggImport/src/OggImport.r; sourceTree = SOURCE_ROOT; };
 		737449EF0B1A012B002B059E /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = SOURCE_ROOT; };
 		737449F00B1A012B002B059E /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = SOURCE_ROOT; };
@@ -511,7 +511,7 @@
 		738837DE0B1938DC005C7A69 /* Theora.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Theora.xcodeproj; path = "../external-libs/theora/macosx/Theora.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738A452D0B18659A00B43A0C /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		73C752920B5FB59100615F6C /* tests.cptest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.cptest; sourceTree = BUILT_PRODUCTS_DIR; };
-		73C752930B5FB59100615F6C /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "tests-Info.plist"; sourceTree = "<group>"; };
+		73C752930B5FB59100615F6C /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "tests-Info.plist"; sourceTree = "<group>"; };
 		73C752A70B5FB82C00615F6C /* OggFLACTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggFLACTests.h; path = ../tests/CAFLAC/OggFLACTests.h; sourceTree = SOURCE_ROOT; };
 		73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggFLACTests.cpp; path = ../tests/CAFLAC/OggFLACTests.cpp; sourceTree = SOURCE_ROOT; };
 		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
