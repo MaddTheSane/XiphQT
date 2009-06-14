@@ -1,3 +1,9 @@
+2009-06-14  Arek Korbik  <arkadini@gmail.com>
+
+	* README:
+	* external-libs/README:
+	Update READMEs.
+
 2009-06-09  Arek Korbik  <arkadini@gmail.com>
 
 	* Theora/src/TheoraDecoder.c:

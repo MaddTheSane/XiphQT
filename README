@@ -36,7 +36,7 @@ Installing
 
 The binary component bundle needs to be installed in
 ~/Library/Components (or /Library/Components for system-wide
-installation).
+installation). Create the folder if it doesn't exist.
 
 
 Source code organisation
