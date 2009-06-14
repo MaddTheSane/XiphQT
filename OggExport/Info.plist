@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>OggExport</string>
 	<key>CFBundleGetInfoString</key>
-	<string>QuickTime Ogg Exporter Component 0.1.1, Copyright © 2006 Arek Korbik</string>
+	<string>QuickTime Ogg Exporter Component 0.1.2, Copyright © 2006-2009 Arek Korbik</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -19,11 +19,11 @@
 	<key>CFBundleSignature</key>
 	<string>spit</string>
 	<key>CFBundleVersion</key>
-	<string>0.1.1</string>
+	<string>0.1.2</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.1</string>
+	<string>0.1.2</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>QuickTime Ogg Exporter Component 0.1.1, Copyright © 2006 Arek Korbik</string>
+	<string>QuickTime Ogg Exporter Component 0.1.2, Copyright © 2006-2009 Arek Korbik</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>
