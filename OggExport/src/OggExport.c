@@ -708,7 +708,7 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
 
         if (!err && globals->setdlg_movie != NULL) {
             SoundDescriptionHandle sdh = (SoundDescriptionHandle) NewHandle(0);
-            Media media;
+            Media media = NULL;
             Track track = globals->setdlg_track;
             if (track == NULL)
                 track = GetMovieIndTrackType(globals->setdlg_movie, 1, AudioMediaCharacteristic,
