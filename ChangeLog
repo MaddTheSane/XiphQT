@@ -1,3 +1,10 @@
+2009-06-21  Arek Korbik  <arkadini@gmail.com>
+
+	* OggExport/src/OggExport.c:
+	Don't expect the StdAudio compression component to do double
+	conversion - initialize it with LPCM as input instead.
+	Fixes #1305.
+
 === release 0.1.9 ===
 
 2009-06-14  Arek Korbik  <arkadini@gmail.com>
