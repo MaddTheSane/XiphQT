@@ -1,3 +1,10 @@
+2009-07-04  Arek Korbik  <arkadini@gmail.com>
+
+	* common/os_types.h (added):
+	* common/config.h:
+	* OggImport/src/samplerefs.h:
+	Add some Windows compatibility touches.
+
 2009-06-21  Arek Korbik  <arkadini@gmail.com>
 
 	* OggExport/src/OggExport.c:

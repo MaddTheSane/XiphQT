@@ -31,6 +31,7 @@
 #if !defined(__xiphqt_config_h__)
 #define __xiphqt_config_h__
 
+#include "os_types.h"
 
 #if !defined(XIPHQT_NO_ENCODERS)
 #define kXiphQTBundleID "org.xiph.xiph-qt.xiphqt"

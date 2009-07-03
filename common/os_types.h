@@ -1,10 +1,10 @@
 /*
- *  samplerefs.h
+ *  os_types.h
  *
- *    SampleReference arrays handling utilities header file.
+ *    Additional, OS-types specific configuration file.
  *
  *
- *  Copyright (c) 2007  Arek Korbik
+ *  Copyright (c) 2009  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,15 +28,13 @@
  */
 
 
-#if !defined(__samplerefs_h__)
-#define __samplerefs_h__
+#if !defined(__xiphqt__os_types__)
+#define __xiphqt__os_types__
 
-#include "config.h"
-#include "importer_types.h"
+#if !defined(__APPLE_CC__) && !defined(REZ)
+#include <MacTypes.h>
+#include <MacMemory.h>
+#include <CoreServices.h>
+#endif /* __APPLE_CC__ && REZ */
 
-
-extern ComponentResult _store_sample_reference(StreamInfo *si, SInt64 *dataOffset, int size, TimeValue duration, short smp_flags);
-extern ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean *movie_changed);
-
-
-#endif /* __samplerefs_h__ */
+#endif /* __xiphqt__os_types__ */
