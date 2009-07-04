@@ -426,7 +426,7 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
     ICMDataProcRecordPtr dataProc = drp->dataProcRecord.dataProc ? &drp->dataProcRecord : NULL;
     SInt32 dataAvailable = dataProc != NULL ? codecMinimumDataSize : -1;
 
-    dbg_printf("--:Theora:-  CodecDecodeBand(%08lx, %08lx, %08lx) cald (                 frN: %8ld, dataProc: %8lx)\n",
+    dbg_printf("[TD  ]  >> [%08lx] :: DecodeBand(%08lx, %08lx): (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
     if (dataAvailable > -1) {
@@ -502,7 +502,8 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             op.bytes = data_size;
             op.packet = data_buffer;
             terr = th_decode_packetin(glob->td, &op, NULL);
-            dbg_printf("--:Theora:-  theora_decode_packetin(pktno: %lld, size: %ld, data1: [%02x]) = %d\n", op.packetno, op.bytes, data_buffer[0], terr);
+            dbg_printf("[TD  ]     [%08lx] :: DecodeBand(): theora_decode_packetin(pktno: %lld, size: %ld, data1: [%02x]) = %d\n",
+                       (long) glob, op.packetno, op.bytes, data_buffer[0], terr);
 
             if (terr != 0) {
                 myDrp->draw = 0;
@@ -513,6 +514,8 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
 
     myDrp->decoded = 1;
     drp->codecData += dataConsumed;
+
+    dbg_printf("[TD  ] <   [%08lx] :: DecodeBand() = %ld\n", (long) glob, err);
     return err;
 }
 
@@ -524,7 +527,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
     unsigned char *dataPtr = (unsigned char *)drp->codecData;
     ICMDataProcRecordPtr dataProc = drp->dataProcRecord.dataProc ? &drp->dataProcRecord : NULL;
 
-    dbg_printf("--:Theora:-  CodecDrawBand(%08lx, %08lx, %08lx) called (                 frN: %8ld, dataProc: %8lx)\n",
+    dbg_printf("[TD  ]  >> [%08lx] :: DrawBand(%08lx, %08lx):   (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
     if (myDrp->decoded == 0) {
@@ -536,7 +539,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
             err = codecDroppedFrameErr;
         } else  {
             th_ycbcr_buffer ycbcrB;
-            dbg_printf("--:Theora:-  calling theora_decode_YUVout()...\n");
+            dbg_printf("[TD  ]     [%08lx] :: DrawBand(): calling theora_decode_YUVout()...\n", (long)glob);
             th_decode_ycbcr_out(glob->td, ycbcrB);
             if (myDrp->pixelFormat == k422YpCbCr8PixelFormat) {
                 if (glob->ti.pixel_fmt == TH_PF_420) {
@@ -558,6 +561,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
         }
     }
 
+    dbg_printf("[TD  ] <   [%08lx] :: DrawBand() = %ld\n", (long) glob, err);
     return err;
 }
 
@@ -566,17 +570,19 @@ pascal ComponentResult Theora_ImageCodecEndBand(Theora_Globals glob, ImageSubCod
 #pragma unused(glob, result, flags)
     OSErr err = noErr;
     Theora_DecompressRecord *myDrp = (Theora_DecompressRecord *)drp->userDecompressRecord;
-    dbg_printf("--:Theora:-   CodecEndBand(%08lx, %08lx, %08lx, %08lx) called\n", (long)glob, (long)drp, (long)drp->userDecompressRecord, result);
+    dbg_printf("[TD  ]  >> [%08lx] :: EndBand(%08lx, %08lx, %08lx)\n", (long)glob, (long)drp, (long)drp->userDecompressRecord, result);
 
     if (myDrp->draw == 0)
         err = codecDroppedFrameErr;
+
+    dbg_printf("[TD  ] <   [%08lx] :: EndBand() = %ld\n", (long)glob, err);
     return err;
 }
 
 pascal ComponentResult Theora_ImageCodecQueueStarting(Theora_Globals glob)
 {
 #pragma unused(glob)
-    dbg_printf("--:Theora:- CodecQueueStarting(%08lx) called\n", (long)glob);
+    dbg_printf("[TD  ] <>> [%08lx] :: QueueStarting()\n", (long)glob);
 
     return noErr;
 }
@@ -584,7 +590,7 @@ pascal ComponentResult Theora_ImageCodecQueueStarting(Theora_Globals glob)
 pascal ComponentResult Theora_ImageCodecQueueStopping(Theora_Globals glob)
 {
 #pragma unused(glob)
-    dbg_printf("--:Theora:- CodecQueueStopping(%08lx) called\n", (long)glob);
+    dbg_printf("[TD  ] <>> [%08lx] :: QueueStopping()\n", (long)glob);
 
     return noErr;
 }
