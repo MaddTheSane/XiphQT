@@ -492,9 +492,14 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             data_buffer = glob->p_buffer;
         }
 
-        if (myDrp->draw == 0)
-            err = codecDroppedFrameErr;
-        else {
+        if (myDrp->draw == 0) {
+            // returning codecDroppedFrameErr here seems to seriously confuse QuickTime on Windows,
+            //  so let's pretend it's all cool - the DrawBand will return that same error later, but
+            // that's apparently much more OK
+
+            // err = codecDroppedFrameErr;
+            ;
+        } else {
             op.b_o_s = 0;
             op.e_o_s = 0;
             op.granulepos = -1;

@@ -1,5 +1,11 @@
 2009-07-04  Arek Korbik  <arkadini@gmail.com>
 
+	* Theora/src/TheoraDecoder.c:
+	Don't indicate "dropped frame" as early as in DecodeBand - seems
+	to make difference on Windows.
+
+2009-07-04  Arek Korbik  <arkadini@gmail.com>
+
 	* build-win32/XiphQT.sln (added):
 	* build-win32/XiphQT.vcproj (added):
 	Add VS2008 project files.
