@@ -32,9 +32,9 @@
 #define __versions_h__
 
 #ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF010B)
+#define kOgg_eat__Version		(0x00FF010C)
 #else
-#define kOgg_eat__Version		(0x0000010B)
+#define kOgg_eat__Version		(0x0000010C)
 #endif /* DEBUG */
 
 #endif /* __versions_h__ */
