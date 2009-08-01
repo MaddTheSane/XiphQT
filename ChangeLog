@@ -1,5 +1,11 @@
 2009-08-02  Arek Korbik  <arkadini@gmail.com>
 
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_types_theora.h:
+	Handle base grpos of pre-3.2.1 Theora bitstreams correctly.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
 	* OggImport/src/stream_flac.c:
 	* OggImport/src/stream_speex.c:
 	Add minimal stub code for Speex and FLAC to not block group base

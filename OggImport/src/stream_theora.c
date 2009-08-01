@@ -123,6 +123,10 @@ static void _find_base_gp(StreamInfo *si, ogg_page *opg)
                                                                  // we've been consistently packeting-out so far...
         dbg_printf("---/t / page duration: %lld, %lld (%lld); pkts: %d\n", duration, ogg_page_granulepos(opg), si->lastGranulePos, packets);
         if (duration >= 0) {
+            if (si->si_theora.bitstream_version <= 0x00030200) {
+                // compensate for 0-based grpos in pre-3.2.1 bitstreams (as opposed to 1-based)
+                duration += 1;
+            }
             si->baseGranulePos = grpos - (duration << si->si_theora.granulepos_shift); // subtracting from the "frames at last keyframe" part directly
             if (si->baseGranulePos < 0)
                 si->baseGranulePos = 0;
@@ -280,6 +284,8 @@ int process_first_packet__theora(StreamInfo *si, ogg_page *op, ogg_packet *opckt
     UInt32 fps_N, fps_D;
 
     th_decode_headerin(&si->si_theora.ti, &si->si_theora.tc, &si->si_theora.ts, opckt); //check errors?
+
+    si->si_theora.bitstream_version = (si->si_theora.ti.version_major << 16) + (si->si_theora.ti.version_minor << 8) + (si->si_theora.ti.version_subminor);
 
     si->numChannels = 0;
     //si->lastMediaInserted = 0;
