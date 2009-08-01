@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		09C8F66C0C82FC7D00F72188 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
+		37B42EC70FF5453E00FC88AE /* stream_private_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */; };
+		37B42EC80FF5453E00FC88AE /* stream_private_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */; };
 		37CA8E6D0DD74A65005C8CB6 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
 		7326B5130B5AC44B004CE9D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		7326B5160B5AC44B004CE9D3 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
@@ -391,6 +393,8 @@
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
+		37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stream_private_vorbis.c; path = ../OggImport/src/stream_private_vorbis.c; sourceTree = SOURCE_ROOT; };
+		37B42EC60FF5453E00FC88AE /* stream_private_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stream_private_vorbis.h; path = ../OggImport/src/stream_private_vorbis.h; sourceTree = SOURCE_ROOT; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
 		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBufferTests.h; path = ../tests/common/RingBufferTests.h; sourceTree = SOURCE_ROOT; };
@@ -750,6 +754,8 @@
 		737448C10B19EC3E002B059E /* vorbis */ = {
 			isa = PBXGroup;
 			children = (
+				37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */,
+				37B42EC60FF5453E00FC88AE /* stream_private_vorbis.h */,
 				737448B00B19EC05002B059E /* stream_types_vorbis.h */,
 				737448B10B19EC05002B059E /* stream_vorbis.c */,
 				737448B20B19EC05002B059E /* stream_vorbis.h */,
@@ -1351,6 +1357,7 @@
 				7326B5320B5AC44B004CE9D3 /* CAOggFLACDecoder.cpp in Sources */,
 				7326B5330B5AC44B004CE9D3 /* flac_entrypoints.cpp in Sources */,
 				7373EDD20B7BDCAA00591836 /* samplerefs.c in Sources */,
+				37B42EC80FF5453E00FC88AE /* stream_private_vorbis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,6 +1422,7 @@
 				73744CAE0B1A3D07002B059E /* stream_audio.c in Sources */,
 				73744CB20B1A3D07002B059E /* stream_video.c in Sources */,
 				7373EDD00B7BDCAA00591836 /* samplerefs.c in Sources */,
+				37B42EC70FF5453E00FC88AE /* stream_private_vorbis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

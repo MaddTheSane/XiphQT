@@ -37,6 +37,7 @@
 
 extern ComponentResult _store_sample_reference(StreamInfo *si, SInt64 *dataOffset, int size, TimeValue duration, short smp_flags);
 extern ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean *movie_changed);
+extern ComponentResult _add_first_duration(StreamInfo *si, TimeValue duration);
 
 
 #endif /* __samplerefs_h__ */

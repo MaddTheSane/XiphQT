@@ -1,3 +1,34 @@
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_private_vorbis.h (added):
+	* OggImport/src/stream_private_vorbis.c (added):
+	* OggImport/src/stream_types_vorbis.h:
+	* build-macosx/XiphQT.xcodeproj/project.pbxproj:
+	Add code to calculate duration of Vorbis ogg page.
+
+	* OggImport/src/OggImport.c:
+	* OggImport/src/importer_types.h:
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_theora.h:
+	* OggImport/src/stream_vorbis.c:
+	* OggImport/src/stream_vorbis.h:
+	Add code to calculate base granulepos for each group of streams
+	and use it to correctly synchronize the streams withing the
+	groups.
+
+	* OggImport/src/samplerefs.h:
+	* OggImport/src/samplerefs.c:
+	Add method for updating the duration of the first pending sample
+	reference.
+
+	* OggImport/src/utils.h:
+	* OggImport/src/utils.c:
+	Add granulepos -> time conversion utility.
+
+	* OggImport/src/stream_flac.h:
+	* OggImport/src/stream_speex.h:
+	Adapt to changes.
+
 2009-07-18  Arek Korbik  <arkadini@gmail.com>
 
 	* OggImport/src/OggImport.r:

@@ -84,3 +84,9 @@ void find_last_page_GP(const unsigned char *data, UInt32 data_size,
         }
     }
 }
+
+void gp_to_time_subsec(int rate, ogg_int64_t gp, TimeValue64 *ts, Float64 *subsec)
+{
+    *ts = gp / rate;
+    *subsec = (Float64) (gp - *ts * rate) / (Float64) rate;
+}
