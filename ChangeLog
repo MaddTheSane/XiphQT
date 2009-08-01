@@ -1,5 +1,12 @@
 2009-08-02  Arek Korbik  <arkadini@gmail.com>
 
+	* OggImport/src/stream_flac.c:
+	* OggImport/src/stream_speex.c:
+	Add minimal stub code for Speex and FLAC to not block group base
+	discovery if used with other streams.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
 	* OggImport/src/stream_theora.c:
 	* OggImport/src/stream_vorbis.c:
 	Use track-based offset as much as possible; add some older Theora
