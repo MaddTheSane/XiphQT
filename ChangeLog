@@ -1,5 +1,12 @@
 2009-08-02  Arek Korbik  <arkadini@gmail.com>
 
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_vorbis.c:
+	Use track-based offset as much as possible; add some older Theora
+	compatibility.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
 	* OggImport/src/stream_private_vorbis.h (added):
 	* OggImport/src/stream_private_vorbis.c (added):
 	* OggImport/src/stream_types_vorbis.h:

@@ -116,10 +116,12 @@ static void _gp_to_time_subsec(StreamInfo *si, ogg_int64_t gp, TimeValue64 *ts, 
 static void _find_base_gp(StreamInfo *si, ogg_page *opg)
 {
     ogg_int64_t grpos = ogg_page_granulepos(opg);
-    if (grpos >= 0) {
+    int packets = ogg_page_packets(opg);
+
+    if (grpos >= 0 && packets > 0) { // checking packet num explicitly - some older muxers were timestamping empty pages with 1|1...
         ogg_int64_t duration = theora_private_page_duration(si); // will use page that's been recently pagein-ed, assumes
                                                                  // we've been consistently packeting-out so far...
-        dbg_printf("---/t / page duration: %lld, %lld (%lld)\n", duration, ogg_page_granulepos(opg), si->lastGranulePos);
+        dbg_printf("---/t / page duration: %lld, %lld (%lld); pkts: %d\n", duration, ogg_page_granulepos(opg), si->lastGranulePos, packets);
         if (duration >= 0) {
             si->baseGranulePos = grpos - (duration << si->si_theora.granulepos_shift); // subtracting from the "frames at last keyframe" part directly
             if (si->baseGranulePos < 0)
@@ -129,7 +131,7 @@ static void _find_base_gp(StreamInfo *si, ogg_page *opg)
             dbg_printf("---/t / found base grpos: %lld, %lf\n", si->baseGranuleTime, si->baseGranuleTimeSubSecond);
         }
     } else {
-        dbg_printf("---/t / page no duration: %lld (nr: %ld) (%lld)\n", ogg_page_granulepos(opg), ogg_page_pageno(opg), si->lastGranulePos);
+        dbg_printf("---/t / page no duration: %lld (nr: %ld) (%lld); pkts: %d\n", ogg_page_granulepos(opg), ogg_page_pageno(opg), si->lastGranulePos, packets);
     }
 }
 
@@ -583,12 +585,15 @@ ComponentResult update_group_gp__theora(OggImportGlobals *globals, StreamInfo *s
     ComponentResult ret = noErr;
     TimeValue offset;
     Float64 offset_subsec;
+    TimeValue movieTS = 0;
 
     if (si->groupBaseOffsetApplied)
         return ret;
 
     if (globals->currentGroupBase == si->baseGranuleTime && globals->currentGroupBaseSubSecond == si->baseGranuleTimeSubSecond)
         return ret;
+
+    movieTS = GetMovieTimeScale(globals->theMovie);
 
     offset = si->baseGranuleTime - globals->currentGroupBase;
     offset_subsec =  si->baseGranuleTimeSubSecond - globals->currentGroupBaseSubSecond;
@@ -599,9 +604,15 @@ ComponentResult update_group_gp__theora(OggImportGlobals *globals, StreamInfo *s
 
     dbg_printf("---/t / offset diff: %ld %lf\n", offset, offset_subsec);
 
-    if (offset > 0) {
-        si->streamOffset += offset * GetMovieTimeScale(globals->theMovie);
-        dbg_printf("---/t / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, offset * GetMovieTimeScale(globals->theMovie));
+    if (offset > 0 || offset_subsec > 0.0) {
+        TimeValue track_offset = offset * movieTS;
+        if (offset_subsec > 0.0) {
+            TimeValue track_subsec_offset = (TimeValue) (offset_subsec * movieTS);
+            offset_subsec -= (Float64) track_subsec_offset / (Float64) movieTS;
+            track_offset += track_subsec_offset;
+        }
+        dbg_printf("---/t / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, track_offset);
+        si->streamOffset += track_offset;
     }
 
     if (offset_subsec > 0.0) {

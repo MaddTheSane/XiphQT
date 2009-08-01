@@ -417,12 +417,15 @@ ComponentResult update_group_gp__vorbis(OggImportGlobals *globals, StreamInfo *s
     ComponentResult ret = noErr;
     TimeValue offset;
     Float64 offset_subsec;
+    TimeValue movieTS = 0;
 
     if (si->groupBaseOffsetApplied)
         return ret;
 
     if (globals->currentGroupBase == si->baseGranuleTime && globals->currentGroupBaseSubSecond == si->baseGranuleTimeSubSecond)
         return ret;
+
+    movieTS = GetMovieTimeScale(globals->theMovie);
 
     offset = si->baseGranuleTime - globals->currentGroupBase;
     offset_subsec =  si->baseGranuleTimeSubSecond - globals->currentGroupBaseSubSecond;
@@ -433,9 +436,15 @@ ComponentResult update_group_gp__vorbis(OggImportGlobals *globals, StreamInfo *s
 
     dbg_printf("---/v / offset diff: %ld %lf\n", offset, offset_subsec);
 
-    if (offset > 0) {
-        si->streamOffset += offset * GetMovieTimeScale(globals->theMovie);
-        dbg_printf("---/v / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, offset * GetMovieTimeScale(globals->theMovie));
+    if (offset > 0 || offset_subsec > 0.0) {
+        TimeValue track_offset = offset * movieTS;
+        if (offset_subsec > 0.0) {
+            TimeValue track_subsec_offset = (TimeValue) (offset_subsec * movieTS);
+            offset_subsec -= (Float64) track_subsec_offset / (Float64) movieTS;
+            track_offset += track_subsec_offset;
+        }
+        dbg_printf("---/v / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, track_offset);
+        si->streamOffset += track_offset;
     }
 
     if (offset_subsec > 0.0) {
