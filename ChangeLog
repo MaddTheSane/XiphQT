@@ -1,3 +1,8 @@
+2010-10-01  Arek Korbik  <arkadini@gmail.com>
+
+	* Theora/src/TheoraDecoder.c:
+	Use "correct" endian for the 'y420' pixmap info structure.
+
 2009-08-02  Arek Korbik  <arkadini@gmail.com>
 
 	* OggImport/src/stream_theora.c:

@@ -848,8 +848,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
                ycbcr[2].width, ycbcr[2].height, ycbcr[2].stride);
 
     lines = height;
-    dst_base = baseAddr + pinfo->componentInfoY.offset;
-    dst_stride = pinfo->componentInfoY.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoY.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoY.rowBytes);
     src_base = ycbcr[0].data + off_y * ycbcr[0].stride + off_x;
     src_stride = ycbcr[0].stride;
     while (lines-- > 0) {
@@ -859,8 +859,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     }
 
     lines = height / 2;
-    dst_base = baseAddr + pinfo->componentInfoCb.offset;
-    dst_stride = pinfo->componentInfoCb.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoCb.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoCb.rowBytes);
     src_base = ycbcr[1].data + off_y * ycbcr[1].stride + off_x2;
     src_stride = ycbcr[1].stride;
     while (lines-- > 0) {
@@ -870,8 +870,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     }
 
     lines = height / 2;
-    dst_base = baseAddr + pinfo->componentInfoCr.offset;
-    dst_stride = pinfo->componentInfoCr.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoCr.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoCr.rowBytes);
     src_base = ycbcr[2].data + off_y * ycbcr[2].stride + off_x2;;
     src_stride = ycbcr[2].stride;
     while (lines-- > 0) {
