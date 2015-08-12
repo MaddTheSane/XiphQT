@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:DefaultConfigs.xcconfig">
+   </FileRef>
+   <FileRef
+      location = "group:DebugConfigs.xcconfig">
+   </FileRef>
+   <FileRef
+      location = "group:OggExport/OggExport.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:OggImport/OggImport.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Theora/Theora.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:CAFLAC/CAFLAC.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:CASpeex/CASpeex.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:CAVorbis/CAVorbis.xcodeproj">
+   </FileRef>
+</Workspace>

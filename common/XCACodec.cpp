@@ -49,7 +49,7 @@ XCACodec::~XCACodec()
 void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteSize, UInt32& ioNumberPackets,
                                const AudioStreamPacketDescription* inPacketDescription)
 {
-    dbg_printf("[ XC ]  >> [%08lx] AppendInputData(%ld [%ld] %d)\n", (UInt32) this, ioNumberPackets, ioInputDataByteSize, inPacketDescription != NULL);
+    dbg_printf("[ XC ]  >> [%08lx] AppendInputData(%ld [%ld] %d)\n", (size_t) this, ioNumberPackets, ioInputDataByteSize, inPacketDescription != NULL);
     if(!mIsInitialized) CODEC_THROW(kAudioCodecStateError);
 
     UInt32 bytesToCopy = BufferGetAvailableBytesSize();
@@ -96,13 +96,13 @@ void XCACodec::AppendInputData(const void* inInputData, UInt32& ioInputDataByteS
     } else {
         CODEC_THROW(kAudioCodecNotEnoughBufferSpaceError);
     }
-    dbg_printf("[ XC ] <.. [%08lx] AppendInputData(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioInputDataByteSize);
+    dbg_printf("[ XC ] <.. [%08lx] AppendInputData(%ld [%ld])\n", (size_t) this, ioNumberPackets, ioInputDataByteSize);
 }
 
 UInt32 XCACodec::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                       AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[ XC ]  >> [%08lx] ProduceOutputPackets(%ld [%ld] %d)\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize, outPacketDescription != NULL);
+    dbg_printf("[ XC ]  >> [%08lx] ProduceOutputPackets(%ld [%ld] %d)\n", (size_t) this, ioNumberPackets, ioOutputDataByteSize, outPacketDescription != NULL);
 
     UInt32 theAnswer = kAudioCodecProduceOutputPacketSuccess;
 
@@ -124,7 +124,7 @@ UInt32 XCACodec::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataB
                 ioNumberPackets = pout;
                 ioOutputDataByteSize = mOutputFormat.mBytesPerFrame * fout;
                 theAnswer = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-                dbg_printf("<.! [%08lx] XCACodec :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+                dbg_printf("<.! [%08lx] XCACodec :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
                            ioNumberPackets, ioOutputDataByteSize, theAnswer, FramesReady());
                 return theAnswer;
             }
@@ -134,7 +134,7 @@ UInt32 XCACodec::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataB
                     ioNumberPackets = pout;
                     ioOutputDataByteSize = mOutputFormat.mBytesPerFrame * fout;
                     theAnswer = kAudioCodecProduceOutputPacketFailure;
-                    dbg_printf("[ XC ] <!! [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+                    dbg_printf("[ XC ] <!! [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
                                ioNumberPackets, ioOutputDataByteSize, theAnswer, FramesReady());
                     return theAnswer;
                 }
@@ -165,7 +165,7 @@ UInt32 XCACodec::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataB
         : kAudioCodecProduceOutputPacketSuccess;
 
     dbg_printf("[ XC ] <.. [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, theAnswer, FramesReady());
+               (size_t) this, ioNumberPackets, ioOutputDataByteSize, theAnswer, FramesReady());
     return theAnswer;
 }
 

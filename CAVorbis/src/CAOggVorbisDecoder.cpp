@@ -104,18 +104,20 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
     }
 }
 
+#define BlockMoveData(src, dest, size) memmove(dest, src, size)
+
 UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
     dbg_printf("[VDO ]  >> [%08lx] :: ProduceOutputPackets(%ld [%ld]) (%ld, %ld, %ld; %ld[%ld])\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, mSOBufferSize, mSOBufferUsed, mSOReturned, mSOBufferPages, mSOBufferPackets);
+               (size_t) this, ioNumberPackets, ioOutputDataByteSize, mSOBufferSize, mSOBufferUsed, mSOReturned, mSOBufferPages, mSOBufferPackets);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("[VDO ] <!E [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+        dbg_printf("[VDO ] <!E [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
                    ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
@@ -264,7 +266,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
     }
 
     dbg_printf("[VDO ] <.. [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+               (size_t) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
 
@@ -307,16 +309,16 @@ void CAOggVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 
 void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
-    dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%ld, %ld})\n", (UInt32) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
+    dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%ld, %ld})\n", (size_t) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
     if (!mCompressionInitialized) {
-        dbg_printf("[VDO ] <!I [%08lx] :: InPacket()\n", (UInt32) this);
+        dbg_printf("[VDO ] <!I [%08lx] :: InPacket()\n", (size_t) this);
         CODEC_THROW(kAudioCodecUnspecifiedError);
     }
 
     ogg_page op;
 
     if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize + inPacketDescription->mStartOffset, inPacketDescription->mStartOffset)) {
-        dbg_printf("[VDO ] <!O [%08lx] :: InPacket()\n", (UInt32) this);
+        dbg_printf("[VDO ] <!O [%08lx] :: InPacket()\n", (size_t) this);
         CODEC_THROW(kAudioCodecUnspecifiedError);
     }
 
@@ -360,7 +362,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
         mSOReturned = 0;
     }
 
-    dbg_printf("[VDO ] <.. [%08lx] :: InPacket(pn: %ld)\n", (UInt32) this, ogg_page_pageno (&op));
+    dbg_printf("[VDO ] <.. [%08lx] :: InPacket(pn: %ld)\n", (size_t) this, ogg_page_pageno (&op));
 }
 
 
@@ -385,7 +387,7 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
 
             if (EndianS32_BtoN(aheader->type) == kCookieTypeVorbisFirstPageNo && ptrheader <= cend) {
                 mFirstPageNo = EndianU32_BtoN((reinterpret_cast<OggSerialNoAtom*> (aheader))->serialno);
-                dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %ld)\n", (UInt32) this, mFirstPageNo);
+                dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %ld)\n", (size_t) this, mFirstPageNo);
                 break;
             }
         }

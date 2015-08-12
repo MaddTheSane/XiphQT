@@ -33,7 +33,7 @@
 
 #define cfrg_RezTemplateVersion 1
 
-#ifdef TARGET_REZ_MAC_PPC
+#ifdef TARGET_REZ_MAC
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
 #include <QuickTime/QuickTimeComponents.r>
@@ -48,27 +48,11 @@
 #define kExporterComponentType 'spit'
 
 
-/* How do I do this properly... anybody? */
-#if defined(BUILD_UNIVERSAL)
-  #define TARGET_CPU_PPC 1
-  #define TARGET_CPU_X86 1
-#endif
-
-
 #ifndef cmpThreadSafe
 #define cmpThreadSafe	0x10000000
 #endif
 
 #if TARGET_OS_MAC
-  #if TARGET_CPU_PPC && TARGET_CPU_X86
-    #define TARGET_REZ_FAT_COMPONENTS 1
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-    #define Target_SecondPlatformType platformIA32NativeEntryPoint
-  #elif TARGET_CPU_X86
-    #define Target_PlatformType       platformIA32NativeEntryPoint
-  #else
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-  #endif
 #elif TARGET_OS_WIN32
   #define Target_PlatformType platformWin32
 #else
@@ -97,16 +81,49 @@ resource 'thng' (kExporterResID, OggExporterName, purgeable) {
     componentDoAutoVersion|componentHasMultiplePlatforms, 0,
     {
         // COMPONENT PLATFORM INFORMATION ----------------------
-        kExporterFlags,
-        'dlle',                                 // Code Resource type - Entry point found by symbol name 'dlle' resource
-        kExporterResID,                         // ID of 'dlle' resource
-        Target_PlatformType,
-#if TARGET_REZ_FAT_COMPONENTS
-        kExporterFlags,
-        'dlle',
-        kExporterResID,
-        Target_SecondPlatformType,
-#endif
+		#if defined(ppc_YES)
+		kExporterFlags,
+		'dlle',
+		kExporterResID,
+		platformPowerPCNativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(ppc64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kExporterFlags,
+		'dlle',
+		kExporterResID,
+		platformPowerPC64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(i386_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kExporterFlags,
+		'dlle',
+		kExporterResID,
+		platformIA32NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(x86_64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kExporterFlags,
+		'dlle',
+		kExporterResID,
+		platformX86_64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(TARGET_OS_WIN32)
+		kExporterFlags,
+		'dlle',
+		kExporterResID,
+		platformWin32
+		#endif
     },
     'thnr', kExporterResID
 };

@@ -42,6 +42,7 @@
 
 #include "debug.h"
 
+#define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
 CAFLACDecoder::CAFLACDecoder(Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
@@ -96,7 +97,7 @@ void CAFLACDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
                                const AudioStreamBasicDescription* inOutputFormat,
                                const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
-    dbg_printf(" >> [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf(" >> [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
@@ -127,20 +128,20 @@ void CAFLACDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
     //    FixFormats();
 
     XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
-    dbg_printf("<.. [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("<.. [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
 void CAFLACDecoder::Uninitialize()
 {
-    dbg_printf(" >> [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf(" >> [%08lx] :: Uninitialize()\n", (size_t) this);
     BDCUninitialize();
     XCACodec::Uninitialize();
-    dbg_printf("<.. [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("<.. [%08lx] :: Uninitialize()\n", (size_t) this);
 }
 
 void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf(" >> [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf(" >> [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -194,12 +195,12 @@ void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
     default:
         ACBaseCodec::GetProperty(inPropertyID, ioPropertyDataSize, outPropertyData);
     }
-    dbg_printf("<.. [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("<.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    dbg_printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -229,16 +230,16 @@ void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& o
         break;
 
     };
-    dbg_printf("<.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("<.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAFLACDecoder::Reset()
 {
-    dbg_printf(">> [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf(">> [%08lx] :: Reset()\n", (size_t) this);
     BDCReset();
 
     XCACodec::Reset();
-    dbg_printf("<< [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("<< [%08lx] :: Reset()\n", (size_t) this);
 }
 
 UInt32 CAFLACDecoder::GetVersion() const
@@ -261,7 +262,7 @@ void CAFLACDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCook
 
 void CAFLACDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    dbg_printf(" >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf(" >> [%08lx] :: SetMagicCookie()\n", (size_t) this);
     if (mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
@@ -271,7 +272,7 @@ void CAFLACDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagic
 
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);
-    dbg_printf("<.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("<.. [%08lx] :: SetMagicCookie()\n", (size_t) this);
 }
 
 
@@ -412,7 +413,7 @@ void CAFLACDecoder::InitializeCompressionSettings()
             mFLACsrate = (sib >> 3) & 0xfffff;
 
             dbg_printf("  = [%08lx] CAFLACDecoder :: InitializeCompressionSettings(sr: %ld, chn: %ld, bi: %ld)\n",
-                       (UInt32) this, mFLACsrate, mFLACchannels, mFLACbits);
+                       (size_t) this, mFLACsrate, mFLACchannels, mFLACbits);
 
             mCompressionInitialized = true;
         }
@@ -550,7 +551,7 @@ void CAFLACDecoder::DFPclear()
 
 ::FLAC__StreamDecoderReadStatus CAFLACDecoder::read_callback(FLAC__byte buffer[], size_t *bytes)
 {
-    dbg_printf("[  FD]| -> [%08lx] :: read_callback(%ld)\n", (UInt32) this, *bytes);
+    dbg_printf("[  FD]| -> [%08lx] :: read_callback(%ld)\n", (size_t) this, *bytes);
     FLAC__StreamDecoderReadStatus ret = FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 
     if (mFLACFPList.empty()) {
@@ -573,14 +574,14 @@ void CAFLACDecoder::DFPclear()
         }
     }
 
-    dbg_printf("[  FD]|<-. [%08lx] :: read_callback(%ld) = %ld\n", (UInt32) this, *bytes, ret);
+    dbg_printf("[  FD]|<-. [%08lx] :: read_callback(%ld) = %d\n", (size_t) this, *bytes, ret);
     return ret;
 }
 
 ::FLAC__StreamDecoderWriteStatus CAFLACDecoder::write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[])
 {
     ::FLAC__StreamDecoderWriteStatus ret = FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
-    dbg_printf("[  FD]| +> [%08lx] :: write_callback(%ld) [%ld]\n", (UInt32) this, frame->header.blocksize, frame->header.channels);
+    dbg_printf("[  FD]| +> [%08lx] :: write_callback(%d) [%d]\n", (size_t) this, frame->header.blocksize, frame->header.channels);
 
     FLAC__int32** lbuffer = new FLAC__int32*[frame->header.channels];
     for (unsigned int i = 0; i < frame->header.channels; i++) {
@@ -592,16 +593,16 @@ void CAFLACDecoder::DFPclear()
 
     DFPinit(*frame, lbuffer); //MFDFPacket will free the lbuffer on .clear() call
 
-    dbg_printf("[  FD]|<+. [%08lx] :: write_callback()\n", (UInt32) this);
+    dbg_printf("[  FD]|<+. [%08lx] :: write_callback()\n", (size_t) this);
     return ret;
 }
 
 void CAFLACDecoder::metadata_callback(const ::FLAC__StreamMetadata *metadata)
 {
-    dbg_printf(" |\".\" [%08lx] :: metadata_callback()\n", (UInt32) this);
+    dbg_printf(" |\".\" [%08lx] :: metadata_callback()\n", (size_t) this);
 }
 
 void CAFLACDecoder::error_callback(::FLAC__StreamDecoderErrorStatus status)
 {
-    dbg_printf(" |<!> [%08lx] :: error_callback(%ld)\n", (UInt32) this, status);
+    dbg_printf(" |<!> [%08lx] :: error_callback(%u)\n", (size_t) this, status);
 }

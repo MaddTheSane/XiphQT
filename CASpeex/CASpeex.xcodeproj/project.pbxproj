@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		736FE585090DAFD800BC8DCC /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 736FE584090DAFD800BC8DCC /* Ogg.framework */; };
+		556C3F511B79522A00D2CDDA /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 556C3F4C1B7951E000D2CDDA /* Ogg.framework */; };
+		556C3F531B79524B00D2CDDA /* Ogg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 556C3F4C1B7951E000D2CDDA /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		556C409E1B795E9100D2CDDA /* Speex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 556C40981B795E4B00D2CDDA /* Speex.framework */; };
+		556C409F1B795E9A00D2CDDA /* Speex.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 556C40981B795E4B00D2CDDA /* Speex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		737447C009112E05006D2F02 /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737447BE09112E05006D2F02 /* wrap_ogg.cpp */; };
-		73814BBB0908014700C478FC /* Speex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73814BBA0908014700C478FC /* Speex.framework */; };
 		73814BE30908018800C478FC /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73814BE20908018800C478FC /* AudioUnit.framework */; };
 		73814BF10908027600C478FC /* CASpeexDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814BE70908027600C478FC /* CASpeexDecoder.cpp */; };
 		73814BF20908027600C478FC /* speex_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814BEB0908027600C478FC /* speex_entrypoints.cpp */; };
@@ -22,21 +24,66 @@
 		73814C1D0908039E00C478FC /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C130908039E00C478FC /* CADebugMacros.cpp */; };
 		73814C1E0908039E00C478FC /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C160908039E00C478FC /* CAStreamBasicDescription.cpp */; };
 		73814C25090803C600C478FC /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C22090803C600C478FC /* ringbuffer.cpp */; };
-		73814C300908060E00C478FC /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73814BF70908034600C478FC /* PkgInfo */; };
 		7398ABEE090A7F2F0003F1A2 /* CASpeexDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 73814BEA0908027600C478FC /* CASpeexDecoderPublic.r */; };
 		73E8B293090D4E6E00686EE5 /* CAOggSpeexDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E8B291090D4E6E00686EE5 /* CAOggSpeexDecoder.cpp */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		556C3F4B1B7951E000D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
+		556C3F4D1B7951E000D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 734FB2E50B18B33E00D561D7;
+			remoteInfo = "libogg (static)";
+		};
+		556C3F4F1B79521D00D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
+		556C40971B795E4B00D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C40921B795E4B00D2CDDA /* Speex.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
+			remoteInfo = Speex;
+		};
+		556C40991B795E4B00D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C40921B795E4B00D2CDDA /* Speex.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 734FB2E50B18B33E00D561D7;
+			remoteInfo = "libspeex (static)";
+		};
+		556C409B1B795E5F00D2CDDA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 556C40921B795E4B00D2CDDA /* Speex.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Speex;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		73814C2D090805DF00C478FC /* CopyFiles */ = {
+		556C3F521B79523800D2CDDA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = Contents;
-			dstSubfolderSpec = 1;
+			dstPath = "";
+			dstSubfolderSpec = 10;
 			files = (
-				73814C300908060E00C478FC /* PkgInfo in CopyFiles */,
+				556C409F1B795E9A00D2CDDA /* Speex.framework in CopyFiles */,
+				556C3F531B79524B00D2CDDA /* Ogg.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,17 +91,19 @@
 
 /* Begin PBXFileReference section */
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		32BAE0B30371A71500C91783 /* CASpeex_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CASpeex_Prefix.pch; sourceTree = "<group>"; };
+		556C3F361B7948BE00D2CDDA /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
+		556C3F371B79494000D2CDDA /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
+		556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = ogg/macosx/Ogg.xcodeproj; sourceTree = "<group>"; };
+		556C40921B795E4B00D2CDDA /* Speex.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Speex.xcodeproj; path = speex/macosx/Speex.xcodeproj; sourceTree = "<group>"; };
 		730DC2AE09086D3B00B7BB6A /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 		7348BD670944D3AF00AC363C /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = SOURCE_ROOT; };
 		7348BD690944D3C100AC363C /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
-		736FE584090DAFD800BC8DCC /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = /Library/Frameworks/Ogg.framework; sourceTree = "<absolute>"; };
 		737447470911261B006D2F02 /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		737447BD09112E05006D2F02 /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wrap_ogg.h; sourceTree = "<group>"; };
 		737447BE09112E05006D2F02 /* wrap_ogg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrap_ogg.cpp; sourceTree = "<group>"; };
-		73814BBA0908014700C478FC /* Speex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speex.framework; path = /Library/Frameworks/Speex.framework; sourceTree = "<absolute>"; };
-		73814BE20908018800C478FC /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
+		73814BE20908018800C478FC /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		73814BE60908027600C478FC /* CASpeexCodec.exp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.exports; name = CASpeexCodec.exp; path = src/CASpeexCodec.exp; sourceTree = "<group>"; };
 		73814BE70908027600C478FC /* CASpeexDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CASpeexDecoder.cpp; path = src/CASpeexDecoder.cpp; sourceTree = "<group>"; };
 		73814BE80908027600C478FC /* CASpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CASpeexDecoder.h; path = src/CASpeexDecoder.h; sourceTree = "<group>"; };
@@ -65,7 +114,6 @@
 		73814BEE0908027600C478FC /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = "<group>"; };
 		73814BF4090802F600C478FC /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = SOURCE_ROOT; };
 		73814BF5090802F600C478FC /* icon.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = icon.r; path = ../resources/icon.r; sourceTree = SOURCE_ROOT; };
-		73814BF70908034600C478FC /* PkgInfo */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = PkgInfo; sourceTree = "<group>"; };
 		73814C000908039E00C478FC /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACBaseCodec.cpp; sourceTree = "<group>"; };
 		73814C010908039E00C478FC /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		73814C020908039E00C478FC /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
@@ -98,10 +146,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				556C409E1B795E9100D2CDDA /* Speex.framework in Frameworks */,
+				556C3F511B79522A00D2CDDA /* Ogg.framework in Frameworks */,
 				8D01CCCE0486CAD60068D4B7 /* Carbon.framework in Frameworks */,
-				73814BBB0908014700C478FC /* Speex.framework in Frameworks */,
 				73814BE30908018800C478FC /* AudioUnit.framework in Frameworks */,
-				736FE585090DAFD800BC8DCC /* Ogg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,31 +159,30 @@
 		089C166AFE841209C02AAC07 /* CASpeex */ = {
 			isa = PBXGroup;
 			children = (
+				556C3F371B79494000D2CDDA /* DebugConfigs.xcconfig */,
+				556C3F361B7948BE00D2CDDA /* DefaultConfigs.xcconfig */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				73814BFA0908037D00C478FC /* External Source */,
-				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				089C1671FE841209C02AAC07 /* Frameworks */,
 				19C28FB4FE9D528D11CA2CBB /* Products */,
 			);
 			name = CASpeex;
 			sourceTree = "<group>";
 		};
-		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+		089C1671FE841209C02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				736FE584090DAFD800BC8DCC /* Ogg.framework */,
-				73814BBA0908014700C478FC /* Speex.framework */,
 				73814BE20908018800C478FC /* AudioUnit.framework */,
 				08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */,
 			);
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				7348BD670944D3AF00AC363C /* XCAResources.r */,
-				73814BF70908034600C478FC /* PkgInfo */,
 				73814BF4090802F600C478FC /* icon.icns */,
 				73814BF5090802F600C478FC /* icon.r */,
 				73814BEA0908027600C478FC /* CASpeexDecoderPublic.r */,
@@ -173,9 +220,38 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		556C3F451B79519A00D2CDDA /* External libs */ = {
+			isa = PBXGroup;
+			children = (
+				556C40921B795E4B00D2CDDA /* Speex.xcodeproj */,
+				556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */,
+			);
+			name = "External libs";
+			path = "../external-libs";
+			sourceTree = "<group>";
+		};
+		556C3F471B7951E000D2CDDA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				556C3F4C1B7951E000D2CDDA /* Ogg.framework */,
+				556C3F4E1B7951E000D2CDDA /* libogg.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		556C40931B795E4B00D2CDDA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				556C40981B795E4B00D2CDDA /* Speex.framework */,
+				556C409A1B795E4B00D2CDDA /* libspeex.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		73814BFA0908037D00C478FC /* External Source */ = {
 			isa = PBXGroup;
 			children = (
+				556C3F451B79519A00D2CDDA /* External libs */,
 				73814BFC0908039E00C478FC /* AppleSDK */,
 				73814C1F090803C600C478FC /* utils */,
 			);
@@ -288,12 +364,14 @@
 				8D01CCCB0486CAD60068D4B7 /* Sources */,
 				8D01CCCD0486CAD60068D4B7 /* Frameworks */,
 				73814C260908053200C478FC /* Rez */,
-				73814C2D090805DF00C478FC /* CopyFiles */,
+				556C3F521B79523800D2CDDA /* CopyFiles */,
 				73814C310908064E00C478FC /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				556C409C1B795E5F00D2CDDA /* PBXTargetDependency */,
+				556C3F501B79521D00D2CDDA /* PBXTargetDependency */,
 			);
 			name = CASpeex;
 			productInstallPath = "$(HOME)/Library/Bundles";
@@ -306,15 +384,65 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+			};
 			buildConfigurationList = 73814AA40907F9EC00C478FC /* Build configuration list for PBXProject "CASpeex" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 089C166AFE841209C02AAC07 /* CASpeex */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 556C3F471B7951E000D2CDDA /* Products */;
+					ProjectRef = 556C3F461B7951E000D2CDDA /* Ogg.xcodeproj */;
+				},
+				{
+					ProductGroup = 556C40931B795E4B00D2CDDA /* Products */;
+					ProjectRef = 556C40921B795E4B00D2CDDA /* Speex.xcodeproj */;
+				},
+			);
+			projectRoot = "";
 			targets = (
 				8D01CCC60486CAD60068D4B7 /* CASpeex */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		556C3F4C1B7951E000D2CDDA /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 556C3F4B1B7951E000D2CDDA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		556C3F4E1B7951E000D2CDDA /* libogg.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libogg.a;
+			remoteRef = 556C3F4D1B7951E000D2CDDA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		556C40981B795E4B00D2CDDA /* Speex.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Speex.framework;
+			remoteRef = 556C40971B795E4B00D2CDDA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		556C409A1B795E4B00D2CDDA /* libspeex.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libspeex.a;
+			remoteRef = 556C40991B795E4B00D2CDDA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D01CCC90486CAD60068D4B7 /* Resources */ = {
@@ -379,6 +507,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		556C3F501B79521D00D2CDDA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Ogg;
+			targetProxy = 556C3F4F1B79521D00D2CDDA /* PBXContainerItemProxy */;
+		};
+		556C409C1B795E5F00D2CDDA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Speex;
+			targetProxy = 556C409B1B795E5F00D2CDDA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -391,9 +532,10 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		73814AA10907F9EC00C478FC /* Development */ = {
+		73814AA10907F9EC00C478FC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				EXPORTED_SYMBOLS_FILE = src/CASpeexCodec.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -403,22 +545,24 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CASpeex_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
+				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Components";
 				OTHER_CFLAGS = "-Wall";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.xiph.xiph-qt.caspeex";
 				PRODUCT_NAME = CASpeex;
 				WRAPPER_EXTENSION = component;
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		73814AA20907F9EC00C478FC /* Deployment */ = {
+		73814AA20907F9EC00C478FC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				EXPORTED_SYMBOLS_FILE = src/CASpeexCodec.exp;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -433,54 +577,54 @@
 					__MACOSX__,
 					NDEBUG,
 				);
+				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Components";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.xiph.xiph-qt.caspeex";
 				PRODUCT_NAME = CASpeex;
 				WRAPPER_EXTENSION = component;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		73814AA50907F9EC00C478FC /* Development */ = {
+		73814AA50907F9EC00C478FC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 556C3F371B79494000D2CDDA /* DebugConfigs.xcconfig */;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					QT_IA32__VBR_BROKEN,
 				);
-				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ONLY_ACTIVE_ARCH = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		73814AA60907F9EC00C478FC /* Deployment */ = {
+		73814AA60907F9EC00C478FC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 556C3F361B7948BE00D2CDDA /* DefaultConfigs.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_FAST_MATH = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					QT_IA32__VBR_BROKEN,
 				);
 				OTHER_CFLAGS = (
-					"$(OTHER_CFLAGS)",
+					"$(inherited)",
 					"-falign-loops=16",
-					"-ffast-math",
 				);
-				OTHER_REZFLAGS = "$(OTHER_REZFLAGS) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = Deployment;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -488,20 +632,20 @@
 		73814AA00907F9EC00C478FC /* Build configuration list for PBXNativeTarget "CASpeex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				73814AA10907F9EC00C478FC /* Development */,
-				73814AA20907F9EC00C478FC /* Deployment */,
+				73814AA10907F9EC00C478FC /* Debug */,
+				73814AA20907F9EC00C478FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Release;
 		};
 		73814AA40907F9EC00C478FC /* Build configuration list for PBXProject "CASpeex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				73814AA50907F9EC00C478FC /* Development */,
-				73814AA60907F9EC00C478FC /* Deployment */,
+				73814AA50907F9EC00C478FC /* Debug */,
+				73814AA60907F9EC00C478FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

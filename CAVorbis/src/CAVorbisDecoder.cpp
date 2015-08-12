@@ -107,11 +107,11 @@ void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputForma
                                  const AudioStreamBasicDescription* inOutputFormat,
                                  const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("[VD  ]  >> [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
     if (inInputFormat)
-        dbg_printf("[VD  ]   > [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inInputFormat));
+        dbg_printf("[VD  ]   > [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(inInputFormat));
     if (inOutputFormat)
-        dbg_printf("[VD  ]   > [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inOutputFormat));
+        dbg_printf("[VD  ]   > [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(inOutputFormat));
 
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
@@ -140,23 +140,23 @@ void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputForma
 
     if (mCompressionInitialized)
         XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
-    dbg_printf("[VD  ]  <  [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mInputFormat));
-    dbg_printf("[VD  ]  <  [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mOutputFormat));
-    dbg_printf("[VD  ] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("[VD  ]  <  [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(&mInputFormat));
+    dbg_printf("[VD  ]  <  [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(&mOutputFormat));
+    dbg_printf("[VD  ] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
 void CAVorbisDecoder::Uninitialize()
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[VD  ]  >> [%08lx] :: Uninitialize()\n", (size_t) this);
     BDCUninitialize();
 
     XCACodec::Uninitialize();
-    dbg_printf("[VD  ] <.. [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[VD  ] <.. [%08lx] :: Uninitialize()\n", (size_t) this);
 }
 
 void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %ld)\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID), ioPropertyDataSize);
+    dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %ld)\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID), ioPropertyDataSize);
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription: // 'pakd'
@@ -238,12 +238,12 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     default:
         ACBaseCodec::GetProperty(inPropertyID, ioPropertyDataSize, outPropertyData);
     }
-    dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription: // 'pakd'
@@ -277,16 +277,16 @@ void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
         break;
 
     }
-    dbg_printf("[VD  ] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[VD  ] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisDecoder::Reset()
 {
-    dbg_printf("[VD  ] >> [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[VD  ] >> [%08lx] :: Reset()\n", (size_t) this);
     BDCReset();
 
     XCACodec::Reset();
-    dbg_printf("[VD  ] << [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[VD  ] << [%08lx] :: Reset()\n", (size_t) this);
 }
 
 UInt32 CAVorbisDecoder::GetVersion() const
@@ -337,6 +337,8 @@ UInt32 CAVorbisDecoder::GetMagicCookieByteSize() const
     return mCookieSize;
 }
 
+#define BlockMoveData(src, dest, size) memmove(dest, src, size)
+
 void CAVorbisDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
 {
     if (mCookie != NULL) {
@@ -349,7 +351,7 @@ void CAVorbisDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCo
 
 void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[VD  ]  >> [%08lx] :: SetMagicCookie()\n", (size_t) this);
     if (mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
@@ -359,7 +361,7 @@ void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMag
 
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);
-    dbg_printf("[VD  ] <.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[VD  ] <.. [%08lx] :: SetMagicCookie()\n", (size_t) this);
 }
 
 void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
@@ -380,7 +382,7 @@ void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCoo
 
 void CAVorbisDecoder::FixFormats()
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: FixFormats()\n", (UInt32) this);
+    dbg_printf("[VD  ]  >> [%08lx] :: FixFormats()\n", (size_t) this);
     mInputFormat.mSampleRate = mV_vi.rate;
     mInputFormat.mChannelsPerFrame = mV_vi.channels;
     mInputFormat.mBitsPerChannel = 0;
@@ -395,7 +397,7 @@ void CAVorbisDecoder::FixFormats()
       mInputFormat.mBytesPerPacket = mInputFormat.mChannelsPerFrame * 34;
       mInputFormat.mBytesPerFrame = 0;
     */
-    dbg_printf("[VD  ] <.. [%08lx] :: FixFormats()\n", (UInt32) this);
+    dbg_printf("[VD  ] <.. [%08lx] :: FixFormats()\n", (size_t) this);
 }
 
 

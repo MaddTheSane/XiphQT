@@ -1,0 +1,23 @@
+//
+//  DefaultConfigs.xcconfig
+//  
+//
+//  Created by C.W. Betts on 8/10/15.
+//
+//
+
+
+OTHER_REZFLAGS = -d ppc_$ppc -d i386_$i386 -d x86_64_$x86_64 -d ppc64_$ppc64 -D TARGET_REZ_MAC
+ARCHS = $(ARCHS_STANDARD_32_64_BIT)
+SDKROOT = macosx
+MACOSX_DEPLOYMENT_TARGET = 10.6
+GCC_FAST_MATH = YES
+
+
+GCC_C_LANGUAGE_STANDARD = gnu99
+CLANG_CXX_LANGUAGE_STANDARD = gnu++98
+CLANG_CXX_LIBRARY = libstdc++
+LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks @executable_path/../Frameworks
+
+
+CODE_SIGN_IDENTITY = -

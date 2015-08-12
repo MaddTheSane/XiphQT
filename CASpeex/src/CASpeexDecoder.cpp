@@ -43,6 +43,8 @@
 //#define NDEBUG
 #include "debug.h"
 
+#define BlockMoveData(src, dest, size) memmove(dest, src, size)
+
 CASpeexDecoder::CASpeexDecoder(Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0), mOutBufferStart(0),
@@ -107,7 +109,7 @@ void CASpeexDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat
                                 const AudioStreamBasicDescription* inOutputFormat,
                                 const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
-    dbg_printf(" >> [%08lx] CASpeexDecoder :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf(" >> [%08lx] CASpeexDecoder :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
@@ -133,22 +135,22 @@ void CASpeexDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat
     }
 
     XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
-    dbg_printf("<.. [%08lx] CASpeexDecoder :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("<.. [%08lx] CASpeexDecoder :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
 void CASpeexDecoder::Uninitialize()
 {
-    dbg_printf(" >> [%08lx] CASpeexDecoder :: Uninitialize()\n", (UInt32) this);
+    dbg_printf(" >> [%08lx] CASpeexDecoder :: Uninitialize()\n", (size_t) this);
 
     BDCUninitialize();
     XCACodec::Uninitialize();
 
-    dbg_printf("<.. [%08lx] CASpeexDecoder :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("<.. [%08lx] CASpeexDecoder :: Uninitialize()\n", (size_t) this);
 }
 
 void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf(" >> [%08lx] CASpeexDecoder :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf(" >> [%08lx] CASpeexDecoder :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -184,7 +186,7 @@ void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPr
             if (*outProp < 8192 && mInputFormat.mFormatID == kAudioFormatXiphOggFramedSpeex)
                 *outProp = 8192;
             dbg_printf("  = [%08lx] CASpeexDecoder :: GetProperty('pakf'): %ld\n",
-                       (UInt32) this, *outProp);
+                       (size_t) this, *outProp);
         }
         else
         {
@@ -209,12 +211,12 @@ void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPr
     default:
         ACBaseCodec::GetProperty(inPropertyID, ioPropertyDataSize, outPropertyData);
     }
-    dbg_printf("<.. [%08lx] CASpeexDecoder :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("<.. [%08lx] CASpeexDecoder :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CASpeexDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    dbg_printf(" >> [%08lx] CASpeexDecoder :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf(" >> [%08lx] CASpeexDecoder :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription:
@@ -237,16 +239,16 @@ void CASpeexDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& 
         break;
 
     }
-    dbg_printf("<.. [%08lx] CASpeexDecoder :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("<.. [%08lx] CASpeexDecoder :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CASpeexDecoder::Reset()
 {
-    dbg_printf(">> [%08lx] CASpeexDecoder :: Reset()\n", (UInt32) this);
+    dbg_printf(">> [%08lx] CASpeexDecoder :: Reset()\n", (size_t) this);
     BDCReset();
 
     XCACodec::Reset();
-    dbg_printf("<< [%08lx] CASpeexDecoder :: Reset()\n", (UInt32) this);
+    dbg_printf("<< [%08lx] CASpeexDecoder :: Reset()\n", (size_t) this);
 }
 
 UInt32 CASpeexDecoder::GetVersion() const
@@ -309,7 +311,7 @@ void CASpeexDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCoo
 
 void CASpeexDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    dbg_printf(" >> [%08lx] CASpeexDecoder :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf(" >> [%08lx] CASpeexDecoder :: SetMagicCookie()\n", (size_t) this);
     if (mIsInitialized)
         CODEC_THROW(kAudioCodecStateError);
 
@@ -319,7 +321,7 @@ void CASpeexDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagi
 
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);
-    dbg_printf("<.. [%08lx] CASpeexDecoder :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("<.. [%08lx] CASpeexDecoder :: SetMagicCookie()\n", (size_t) this);
 }
 
 void CASpeexDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)

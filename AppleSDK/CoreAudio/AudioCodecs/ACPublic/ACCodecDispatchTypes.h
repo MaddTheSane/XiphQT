@@ -47,7 +47,7 @@
 //=============================================================================
 
 //	note that AudioCodec.h needs to be included prior to including this file
-#if !defined(__AudioCodec_h__)
+#if !defined(__AudioCodec_h__) && !defined(AudioUnit_AudioCodec_h)
 	#error	AudioCodec.h needs to be included prior to including this file
 #endif
 

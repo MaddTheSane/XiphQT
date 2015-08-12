@@ -33,7 +33,7 @@
 
 #define cfrg_RezTemplateVersion 1
 
-#ifdef TARGET_REZ_MAC_PPC
+#ifdef TARGET_REZ_MAC
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
 #include <QuickTime/QuickTimeComponents.r>
@@ -47,23 +47,7 @@
 #include "TheoraEncoder.h"
 
 
-/* How do I do this properly... anybody? */
-#if defined(BUILD_UNIVERSAL)
-  #define TARGET_CPU_PPC 1
-  #define TARGET_CPU_X86 1
-#endif
-
-
 #if TARGET_OS_MAC
-  #if TARGET_CPU_PPC && TARGET_CPU_X86
-    #define TARGET_REZ_FAT_COMPONENTS 1
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-    #define Target_SecondPlatformType platformIA32NativeEntryPoint
-  #elif TARGET_CPU_X86
-    #define Target_PlatformType       platformIA32NativeEntryPoint
-  #else
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-  #endif
   #define theoraThreadSafe cmpThreadSafe
 #elif TARGET_OS_WIN32
   #define Target_PlatformType platformWin32
@@ -113,16 +97,49 @@ resource 'thng' (kTheoraEncoderResID) {
     componentDoAutoVersion | componentHasMultiplePlatforms, 0,
     {
         // component platform information
-        kTheoraEncoderFlags,
-        'dlle',
-        kTheoraEncoderResID,
-        Target_PlatformType,
-#if TARGET_REZ_FAT_COMPONENTS
-        kTheoraEncoderFlags,
-        'dlle',
-        kTheoraEncoderResID,
-        Target_SecondPlatformType,
-#endif
+		#if defined(ppc_YES)
+		kTheoraEncoderFlags,
+		'dlle',
+		kTheoraEncoderResID,
+		platformPowerPCNativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(ppc64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kTheoraEncoderFlags,
+		'dlle',
+		kTheoraEncoderResID,
+		platformPowerPC64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(i386_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kTheoraEncoderFlags,
+		'dlle',
+		kTheoraEncoderResID,
+		platformIA32NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(x86_64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kTheoraEncoderFlags,
+		'dlle',
+		kTheoraEncoderResID,
+		platformX86_64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(TARGET_OS_WIN32)
+		kTheoraEncoderFlags,
+		'dlle',
+		kTheoraEncoderResID,
+		platformWin32
+		#endif
     };
 };
 

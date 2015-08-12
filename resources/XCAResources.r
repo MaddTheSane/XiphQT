@@ -34,7 +34,7 @@
 
 #ifndef __HAVE_INCLUDES_ALREADY__
 
-#ifdef TARGET_REZ_MAC_PPC
+#ifdef TARGET_REZ_MAC
   #include <CoreServices/CoreServices.r>
 #else
   #include "ConditionalMacros.r"
@@ -52,28 +52,11 @@
 #define __HAVE_INCLUDES_ALREADY__
 #endif /* __HAVE_INCLUDES_ALREADY__ */
 
-
-/* How do I do this properly... anybody? */
-#if defined(BUILD_UNIVERSAL)
-  #define TARGET_CPU_PPC 1
-  #define TARGET_CPU_X86 1
-#endif
-
-
 #ifndef GEN_MISSING
   #define GEN_MISSING 0
 #endif
 
 #if TARGET_OS_MAC
-  #if TARGET_CPU_PPC && TARGET_CPU_X86
-    #define TARGET_REZ_FAT_COMPONENTS 1
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-    #define Target_SecondPlatformType platformIA32NativeEntryPoint
-  #elif TARGET_CPU_X86
-    #define Target_PlatformType       platformIA32NativeEntryPoint
-  #else
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-  #endif
 
 //  #define Target_CodeResType		'dlle'
 //  #define TARGET_REZ_USE_DLLE		1
@@ -133,18 +116,40 @@ resource 'thng' (kPrimaryResourceID, kComponentName)
     kComponentRegistrationFlags,
     0, //	Icon family resource ID
     { //	Beginning of platform info
+    #if defined(ppc_YES)
         COMPONENT_FLAGS, //	Component flags
-        'dlle', kPrimaryResourceID,
-        Target_PlatformType,
-#if TARGET_REZ_FAT_COMPONENTS
-        COMPONENT_FLAGS,
-        'dlle', kPrimaryResourceID,
-        Target_SecondPlatformType,
-#endif
+        'dlle', kPrimaryResourceID, platformPowerPCNativeEntryPoint
+        #define NeedLeadingComma 1
+    #endif
+    #if defined(ppc64_YES)
+        #if defined(NeedLeadingComma)
+            ,
+        #endif
+        COMPONENT_FLAGS, //	Component flags
+        'dlle', kPrimaryResourceID, platformPowerPC64NativeEntryPoint
+        #define NeedLeadingComma 1
+    #endif
+    #if defined(i386_YES)
+        #if defined(NeedLeadingComma)
+            ,
+        #endif
+        COMPONENT_FLAGS, //	Component flags
+        'dlle', kPrimaryResourceID, platformIA32NativeEntryPoint
+        #define NeedLeadingComma 1
+    #endif
+    #if defined(x86_64_YES)
+        #if defined(NeedLeadingComma)
+            ,
+        #endif
+        COMPONENT_FLAGS, //	Component flags
+        'dlle', kPrimaryResourceID, platformX86_64NativeEntryPoint
+        #define NeedLeadingComma 1
+    #endif
     },
 #if thng_RezTemplateVersion >= 2
     kComponentPublicResourceMapType, kPrimaryResourceID
 #endif
+#undef NeedLeadingComma
 };
 #else /* GEN_MISSING */
 

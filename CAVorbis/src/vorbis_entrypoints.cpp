@@ -28,6 +28,8 @@
  */
 
 
+#include <AudioUnit/AudioCodec.h>
+
 #include "CAVorbisDecoder.h"
 #include "CAOggVorbisDecoder.h"
 #include "CAVorbisEncoder.h"

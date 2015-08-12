@@ -33,7 +33,7 @@
 
 #define cfrg_RezTemplateVersion 1
 
-#ifdef TARGET_REZ_MAC_PPC
+#ifdef TARGET_REZ_MAC
 #include <CoreServices/CoreServices.r>
 #include <QuickTime/QuickTime.r>
 #include <QuickTime/QuickTimeComponents.r>
@@ -60,15 +60,6 @@
 #endif
 
 #if TARGET_OS_MAC
-  #if TARGET_CPU_PPC && TARGET_CPU_X86
-    #define TARGET_REZ_FAT_COMPONENTS 1
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-    #define Target_SecondPlatformType platformIA32NativeEntryPoint
-  #elif TARGET_CPU_X86
-    #define Target_PlatformType       platformIA32NativeEntryPoint
-  #else
-    #define Target_PlatformType       platformPowerPCNativeEntryPoint
-  #endif
 #elif TARGET_OS_WIN32
   #define Target_PlatformType platformWin32
 #else
@@ -99,16 +90,49 @@ resource 'thng' (kImporterResID, OggImporterName, purgeable) {
     componentDoAutoVersion|componentHasMultiplePlatforms, 0,
     {
         // COMPONENT PLATFORM INFORMATION ----------------------
-        kImporterFlags,
-        'dlle',                                 // Code Resource type - Entry point found by symbol name 'dlle' resource
-        kImporterResID,                         // ID of 'dlle' resource
-        Target_PlatformType,
-#if TARGET_REZ_FAT_COMPONENTS
-        kImporterFlags,
-        'dlle',
-        kImporterResID,
-        Target_SecondPlatformType,
-#endif
+		#if defined(ppc_YES)
+		kImporterFlags,
+		'dlle',
+		kImporterResID,
+		platformPowerPCNativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(ppc64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kImporterFlags,
+		'dlle',
+		kImporterResID,
+		platformPowerPC64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(i386_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kImporterFlags,
+		'dlle',
+		kImporterResID,
+		platformIA32NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(x86_64_YES)
+		#if defined(NeedLeadingComma)
+		,
+		#endif
+		kImporterFlags,
+		'dlle',
+		kImporterResID,
+		platformX86_64NativeEntryPoint
+		#define NeedLeadingComma 1
+		#endif
+		#if defined(TARGET_OS_WIN32)
+		kImporterFlags,
+		'dlle',
+		kImporterResID,
+		platformWin32
+		#endif
     },
     'thnr', kImporterResID
 };

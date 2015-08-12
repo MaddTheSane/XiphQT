@@ -102,14 +102,14 @@ void CAOggSpeexDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription&
 UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
+    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld])\n", (size_t) this, ioNumberPackets, ioOutputDataByteSize);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("<!E [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+        dbg_printf("<!E [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
                    ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
@@ -156,8 +156,8 @@ UInt32 CAOggSpeexDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOu
         }
     }
 
-    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: ProduceOutputPackets(%u [%u]) = %u [%u]\n",
+               (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)ret, (unsigned int)(FramesReady()));
     return ret;
 }
 
@@ -190,7 +190,7 @@ void CAOggSpeexDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 
 void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
-    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: InPacket({%ld, %ld})\n", (UInt32) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
+    dbg_printf(" >> [%08lx] CAOggSpeexDecoder :: InPacket({%u, %d})\n", (size_t) this, (unsigned int)inPacketDescription->mDataByteSize, (unsigned int)inPacketDescription->mVariableFramesInPacket);
     if (!mCompressionInitialized)
         CODEC_THROW(kAudioCodecUnspecifiedError);
 
@@ -206,8 +206,8 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
     UInt32 page_packets = ogg_page_packets(&op);
     SInt32 packet_length_adjust = 0;
 
-    dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): no: %ld, fs: %ld, fpp: %ld, np: %ld\n",
-               (UInt32) this, ogg_page_pageno(&op), mSpeexHeader.frame_size, mSpeexHeader.frames_per_packet, page_packets);
+    dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): no: %ld, fs: %d, fpp: %d, np: %d\n",
+               (size_t) this, ogg_page_pageno(&op), mSpeexHeader.frame_size, mSpeexHeader.frames_per_packet, (unsigned int)page_packets);
 
     if (mSpeexHeader.frame_size != 0 && mSpeexHeader.frames_per_packet != 0) {
         if (mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet * page_packets != inPacketDescription->mVariableFramesInPacket) {
@@ -219,8 +219,8 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
                 }
                 packet_length_adjust = -packet_length_adjust;
             }
-            dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): p_l_adjust: %ld\n",
-                       (UInt32) this, packet_length_adjust);
+            dbg_printf("  > [%08lx] CAOggSpeexDecoder :: InPacket(): p_l_adjust: %d\n",
+                       (size_t) this, (int)packet_length_adjust);
         }
     }
 
@@ -249,7 +249,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
 
     mFramesBufferedList.push_back(packet_count);
 
-    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: InPacket(): packet_count: %ld\n", (UInt32) this, packet_count);
+    dbg_printf("<.. [%08lx] CAOggSpeexDecoder :: InPacket(): packet_count: %ld\n", (size_t) this, packet_count);
 }
 
 

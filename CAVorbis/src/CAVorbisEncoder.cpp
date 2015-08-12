@@ -124,11 +124,11 @@ void CAVorbisEncoder::Initialize(const AudioStreamBasicDescription* inInputForma
                                  const AudioStreamBasicDescription* inOutputFormat,
                                  const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
-    dbg_printf("[  VE]  >> [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("[  VE]  >> [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
     if (inInputFormat)
-        dbg_printf("[  VE]   > [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inInputFormat));
+        dbg_printf("[  VE]   > [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(inInputFormat));
     if (inOutputFormat)
-        dbg_printf("[  VE]   > [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(inOutputFormat));
+        dbg_printf("[  VE]   > [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(inOutputFormat));
 
     if(inInputFormat != NULL) {
         SetCurrentInputFormat(*inInputFormat);
@@ -152,18 +152,18 @@ void CAVorbisEncoder::Initialize(const AudioStreamBasicDescription* inInputForma
 
     XCACodec::Initialize(inInputFormat, inOutputFormat, inMagicCookie, inMagicCookieByteSize);
 
-    dbg_printf("[  VE]  <  [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mInputFormat));
-    dbg_printf("[  VE]  <  [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (UInt32) this, DBG_STREAMDESC_FILL(&mOutputFormat));
-    dbg_printf("[  VE] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (UInt32) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
+    dbg_printf("[  VE]  <  [%08lx] :: InputFormat :" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(&mInputFormat));
+    dbg_printf("[  VE]  <  [%08lx] :: OutputFormat:" DBG_STREAMDESC_FMT "\n", (size_t) this, DBG_STREAMDESC_FILL(&mOutputFormat));
+    dbg_printf("[  VE] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
 void CAVorbisEncoder::Uninitialize()
 {
-    dbg_printf("[  VE]  >> [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[  VE]  >> [%08lx] :: Uninitialize()\n", (size_t) this);
     BDCUninitialize();
 
     XCACodec::Uninitialize();
-    dbg_printf("[  VE] <.. [%08lx] :: Uninitialize()\n", (UInt32) this);
+    dbg_printf("[  VE] <.. [%08lx] :: Uninitialize()\n", (size_t) this);
 }
 
 /*
@@ -175,7 +175,7 @@ void CAVorbisEncoder::Uninitialize()
 
 void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf("[  VE]  >> [%08lx] :: GetProperty('%4.4s') (%d)\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID), inPropertyID == kAudioCodecPropertyFormatCFString);
+    dbg_printf("[  VE]  >> [%08lx] :: GetProperty('%4.4s') (%d)\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID), inPropertyID == kAudioCodecPropertyFormatCFString);
     switch(inPropertyID)
     {
 
@@ -323,7 +323,7 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
             } else {
                 *reinterpret_cast<UInt32*>(outPropertyData) = 0;
             }
-            dbg_printf("[  VE]   . [%08lx] :: GetProperty('%4.4s') = %ld\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID),
+            dbg_printf("[  VE]   . [%08lx] :: GetProperty('%4.4s') = %ld\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID),
                        *reinterpret_cast<UInt32*>(outPropertyData));
         }
         else
@@ -406,12 +406,12 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     default:
         ACBaseCodec::GetProperty(inPropertyID, ioPropertyDataSize, outPropertyData);
     }
-    dbg_printf("[  VE] <.. [%08lx] :: GetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[  VE] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
-    dbg_printf("[  VE]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[  VE]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
     {
         /*
@@ -504,12 +504,12 @@ void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
         break;
 
     }
-    dbg_printf("[  VE] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[  VE] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisEncoder::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPropertyDataSize, const void* inPropertyData)
 {
-    dbg_printf("[  VE]  >> [%08lx] :: SetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[  VE]  >> [%08lx] :: SetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 
     switch(inPropertyID) {
     case kAudioCodecPropertySettings:
@@ -525,16 +525,16 @@ void CAVorbisEncoder::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPr
         ACBaseCodec::SetProperty(inPropertyID, inPropertyDataSize, inPropertyData);
         break;
     }
-    dbg_printf("[  VE] <.. [%08lx] :: SetProperty('%4.4s')\n", (UInt32) this, reinterpret_cast<char*> (&inPropertyID));
+    dbg_printf("[  VE] <.. [%08lx] :: SetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
 void CAVorbisEncoder::Reset()
 {
-    dbg_printf("[  VE] > > [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[  VE] > > [%08lx] :: Reset()\n", (size_t) this);
     BDCReset();
 
     XCACodec::Reset();
-    dbg_printf("[  VE] < < [%08lx] :: Reset()\n", (UInt32) this);
+    dbg_printf("[  VE] < < [%08lx] :: Reset()\n", (size_t) this);
 }
 
 UInt32 CAVorbisEncoder::GetVersion() const
@@ -580,7 +580,7 @@ void CAVorbisEncoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& 
         mCfgBitrate = BitrateMid();
         if (mOutputFormat.mSampleRate < 8000.0 || mOutputFormat.mSampleRate > 50000.0)
             mCfgMode = kVorbisEncoderModeQuality;
-        dbg_printf("[  VE]  of [%08lx] :: InitializeCompressionSettings() = br:%ld, m:%d\n", (UInt32) this, mCfgBitrate, mCfgMode);
+        dbg_printf("[  VE]  of [%08lx] :: InitializeCompressionSettings() = br:%ld, m:%d\n", (size_t) this, mCfgBitrate, mCfgMode);
     } else {
         CODEC_THROW(kAudioCodecStateError);
     }
@@ -590,6 +590,8 @@ UInt32 CAVorbisEncoder::GetMagicCookieByteSize() const
 {
     return mCookieSize;
 }
+
+#define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
 void CAVorbisEncoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
 {
@@ -603,9 +605,9 @@ void CAVorbisEncoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCo
 
 void CAVorbisEncoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
-    dbg_printf("[  VE]  >> [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[  VE]  >> [%08lx] :: SetMagicCookie()\n", (size_t) this);
     CODEC_THROW(kAudioCodecIllegalOperationError);
-    dbg_printf("[  VE] <.. [%08lx] :: SetMagicCookie()\n", (UInt32) this);
+    dbg_printf("[  VE] <.. [%08lx] :: SetMagicCookie()\n", (size_t) this);
 }
 
 void CAVorbisEncoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
@@ -624,11 +626,12 @@ void CAVorbisEncoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCoo
 #endif /* 0 */
 }
 
+#define kAudioTerminatorAtomType       0
 
 
 void CAVorbisEncoder::FixFormats()
 {
-    dbg_printf("[  VE]  >> [%08lx] :: FixFormats()\n", (UInt32) this);
+    dbg_printf("[  VE]  >> [%08lx] :: FixFormats()\n", (size_t) this);
     mOutputFormat.mSampleRate = mInputFormat.mSampleRate;
     mOutputFormat.mBitsPerChannel = 0;
     mOutputFormat.mBytesPerPacket = 0;
@@ -637,7 +640,7 @@ void CAVorbisEncoder::FixFormats()
     //long long_blocksize = (reinterpret_cast<long *>(mV_vi.codec_setup))[1];
     //mOutputFormat.mFramesPerPacket = long_blocksize;
 
-    dbg_printf("[  VE] <.. [%08lx] :: FixFormats()\n", (UInt32) this);
+    dbg_printf("[  VE] <.. [%08lx] :: FixFormats()\n", (size_t) this);
 }
 
 void CAVorbisEncoder::InitializeCompressionSettings()
@@ -670,7 +673,7 @@ void CAVorbisEncoder::InitializeCompressionSettings()
         if (mOutputFormat.mChannelsPerFrame > 2)
             total_bitrate *= mOutputFormat.mChannelsPerFrame;
 
-        dbg_printf("[  VE]  .? [%08lx] :: InitializeCompressionSettings() = br:%ld\n", (UInt32) this, total_bitrate);
+        dbg_printf("[  VE]  .? [%08lx] :: InitializeCompressionSettings() = br:%ld\n", (size_t) this, total_bitrate);
 
         if (mCfgMode == kVorbisEncoderModeAverage) {
             ret = vorbis_encode_init(&mV_vi, mOutputFormat.mChannelsPerFrame, sample_rate, -1, total_bitrate, -1);
@@ -687,7 +690,7 @@ void CAVorbisEncoder::InitializeCompressionSettings()
 
     if (ret) {
         vorbis_info_clear(&mV_vi);
-        dbg_printf("[  VE] <!! [%08lx] :: InitializeCompressionSettings() = %ld\n", (UInt32) this, ret);
+        dbg_printf("[  VE] <!! [%08lx] :: InitializeCompressionSettings() = %ld\n", (size_t) this, ret);
         CODEC_THROW(kAudioCodecUnspecifiedError);
     }
 
@@ -726,7 +729,7 @@ void CAVorbisEncoder::InitializeCompressionSettings()
     }
 
     dbg_printf("[  VE] < > [%08lx] :: InitializeCompressionSettings() - bru: %ld, brn: %ld, brl: %ld, brw: %ld\n",
-               (UInt32) this, mV_vi.bitrate_upper, mV_vi.bitrate_nominal, mV_vi.bitrate_lower, mV_vi.bitrate_window);
+               (size_t) this, mV_vi.bitrate_upper, mV_vi.bitrate_nominal, mV_vi.bitrate_lower, mV_vi.bitrate_window);
     mCompressionInitialized = true;
 }
 
@@ -774,7 +777,7 @@ void CAVorbisEncoder::InPacket(const void* inInputData, const AudioStreamPacketD
 UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                              AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[  VE]  >> [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld] %d)\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize, outPacketDescription != NULL);
+    dbg_printf("[  VE]  >> [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld] %d)\n", (size_t) this, ioNumberPackets, ioOutputDataByteSize, outPacketDescription != NULL);
 
     UInt32 theAnswer = kAudioCodecProduceOutputPacketSuccess;
 
@@ -793,7 +796,7 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
                 ioNumberPackets = fout;
                 ioOutputDataByteSize = bout;
                 theAnswer = kAudioCodecNotEnoughBufferSpaceError;
-                dbg_printf("[  VE] <.! [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (UInt32) this,
+                dbg_printf("[  VE] <.! [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (size_t) this,
                            ioNumberPackets, ioOutputDataByteSize, theAnswer);
                 return theAnswer;
             }
@@ -816,7 +819,7 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
                 ioOutputDataByteSize = bout;
                 theAnswer = kAudioCodecNotEnoughBufferSpaceError;
                 mProducedPList.push_back(op);
-                dbg_printf("[  VE] <.! [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (UInt32) this,
+                dbg_printf("[  VE] <.! [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (size_t) this,
                            ioNumberPackets, ioOutputDataByteSize, theAnswer);
                 return theAnswer;
             }
@@ -844,7 +847,7 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
                 ioNumberPackets = fout;
                 ioOutputDataByteSize = bout;
                 theAnswer = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-                dbg_printf("[  VE] <!. [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (UInt32) this,
+                dbg_printf("[  VE] <!. [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n", (size_t) this,
                            ioNumberPackets, ioOutputDataByteSize, theAnswer);
                 return theAnswer;
             }
@@ -894,7 +897,7 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
     if (mEOSHit)
         theAnswer = kAudioCodecProduceOutputPacketAtEOF;
     dbg_printf("[  VE] <.. [%08lx] CAVorbisEncoder :: ProduceOutputPackets(%ld [%ld]) = %ld\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, theAnswer);
+               (size_t) this, ioNumberPackets, ioOutputDataByteSize, theAnswer);
     return theAnswer;
 }
 
@@ -1076,7 +1079,7 @@ Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
     CFStringRef name = NULL;
     CFIndex i, cf_l;
 
-    dbg_printf("[  VE]  >> [%08lx] :: ApplySettings()\n", (UInt32) this);
+    dbg_printf("[  VE]  >> [%08lx] :: ApplySettings()\n", (size_t) this);
 
     name = (CFStringRef) CFDictionaryGetValue(sd, CFSTR(kAudioSettings_TopLevelKey));
     if (name == NULL || CFStringCompare(name, CFSTR("Xiph Vorbis Encoder"), 0) != kCFCompareEqualTo)
@@ -1115,7 +1118,7 @@ Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
                 mCfgMode = kVorbisEncoderModeQualityByBitrate;
             else
                 return ret;
-            dbg_printf("[  VE]   M [%08lx] :: ApplySettings() :: %d\n", (UInt32) this, mCfgMode);
+            dbg_printf("[  VE]   M [%08lx] :: ApplySettings() :: %d\n", (size_t) this, mCfgMode);
         } else if (CFStringCompare(key, CFSTR("Encoding Quality"), 0) == kCFCompareEqualTo) {
             nval = (CFNumberRef) CFArrayGetValueAtIndex(available, current);
             SInt32 q = 4;
@@ -1123,11 +1126,11 @@ Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
             if (q < -1 || q > 10)
                 continue;
             mCfgQuality = (float) q / 10.0;
-            dbg_printf("[  VE]   Q [%08lx] :: ApplySettings() :: %1.1f\n", (UInt32) this, mCfgQuality);
+            dbg_printf("[  VE]   Q [%08lx] :: ApplySettings() :: %1.1f\n", (size_t) this, mCfgQuality);
         } else if (CFStringCompare(key, CFSTR("Target Bitrate"), 0) == kCFCompareEqualTo) {
             nval = (CFNumberRef) CFArrayGetValueAtIndex(available, current);
             CFNumberGetValue(nval, kCFNumberLongType, &mCfgBitrate);
-            dbg_printf("[  VE]   B [%08lx] :: ApplySettings() :: %ld\n", (UInt32) this, mCfgBitrate);
+            dbg_printf("[  VE]   B [%08lx] :: ApplySettings() :: %ld\n", (size_t) this, mCfgBitrate);
         }
     }
 
@@ -1137,10 +1140,10 @@ Boolean CAVorbisEncoder::ApplySettings(const CFDictionaryRef sd)
         mCfgBitrate = BitrateMin();
     else if (mCfgBitrate > BitrateMax())
        mCfgBitrate = BitrateMax();
-    dbg_printf("[  VE]  != [%08lx] :: ApplySettings() :: %d [br: %ld]\n", (UInt32) this, mCfgMode, mCfgBitrate);
+    dbg_printf("[  VE]  != [%08lx] :: ApplySettings() :: %d [br: %ld]\n", (size_t) this, mCfgMode, mCfgBitrate);
 
     ret = true;
-    dbg_printf("[  VE] <   [%08lx] :: ApplySettings() = %d\n", (UInt32) this, ret);
+    dbg_printf("[  VE] <   [%08lx] :: ApplySettings() = %d\n", (size_t) this, ret);
     return ret;
 }
 

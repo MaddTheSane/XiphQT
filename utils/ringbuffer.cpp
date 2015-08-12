@@ -85,14 +85,14 @@ UInt32 RingBuffer::Reallocate(UInt32 inBufferByteSize) {
     if (inBufferByteSize > mBSize) {
         bptr = new Byte[inBufferByteSize * 2];
         data_size = GetDataAvailable();
-        if (mNeedsWrapping) {
-            UInt32 headBytes = mBSize - mBStart;
-            BlockMoveData(mBuffer + mBStart, bptr, headBytes);
-            BlockMoveData(mBuffer, bptr + headBytes, mBEnd);
-            mNeedsWrapping = false;
-        } else {
-            BlockMoveData(mBuffer + mBStart, bptr, data_size);
-        }
+		if (mNeedsWrapping) {
+			UInt32 headBytes = mBSize - mBStart;
+			memmove(bptr, mBuffer + mBStart, headBytes);
+			memmove(bptr + headBytes, mBuffer, mBEnd);
+			mNeedsWrapping = false;
+		} else {
+			memmove(bptr, mBuffer + mBStart, data_size);
+		}
         mBEnd = data_size;
         mBStart = 0;
 
@@ -138,17 +138,17 @@ void RingBuffer::In(const void* data, UInt32& ioBytes) {
         copiedBytes = ioBytes;
 
     if (mBEnd + copiedBytes <= mBSize) {
-        BlockMoveData(data, mBuffer + mBEnd, copiedBytes);
+		memmove(mBuffer + mBEnd, data, copiedBytes);
         mBEnd += copiedBytes;
         if (mBEnd < mBStart)
             mNeedsWrapping = true;
     } else {
         UInt32 wrappedBytes = mBSize - mBEnd;
         const Byte* dataSplit = static_cast<const Byte*>(data) + wrappedBytes;
-        BlockMoveData(data, mBuffer + mBEnd, wrappedBytes);
+        memmove(mBuffer + mBEnd, data, wrappedBytes);
 
         mBEnd = copiedBytes - wrappedBytes;
-        BlockMoveData(dataSplit, mBuffer, mBEnd);
+        memmove(mBuffer, dataSplit, mBEnd);
 
         mNeedsWrapping = true;
     }
@@ -174,7 +174,7 @@ Byte* RingBuffer::GetData() {
         return mBuffer;
     else {
         if (mNeedsWrapping) {
-            BlockMoveData(mBuffer, mBuffer + mBSize, mBEnd);
+            memmove(mBuffer + mBSize, mBuffer, mBEnd);
             mNeedsWrapping = false;
         }
         return mBuffer + mBStart;
@@ -187,7 +187,7 @@ Byte* RingBuffer::GetDataEnd() {
         return mBuffer;
     else {
         if (mNeedsWrapping) {
-            BlockMoveData(mBuffer, mBuffer + mBSize, mBEnd);
+            memmove(mBuffer + mBSize, mBuffer, mBEnd);
             mNeedsWrapping = false;
         }
         return mBuffer + mBStart + available;

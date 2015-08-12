@@ -100,14 +100,14 @@ void CAOggFLACDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& 
 UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[ oFD]  >> [%08lx] ProduceOutputPackets(%ld [%ld])\n", (UInt32) this, ioNumberPackets, ioOutputDataByteSize);
+    dbg_printf("[ oFD]  >> [%08lx] ProduceOutputPackets(%ld [%ld])\n", (size_t) this, ioNumberPackets, ioOutputDataByteSize);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("<!E [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (UInt32) this,
+        dbg_printf("<!E [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
                    ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
         return ret;
     }
@@ -146,7 +146,7 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
             if (flac_returned_data > 0)
                 opp.frames -= flac_returned_data / mOutputFormat.mBytesPerFrame;
 
-            dbg_printf("[ oFD]     [%08lx] ProduceOutputPackets() p:%ld, f:%ld, c:%ld\n", (UInt32) this, opp.packets, opp.frames, complete_pages);
+            dbg_printf("[ oFD]     [%08lx] ProduceOutputPackets() p:%ld, f:%ld, c:%ld\n", (size_t) this, opp.packets, opp.frames, complete_pages);
             if (opp.packets <= 0 && opp.frames <= 0) {
                 ogg_packets++;
                 if (!empty_packet)
@@ -203,7 +203,7 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
     }
 
     dbg_printf("[ oFD] <.. [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (UInt32) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+               (size_t) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
     return ret;
 }
 
@@ -247,7 +247,7 @@ void CAOggFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacket
     if (!WrapOggPage(&op, inInputData, inPacketDescription->mDataByteSize + inPacketDescription->mStartOffset, inPacketDescription->mStartOffset))
         CODEC_THROW(kAudioCodecUnspecifiedError);
 
-    dbg_printf("[ oFD]   : [%08lx] InPacket() [%4.4s] %ld\n", (UInt32) this, (char *) (static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset),
+    dbg_printf("[ oFD]   : [%08lx] InPacket() [%4.4s] %ld\n", (size_t) this, (char *) (static_cast<const Byte*> (inInputData) + inPacketDescription->mStartOffset),
                ogg_page_pageno(&op));
 
     ogg_packet opk;
