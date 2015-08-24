@@ -118,7 +118,7 @@ resource 'thng' (kExporterResID, OggExporterName, purgeable) {
 		platformX86_64NativeEntryPoint
 		#define NeedLeadingComma 1
 		#endif
-		#if defined(TARGET_OS_WIN32)
+		#if defined(TARGET_OS_WIN32) && TARGET_OS_WIN32
 		kExporterFlags,
 		'dlle',
 		kExporterResID,

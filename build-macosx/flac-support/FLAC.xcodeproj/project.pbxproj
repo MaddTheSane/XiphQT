@@ -102,8 +102,8 @@
 		32BAE0B70371A74B00C91783 /* FLAC_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAC_Prefix.pch; sourceTree = "<group>"; };
 		37CA8E120DD73E6F005C8CB6 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
 		37CA8E150DD73F2D005C8CB6 /* alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
-		5526210A1B7BA8FD00F0550D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../../DebugConfigs.xcconfig; sourceTree = "<group>"; };
-		5526210B1B7BA8FD00F0550D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
+		5526210A1B7BA8FD00F0550D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../../DebugConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
+		5526210B1B7BA8FD00F0550D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../../DefaultConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		73744B050B1A1925002B059E /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		73744B1B0B1A1C43002B059E /* libflac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libflac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B520B1A21DA002B059E /* libflac++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libflac++.a"; sourceTree = BUILT_PRODUCTS_DIR; };

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 45;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -72,7 +72,7 @@
 		737448E10B19EF8D002B059E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CC80B19C38700E06B34 /* libogg.a */; };
 		737449320B19F317002B059E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CB90B19C37600E06B34 /* libvorbis.a */; };
 		737449490B19F67A002B059E /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CAC0B19C36500E06B34 /* libspeex.a */; };
-		737449910B19F922002B059E /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
+		737449910B19F922002B059E /* MetaDataConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
 		737449BD0B19F99D002B059E /* OggImport.r in Rez */ = {isa = PBXBuildFile; fileRef = 737449AF0B19F93E002B059E /* OggImport.r */; };
 		737449F10B1A012B002B059E /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449EF0B1A012B002B059E /* XCACodec.cpp */; };
 		737449F70B1A0159002B059E /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F30B1A0159002B059E /* ringbuffer.cpp */; };
@@ -240,7 +240,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837C50B193896005C7A69 /* Speex.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 738837760B193667005C7A69;
+			remoteGlobalIDString = 734FB2E40B18B33E00D561D7;
 			remoteInfo = "libspeex (static)";
 		};
 		7326B50B0B5AC44B004CE9D3 /* PBXContainerItemProxy */ = {
@@ -303,7 +303,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837C50B193896005C7A69 /* Speex.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 738837760B193667005C7A69;
+			remoteGlobalIDString = 734FB2E40B18B33E00D561D7;
 			remoteInfo = "libspeex (static)";
 		};
 		73744A3F0B1A045B002B059E /* PBXContainerItemProxy */ = {
@@ -381,16 +381,17 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				737449910B19F922002B059E /* MetaDataConfig.plist in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
+		5589FB1E1B8B79870011C7EE /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
+		5589FB1F1B8B79870011C7EE /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
 		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBufferTests.h; path = ../tests/common/RingBufferTests.h; sourceTree = SOURCE_ROOT; };
@@ -399,99 +400,99 @@
 		734716830B77F72E001F439D /* XCACodecTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodecTests.h; path = ../tests/common/XCACodecTests.h; sourceTree = SOURCE_ROOT; };
 		736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OggVorbisTests.cpp; path = ../tests/CAVorbis/OggVorbisTests.cpp; sourceTree = SOURCE_ROOT; };
 		736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggVorbisTests.h; path = ../tests/CAVorbis/OggVorbisTests.h; sourceTree = SOURCE_ROOT; };
-		7373EDCE0B7BDCAA00591836 /* samplerefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = samplerefs.c; path = ../OggImport/src/samplerefs.c; sourceTree = SOURCE_ROOT; };
-		7373EDCF0B7BDCAA00591836 /* samplerefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = samplerefs.h; path = ../OggImport/src/samplerefs.h; sourceTree = SOURCE_ROOT; };
-		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../OggImport/src/common.c; sourceTree = SOURCE_ROOT; };
-		737448A00B19EC05002B059E /* common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../OggImport/src/common.h; sourceTree = SOURCE_ROOT; };
-		737448A10B19EC05002B059E /* importer_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = importer_types.h; path = ../OggImport/src/importer_types.h; sourceTree = SOURCE_ROOT; };
-		737448A20B19EC05002B059E /* OggImport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = OggImport.c; path = ../OggImport/src/OggImport.c; sourceTree = SOURCE_ROOT; };
-		737448A30B19EC05002B059E /* OggImport.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggImport.h; path = ../OggImport/src/OggImport.h; sourceTree = SOURCE_ROOT; };
-		737448A40B19EC05002B059E /* OggImportDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggImportDispatch.h; path = ../OggImport/src/OggImportDispatch.h; sourceTree = SOURCE_ROOT; };
-		737448A50B19EC05002B059E /* rb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rb.c; path = ../OggImport/src/rb.c; sourceTree = SOURCE_ROOT; };
-		737448A60B19EC05002B059E /* rb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rb.h; path = ../OggImport/src/rb.h; sourceTree = SOURCE_ROOT; };
-		737448A70B19EC05002B059E /* stream_flac.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_flac.c; path = ../OggImport/src/stream_flac.c; sourceTree = SOURCE_ROOT; };
-		737448A80B19EC05002B059E /* stream_flac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_flac.h; path = ../OggImport/src/stream_flac.h; sourceTree = SOURCE_ROOT; };
-		737448A90B19EC05002B059E /* stream_speex.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_speex.c; path = ../OggImport/src/stream_speex.c; sourceTree = SOURCE_ROOT; };
-		737448AA0B19EC05002B059E /* stream_speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_speex.h; path = ../OggImport/src/stream_speex.h; sourceTree = SOURCE_ROOT; };
-		737448AB0B19EC05002B059E /* stream_theora.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_theora.c; path = ../OggImport/src/stream_theora.c; sourceTree = SOURCE_ROOT; };
-		737448AC0B19EC05002B059E /* stream_theora.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_theora.h; path = ../OggImport/src/stream_theora.h; sourceTree = SOURCE_ROOT; };
-		737448AD0B19EC05002B059E /* stream_types_flac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_flac.h; path = ../OggImport/src/stream_types_flac.h; sourceTree = SOURCE_ROOT; };
-		737448AE0B19EC05002B059E /* stream_types_speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_speex.h; path = ../OggImport/src/stream_types_speex.h; sourceTree = SOURCE_ROOT; };
-		737448AF0B19EC05002B059E /* stream_types_theora.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_theora.h; path = ../OggImport/src/stream_types_theora.h; sourceTree = SOURCE_ROOT; };
-		737448B00B19EC05002B059E /* stream_types_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_types_vorbis.h; path = ../OggImport/src/stream_types_vorbis.h; sourceTree = SOURCE_ROOT; };
-		737448B10B19EC05002B059E /* stream_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_vorbis.c; path = ../OggImport/src/stream_vorbis.c; sourceTree = SOURCE_ROOT; };
-		737448B20B19EC05002B059E /* stream_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_vorbis.h; path = ../OggImport/src/stream_vorbis.h; sourceTree = SOURCE_ROOT; };
-		737448B30B19EC05002B059E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = utils.c; path = ../OggImport/src/utils.c; sourceTree = SOURCE_ROOT; };
-		737448B40B19EC05002B059E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils.h; path = ../OggImport/src/utils.h; sourceTree = SOURCE_ROOT; };
-		737448B50B19EC05002B059E /* versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = versions.h; path = ../OggImport/src/versions.h; sourceTree = SOURCE_ROOT; };
+		7373EDCE0B7BDCAA00591836 /* samplerefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = samplerefs.c; sourceTree = "<group>"; };
+		7373EDCF0B7BDCAA00591836 /* samplerefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = samplerefs.h; sourceTree = "<group>"; };
+		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = common.c; sourceTree = "<group>"; };
+		737448A00B19EC05002B059E /* common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		737448A10B19EC05002B059E /* importer_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = importer_types.h; sourceTree = "<group>"; };
+		737448A20B19EC05002B059E /* OggImport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = OggImport.c; sourceTree = "<group>"; };
+		737448A30B19EC05002B059E /* OggImport.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggImport.h; sourceTree = "<group>"; };
+		737448A40B19EC05002B059E /* OggImportDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggImportDispatch.h; sourceTree = "<group>"; };
+		737448A50B19EC05002B059E /* rb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = rb.c; sourceTree = "<group>"; };
+		737448A60B19EC05002B059E /* rb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = rb.h; sourceTree = "<group>"; };
+		737448A70B19EC05002B059E /* stream_flac.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = stream_flac.c; sourceTree = "<group>"; };
+		737448A80B19EC05002B059E /* stream_flac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_flac.h; sourceTree = "<group>"; };
+		737448A90B19EC05002B059E /* stream_speex.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = stream_speex.c; sourceTree = "<group>"; };
+		737448AA0B19EC05002B059E /* stream_speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_speex.h; sourceTree = "<group>"; };
+		737448AB0B19EC05002B059E /* stream_theora.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = stream_theora.c; sourceTree = "<group>"; };
+		737448AC0B19EC05002B059E /* stream_theora.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_theora.h; sourceTree = "<group>"; };
+		737448AD0B19EC05002B059E /* stream_types_flac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_types_flac.h; sourceTree = "<group>"; };
+		737448AE0B19EC05002B059E /* stream_types_speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_types_speex.h; sourceTree = "<group>"; };
+		737448AF0B19EC05002B059E /* stream_types_theora.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_types_theora.h; sourceTree = "<group>"; };
+		737448B00B19EC05002B059E /* stream_types_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_types_vorbis.h; sourceTree = "<group>"; };
+		737448B10B19EC05002B059E /* stream_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = stream_vorbis.c; sourceTree = "<group>"; };
+		737448B20B19EC05002B059E /* stream_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stream_vorbis.h; sourceTree = "<group>"; };
+		737448B30B19EC05002B059E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		737448B40B19EC05002B059E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		737448B50B19EC05002B059E /* versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = versions.h; sourceTree = "<group>"; };
 		737448C30B19ECDC002B059E /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = SOURCE_ROOT; };
 		737448C40B19ECDC002B059E /* data_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = data_types.h; path = ../common/data_types.h; sourceTree = SOURCE_ROOT; };
 		737448C50B19ECDC002B059E /* fccs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = SOURCE_ROOT; };
 		737448C60B19ECF7002B059E /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../utils/debug.h; sourceTree = SOURCE_ROOT; };
-		737448DC0B19EF3D002B059E /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		737449730B19F922002B059E /* MetaDataConfig.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; name = MetaDataConfig.plist; path = ../OggImport/MetaDataConfig.plist; sourceTree = SOURCE_ROOT; };
-		737449AF0B19F93E002B059E /* OggImport.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = OggImport.r; path = ../OggImport/src/OggImport.r; sourceTree = SOURCE_ROOT; };
+		737448DC0B19EF3D002B059E /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = System/Library/Frameworks/QuickTime.framework; sourceTree = SDKROOT; };
+		737449730B19F922002B059E /* MetaDataConfig.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = MetaDataConfig.plist; sourceTree = "<group>"; };
+		737449AF0B19F93E002B059E /* OggImport.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = OggImport.r; path = src/OggImport.r; sourceTree = "<group>"; };
 		737449EF0B1A012B002B059E /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = SOURCE_ROOT; };
 		737449F00B1A012B002B059E /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = SOURCE_ROOT; };
 		737449F30B1A0159002B059E /* ringbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ringbuffer.cpp; path = ../utils/ringbuffer.cpp; sourceTree = SOURCE_ROOT; };
 		737449F40B1A0159002B059E /* ringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ringbuffer.h; path = ../utils/ringbuffer.h; sourceTree = SOURCE_ROOT; };
 		737449F50B1A0159002B059E /* wrap_ogg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wrap_ogg.cpp; path = ../utils/wrap_ogg.cpp; sourceTree = SOURCE_ROOT; };
 		737449F60B1A0159002B059E /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wrap_ogg.h; path = ../utils/wrap_ogg.h; sourceTree = SOURCE_ROOT; };
-		73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = AudioCodecComponentGlue.c; path = ../AppleSDK/CoreAudio/AudioCodecs/AudioCodecComponentGlue.c; sourceTree = SOURCE_ROOT; };
-		73744A030B1A0270002B059E /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ACBaseCodec.cpp; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACBaseCodec.cpp; sourceTree = SOURCE_ROOT; };
-		73744A040B1A0270002B059E /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ACBaseCodec.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACBaseCodec.h; sourceTree = SOURCE_ROOT; };
-		73744A050B1A0270002B059E /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ACCodec.cpp; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACCodec.cpp; sourceTree = SOURCE_ROOT; };
-		73744A060B1A0270002B059E /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ACCodec.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACCodec.h; sourceTree = SOURCE_ROOT; };
-		73744A070B1A0270002B059E /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ACCodecDispatch.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACCodecDispatch.h; sourceTree = SOURCE_ROOT; };
-		73744A080B1A0270002B059E /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ACCodecDispatchTypes.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACCodecDispatchTypes.h; sourceTree = SOURCE_ROOT; };
-		73744A090B1A0270002B059E /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ACConditionalMacros.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/ACConditionalMacros.h; sourceTree = SOURCE_ROOT; };
-		73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GetCodecBundle.cpp; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/GetCodecBundle.cpp; sourceTree = SOURCE_ROOT; };
-		73744A0B0B1A0270002B059E /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GetCodecBundle.h; path = ../AppleSDK/CoreAudio/AudioCodecs/ACPublic/GetCodecBundle.h; sourceTree = SOURCE_ROOT; };
-		73744A150B1A0288002B059E /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CABundleLocker.cpp; path = ../AppleSDK/CoreAudio/PublicUtility/CABundleLocker.cpp; sourceTree = SOURCE_ROOT; };
-		73744A160B1A0288002B059E /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CABundleLocker.h; path = ../AppleSDK/CoreAudio/PublicUtility/CABundleLocker.h; sourceTree = SOURCE_ROOT; };
-		73744A170B1A0288002B059E /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAConditionalMacros.h; path = ../AppleSDK/CoreAudio/PublicUtility/CAConditionalMacros.h; sourceTree = SOURCE_ROOT; };
-		73744A180B1A0288002B059E /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CADebugMacros.cpp; path = ../AppleSDK/CoreAudio/PublicUtility/CADebugMacros.cpp; sourceTree = SOURCE_ROOT; };
-		73744A190B1A0288002B059E /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CADebugMacros.h; path = ../AppleSDK/CoreAudio/PublicUtility/CADebugMacros.h; sourceTree = SOURCE_ROOT; };
-		73744A1A0B1A0288002B059E /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAMath.h; path = ../AppleSDK/CoreAudio/PublicUtility/CAMath.h; sourceTree = SOURCE_ROOT; };
-		73744A1B0B1A0288002B059E /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAStreamBasicDescription.cpp; path = ../AppleSDK/CoreAudio/PublicUtility/CAStreamBasicDescription.cpp; sourceTree = SOURCE_ROOT; };
-		73744A1C0B1A0288002B059E /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAStreamBasicDescription.h; path = ../AppleSDK/CoreAudio/PublicUtility/CAStreamBasicDescription.h; sourceTree = SOURCE_ROOT; };
-		73744A250B1A031D002B059E /* CAOggVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAOggVorbisDecoder.cpp; path = ../CAVorbis/src/CAOggVorbisDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744A260B1A031D002B059E /* CAOggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAOggVorbisDecoder.h; path = ../CAVorbis/src/CAOggVorbisDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744A270B1A031D002B059E /* CAVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAVorbisDecoder.cpp; path = ../CAVorbis/src/CAVorbisDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744A280B1A031D002B059E /* CAVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAVorbisDecoder.h; path = ../CAVorbis/src/CAVorbisDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744A290B1A031D002B059E /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vorbis_entrypoints.cpp; path = ../CAVorbis/src/vorbis_entrypoints.cpp; sourceTree = SOURCE_ROOT; };
-		73744A2A0B1A031D002B059E /* vorbis_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vorbis_versions.h; path = ../CAVorbis/src/vorbis_versions.h; sourceTree = SOURCE_ROOT; };
+		73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
+		73744A030B1A0270002B059E /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACBaseCodec.cpp; sourceTree = "<group>"; };
+		73744A040B1A0270002B059E /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
+		73744A050B1A0270002B059E /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
+		73744A060B1A0270002B059E /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
+		73744A070B1A0270002B059E /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
+		73744A080B1A0270002B059E /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
+		73744A090B1A0270002B059E /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
+		73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
+		73744A0B0B1A0270002B059E /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
+		73744A150B1A0288002B059E /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
+		73744A160B1A0288002B059E /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
+		73744A170B1A0288002B059E /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
+		73744A180B1A0288002B059E /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
+		73744A190B1A0288002B059E /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
+		73744A1A0B1A0288002B059E /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
+		73744A1B0B1A0288002B059E /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
+		73744A1C0B1A0288002B059E /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
+		73744A250B1A031D002B059E /* CAOggVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggVorbisDecoder.cpp; sourceTree = "<group>"; };
+		73744A260B1A031D002B059E /* CAOggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAOggVorbisDecoder.h; sourceTree = "<group>"; };
+		73744A270B1A031D002B059E /* CAVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAVorbisDecoder.cpp; sourceTree = "<group>"; };
+		73744A280B1A031D002B059E /* CAVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAVorbisDecoder.h; sourceTree = "<group>"; };
+		73744A290B1A031D002B059E /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vorbis_entrypoints.cpp; sourceTree = "<group>"; };
+		73744A2A0B1A031D002B059E /* vorbis_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vorbis_versions.h; sourceTree = "<group>"; };
 		73744A320B1A035B002B059E /* CAVorbisDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = CAVorbisDecoderPublic.r; path = ../CAVorbis/src/CAVorbisDecoderPublic.r; sourceTree = SOURCE_ROOT; };
 		73744A350B1A0382002B059E /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = SOURCE_ROOT; };
-		73744A380B1A03E6002B059E /* CAVorbisEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAVorbisEncoder.cpp; path = ../CAVorbis/src/CAVorbisEncoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744A390B1A03E6002B059E /* CAVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAVorbisEncoder.h; path = ../CAVorbis/src/CAVorbisEncoder.h; sourceTree = SOURCE_ROOT; };
+		73744A380B1A03E6002B059E /* CAVorbisEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAVorbisEncoder.cpp; sourceTree = "<group>"; };
+		73744A390B1A03E6002B059E /* CAVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAVorbisEncoder.h; sourceTree = "<group>"; };
 		73744A3C0B1A043F002B059E /* CAVorbisEncoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = CAVorbisEncoderPublic.r; path = ../CAVorbis/src/CAVorbisEncoderPublic.r; sourceTree = SOURCE_ROOT; };
-		73744A570B1A0657002B059E /* CAOggSpeexDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAOggSpeexDecoder.cpp; path = ../CASpeex/src/CAOggSpeexDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744A580B1A0657002B059E /* CAOggSpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAOggSpeexDecoder.h; path = ../CASpeex/src/CAOggSpeexDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744A590B1A0657002B059E /* CASpeexDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CASpeexDecoder.cpp; path = ../CASpeex/src/CASpeexDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744A5A0B1A0657002B059E /* CASpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CASpeexDecoder.h; path = ../CASpeex/src/CASpeexDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744A5B0B1A0657002B059E /* speex_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = speex_entrypoints.cpp; path = ../CASpeex/src/speex_entrypoints.cpp; sourceTree = SOURCE_ROOT; };
-		73744A5C0B1A0657002B059E /* speex_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = speex_versions.h; path = ../CASpeex/src/speex_versions.h; sourceTree = SOURCE_ROOT; };
+		73744A570B1A0657002B059E /* CAOggSpeexDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggSpeexDecoder.cpp; sourceTree = "<group>"; };
+		73744A580B1A0657002B059E /* CAOggSpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAOggSpeexDecoder.h; sourceTree = "<group>"; };
+		73744A590B1A0657002B059E /* CASpeexDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CASpeexDecoder.cpp; sourceTree = "<group>"; };
+		73744A5A0B1A0657002B059E /* CASpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CASpeexDecoder.h; sourceTree = "<group>"; };
+		73744A5B0B1A0657002B059E /* speex_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = speex_entrypoints.cpp; sourceTree = "<group>"; };
+		73744A5C0B1A0657002B059E /* speex_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = speex_versions.h; sourceTree = "<group>"; };
 		73744A650B1A068A002B059E /* CASpeexDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = CASpeexDecoderPublic.r; path = ../CASpeex/src/CASpeexDecoderPublic.r; sourceTree = SOURCE_ROOT; };
-		73744A740B1A0A82002B059E /* decoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = decoder_types.h; path = ../Theora/src/decoder_types.h; sourceTree = SOURCE_ROOT; };
-		73744A750B1A0A82002B059E /* encoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = encoder_types.h; path = ../Theora/src/encoder_types.h; sourceTree = SOURCE_ROOT; };
-		73744A760B1A0A82002B059E /* theora_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = theora_versions.h; path = ../Theora/src/theora_versions.h; sourceTree = SOURCE_ROOT; };
-		73744A770B1A0A82002B059E /* TheoraDecoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = TheoraDecoder.c; path = ../Theora/src/TheoraDecoder.c; sourceTree = SOURCE_ROOT; };
-		73744A780B1A0A82002B059E /* TheoraDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraDecoder.h; path = ../Theora/src/TheoraDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744A790B1A0A82002B059E /* TheoraDecoderDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraDecoderDispatch.h; path = ../Theora/src/TheoraDecoderDispatch.h; sourceTree = SOURCE_ROOT; };
-		73744A7A0B1A0A82002B059E /* TheoraEncoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = TheoraEncoder.c; path = ../Theora/src/TheoraEncoder.c; sourceTree = SOURCE_ROOT; };
-		73744A7B0B1A0A82002B059E /* TheoraEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraEncoder.h; path = ../Theora/src/TheoraEncoder.h; sourceTree = SOURCE_ROOT; };
-		73744A7C0B1A0A82002B059E /* TheoraEncoderDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TheoraEncoderDispatch.h; path = ../Theora/src/TheoraEncoderDispatch.h; sourceTree = SOURCE_ROOT; };
+		73744A740B1A0A82002B059E /* decoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = decoder_types.h; sourceTree = "<group>"; };
+		73744A750B1A0A82002B059E /* encoder_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = encoder_types.h; sourceTree = "<group>"; };
+		73744A760B1A0A82002B059E /* theora_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = theora_versions.h; sourceTree = "<group>"; };
+		73744A770B1A0A82002B059E /* TheoraDecoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = TheoraDecoder.c; sourceTree = "<group>"; };
+		73744A780B1A0A82002B059E /* TheoraDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TheoraDecoder.h; sourceTree = "<group>"; };
+		73744A790B1A0A82002B059E /* TheoraDecoderDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TheoraDecoderDispatch.h; sourceTree = "<group>"; };
+		73744A7A0B1A0A82002B059E /* TheoraEncoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = TheoraEncoder.c; sourceTree = "<group>"; };
+		73744A7B0B1A0A82002B059E /* TheoraEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TheoraEncoder.h; sourceTree = "<group>"; };
+		73744A7C0B1A0A82002B059E /* TheoraEncoderDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TheoraEncoderDispatch.h; sourceTree = "<group>"; };
 		73744A870B1A0AFF002B059E /* TheoraDecoder.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = TheoraDecoder.r; path = ../Theora/src/TheoraDecoder.r; sourceTree = SOURCE_ROOT; };
 		73744A880B1A0AFF002B059E /* TheoraEncoder.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = TheoraEncoder.r; path = ../Theora/src/TheoraEncoder.r; sourceTree = SOURCE_ROOT; };
-		73744A900B1A0BB0002B059E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		73744A900B1A0BB0002B059E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		73744C260B1A25A2002B059E /* FLAC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FLAC.xcodeproj; path = "flac-support/FLAC.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAFLACDecoder.cpp; path = ../CAFLAC/src/CAFLACDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744C610B1A2AD8002B059E /* CAFLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAFLACDecoder.h; path = ../CAFLAC/src/CAFLACDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAOggFLACDecoder.cpp; path = ../CAFLAC/src/CAOggFLACDecoder.cpp; sourceTree = SOURCE_ROOT; };
-		73744C630B1A2AD8002B059E /* CAOggFLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAOggFLACDecoder.h; path = ../CAFLAC/src/CAOggFLACDecoder.h; sourceTree = SOURCE_ROOT; };
-		73744C640B1A2AD8002B059E /* flac_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = flac_entrypoints.cpp; path = ../CAFLAC/src/flac_entrypoints.cpp; sourceTree = SOURCE_ROOT; };
-		73744C650B1A2AD8002B059E /* flac_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = flac_versions.h; path = ../CAFLAC/src/flac_versions.h; sourceTree = SOURCE_ROOT; };
+		73744C600B1A2AD8002B059E /* CAFLACDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAFLACDecoder.cpp; sourceTree = "<group>"; };
+		73744C610B1A2AD8002B059E /* CAFLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAFLACDecoder.h; sourceTree = "<group>"; };
+		73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggFLACDecoder.cpp; sourceTree = "<group>"; };
+		73744C630B1A2AD8002B059E /* CAOggFLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAOggFLACDecoder.h; sourceTree = "<group>"; };
+		73744C640B1A2AD8002B059E /* flac_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = flac_entrypoints.cpp; sourceTree = "<group>"; };
+		73744C650B1A2AD8002B059E /* flac_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = flac_versions.h; sourceTree = "<group>"; };
 		73744C6C0B1A2B78002B059E /* CAFLACDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = CAFLACDecoderPublic.r; path = ../CAFLAC/src/CAFLACDecoderPublic.r; sourceTree = SOURCE_ROOT; };
 		73744C9E0B1A3D07002B059E /* exporter_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = exporter_types.h; path = ../OggExport/src/exporter_types.h; sourceTree = SOURCE_ROOT; };
 		73744C9F0B1A3D07002B059E /* oggexport_versions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggexport_versions.h; path = ../OggExport/src/oggexport_versions.h; sourceTree = SOURCE_ROOT; };
@@ -570,25 +571,27 @@
 		089C166AFE841209C02AAC07 /* XiphQT */ = {
 			isa = PBXGroup;
 			children = (
+				5589FB1E1B8B79870011C7EE /* DefaultConfigs.xcconfig */,
+				5589FB1F1B8B79870011C7EE /* DebugConfigs.xcconfig */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				73C752A30B5FB78300615F6C /* Tests */,
 				738A45290B18604100B43A0C /* libs */,
-				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				089C1671FE841209C02AAC07 /* Frameworks */,
 				19C28FB4FE9D528D11CA2CBB /* Products */,
 				73C752930B5FB59100615F6C /* tests-Info.plist */,
 			);
 			name = XiphQT;
 			sourceTree = "<group>";
 		};
-		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+		089C1671FE841209C02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				73744A900B1A0BB0002B059E /* QuartzCore.framework */,
 				737448DC0B19EF3D002B059E /* QuickTime.framework */,
 				08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */,
 			);
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		089C167CFE841241C02AAC07 /* Resources */ = {
@@ -715,6 +718,7 @@
 				737448B50B19EC05002B059E /* versions.h */,
 			);
 			name = OggImport;
+			path = ../OggImport/src;
 			sourceTree = "<group>";
 		};
 		737448BE0B19EC18002B059E /* theora */ = {
@@ -781,6 +785,7 @@
 				737449730B19F922002B059E /* MetaDataConfig.plist */,
 			);
 			name = OggImport;
+			path = ../OggImport;
 			sourceTree = "<group>";
 		};
 		737449E60B1A00CC002B059E /* CAVorbis */ = {
@@ -796,6 +801,7 @@
 				73744A2A0B1A031D002B059E /* vorbis_versions.h */,
 			);
 			name = CAVorbis;
+			path = ../CAVorbis/src;
 			sourceTree = "<group>";
 		};
 		737449FB0B1A0197002B059E /* external */ = {
@@ -812,6 +818,7 @@
 				737449FD0B1A01E9002B059E /* CoreAudio */,
 			);
 			name = AppleSDK;
+			path = ../AppleSDK;
 			sourceTree = "<group>";
 		};
 		737449FD0B1A01E9002B059E /* CoreAudio */ = {
@@ -820,7 +827,7 @@
 				737449FE0B1A01F8002B059E /* AudioCodecs */,
 				73744A000B1A0219002B059E /* PublicUtility */,
 			);
-			name = CoreAudio;
+			path = CoreAudio;
 			sourceTree = "<group>";
 		};
 		737449FE0B1A01F8002B059E /* AudioCodecs */ = {
@@ -829,7 +836,7 @@
 				73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */,
 				737449FF0B1A020D002B059E /* ACPublic */,
 			);
-			name = AudioCodecs;
+			path = AudioCodecs;
 			sourceTree = "<group>";
 		};
 		737449FF0B1A020D002B059E /* ACPublic */ = {
@@ -845,7 +852,7 @@
 				73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */,
 				73744A0B0B1A0270002B059E /* GetCodecBundle.h */,
 			);
-			name = ACPublic;
+			path = ACPublic;
 			sourceTree = "<group>";
 		};
 		73744A000B1A0219002B059E /* PublicUtility */ = {
@@ -860,7 +867,7 @@
 				73744A1B0B1A0288002B059E /* CAStreamBasicDescription.cpp */,
 				73744A1C0B1A0288002B059E /* CAStreamBasicDescription.h */,
 			);
-			name = PublicUtility;
+			path = PublicUtility;
 			sourceTree = "<group>";
 		};
 		73744A310B1A0332002B059E /* CAVorbis */ = {
@@ -891,6 +898,7 @@
 				73744A5C0B1A0657002B059E /* speex_versions.h */,
 			);
 			name = CASpeex;
+			path = ../CASpeex/src;
 			sourceTree = "<group>";
 		};
 		73744A640B1A0675002B059E /* CASpeex */ = {
@@ -915,6 +923,7 @@
 				73744A7C0B1A0A82002B059E /* TheoraEncoderDispatch.h */,
 			);
 			name = Theora;
+			path = ../Theora/src;
 			sourceTree = "<group>";
 		};
 		73744A860B1A0AC8002B059E /* Theora */ = {
@@ -948,6 +957,7 @@
 				73744C650B1A2AD8002B059E /* flac_versions.h */,
 			);
 			name = CAFLAC;
+			path = ../CAFLAC/src;
 			sourceTree = "<group>";
 		};
 		73744C450B1A29C9002B059E /* CAFLAC */ = {
@@ -1100,9 +1110,15 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "XiphQT" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 089C166AFE841209C02AAC07 /* XiphQT */;
 			projectDirPath = "";
 			projectReferences = (
@@ -1266,6 +1282,7 @@
 			files = (
 				8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */,
 				73744CB70B1A3D5E002B059E /* OggExport.nib in Resources */,
+				737449910B19F922002B059E /* MetaDataConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1528,7 +1545,6 @@
 		4FADC23408B4156C00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1547,11 +1563,10 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/QuickTime";
-				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				OTHER_REZFLAGS = "$(inherited)";
 				PRODUCT_NAME = XiphQT;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = component;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -1578,10 +1593,9 @@
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-falign-loops=16",
-					"-ffast-math",
 				);
 				OTHER_LDFLAGS_i386 = "-Wl,-read_only_relocs,suppress";
-				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				OTHER_REZFLAGS = "$(inherited)";
 				PRODUCT_NAME = XiphQT;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = component;
@@ -1590,8 +1604,10 @@
 		};
 		4FADC23808B4156C00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5589FB1F1B8B79870011C7EE /* DebugConfigs.xcconfig */;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 0;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					__MACOSX__,
@@ -1599,16 +1615,14 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
 		4FADC23908B4156C00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5589FB1E1B8B79870011C7EE /* DefaultConfigs.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1618,8 +1632,6 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
@@ -1651,21 +1663,15 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../external-libs/theora/macosx/build/Release\"";
-				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				OTHER_REZFLAGS = "$(inherited)";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7326B5500B5AC44B004CE9D3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = XiphQT_Prefix.pch;
@@ -1688,13 +1694,11 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../external-libs/theora/macosx/build/Release\"";
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-falign-loops=16",
-					"-ffast-math",
 				);
-				OTHER_REZFLAGS = "$(inherited) -D TARGET_REZ_MAC_PPC=1 -D BUILD_UNIVERSAL";
+				OTHER_REZFLAGS = "$(inherited)";
 				PRODUCT_NAME = "XiphQT (decoders)";
 				WRAPPER_EXTENSION = component;
 			};
