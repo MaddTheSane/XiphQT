@@ -30,34 +30,23 @@
 
 #include "XCACodecTests.h"
 
+@implementation XCACodecTests
 
-XCACodecTests::XCACodecTests(TestInvocation *invocation)
-    : TestCase(invocation)
+- (void)setUp
 {
-}
-
-
-XCACodecTests::~XCACodecTests()
-{
-}
-
-void XCACodecTests::setUp()
-{
+	[super setUp];
     //mCodec = new XCACodec();
     mCodec = new test_XCACodec();
 }
 
-void XCACodecTests::tearDown()
+- (void)tearDown
 {
     delete mCodec;
     mCodec = NULL;
+	[super tearDown];
 }
 
-void XCACodecTests::noop()
-{
-}
-
-void XCACodecTests::append_uninitialized()
+- (void)testAppendUninitialized
 {
     UInt32 bytes = 0;
     UInt32 packets = 0;
@@ -70,10 +59,10 @@ void XCACodecTests::append_uninitialized()
     } catch (...) {
     };
 
-    CPTAssert(appended == false);
+    XCTAssert(appended == false);
 }
 
-void XCACodecTests::append_zero()
+- (void)testAppendZero
 {
     UInt32 bytes = 0;
     UInt32 packets = 0;
@@ -83,7 +72,7 @@ void XCACodecTests::append_zero()
     ComponentResult ac_error = kAudioCodecNoError;
 
     mCodec->Initialize(NULL, NULL, NULL, 0);
-    CPTAssert(mCodec->IsInitialized());
+    XCTAssert(mCodec->IsInitialized());
 
     try {
         mCodec->AppendInputData(NULL, bytes, packets, NULL);
@@ -94,21 +83,18 @@ void XCACodecTests::append_zero()
         other_error = true;
     };
 
-    CPTAssert(appended == false);
-    CPTAssert(bytes == 0);
-    CPTAssert(packets == 0);
-    CPTAssert(other_error == false);
+    XCTAssert(appended == false);
+    XCTAssert(bytes == 0);
+    XCTAssert(packets == 0);
+    XCTAssert(other_error == false);
 
     /* There is no apparent appropriate error code for 0-sized input
        on decoding, NotEnoughBufferSpace seems to do the trick on both
        PPC/Intel. */
-    CPTAssert(ac_error == kAudioCodecNotEnoughBufferSpaceError);
+    XCTAssert(ac_error == kAudioCodecNotEnoughBufferSpaceError);
 
     mCodec->Uninitialize();
-    CPTAssert(mCodec->IsInitialized() == false);
+    XCTAssert(mCodec->IsInitialized() == false);
 }
 
-XCACodecTests t_xcac_noop(TEST_INVOCATION(XCACodecTests, noop));
-XCACodecTests t_xcac_append_uninitialized(TEST_INVOCATION(XCACodecTests,
-                                                          append_uninitialized));
-XCACodecTests t_xcac_append_zero(TEST_INVOCATION(XCACodecTests, append_zero));
+@end

@@ -28,20 +28,13 @@
  */
 
 
-#include <CPlusTest/CPlusTest.h>
+#import <XCTest/XCTest.h>
 #include "CAOggFLACDecoder.h"
 
-class OggFLACTests : public TestCase {
-public:
-    OggFLACTests(TestInvocation* invocation);
-    virtual ~OggFLACTests();
+@interface OggFLACTests : XCTestCase {
+	CAOggFLACDecoder *mOggDecoder;
+}
+- (void)testAppendUninitialized;
+- (void)testInitCookie;
 
-    void setUp();
-    void tearDown();
-
-    CAOggFLACDecoder *mOggDecoder;
-
-    void noop();
-    void append_uninitialized();
-    void init_cookie();
-};
+@end

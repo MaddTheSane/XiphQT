@@ -28,7 +28,7 @@
  */
 
 
-#include <CPlusTest/CPlusTest.h>
+#import <XCTest/XCTest.h>
 #include "XCACodec.h"
 
 class test_XCACodec : public XCACodec {
@@ -45,17 +45,10 @@ class test_XCACodec : public XCACodec {
 
 };
 
-class XCACodecTests : public TestCase {
-public:
-    XCACodecTests(TestInvocation* invocation);
-    virtual ~XCACodecTests();
+@interface XCACodecTests : XCTestCase {
+	XCACodec *mCodec;
+}
 
-    void setUp();
-    void tearDown();
-
-    XCACodec *mCodec;
-
-    void noop();
-    void append_uninitialized();
-    void append_zero();
-};
+- (void)testAppendUninitialized;
+- (void)testAppendZero;
+@end

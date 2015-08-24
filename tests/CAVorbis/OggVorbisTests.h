@@ -28,23 +28,17 @@
  */
 
 
-#include <CPlusTest/CPlusTest.h>
+#import <XCTest/XCTest.h>
 #include "CAOggVorbisDecoder.h"
 
-class OggVorbisTests : public TestCase {
-public:
-    OggVorbisTests(TestInvocation* invocation);
-    virtual ~OggVorbisTests();
+@interface OggVorbisTests : XCTestCase {
+	CAOggVorbisDecoder *mOggDecoder;
+}
 
-    void setUp();
-    void tearDown();
+- (void)testAppendUnitialized;
+- (void)testInitCookie;
+- (void)testAppendSingle;
+- (void)testAppendMultiple;
+- (void)testAudioOffset;
 
-    CAOggVorbisDecoder *mOggDecoder;
-
-    void noop();
-    void append_uninitialized();
-    void init_cookie();
-    void append_single();
-    void append_multiple();
-    void audio_offset();
-};
+@end

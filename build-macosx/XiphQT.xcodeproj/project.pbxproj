@@ -3,12 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		09C8F66C0C82FC7D00F72188 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
 		37CA8E6D0DD74A65005C8CB6 /* libtheoradec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09C8F6460C82FBE500F72188 /* libtheoradec.a */; };
+		55FA1A381B8B8438005C60B2 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */; };
+		55FA1A3A1B8B8456005C60B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FA1A391B8B8456005C60B2 /* Foundation.framework */; };
+		55FA1A3F1B8B86D6005C60B2 /* flac.ogg.cookie in Resources */ = {isa = PBXBuildFile; fileRef = 55FA1A3C1B8B86D6005C60B2 /* flac.ogg.cookie */; };
+		55FA1A401B8B86D6005C60B2 /* vorbis.ogg.cookie in Resources */ = {isa = PBXBuildFile; fileRef = 55FA1A3D1B8B86D6005C60B2 /* vorbis.ogg.cookie */; };
+		55FA1A411B8B86D6005C60B2 /* vorbis.ogg.data in Resources */ = {isa = PBXBuildFile; fileRef = 55FA1A3E1B8B86D6005C60B2 /* vorbis.ogg.data */; };
 		7326B5130B5AC44B004CE9D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		7326B5160B5AC44B004CE9D3 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 7374489F0B19EC05002B059E /* common.c */; };
 		7326B5170B5AC44B004CE9D3 /* OggImport.c in Sources */ = {isa = PBXBuildFile; fileRef = 737448A20B19EC05002B059E /* OggImport.c */; };
@@ -52,9 +57,9 @@
 		7326B5480B5AC44B004CE9D3 /* TheoraDecoder.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744A870B1A0AFF002B059E /* TheoraDecoder.r */; };
 		7326B54A0B5AC44B004CE9D3 /* CAFLACDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744C6C0B1A2B78002B059E /* CAFLACDecoderPublic.r */; };
 		7326B54D0B5AC44B004CE9D3 /* MetaDataConfig.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 737449730B19F922002B059E /* MetaDataConfig.plist */; };
-		73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73271C830B610B2400175874 /* RingBufferTests.cpp */; };
-		734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734716820B77F72E001F439D /* XCACodecTests.cpp */; };
-		736266AB0BB9502C006BE1C2 /* OggVorbisTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */; };
+		73271C840B610B2400175874 /* RingBufferTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73271C830B610B2400175874 /* RingBufferTests.mm */; };
+		734716840B77F72E001F439D /* XCACodecTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 734716820B77F72E001F439D /* XCACodecTests.mm */; };
+		736266AB0BB9502C006BE1C2 /* OggVorbisTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 736266A90BB9502C006BE1C2 /* OggVorbisTests.mm */; };
 		736266AC0BB950A0006BE1C2 /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A250B1A031D002B059E /* CAOggVorbisDecoder.cpp */; };
 		736266AD0BB950AD006BE1C2 /* CAVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A270B1A031D002B059E /* CAVorbisDecoder.cpp */; };
 		736266B80BB95199006BE1C2 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 730B1CB90B19C37600E06B34 /* libvorbis.a */; };
@@ -112,7 +117,7 @@
 		73744CB20B1A3D07002B059E /* stream_video.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744CA70B1A3D07002B059E /* stream_video.c */; };
 		73744CB70B1A3D5E002B059E /* OggExport.nib in Resources */ = {isa = PBXBuildFile; fileRef = 73744CB50B1A3D5E002B059E /* OggExport.nib */; };
 		73744CB80B1A3D5E002B059E /* OggExport.r in Rez */ = {isa = PBXBuildFile; fileRef = 73744CB60B1A3D5E002B059E /* OggExport.r */; };
-		73C752A90B5FB82C00615F6C /* OggFLACTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */; };
+		73C752A90B5FB82C00615F6C /* OggFLACTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73C752A80B5FB82C00615F6C /* OggFLACTests.mm */; };
 		73C752E40B5FC02D00615F6C /* CAOggFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744C620B1A2AD8002B059E /* CAOggFLACDecoder.cpp */; };
 		73C752E60B5FD84400615F6C /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A030B1A0270002B059E /* ACBaseCodec.cpp */; };
 		73C752E70B5FD84500615F6C /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A050B1A0270002B059E /* ACCodec.cpp */; };
@@ -392,14 +397,18 @@
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
 		5589FB1E1B8B79870011C7EE /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
 		5589FB1F1B8B79870011C7EE /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
+		55FA1A391B8B8456005C60B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		55FA1A3C1B8B86D6005C60B2 /* flac.ogg.cookie */ = {isa = PBXFileReference; lastKnownFileType = file; path = flac.ogg.cookie; sourceTree = "<group>"; };
+		55FA1A3D1B8B86D6005C60B2 /* vorbis.ogg.cookie */ = {isa = PBXFileReference; lastKnownFileType = file; path = vorbis.ogg.cookie; sourceTree = "<group>"; };
+		55FA1A3E1B8B86D6005C60B2 /* vorbis.ogg.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = vorbis.ogg.data; sourceTree = "<group>"; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
-		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBufferTests.h; path = ../tests/common/RingBufferTests.h; sourceTree = SOURCE_ROOT; };
-		73271C830B610B2400175874 /* RingBufferTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RingBufferTests.cpp; path = ../tests/common/RingBufferTests.cpp; sourceTree = SOURCE_ROOT; };
-		734716820B77F72E001F439D /* XCACodecTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodecTests.cpp; path = ../tests/common/XCACodecTests.cpp; sourceTree = SOURCE_ROOT; };
-		734716830B77F72E001F439D /* XCACodecTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XCACodecTests.h; path = ../tests/common/XCACodecTests.h; sourceTree = SOURCE_ROOT; };
-		736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OggVorbisTests.cpp; path = ../tests/CAVorbis/OggVorbisTests.cpp; sourceTree = SOURCE_ROOT; };
-		736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggVorbisTests.h; path = ../tests/CAVorbis/OggVorbisTests.h; sourceTree = SOURCE_ROOT; };
+		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBufferTests.h; sourceTree = "<group>"; };
+		73271C830B610B2400175874 /* RingBufferTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RingBufferTests.mm; sourceTree = "<group>"; };
+		734716820B77F72E001F439D /* XCACodecTests.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = XCACodecTests.mm; sourceTree = "<group>"; };
+		734716830B77F72E001F439D /* XCACodecTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = XCACodecTests.h; sourceTree = "<group>"; };
+		736266A90BB9502C006BE1C2 /* OggVorbisTests.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggVorbisTests.mm; sourceTree = "<group>"; };
+		736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisTests.h; sourceTree = "<group>"; };
 		7373EDCE0B7BDCAA00591836 /* samplerefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = samplerefs.c; sourceTree = "<group>"; };
 		7373EDCF0B7BDCAA00591836 /* samplerefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = samplerefs.h; sourceTree = "<group>"; };
 		7374489F0B19EC05002B059E /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = common.c; sourceTree = "<group>"; };
@@ -511,10 +520,10 @@
 		738837C50B193896005C7A69 /* Speex.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Speex.xcodeproj; path = "../external-libs/speex/macosx/Speex.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738837DE0B1938DC005C7A69 /* Theora.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Theora.xcodeproj; path = "../external-libs/theora/macosx/Theora.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		738A452D0B18659A00B43A0C /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		73C752920B5FB59100615F6C /* tests.cptest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.cptest; sourceTree = BUILT_PRODUCTS_DIR; };
-		73C752930B5FB59100615F6C /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "tests-Info.plist"; sourceTree = "<group>"; };
-		73C752A70B5FB82C00615F6C /* OggFLACTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggFLACTests.h; path = ../tests/CAFLAC/OggFLACTests.h; sourceTree = SOURCE_ROOT; };
-		73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggFLACTests.cpp; path = ../tests/CAFLAC/OggFLACTests.cpp; sourceTree = SOURCE_ROOT; };
+		73C752920B5FB59100615F6C /* tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		73C752930B5FB59100615F6C /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tests-Info.plist"; path = "../build-macosx/tests-Info.plist"; sourceTree = "<group>"; };
+		73C752A70B5FB82C00615F6C /* OggFLACTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACTests.h; sourceTree = "<group>"; };
+		73C752A80B5FB82C00615F6C /* OggFLACTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACTests.mm; sourceTree = "<group>"; };
 		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D01CCD20486CAD60068D4B7 /* XiphQT.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XiphQT.component; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -540,9 +549,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55FA1A3A1B8B8456005C60B2 /* Foundation.framework in Frameworks */,
 				736266B80BB95199006BE1C2 /* libvorbis.a in Frameworks */,
 				73C752FA0B5FD91100615F6C /* libflac++.a in Frameworks */,
 				73C752FB0B5FD91200615F6C /* libflac.a in Frameworks */,
+				55FA1A381B8B8438005C60B2 /* Carbon.framework in Frameworks */,
 				73C752FD0B5FD92200615F6C /* libogg.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,7 +590,6 @@
 				738A45290B18604100B43A0C /* libs */,
 				089C1671FE841209C02AAC07 /* Frameworks */,
 				19C28FB4FE9D528D11CA2CBB /* Products */,
-				73C752930B5FB59100615F6C /* tests-Info.plist */,
 			);
 			name = XiphQT;
 			sourceTree = "<group>";
@@ -587,6 +597,7 @@
 		089C1671FE841209C02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55FA1A391B8B8456005C60B2 /* Foundation.framework */,
 				73744A900B1A0BB0002B059E /* QuartzCore.framework */,
 				737448DC0B19EF3D002B059E /* QuickTime.framework */,
 				08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */,
@@ -632,9 +643,19 @@
 			children = (
 				8D01CCD20486CAD60068D4B7 /* XiphQT.component */,
 				7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */,
-				73C752920B5FB59100615F6C /* tests.cptest */,
+				73C752920B5FB59100615F6C /* tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		55FA1A3B1B8B86D6005C60B2 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				55FA1A3C1B8B86D6005C60B2 /* flac.ogg.cookie */,
+				55FA1A3D1B8B86D6005C60B2 /* vorbis.ogg.cookie */,
+				55FA1A3E1B8B86D6005C60B2 /* vorbis.ogg.data */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 		730B1C8F0B19C33B00E06B34 /* Products */ = {
@@ -679,21 +700,21 @@
 		73271C7F0B610A9600175874 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				734716820B77F72E001F439D /* XCACodecTests.cpp */,
+				734716820B77F72E001F439D /* XCACodecTests.mm */,
 				734716830B77F72E001F439D /* XCACodecTests.h */,
 				73271C820B610B2400175874 /* RingBufferTests.h */,
-				73271C830B610B2400175874 /* RingBufferTests.cpp */,
+				73271C830B610B2400175874 /* RingBufferTests.mm */,
 			);
-			name = common;
+			path = common;
 			sourceTree = "<group>";
 		};
 		736266A80BB9500B006BE1C2 /* CAVorbis */ = {
 			isa = PBXGroup;
 			children = (
-				736266A90BB9502C006BE1C2 /* OggVorbisTests.cpp */,
+				736266A90BB9502C006BE1C2 /* OggVorbisTests.mm */,
 				736266AA0BB9502C006BE1C2 /* OggVorbisTests.h */,
 			);
-			name = CAVorbis;
+			path = CAVorbis;
 			sourceTree = "<group>";
 		};
 		737448880B19EAE7002B059E /* OggImport */ = {
@@ -1010,20 +1031,23 @@
 		73C752A30B5FB78300615F6C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				73C752930B5FB59100615F6C /* tests-Info.plist */,
 				736266A80BB9500B006BE1C2 /* CAVorbis */,
 				73C752A40B5FB79A00615F6C /* CAFLAC */,
 				73271C7F0B610A9600175874 /* common */,
+				55FA1A3B1B8B86D6005C60B2 /* data */,
 			);
 			name = Tests;
+			path = ../tests;
 			sourceTree = "<group>";
 		};
 		73C752A40B5FB79A00615F6C /* CAFLAC */ = {
 			isa = PBXGroup;
 			children = (
 				73C752A70B5FB82C00615F6C /* OggFLACTests.h */,
-				73C752A80B5FB82C00615F6C /* OggFLACTests.cpp */,
+				73C752A80B5FB82C00615F6C /* OggFLACTests.mm */,
 			);
-			name = CAFLAC;
+			path = CAFLAC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1062,7 +1086,6 @@
 				73C7528D0B5FB59100615F6C /* Resources */,
 				73C7528E0B5FB59100615F6C /* Sources */,
 				73C7528F0B5FB59100615F6C /* Frameworks */,
-				73C752900B5FB59100615F6C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1074,8 +1097,8 @@
 			);
 			name = tests;
 			productName = tests;
-			productReference = 73C752920B5FB59100615F6C /* tests.cptest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 73C752920B5FB59100615F6C /* tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		8D01CCC60486CAD60068D4B7 /* XiphQT */ = {
 			isa = PBXNativeTarget;
@@ -1103,7 +1126,7 @@
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = XiphQT;
 			productReference = 8D01CCD20486CAD60068D4B7 /* XiphQT.component */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1113,7 +1136,7 @@
 			attributes = {
 			};
 			buildConfigurationList = 4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "XiphQT" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -1273,6 +1296,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55FA1A3F1B8B86D6005C60B2 /* flac.ogg.cookie in Resources */,
+				55FA1A401B8B86D6005C60B2 /* vorbis.ogg.cookie in Resources */,
+				55FA1A411B8B86D6005C60B2 /* vorbis.ogg.data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1318,22 +1344,6 @@
 		};
 /* End PBXRezBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		73C752900B5FB59100615F6C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		7326B5150B5AC44B004CE9D3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1375,7 +1385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73C752A90B5FB82C00615F6C /* OggFLACTests.cpp in Sources */,
+				73C752A90B5FB82C00615F6C /* OggFLACTests.mm in Sources */,
 				73C752E40B5FC02D00615F6C /* CAOggFLACDecoder.cpp in Sources */,
 				73C752E60B5FD84400615F6C /* ACBaseCodec.cpp in Sources */,
 				73C752E70B5FD84500615F6C /* ACCodec.cpp in Sources */,
@@ -1386,9 +1396,9 @@
 				73C752F00B5FD8AD00615F6C /* CABundleLocker.cpp in Sources */,
 				73C752F10B5FD8BB00615F6C /* ringbuffer.cpp in Sources */,
 				73C752F30B5FD8D300615F6C /* GetCodecBundle.cpp in Sources */,
-				73271C840B610B2400175874 /* RingBufferTests.cpp in Sources */,
-				734716840B77F72E001F439D /* XCACodecTests.cpp in Sources */,
-				736266AB0BB9502C006BE1C2 /* OggVorbisTests.cpp in Sources */,
+				73271C840B610B2400175874 /* RingBufferTests.mm in Sources */,
+				734716840B77F72E001F439D /* XCACodecTests.mm in Sources */,
+				736266AB0BB9502C006BE1C2 /* OggVorbisTests.mm in Sources */,
 				736266AC0BB950A0006BE1C2 /* CAOggVorbisDecoder.cpp in Sources */,
 				736266AD0BB950AD006BE1C2 /* CAVorbisDecoder.cpp in Sources */,
 			);
@@ -1707,10 +1717,11 @@
 		73C752950B5FB59200615F6C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(value)",
-					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1738,11 +1749,11 @@
 					"-framework",
 					Carbon,
 					"-framework",
-					CPlusTest,
+					XCTest,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = tests;
-				WRAPPER_EXTENSION = cptest;
+				WRAPPER_EXTENSION = xctest;
 				ZERO_LINK = NO;
 			};
 			name = Debug;
@@ -1750,10 +1761,11 @@
 		73C752960B5FB59200615F6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(value)",
-					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -1779,11 +1791,11 @@
 					"-framework",
 					Carbon,
 					"-framework",
-					CPlusTest,
+					XCTest,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = tests;
-				WRAPPER_EXTENSION = cptest;
+				WRAPPER_EXTENSION = xctest;
 				ZERO_LINK = NO;
 			};
 			name = Release;

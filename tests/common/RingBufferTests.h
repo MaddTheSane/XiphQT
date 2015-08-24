@@ -28,19 +28,14 @@
  */
 
 
-#include <CPlusTest/CPlusTest.h>
+#import <XCTest/XCTest.h>
 #include "ringbuffer.h"
 
 
-class RingBufferTests : public TestCase {
-public:
-    RingBufferTests(TestInvocation* invocation);
-    virtual ~RingBufferTests();
+@interface RingBufferTests : XCTestCase {
+	RingBuffer *mBuffer;
+}
 
-    void setUp();
-    void tearDown();
+- (void)testBasic;
 
-    RingBuffer *mBuffer;
-
-    void basic();
-};
+@end

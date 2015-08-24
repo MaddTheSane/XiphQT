@@ -32,33 +32,23 @@
 #include <iostream>
 #include <fstream>
 
+@implementation OggFLACTests
 
-OggFLACTests::OggFLACTests(TestInvocation *invocation)
-    : TestCase(invocation)
+
+-(void)setUp
 {
+	[super setUp];
+	mOggDecoder = new CAOggFLACDecoder();
 }
 
-
-OggFLACTests::~OggFLACTests()
-{
-}
-
-void OggFLACTests::setUp()
-{
-    mOggDecoder = new CAOggFLACDecoder();
-}
-
-void OggFLACTests::tearDown()
+-(void)tearDown
 {
     delete mOggDecoder;
     mOggDecoder = NULL;
+	[super tearDown];
 }
 
-void OggFLACTests::noop()
-{
-}
-
-void OggFLACTests::append_uninitialized()
+- (void)testAppendUninitialized;
 {
     UInt32 bytes = 0;
     UInt32 packets = 0;
@@ -71,17 +61,17 @@ void OggFLACTests::append_uninitialized()
     } catch (...) {
     };
 
-    CPTAssert(appended == false);
+    XCTAssert(appended == false);
 }
 
-void OggFLACTests::init_cookie()
+- (void)testInitCookie;
 {
     std::ifstream f_in;
     char cookie[8192];
 
     f_in.open("../tests/data/flac.ogg.cookie", std::ios::in);
 
-    CPTAssert(f_in.good());
+    XCTAssert(f_in.good());
 
     f_in.read(cookie, 8192);
     f_in.close();
@@ -93,18 +83,15 @@ void OggFLACTests::init_cookie()
 
     mOggDecoder->Initialize(&in_dsc, &out_dsc, NULL, 0);
 
-    CPTAssert(mOggDecoder->IsInitialized());
+    XCTAssert(mOggDecoder->IsInitialized());
 
     mOggDecoder->Uninitialize();
 
-    CPTAssert(!mOggDecoder->IsInitialized());
+    XCTAssert(!mOggDecoder->IsInitialized());
 
     mOggDecoder->Initialize(NULL, NULL, cookie, 4264);
 
-    CPTAssert(mOggDecoder->IsInitialized());
+    XCTAssert(mOggDecoder->IsInitialized());
 }
 
-OggFLACTests t_noop(TEST_INVOCATION(OggFLACTests, noop));
-OggFLACTests t_append_uninitialized(TEST_INVOCATION(OggFLACTests,
-                                                    append_uninitialized));
-OggFLACTests t_init_cookie(TEST_INVOCATION(OggFLACTests, init_cookie));
+@end
