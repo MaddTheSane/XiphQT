@@ -149,7 +149,7 @@ public XCACodec
 
         kVorbisEncoderBufferSize = 256 * 1024,
 
-        kVorbisEncoderOutChannelLayouts = 5,
+        kVorbisEncoderOutChannelLayouts = 6,
 
         kVorbisEncoderBitrateSeriesLength = 23,
         kVorbisEncoderBitrateSeriesBase = 1,

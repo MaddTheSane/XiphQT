@@ -185,8 +185,8 @@ void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPr
                 *outProp = 8192;
             if (*outProp < 8192 && mInputFormat.mFormatID == kAudioFormatXiphOggFramedSpeex)
                 *outProp = 8192;
-            dbg_printf("  = [%08lx] CASpeexDecoder :: GetProperty('pakf'): %ld\n",
-                       (size_t) this, *outProp);
+            dbg_printf("  = [%08lx] CASpeexDecoder :: GetProperty('pakf'): %u\n",
+                       (size_t) this, (unsigned int)*outProp);
         }
         else
         {
@@ -511,7 +511,7 @@ Boolean CASpeexDecoder::GenerateFrames()
     }
 
     for (SInt32 i = 0; i < mSpeexHeader.frames_per_packet; i++) {
-        if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0)
+        if ((mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked) != 0)
             result = speex_decode(mSpeexDecoderState, &mSpeexBits, reinterpret_cast<float*> (mOutBuffer + mOutBufferUsedSize));
         else
             result = speex_decode_int(mSpeexDecoderState, &mSpeexBits, reinterpret_cast<spx_int16_t*> (mOutBuffer + mOutBufferUsedSize));
@@ -522,7 +522,7 @@ Boolean CASpeexDecoder::GenerateFrames()
         }
 
         if (mSpeexHeader.nb_channels == 2) {
-            if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0)
+            if ((mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked) != 0)
                 speex_decode_stereo(reinterpret_cast<float*> (mOutBuffer + mOutBufferUsedSize), mSpeexHeader.frame_size, &mSpeexStereoState);
             else
                 speex_decode_stereo_int(reinterpret_cast<spx_int16_t*> (mOutBuffer + mOutBufferUsedSize), mSpeexHeader.frame_size, &mSpeexStereoState);
@@ -549,7 +549,7 @@ Boolean CASpeexDecoder::GenerateFrames()
 void CASpeexDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
                                   AudioStreamPacketDescription* /* outPacketDescription */) const
 {
-    if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0) {
+    if ((mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked) != 0) {
         float* theOutputData = static_cast<float*> (outOutputData) + inFramesOffset * mSpeexHeader.nb_channels;
         float* theSourceData = reinterpret_cast<float*> (mOutBuffer + mOutBufferStart);
         UInt32 num_floats = inNumberFrames * mSpeexHeader.nb_channels;
@@ -567,10 +567,10 @@ void CASpeexDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UI
 
 void CASpeexDecoder::Zap(UInt32 inFrames)
 {
-    mNumFrames -= inFrames;
-
-    if (mNumFrames < 0)
-        mNumFrames = 0;
+	if ((mNumFrames - (long long)inFrames) < 0) {
+		mNumFrames = 0;
+	} else
+		mNumFrames -= inFrames;
 
     if (mNumFrames == 0) {
         mOutBufferUsedSize = 0;

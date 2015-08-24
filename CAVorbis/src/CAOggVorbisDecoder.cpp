@@ -387,7 +387,7 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
 
             if (EndianS32_BtoN(aheader->type) == kCookieTypeVorbisFirstPageNo && ptrheader <= cend) {
                 mFirstPageNo = EndianU32_BtoN((reinterpret_cast<OggSerialNoAtom*> (aheader))->serialno);
-                dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %ld)\n", (size_t) this, mFirstPageNo);
+                dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %u)\n", (size_t) this, (unsigned int)mFirstPageNo);
                 break;
             }
         }

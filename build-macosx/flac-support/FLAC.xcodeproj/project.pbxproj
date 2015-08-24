@@ -936,7 +936,7 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.xiph.flac++";
+				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
 				PRODUCT_NAME = "FLAC++";
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = YES;
@@ -969,7 +969,7 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.xiph.flac++";
+				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
 				PRODUCT_NAME = "FLAC++";
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = NO;
