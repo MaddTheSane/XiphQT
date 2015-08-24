@@ -43,10 +43,10 @@
 //#define NDEBUG
 #include "debug.h"
 
-#define DBG_STREAMDESC_FMT " [CASBD: sr=%lf, fmt=%4.4s, fl=%lx, bpp=%ld, fpp=%ld, bpf=%ld, ch=%ld, bpc=%ld]"
+#define DBG_STREAMDESC_FMT " [CASBD: sr=%lf, fmt=%4.4s, fl=%x, bpp=%d, fpp=%d, bpf=%d, ch=%d, bpc=%d]"
 #define DBG_STREAMDESC_FILL(x) (x)->mSampleRate, reinterpret_cast<const char*> (&((x)->mFormatID)), \
-        (x)->mFormatFlags, (x)->mBytesPerPacket, (x)->mFramesPerPacket, (x)->mBytesPerPacket, \
-        (x)->mChannelsPerFrame, (x)->mBitsPerChannel
+        (unsigned int)(x)->mFormatFlags, (unsigned int)(x)->mBytesPerPacket, (unsigned int)(x)->mFramesPerPacket, (unsigned int)(x)->mBytesPerPacket, \
+        (unsigned int)(x)->mChannelsPerFrame, (unsigned int)(x)->mBitsPerChannel
 
 
 CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false */) :
@@ -156,7 +156,7 @@ void CAVorbisDecoder::Uninitialize()
 
 void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %ld)\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID), ioPropertyDataSize);
+    dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %d)\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID), (unsigned int)ioPropertyDataSize);
     switch(inPropertyID)
     {
     case kAudioCodecPropertyRequiresPacketDescription: // 'pakd'
@@ -433,7 +433,7 @@ void CAVorbisDecoder::InitializeCompressionSettings()
             header.e_o_s = 0;
             header.granulepos = 0;
             header.packetno = 0;
-            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header.packet = aheader->data;
             break;
 
@@ -442,7 +442,7 @@ void CAVorbisDecoder::InitializeCompressionSettings()
             header_vc.e_o_s = 0;
             header_vc.granulepos = 0;
             header_vc.packetno = 1;
-            header_vc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_vc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header_vc.packet = aheader->data;
             break;
 
@@ -451,7 +451,7 @@ void CAVorbisDecoder::InitializeCompressionSettings()
             header_cb.e_o_s = 0;
             header_cb.granulepos = 0;
             header_cb.packetno = 2;
-            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header_cb.packet = aheader->data;
             break;
 
@@ -586,7 +586,7 @@ void CAVorbisDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, U
     float **pcm;
     vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), &pcm);  // ignoring the result, but should be (!!) at least inNumberFrames
 
-    if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0) {
+    if ((mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked) != 0) {
         for (SInt32 i = 0; i < mV_vi.channels; i++) {
             float* theOutputData = static_cast<float*> (outOutputData) + i + (inFramesOffset * mV_vi.channels);
             float* mono = pcm[i];

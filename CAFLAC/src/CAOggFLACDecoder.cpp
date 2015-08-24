@@ -100,15 +100,15 @@ void CAOggFLACDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& 
 UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[ oFD]  >> [%08lx] ProduceOutputPackets(%ld [%ld])\n", (size_t) this, ioNumberPackets, ioOutputDataByteSize);
+    dbg_printf("[ oFD]  >> [%08lx] ProduceOutputPackets(%u [%u])\n", (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("<!E [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
-                   ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+        dbg_printf("<!E [%08lx] CAOggFLACDecoder :: ProduceOutputPackets(%u [%u]) = %u [%u]\n", (size_t) this,
+                   (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)ret, (unsigned int)(FramesReady()));
         return ret;
     }
 
@@ -146,7 +146,7 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
             if (flac_returned_data > 0)
                 opp.frames -= flac_returned_data / mOutputFormat.mBytesPerFrame;
 
-            dbg_printf("[ oFD]     [%08lx] ProduceOutputPackets() p:%ld, f:%ld, c:%ld\n", (size_t) this, opp.packets, opp.frames, complete_pages);
+            dbg_printf("[ oFD]     [%08lx] ProduceOutputPackets() p:%u, f:%u, c:%u\n", (size_t) this, (unsigned int)opp.packets, (unsigned int)opp.frames, (unsigned int)complete_pages);
             if (opp.packets <= 0 && opp.frames <= 0) {
                 ogg_packets++;
                 if (!empty_packet)
@@ -202,8 +202,8 @@ UInt32 CAOggFLACDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOut
         }
     }
 
-    dbg_printf("[ oFD] <.. [%08lx] ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (size_t) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+    dbg_printf("[ oFD] <.. [%08lx] ProduceOutputPackets(%u [%u]) = %u [%u]\n",
+               (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)ret, (unsigned int)(FramesReady()));
     return ret;
 }
 

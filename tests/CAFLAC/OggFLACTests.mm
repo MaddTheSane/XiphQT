@@ -53,15 +53,15 @@
     UInt32 bytes = 0;
     UInt32 packets = 0;
 
-    Boolean appended = false;
+    BOOL appended = NO;
 
     try {
         mOggDecoder->AppendInputData(NULL, bytes, packets, NULL);
-        appended = true;
+        appended = YES;
     } catch (...) {
     };
 
-    XCTAssert(appended == false);
+    XCTAssert(appended == NO);
 }
 
 - (void)testInitCookie;
@@ -69,7 +69,12 @@
     std::ifstream f_in;
     char cookie[8192];
 
-    f_in.open("../tests/data/flac.ogg.cookie", std::ios::in);
+	@autoreleasepool {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		NSString *filepath = [ourBundle pathForResource:@"flac.ogg.cookie" ofType:nil];
+		
+		f_in.open([filepath fileSystemRepresentation], std::ios::in);
+	}
 
     XCTAssert(f_in.good());
 
@@ -89,7 +94,7 @@
 
     XCTAssert(!mOggDecoder->IsInitialized());
 
-    mOggDecoder->Initialize(NULL, NULL, cookie, 4264);
+    XCTAssertNoThrow(mOggDecoder->Initialize(NULL, NULL, cookie, 4264));
 
     XCTAssert(mOggDecoder->IsInitialized());
 }

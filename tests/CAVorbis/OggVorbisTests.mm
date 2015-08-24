@@ -90,11 +90,11 @@
 	
 	XCTAssert(!mOggDecoder->IsInitialized());
 	
-	mOggDecoder->Uninitialize();
+	XCTAssertNoThrow(mOggDecoder->Uninitialize());
 	
 	XCTAssert(!mOggDecoder->IsInitialized());
 	
-	mOggDecoder->Initialize(NULL, NULL, cookie, 4216);
+	XCTAssertNoThrow(mOggDecoder->Initialize(NULL, NULL, cookie, 4216));
 	
 	XCTAssert(mOggDecoder->IsInitialized());
 }
@@ -104,7 +104,12 @@
 	std::ifstream f_in;
 	char buffer[16384];
 	
-	f_in.open("../tests/data/vorbis.ogg.cookie", std::ios::in);
+	@autoreleasepool {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		NSString *filepath = [ourBundle pathForResource:@"vorbis.ogg.cookie" ofType:nil];
+		
+		f_in.open([filepath fileSystemRepresentation], std::ios::in);
+	}
 	
 	XCTAssert(f_in.good());
 	
@@ -119,7 +124,12 @@
 	mOggDecoder->Initialize(&in_dsc, &out_dsc, buffer, 4216);
 	XCTAssert(mOggDecoder->IsInitialized());
 	
-	f_in.open("../tests/data/vorbis.ogg.data", std::ios::in);
+	@autoreleasepool {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		NSString *filepath = [ourBundle pathForResource:@"vorbis.ogg.data" ofType:nil];
+		
+		f_in.open([filepath fileSystemRepresentation], std::ios::in);
+	}
 	
 	XCTAssert(f_in.good());
 	
@@ -162,7 +172,12 @@
 	std::ifstream f_in;
 	char buffer[16384];
 	
-	f_in.open("../tests/data/vorbis.ogg.cookie", std::ios::in);
+	@autoreleasepool {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		NSString *filepath = [ourBundle pathForResource:@"vorbis.ogg.cookie" ofType:nil];
+		
+		f_in.open([filepath fileSystemRepresentation], std::ios::in);
+	}
 	
 	XCTAssert(f_in.good());
 	
@@ -173,11 +188,14 @@
 	AudioStreamBasicDescription out_dsc = {44100.0, kAudioFormatLinearPCM,
 		kAudioFormatFlagsNativeFloatPacked,
 		8, 1, 8, 2, 32, 0};
+	XCTAssertNoThrow(mOggDecoder->Initialize(&in_dsc, &out_dsc, buffer, 4216));
 	
-	mOggDecoder->Initialize(&in_dsc, &out_dsc, buffer, 4216);
-	XCTAssert(mOggDecoder->IsInitialized());
-	
-	f_in.open("../tests/data/vorbis.ogg.data", std::ios::in);
+	@autoreleasepool {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		NSString *filepath = [ourBundle pathForResource:@"vorbis.ogg.data" ofType:nil];
+		
+		f_in.open([filepath fileSystemRepresentation], std::ios::in);
+	}
 	
 	XCTAssert(f_in.good());
 	
@@ -191,13 +209,7 @@
 	
 	AudioStreamPacketDescription pd[2] = {{0, 6720, 4152}, {4152, 7168, 4218}};
 	
-	try {
-		mOggDecoder->AppendInputData(buffer, bytes, packets, pd);
-		appended = true;
-	} catch (...) {
-	};
-	
-	XCTAssert(appended == true);
+	XCTAssertNoThrow(mOggDecoder->AppendInputData(buffer, bytes, packets, pd));
 	
 	packets = 6720;
 	bytes = 8 * packets;
@@ -243,8 +255,7 @@
                                            kAudioFormatFlagsNativeFloatPacked,
                                            8, 1, 8, 2, 32, 0};
 
-    mOggDecoder->Initialize(&in_dsc, &out_dsc, cookie, cookie_size);
-    XCTAssert(mOggDecoder->IsInitialized());
+    XCTAssertNoThrow(mOggDecoder->Initialize(&in_dsc, &out_dsc, cookie, cookie_size));
 
 	@autoreleasepool {
 		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
@@ -266,13 +277,7 @@
 
     AudioStreamPacketDescription pd = {0, orig_duration, 4152};
 
-    try {
-        mOggDecoder->AppendInputData(buffer, bytes, packets, &pd);
-        appended = true;
-    } catch (...) {
-    };
-
-    XCTAssert(appended == true);
+	XCTAssertNoThrow(mOggDecoder->AppendInputData(buffer, bytes, packets, &pd));
 
     packets = orig_duration;
     bytes = 8 * packets;
@@ -291,7 +296,7 @@
 
     /* decode again, increased duration (decoder should prepend zeros) */
     mOggDecoder->Reset();
-    mOggDecoder->Uninitialize();
+    XCTAssertNoThrow(mOggDecoder->Uninitialize());
     XCTAssert(!mOggDecoder->IsInitialized());
 
     mOggDecoder->Initialize(&in_dsc, &out_dsc, cookie, cookie_size);
@@ -306,13 +311,7 @@
     pd.mVariableFramesInPacket = inc_duration;
     pd.mDataByteSize = 4152;
 
-    try {
-        mOggDecoder->AppendInputData(buffer, bytes, packets, &pd);
-        appended = true;
-    } catch (...) {
-    };
-
-    XCTAssert(appended == true);
+	XCTAssertNoThrow(mOggDecoder->AppendInputData(buffer, bytes, packets, &pd));
 
     packets = inc_duration;
     bytes = 8 * packets;
@@ -321,7 +320,7 @@
     ac_ret = kAudioCodecProduceOutputPacketFailure;
 
     try {
-        ac_ret = mOggDecoder->ProduceOutputPackets(audio_2, bytes, packets, NULL);
+        XCTAssertNoThrow(ac_ret = mOggDecoder->ProduceOutputPackets(audio_2, bytes, packets, NULL));
     } catch (...) {
         bytes = 0;
         packets = 0;
@@ -335,7 +334,7 @@
 
     /* decode again, decreased duration (decoder should truncate head) */
     mOggDecoder->Reset();
-    mOggDecoder->Uninitialize();
+    XCTAssertNoThrow(mOggDecoder->Uninitialize());
     XCTAssert(!mOggDecoder->IsInitialized());
 
     mOggDecoder->Initialize(&in_dsc, &out_dsc, cookie, cookie_size);

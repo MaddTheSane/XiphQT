@@ -336,7 +336,7 @@ void CAFLACDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UIn
 {
     UInt32 i, j;
 
-    if (mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked != 0) {
+    if ((mOutputFormat.mFormatFlags & kAudioFormatFlagsNativeFloatPacked) != 0) {
         float cnvrtr = (float)((1 << (mFLACbits - 1)) - 1);
         for (i = 0; i < mFLACchannels; i++) {
             float* theOutputData = static_cast<float*> (outOutputData) + i + (inFramesOffset * mFLACchannels);
@@ -382,7 +382,7 @@ void CAFLACDecoder::SetCookie(const void* inMagicCookie, UInt32 inMagicCookieByt
     mCookieSize = inMagicCookieByteSize;
     if (inMagicCookieByteSize != 0) {
         mCookie = new Byte[inMagicCookieByteSize];
-        BlockMoveData(inMagicCookie, mCookie, inMagicCookieByteSize);
+		memcpy(mCookie, inMagicCookie, inMagicCookieByteSize);
     } else {
         mCookie = NULL;
     }
@@ -412,8 +412,8 @@ void CAFLACDecoder::InitializeCompressionSettings()
             mFLACchannels = (sib & 0x07) + 1;
             mFLACsrate = (sib >> 3) & 0xfffff;
 
-            dbg_printf("  = [%08lx] CAFLACDecoder :: InitializeCompressionSettings(sr: %ld, chn: %ld, bi: %ld)\n",
-                       (size_t) this, mFLACsrate, mFLACchannels, mFLACbits);
+            dbg_printf("  = [%08lx] CAFLACDecoder :: InitializeCompressionSettings(sr: %d, chn: %d, bi: %d)\n",
+                       (size_t) this, (unsigned int)mFLACsrate, (unsigned int)mFLACchannels, (unsigned int)mFLACbits);
 
             mCompressionInitialized = true;
         }
@@ -518,8 +518,9 @@ void CAFLACDecoder::Zap(UInt32 inFrames)
 {
     mNumFrames -= inFrames;
 
-    if (mNumFrames < 0)
-        mNumFrames = 0;
+	if (mNumFrames - inFrames <= 0) {
+		mNumFrames = 0;
+	}
 
     if (mNumFrames == 0) {
         mOutBufferUsedSize = 0;

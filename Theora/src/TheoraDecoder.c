@@ -169,7 +169,7 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
             header.e_o_s = 0;
             header.granulepos = 0;
             header.packetno = 0;
-            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header.packet = aheader->data;
             break;
 
@@ -178,7 +178,7 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
             header_tc.e_o_s = 0;
             header_tc.granulepos = 0;
             header_tc.packetno = 1;
-            header_tc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_tc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header_tc.packet = aheader->data;
             break;
 
@@ -187,7 +187,7 @@ OSErr init_theora_decoder(Theora_Globals glob, CodecDecompressParams *p)
             header_cb.e_o_s = 0;
             header_cb.granulepos = 0;
             header_cb.packetno = 2;
-            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(long);
+            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
             header_cb.packet = aheader->data;
             break;
 

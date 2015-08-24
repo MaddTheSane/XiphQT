@@ -70,15 +70,15 @@ enum {
 
 
 struct OggSerialNoAtom {
-    long size;			// = sizeof(OggSerialNoAtom)
-    long type;			// = kOggCookieSerialNoType
-    long serialno;
+    int size;			// = sizeof(OggSerialNoAtom)
+    int type;			// = kOggCookieSerialNoType
+    int serialno;
 };
 typedef struct OggSerialNoAtom OggSerialNoAtom;
 
 struct CookieAtomHeader {
-    long           size;
-    long           type;
+    int            size;
+    int            type;
     unsigned char  data[1];
 };
 typedef struct CookieAtomHeader CookieAtomHeader;
