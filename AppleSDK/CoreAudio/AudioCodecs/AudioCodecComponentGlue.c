@@ -46,6 +46,7 @@
 
 #include <AudioUnit/AudioCodec.h>
 #include "ACCodecDispatchTypes.h"
+#include <CoreServices/CoreServices.h>
 
 #if	!TARGET_OS_MAC || !TARGET_RT_MAC_MACHO
 	#include <MixedMode.h>

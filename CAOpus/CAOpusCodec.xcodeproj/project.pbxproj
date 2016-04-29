@@ -1,0 +1,472 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5530E4E01CD326B300071A6D /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4CD1CD326B300071A6D /* ACBaseCodec.cpp */; };
+		5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4CF1CD326B300071A6D /* ACCodec.cpp */; };
+		5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */; };
+		5530E4E31CD326B300071A6D /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */; };
+		5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D81CD326B300071A6D /* CABundleLocker.cpp */; };
+		5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */; };
+		5530E4E61CD326B300071A6D /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4DE1CD326B300071A6D /* CAStreamBasicDescription.cpp */; };
+		5530E4FE1CD32C2800071A6D /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4FC1CD32C2800071A6D /* CADebugPrintf.cpp */; };
+		5530E50A1CD32DB400071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
+		5530E5101CD32DEE00071A6D /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5530E50C1CD32DEE00071A6D /* icon.icns */; };
+		5530E5151CD32E0700071A6D /* CAOpusDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */; };
+		5530E5161CD32E0700071A6D /* CAOpusEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5530E5061CD32D9E00071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
+			remoteInfo = Opus;
+		};
+		5530E5081CD32D9E00071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 734FB2E50B18B33E00D561D7;
+			remoteInfo = "libopus (static)";
+		};
+		5530E51A1CD32FCC00071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Opus;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5530E4C11CD3268500071A6D /* CAOpusCodec.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CAOpusCodec.component; sourceTree = BUILT_PRODUCTS_DIR; };
+		5530E4C41CD3268500071A6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5530E4CD1CD326B300071A6D /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACBaseCodec.cpp; sourceTree = "<group>"; };
+		5530E4CE1CD326B300071A6D /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
+		5530E4CF1CD326B300071A6D /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
+		5530E4D01CD326B300071A6D /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
+		5530E4D11CD326B300071A6D /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
+		5530E4D21CD326B300071A6D /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
+		5530E4D31CD326B300071A6D /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
+		5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
+		5530E4D51CD326B300071A6D /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
+		5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
+		5530E4D81CD326B300071A6D /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
+		5530E4D91CD326B300071A6D /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
+		5530E4DA1CD326B300071A6D /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
+		5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
+		5530E4DC1CD326B300071A6D /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
+		5530E4DD1CD326B300071A6D /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
+		5530E4DE1CD326B300071A6D /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
+		5530E4DF1CD326B300071A6D /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
+		5530E4FC1CD32C2800071A6D /* CADebugPrintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugPrintf.cpp; sourceTree = "<group>"; };
+		5530E4FD1CD32C2800071A6D /* CADebugPrintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugPrintf.h; sourceTree = "<group>"; };
+		5530E4FF1CD32C5400071A6D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
+		5530E5001CD32C5400071A6D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
+		5530E5011CD32D9E00071A6D /* Opus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Opus.xcodeproj; path = "../external-libs/opus/macosx/Opus.xcodeproj"; sourceTree = "<group>"; };
+		5530E50B1CD32DEE00071A6D /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = "<group>"; };
+		5530E50C1CD32DEE00071A6D /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = "<group>"; };
+		5530E50D1CD32DEE00071A6D /* icon.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = icon.r; path = ../resources/icon.r; sourceTree = "<group>"; };
+		5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = CAOpusDecoderPublic.r; sourceTree = "<group>"; };
+		5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = CAOpusEncoderPublic.r; sourceTree = "<group>"; };
+		5530E5181CD32EAB00071A6D /* fccs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5530E4BE1CD3268500071A6D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E50A1CD32DB400071A6D /* Opus.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5530E4B81CD3268500071A6D = {
+			isa = PBXGroup;
+			children = (
+				5530E4FF1CD32C5400071A6D /* DefaultConfigs.xcconfig */,
+				5530E5001CD32C5400071A6D /* DebugConfigs.xcconfig */,
+				5530E5011CD32D9E00071A6D /* Opus.xcodeproj */,
+				5530E5111CD32DF500071A6D /* Resources */,
+				5530E5171CD32E7100071A6D /* Source */,
+				5530E4C31CD3268500071A6D /* OpusCodec */,
+				5530E4C21CD3268500071A6D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5530E4C21CD3268500071A6D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4C11CD3268500071A6D /* CAOpusCodec.component */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5530E4C31CD3268500071A6D /* OpusCodec */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4C41CD3268500071A6D /* Info.plist */,
+			);
+			path = OpusCodec;
+			sourceTree = "<group>";
+		};
+		5530E4CA1CD326B300071A6D /* CoreAudio */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4CB1CD326B300071A6D /* AudioCodecs */,
+				5530E4D71CD326B300071A6D /* PublicUtility */,
+			);
+			name = CoreAudio;
+			path = ../AppleSDK/CoreAudio;
+			sourceTree = "<group>";
+		};
+		5530E4CB1CD326B300071A6D /* AudioCodecs */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4CC1CD326B300071A6D /* ACPublic */,
+				5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */,
+			);
+			path = AudioCodecs;
+			sourceTree = "<group>";
+		};
+		5530E4CC1CD326B300071A6D /* ACPublic */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4CD1CD326B300071A6D /* ACBaseCodec.cpp */,
+				5530E4CE1CD326B300071A6D /* ACBaseCodec.h */,
+				5530E4CF1CD326B300071A6D /* ACCodec.cpp */,
+				5530E4D01CD326B300071A6D /* ACCodec.h */,
+				5530E4D11CD326B300071A6D /* ACCodecDispatch.h */,
+				5530E4D21CD326B300071A6D /* ACCodecDispatchTypes.h */,
+				5530E4D31CD326B300071A6D /* ACConditionalMacros.h */,
+				5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */,
+				5530E4D51CD326B300071A6D /* GetCodecBundle.h */,
+			);
+			path = ACPublic;
+			sourceTree = "<group>";
+		};
+		5530E4D71CD326B300071A6D /* PublicUtility */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4FC1CD32C2800071A6D /* CADebugPrintf.cpp */,
+				5530E4FD1CD32C2800071A6D /* CADebugPrintf.h */,
+				5530E4D81CD326B300071A6D /* CABundleLocker.cpp */,
+				5530E4D91CD326B300071A6D /* CABundleLocker.h */,
+				5530E4DA1CD326B300071A6D /* CAConditionalMacros.h */,
+				5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */,
+				5530E4DC1CD326B300071A6D /* CADebugMacros.h */,
+				5530E4DD1CD326B300071A6D /* CAMath.h */,
+				5530E4DE1CD326B300071A6D /* CAStreamBasicDescription.cpp */,
+				5530E4DF1CD326B300071A6D /* CAStreamBasicDescription.h */,
+			);
+			path = PublicUtility;
+			sourceTree = "<group>";
+		};
+		5530E5021CD32D9E00071A6D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5071CD32D9E00071A6D /* Opus.framework */,
+				5530E5091CD32D9E00071A6D /* libopus.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5530E5111CD32DF500071A6D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5530E50B1CD32DEE00071A6D /* XCAResources.r */,
+				5530E50C1CD32DEE00071A6D /* icon.icns */,
+				5530E50D1CD32DEE00071A6D /* icon.r */,
+				5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */,
+				5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		5530E5171CD32E7100071A6D /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5191CD32EAF00071A6D /* Common */,
+				5530E4CA1CD326B300071A6D /* CoreAudio */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		5530E5191CD32EAF00071A6D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5181CD32EAB00071A6D /* fccs.h */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5530E4C01CD3268500071A6D /* CAOpusCodec */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5530E4C71CD3268500071A6D /* Build configuration list for PBXNativeTarget "CAOpusCodec" */;
+			buildPhases = (
+				5530E4BD1CD3268500071A6D /* Sources */,
+				5530E4BE1CD3268500071A6D /* Frameworks */,
+				5530E4BF1CD3268500071A6D /* Resources */,
+				5530E5121CD32DFD00071A6D /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5530E51B1CD32FCC00071A6D /* PBXTargetDependency */,
+			);
+			name = CAOpusCodec;
+			productName = OpusCodec;
+			productReference = 5530E4C11CD3268500071A6D /* CAOpusCodec.component */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5530E4B91CD3268500071A6D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "C.W. Betts";
+				TargetAttributes = {
+					5530E4C01CD3268500071A6D = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 5530E4BC1CD3268500071A6D /* Build configuration list for PBXProject "CAOpusCodec" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5530E4B81CD3268500071A6D;
+			productRefGroup = 5530E4C21CD3268500071A6D /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5530E5021CD32D9E00071A6D /* Products */;
+					ProjectRef = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5530E4C01CD3268500071A6D /* CAOpusCodec */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5530E5071CD32D9E00071A6D /* Opus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Opus.framework;
+			remoteRef = 5530E5061CD32D9E00071A6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5530E5091CD32D9E00071A6D /* libopus.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libopus.a;
+			remoteRef = 5530E5081CD32D9E00071A6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5530E4BF1CD3268500071A6D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E5101CD32DEE00071A6D /* icon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		5530E5121CD32DFD00071A6D /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E5151CD32E0700071A6D /* CAOpusDecoderPublic.r in Rez */,
+				5530E5161CD32E0700071A6D /* CAOpusEncoderPublic.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5530E4BD1CD3268500071A6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E4FE1CD32C2800071A6D /* CADebugPrintf.cpp in Sources */,
+				5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */,
+				5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */,
+				5530E4E31CD326B300071A6D /* AudioCodecComponentGlue.c in Sources */,
+				5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */,
+				5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */,
+				5530E4E01CD326B300071A6D /* ACBaseCodec.cpp in Sources */,
+				5530E4E61CD326B300071A6D /* CAStreamBasicDescription.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5530E51B1CD32FCC00071A6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Opus;
+			targetProxy = 5530E51A1CD32FCC00071A6D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5530E4C51CD3268500071A6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5530E5001CD32C5400071A6D /* DebugConfigs.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5530E4C61CD3268500071A6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5530E4FF1CD32C5400071A6D /* DefaultConfigs.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5530E4C81CD3268500071A6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = OpusCodec/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusCodec;
+				PRODUCT_NAME = CAOpusCodec;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = component;
+			};
+			name = Debug;
+		};
+		5530E4C91CD3268500071A6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = OpusCodec/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusCodec;
+				PRODUCT_NAME = CAOpusCodec;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = component;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5530E4BC1CD3268500071A6D /* Build configuration list for PBXProject "CAOpusCodec" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5530E4C51CD3268500071A6D /* Debug */,
+				5530E4C61CD3268500071A6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5530E4C71CD3268500071A6D /* Build configuration list for PBXNativeTarget "CAOpusCodec" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5530E4C81CD3268500071A6D /* Debug */,
+				5530E4C91CD3268500071A6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5530E4B91CD3268500071A6D /* Project object */;
+}
