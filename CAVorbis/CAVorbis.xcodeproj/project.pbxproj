@@ -308,7 +308,6 @@
 		737C9FFC08F82D0600DAC36C /* CoreAudio */ = {
 			isa = PBXGroup;
 			children = (
-				737CA4F608F95BCE00DAC36C /* AudioUnits */,
 				737C9FFD08F82D0600DAC36C /* AudioCodecs */,
 				737CA00808F82D0600DAC36C /* PublicUtility */,
 			);
@@ -353,29 +352,6 @@
 				737CA00908F82D0600DAC36C /* CAConditionalMacros.h */,
 			);
 			path = PublicUtility;
-			sourceTree = "<group>";
-		};
-		737CA4F608F95BCE00DAC36C /* AudioUnits */ = {
-			isa = PBXGroup;
-			children = (
-				737CA4F708F95BCE00DAC36C /* AUPublic */,
-			);
-			path = AudioUnits;
-			sourceTree = "<group>";
-		};
-		737CA4F708F95BCE00DAC36C /* AUPublic */ = {
-			isa = PBXGroup;
-			children = (
-				737CA4F808F95BCE00DAC36C /* AUBase */,
-			);
-			path = AUPublic;
-			sourceTree = "<group>";
-		};
-		737CA4F808F95BCE00DAC36C /* AUBase */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AUBase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

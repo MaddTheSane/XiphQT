@@ -109,16 +109,16 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
 UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[VDO ]  >> [%08lx] :: ProduceOutputPackets(%ld [%ld]) (%ld, %ld, %ld; %ld[%ld])\n",
-               (size_t) this, ioNumberPackets, ioOutputDataByteSize, mSOBufferSize, mSOBufferUsed, mSOReturned, mSOBufferPages, mSOBufferPackets);
+    dbg_printf("[VDO ]  >> [%08lx] :: ProduceOutputPackets(%u [%u]) (%u, %u, %u; %u[%u])\n",
+               (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)mSOBufferSize, (unsigned int)mSOBufferUsed, (unsigned int)mSOReturned, (unsigned int)mSOBufferPages, (unsigned int)mSOBufferPackets);
     UInt32 ret = kAudioCodecProduceOutputPacketSuccess;
 
     if (mFramesBufferedList.empty()) {
         ioOutputDataByteSize = 0;
         ioNumberPackets = 0;
         ret = kAudioCodecProduceOutputPacketNeedsMoreInputData;
-        dbg_printf("[VDO ] <!E [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n", (size_t) this,
-                   ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+        dbg_printf("[VDO ] <!E [%08lx] :: ProduceOutputPackets(%u [%u]) = %u [%u]\n", (size_t) this,
+                   (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)ret, (unsigned int)(FramesReady()));
         return ret;
     }
 
@@ -265,8 +265,8 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
         ioNumberPackets = ioOutputDataByteSize / mOutputFormat.mBytesPerFrame;
     }
 
-    dbg_printf("[VDO ] <.. [%08lx] :: ProduceOutputPackets(%ld [%ld]) = %ld [%ld]\n",
-               (size_t) this, ioNumberPackets, ioOutputDataByteSize, ret, FramesReady());
+    dbg_printf("[VDO ] <.. [%08lx] :: ProduceOutputPackets(%u [%u]) = %u [%u]\n",
+               (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)ret, (unsigned int)(FramesReady()));
     return ret;
 }
 
@@ -309,7 +309,7 @@ void CAOggVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 
 void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
-    dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%ld, %ld})\n", (size_t) this, inPacketDescription->mDataByteSize, inPacketDescription->mVariableFramesInPacket);
+    dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%u, %u})\n", (size_t) this, (unsigned int)inPacketDescription->mDataByteSize, (unsigned int)inPacketDescription->mVariableFramesInPacket);
     if (!mCompressionInitialized) {
         dbg_printf("[VDO ] <!I [%08lx] :: InPacket()\n", (size_t) this);
         CODEC_THROW(kAudioCodecUnspecifiedError);

@@ -47,7 +47,7 @@
 
 /* Begin PBXFileReference section */
 		5530E4C11CD3268500071A6D /* CAOpusCodec.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CAOpusCodec.component; sourceTree = BUILT_PRODUCTS_DIR; };
-		5530E4C41CD3268500071A6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5530E4C41CD3268500071A6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = OpusCodec/Info.plist; sourceTree = "<group>"; };
 		5530E4CD1CD326B300071A6D /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACBaseCodec.cpp; sourceTree = "<group>"; };
 		5530E4CE1CD326B300071A6D /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		5530E4CF1CD326B300071A6D /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
@@ -96,10 +96,10 @@
 			children = (
 				5530E4FF1CD32C5400071A6D /* DefaultConfigs.xcconfig */,
 				5530E5001CD32C5400071A6D /* DebugConfigs.xcconfig */,
-				5530E5011CD32D9E00071A6D /* Opus.xcodeproj */,
-				5530E5111CD32DF500071A6D /* Resources */,
 				5530E5171CD32E7100071A6D /* Source */,
-				5530E4C31CD3268500071A6D /* OpusCodec */,
+				5530E5111CD32DF500071A6D /* Resources */,
+				5530E5231CD332C400071A6D /* External Libs */,
+				5530E5241CD332D800071A6D /* Frameworks */,
 				5530E4C21CD3268500071A6D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,22 +112,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5530E4C31CD3268500071A6D /* OpusCodec */ = {
-			isa = PBXGroup;
-			children = (
-				5530E4C41CD3268500071A6D /* Info.plist */,
-			);
-			path = OpusCodec;
-			sourceTree = "<group>";
-		};
 		5530E4CA1CD326B300071A6D /* CoreAudio */ = {
 			isa = PBXGroup;
 			children = (
 				5530E4CB1CD326B300071A6D /* AudioCodecs */,
 				5530E4D71CD326B300071A6D /* PublicUtility */,
 			);
-			name = CoreAudio;
-			path = ../AppleSDK/CoreAudio;
+			path = CoreAudio;
 			sourceTree = "<group>";
 		};
 		5530E4CB1CD326B300071A6D /* AudioCodecs */ = {
@@ -184,6 +175,7 @@
 		5530E5111CD32DF500071A6D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5530E4C41CD3268500071A6D /* Info.plist */,
 				5530E50B1CD32DEE00071A6D /* XCAResources.r */,
 				5530E50C1CD32DEE00071A6D /* icon.icns */,
 				5530E50D1CD32DEE00071A6D /* icon.r */,
@@ -197,7 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				5530E5191CD32EAF00071A6D /* Common */,
-				5530E4CA1CD326B300071A6D /* CoreAudio */,
+				5530E51E1CD3324600071A6D /* ApppleSDK */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -208,6 +200,30 @@
 				5530E5181CD32EAB00071A6D /* fccs.h */,
 			);
 			name = Common;
+			sourceTree = "<group>";
+		};
+		5530E51E1CD3324600071A6D /* ApppleSDK */ = {
+			isa = PBXGroup;
+			children = (
+				5530E4CA1CD326B300071A6D /* CoreAudio */,
+			);
+			name = ApppleSDK;
+			path = ../AppleSDK;
+			sourceTree = "<group>";
+		};
+		5530E5231CD332C400071A6D /* External Libs */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5011CD32D9E00071A6D /* Opus.xcodeproj */,
+			);
+			name = "External Libs";
+			sourceTree = "<group>";
+		};
+		5530E5241CD332D800071A6D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,8 +359,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -388,8 +402,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;

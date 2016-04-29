@@ -26,6 +26,9 @@
       location = "group:CAVorbis/CAVorbis.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:CAOpus/CAOpusCodec.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:build-macosx/XiphQT.xcodeproj">
    </FileRef>
 </Workspace>
