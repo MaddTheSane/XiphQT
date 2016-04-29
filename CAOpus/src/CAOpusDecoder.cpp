@@ -33,7 +33,7 @@
 #include <Opus/opus.h>
 #include <Vorbis/codec.h>
 
-#include "CAVorbisDecoder.h"
+#include "CAOpusDecoder.h"
 
 #include "CABundleLocker.h"
 

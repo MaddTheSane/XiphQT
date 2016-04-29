@@ -20,8 +20,8 @@
 		5530E5151CD32E0700071A6D /* CAOpusDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */; };
 		5530E5161CD32E0700071A6D /* CAOpusEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */; };
 		5530E52F1CD3340600071A6D /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */; };
-		5530E5311CD3340600071A6D /* CAVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5291CD3340600071A6D /* CAVorbisDecoder.cpp */; };
-		5530E5321CD3340600071A6D /* CAVorbisEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52B1CD3340600071A6D /* CAVorbisEncoder.cpp */; };
+		5530E5311CD3340600071A6D /* CAOpusDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */; };
+		5530E5321CD3340600071A6D /* CAOpusEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */; };
 		5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */; };
 		5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5341CD3354400071A6D /* XCACodec.cpp */; };
 		5530E53C1CD3359200071A6D /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5381CD3359200071A6D /* ringbuffer.cpp */; };
@@ -159,10 +159,10 @@
 		5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggVorbisDecoder.cpp; sourceTree = "<group>"; };
 		5530E5271CD3340600071A6D /* CAOggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOggVorbisDecoder.h; sourceTree = "<group>"; };
 		5530E5281CD3340600071A6D /* CAOpusCodec.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = CAOpusCodec.exp; sourceTree = "<group>"; };
-		5530E5291CD3340600071A6D /* CAVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAVorbisDecoder.cpp; sourceTree = "<group>"; };
-		5530E52A1CD3340600071A6D /* CAVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAVorbisDecoder.h; sourceTree = "<group>"; };
-		5530E52B1CD3340600071A6D /* CAVorbisEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAVorbisEncoder.cpp; sourceTree = "<group>"; };
-		5530E52C1CD3340600071A6D /* CAVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAVorbisEncoder.h; sourceTree = "<group>"; };
+		5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOpusDecoder.cpp; sourceTree = "<group>"; };
+		5530E52A1CD3340600071A6D /* CAOpusDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOpusDecoder.h; sourceTree = "<group>"; };
+		5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOpusEncoder.cpp; sourceTree = "<group>"; };
+		5530E52C1CD3340600071A6D /* CAOpusEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOpusEncoder.h; sourceTree = "<group>"; };
 		5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vorbis_entrypoints.cpp; sourceTree = "<group>"; };
 		5530E52E1CD3340600071A6D /* vorbis_versions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vorbis_versions.h; sourceTree = "<group>"; };
 		5530E5341CD3354400071A6D /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = "<group>"; };
@@ -314,10 +314,10 @@
 				5530E5271CD3340600071A6D /* CAOggVorbisDecoder.h */,
 				5530E5281CD3340600071A6D /* CAOpusCodec.exp */,
 				5530E5401CD337B200071A6D /* CAOpusCodec.pch */,
-				5530E5291CD3340600071A6D /* CAVorbisDecoder.cpp */,
-				5530E52A1CD3340600071A6D /* CAVorbisDecoder.h */,
-				5530E52B1CD3340600071A6D /* CAVorbisEncoder.cpp */,
-				5530E52C1CD3340600071A6D /* CAVorbisEncoder.h */,
+				5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */,
+				5530E52A1CD3340600071A6D /* CAOpusDecoder.h */,
+				5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */,
+				5530E52C1CD3340600071A6D /* CAOpusEncoder.h */,
 				5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */,
 				5530E52E1CD3340600071A6D /* vorbis_versions.h */,
 			);
@@ -572,8 +572,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5530E4FE1CD32C2800071A6D /* CADebugPrintf.cpp in Sources */,
-				5530E5321CD3340600071A6D /* CAVorbisEncoder.cpp in Sources */,
-				5530E5311CD3340600071A6D /* CAVorbisDecoder.cpp in Sources */,
+				5530E5321CD3340600071A6D /* CAOpusEncoder.cpp in Sources */,
+				5530E5311CD3340600071A6D /* CAOpusDecoder.cpp in Sources */,
 				5530E53D1CD3359200071A6D /* wrap_ogg.cpp in Sources */,
 				5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */,
 				5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */,
@@ -728,6 +728,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				EXPORTED_SYMBOLS_FILE = src/CAOpusCodec.exp;
 				INFOPLIST_FILE = OpusCodec/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusCodec;
@@ -741,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				EXPORTED_SYMBOLS_FILE = src/CAOpusCodec.exp;
 				INFOPLIST_FILE = OpusCodec/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusCodec;

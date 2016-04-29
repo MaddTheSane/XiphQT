@@ -34,7 +34,7 @@
 #include <Ogg/ogg.h>
 #include <vector>
 
-#include "CAVorbisDecoder.h"
+#include "CAOpusDecoder.h"
 
 #include "CAStreamBasicDescription.h"
 

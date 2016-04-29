@@ -34,8 +34,7 @@
 
 #include "XCACodec.h"
 
-#include <Ogg/ogg.h>
-#include <Vorbis/codec.h>
+#include <OpusFile/opusfile.h>
 
 #include <vector>
 
@@ -47,12 +46,12 @@
 #endif
 
 
-class CAVorbisDecoder:
+class CAOpusDecoder:
 public XCACodec
 {
  public:
-    CAVorbisDecoder(Boolean inSkipFormatsInitialization = false);
-    ~CAVorbisDecoder();
+    CAOpusDecoder(Boolean inSkipFormatsInitialization = false);
+    ~CAOpusDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
                                    const AudioStreamBasicDescription* inOutputFormat,

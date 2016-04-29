@@ -29,10 +29,9 @@
  */
 
 
-#include <Ogg/ogg.h>
-#include <Vorbis/vorbisenc.h>
+#include <OpusFile/opusfile.h>
 
-#include "CAVorbisEncoder.h"
+#include "CAOpusEncoder.h"
 
 #include "CABundleLocker.h"
 
