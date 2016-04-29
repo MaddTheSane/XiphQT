@@ -50,7 +50,7 @@
         (unsigned int)(x)->mChannelsPerFrame, (unsigned int)(x)->mBitsPerChannel
 
 
-CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false */) :
+CAOpusDecoder::CAOpusDecoder(Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mVorbisFPList(), mConsumedFPList(),
     mFullInPacketsZapped(0)
@@ -91,7 +91,7 @@ CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false 
     mOutputFormat.mBitsPerChannel = 32;
 }
 
-CAVorbisDecoder::~CAVorbisDecoder()
+CAOpusDecoder::~CAOpusDecoder()
 {
     if (mCookie != NULL)
         delete[] mCookie;
@@ -104,7 +104,7 @@ CAVorbisDecoder::~CAVorbisDecoder()
     }
 }
 
-void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
+void CAOpusDecoder::Initialize(const AudioStreamBasicDescription* inInputFormat,
                                  const AudioStreamBasicDescription* inOutputFormat,
                                  const void* inMagicCookie, UInt32 inMagicCookieByteSize)
 {
@@ -146,7 +146,7 @@ void CAVorbisDecoder::Initialize(const AudioStreamBasicDescription* inInputForma
     dbg_printf("[VD  ] <.. [%08lx] :: Initialize(%d, %d, %d)\n", (size_t) this, inInputFormat != NULL, inOutputFormat != NULL, inMagicCookieByteSize != 0);
 }
 
-void CAVorbisDecoder::Uninitialize()
+void CAOpusDecoder::Uninitialize()
 {
     dbg_printf("[VD  ]  >> [%08lx] :: Uninitialize()\n", (size_t) this);
     BDCUninitialize();
@@ -155,7 +155,7 @@ void CAVorbisDecoder::Uninitialize()
     dbg_printf("[VD  ] <.. [%08lx] :: Uninitialize()\n", (size_t) this);
 }
 
-void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
+void CAOpusDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData)
 {
     dbg_printf("[VD  ]  >> [%08lx] :: GetProperty('%4.4s', %d)\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID), (unsigned int)ioPropertyDataSize);
     switch(inPropertyID)
@@ -242,7 +242,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAOpusDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
 {
     dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -281,7 +281,7 @@ void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32&
     dbg_printf("[VD  ] <.. [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAVorbisDecoder::Reset()
+void CAOpusDecoder::Reset()
 {
     dbg_printf("[VD  ] >> [%08lx] :: Reset()\n", (size_t) this);
     BDCReset();
@@ -290,13 +290,13 @@ void CAVorbisDecoder::Reset()
     dbg_printf("[VD  ] << [%08lx] :: Reset()\n", (size_t) this);
 }
 
-UInt32 CAVorbisDecoder::GetVersion() const
+UInt32 CAOpusDecoder::GetVersion() const
 {
     return kCAVorbis_adec_Version;
 }
 
 
-void CAVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
+void CAOpusDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
 {
     if (!mIsInitialized) {
         //	check to make sure the input format is legal
@@ -312,7 +312,7 @@ void CAVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& i
     }
 }
 
-void CAVorbisDecoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat)
+void CAOpusDecoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat)
 {
     if (!mIsInitialized) {
         //	check to make sure the output format is legal
@@ -333,14 +333,14 @@ void CAVorbisDecoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& 
     }
 }
 
-UInt32 CAVorbisDecoder::GetMagicCookieByteSize() const
+UInt32 CAOpusDecoder::GetMagicCookieByteSize() const
 {
     return mCookieSize;
 }
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-void CAVorbisDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
+void CAOpusDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
 {
     if (mCookie != NULL) {
         ioMagicCookieDataByteSize = mCookieSize;
@@ -350,7 +350,7 @@ void CAVorbisDecoder::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCo
     }
 }
 
-void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
+void CAOpusDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
     dbg_printf("[VD  ]  >> [%08lx] :: SetMagicCookie()\n", (size_t) this);
     if (mIsInitialized)
@@ -365,7 +365,7 @@ void CAVorbisDecoder::SetMagicCookie(const void* inMagicCookieData, UInt32 inMag
     dbg_printf("[VD  ] <.. [%08lx] :: SetMagicCookie()\n", (size_t) this);
 }
 
-void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
+void CAOpusDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCookieDataByteSize)
 {
     if (mCookie != NULL)
         delete[] mCookie;
@@ -381,7 +381,7 @@ void CAVorbisDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCoo
 
 
 
-void CAVorbisDecoder::FixFormats()
+void CAOpusDecoder::FixFormats()
 {
     dbg_printf("[VD  ]  >> [%08lx] :: FixFormats()\n", (size_t) this);
     mInputFormat.mSampleRate = mV_vi.rate;
@@ -402,7 +402,7 @@ void CAVorbisDecoder::FixFormats()
 }
 
 
-void CAVorbisDecoder::InitializeCompressionSettings()
+void CAOpusDecoder::InitializeCompressionSettings()
 {
     if (mCookie == NULL)
         return;
@@ -489,12 +489,12 @@ void CAVorbisDecoder::InitializeCompressionSettings()
 
 #pragma mark BDC handling
 
-void CAVorbisDecoder::BDCInitialize(UInt32 inInputBufferByteSize)
+void CAOpusDecoder::BDCInitialize(UInt32 inInputBufferByteSize)
 {
     XCACodec::BDCInitialize(inInputBufferByteSize);
 }
 
-void CAVorbisDecoder::BDCUninitialize()
+void CAOpusDecoder::BDCUninitialize()
 {
     mVorbisFPList.clear();
     mConsumedFPList.clear();
@@ -503,7 +503,7 @@ void CAVorbisDecoder::BDCUninitialize()
     XCACodec::BDCUninitialize();
 }
 
-void CAVorbisDecoder::BDCReset()
+void CAOpusDecoder::BDCReset()
 {
     mVorbisFPList.clear();
     mConsumedFPList.clear();
@@ -517,7 +517,7 @@ void CAVorbisDecoder::BDCReset()
     XCACodec::BDCReset();
 }
 
-void CAVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
+void CAOpusDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 {
     mVorbisFPList.clear();
     mConsumedFPList.clear();
@@ -527,7 +527,7 @@ void CAVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 }
 
 
-void CAVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
+void CAOpusDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
     const Byte * theData = static_cast<const Byte *> (inInputData) + inPacketDescription->mStartOffset;
     UInt32 size = inPacketDescription->mDataByteSize;
@@ -536,13 +536,13 @@ void CAVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketD
 }
 
 
-UInt32 CAVorbisDecoder::FramesReady() const
+UInt32 CAOpusDecoder::FramesReady() const
 {
     //return mNumFrames; // TODO: definitely probably not right!!
     return vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), NULL);
 }
 
-Boolean CAVorbisDecoder::GenerateFrames()
+Boolean CAOpusDecoder::GenerateFrames()
 {
     Boolean ret = true;
 
@@ -581,7 +581,7 @@ Boolean CAVorbisDecoder::GenerateFrames()
     return ret;
 }
 
-void CAVorbisDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
+void CAOpusDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
                                    AudioStreamPacketDescription* /* outPacketDescription */) const
 {
     float **pcm;
@@ -615,7 +615,7 @@ void CAVorbisDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, U
     }
 }
 
-void CAVorbisDecoder::Zap(UInt32 inFrames)
+void CAOpusDecoder::Zap(UInt32 inFrames)
 {
     vorbis_synthesis_read(&mV_vd, inFrames);
 
@@ -634,7 +634,7 @@ void CAVorbisDecoder::Zap(UInt32 inFrames)
     }
 }
 
-UInt32 CAVorbisDecoder::InPacketsConsumed() const
+UInt32 CAOpusDecoder::InPacketsConsumed() const
 {
     return mFullInPacketsZapped;
 }

@@ -19,7 +19,7 @@
 		5530E5101CD32DEE00071A6D /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5530E50C1CD32DEE00071A6D /* icon.icns */; };
 		5530E5151CD32E0700071A6D /* CAOpusDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */; };
 		5530E5161CD32E0700071A6D /* CAOpusEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */; };
-		5530E52F1CD3340600071A6D /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */; };
+		5530E52F1CD3340600071A6D /* CAOggOpusDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5261CD3340600071A6D /* CAOggOpusDecoder.cpp */; };
 		5530E5311CD3340600071A6D /* CAOpusDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */; };
 		5530E5321CD3340600071A6D /* CAOpusEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */; };
 		5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */; };
@@ -156,8 +156,8 @@
 		5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = CAOpusDecoderPublic.r; sourceTree = "<group>"; };
 		5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = CAOpusEncoderPublic.r; sourceTree = "<group>"; };
 		5530E5181CD32EAB00071A6D /* fccs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fccs.h; path = ../common/fccs.h; sourceTree = "<group>"; };
-		5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggVorbisDecoder.cpp; sourceTree = "<group>"; };
-		5530E5271CD3340600071A6D /* CAOggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOggVorbisDecoder.h; sourceTree = "<group>"; };
+		5530E5261CD3340600071A6D /* CAOggOpusDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOggOpusDecoder.cpp; sourceTree = "<group>"; };
+		5530E5271CD3340600071A6D /* CAOggOpusDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOggOpusDecoder.h; sourceTree = "<group>"; };
 		5530E5281CD3340600071A6D /* CAOpusCodec.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = CAOpusCodec.exp; sourceTree = "<group>"; };
 		5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOpusDecoder.cpp; sourceTree = "<group>"; };
 		5530E52A1CD3340600071A6D /* CAOpusDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOpusDecoder.h; sourceTree = "<group>"; };
@@ -310,8 +310,8 @@
 		5530E5171CD32E7100071A6D /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */,
-				5530E5271CD3340600071A6D /* CAOggVorbisDecoder.h */,
+				5530E5261CD3340600071A6D /* CAOggOpusDecoder.cpp */,
+				5530E5271CD3340600071A6D /* CAOggOpusDecoder.h */,
 				5530E5281CD3340600071A6D /* CAOpusCodec.exp */,
 				5530E5401CD337B200071A6D /* CAOpusCodec.pch */,
 				5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */,
@@ -582,7 +582,7 @@
 				5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */,
 				5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */,
 				5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */,
-				5530E52F1CD3340600071A6D /* CAOggVorbisDecoder.cpp in Sources */,
+				5530E52F1CD3340600071A6D /* CAOggOpusDecoder.cpp in Sources */,
 				5530E53C1CD3359200071A6D /* ringbuffer.cpp in Sources */,
 				5530E4E01CD326B300071A6D /* ACBaseCodec.cpp in Sources */,
 				5530E4E61CD326B300071A6D /* CAStreamBasicDescription.cpp in Sources */,
@@ -639,7 +639,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -683,7 +682,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -756,7 +754,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0.7;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -785,7 +783,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0.7;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -832,6 +830,7 @@
 				5530E54F1CD33A4200071A6D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -97,9 +97,9 @@ public XCACodec
 
     Boolean mCompressionInitialized;
 
-    vorbis_info mV_vi;
-    vorbis_dsp_state mV_vd;
-    vorbis_block mV_vb;
+    //vorbis_info mV_vi;
+    //vorbis_dsp_state mV_vd;
+    //vorbis_block mV_vb;
 
     struct VorbisFramePacket {
         UInt32 frames;

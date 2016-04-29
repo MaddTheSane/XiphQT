@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>CASpeex</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CoreAudio Speex Decoder Component 0.1.3, Copyright © 2005-2006 Arek Korbik</string>
 	<key>CFBundleIconFile</key>

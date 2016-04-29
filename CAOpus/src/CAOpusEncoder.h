@@ -109,10 +109,10 @@ public XCACodec
     Boolean mCompressionInitialized;
     Boolean mEOSHit;
 
-    vorbis_info mV_vi;
-    vorbis_comment mV_vc;
-    vorbis_dsp_state mV_vd;
-    vorbis_block mV_vb;
+    //vorbis_info mV_vi;
+    //vorbis_comment mV_vc;
+    //vorbis_dsp_state mV_vd;
+    //vorbis_block mV_vb;
 
     ogg_int64_t last_granulepos;
     ogg_int64_t last_packetno; // do I need this one?

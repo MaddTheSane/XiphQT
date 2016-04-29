@@ -39,12 +39,12 @@
 #include "CAStreamBasicDescription.h"
 
 
-class CAOggVorbisDecoder :
-public CAVorbisDecoder
+class CAOggOpusDecoder :
+public CAOpusDecoder
 {
  public:
-    CAOggVorbisDecoder();
-    virtual ~CAOggVorbisDecoder();
+    CAOggOpusDecoder();
+    virtual ~CAOggOpusDecoder();
 
     virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                  AudioStreamPacketDescription* outPacketDescription);

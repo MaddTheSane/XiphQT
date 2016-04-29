@@ -1,8 +1,8 @@
 /*
- *  CAOggVorbisDecoder.cpp
+ *  CAOggOpusDecoder.cpp
  *
- *    CAOggVorbisDecoder class implementation; translation layer handling
- *    ogg page encapsulation of Vorbis packets, using CAVorbisDecoder
+ *    CAOggOpusDecoder class implementation; translation layer handling
+ *    ogg page encapsulation of Vorbis packets, using CAOpusDecoder
  *    for the actual decoding.
  *
  *
@@ -25,12 +25,12 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAOggVorbisDecoder.cpp 12814 2007-03-27 22:09:32Z arek $
+ *  Last modified: $Id: CAOggOpusDecoder.cpp 12814 2007-03-27 22:09:32Z arek $
  *
  */
 
 
-#include "CAOggVorbisDecoder.h"
+#include "CAOggOpusDecoder.h"
 
 #include "fccs.h"
 #include "data_types.h"
@@ -40,8 +40,8 @@
 #include "debug.h"
 
 
-CAOggVorbisDecoder::CAOggVorbisDecoder() :
-    CAVorbisDecoder(true),
+CAOggOpusDecoder::CAOggOpusDecoder() :
+    CAOpusDecoder(true),
     mFramesBufferedList(),
     mSOBuffer(NULL),
     mSOBufferSize(0), mSOBufferUsed(0),
@@ -82,7 +82,7 @@ CAOggVorbisDecoder::CAOggVorbisDecoder() :
     mOutputFormat.mBitsPerChannel = 32;
 }
 
-CAOggVorbisDecoder::~CAOggVorbisDecoder()
+CAOggOpusDecoder::~CAOggOpusDecoder()
 {
     if (mCompressionInitialized)
         ogg_stream_clear(&mO_st);
@@ -91,11 +91,11 @@ CAOggVorbisDecoder::~CAOggVorbisDecoder()
         delete[] mSOBuffer;
 }
 
-void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
+void CAOggOpusDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat)
 {
     if (!mIsInitialized) {
         if (inInputFormat.mFormatID != kAudioFormatXiphOggFramedVorbis) {
-            dbg_printf("CAOggVorbisDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
+            dbg_printf("CAOggOpusDecoder::SetFormats: only support Xiph Vorbis (Ogg-framed) for input\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
         XCACodec::SetCurrentInputFormat(inInputFormat);
@@ -106,7 +106,7 @@ void CAOggVorbisDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
+UInt32 CAOggOpusDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                                 AudioStreamPacketDescription* outPacketDescription)
 {
     dbg_printf("[VDO ]  >> [%08lx] :: ProduceOutputPackets(%u [%u]) (%u, %u, %u; %u[%u])\n",
@@ -138,7 +138,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
             vorbis_returned_data = mSOBufferSize;
 
             while (true) {
-                UInt32 vorbis_return = CAVorbisDecoder::ProduceOutputPackets(the_data, vorbis_returned_data, vorbis_packets, NULL);
+                UInt32 vorbis_return = CAOpusDecoder::ProduceOutputPackets(the_data, vorbis_returned_data, vorbis_packets, NULL);
                 if (vorbis_return == kAudioCodecProduceOutputPacketSuccess ||
                     vorbis_return == kAudioCodecProduceOutputPacketSuccessHasMore ||
                     vorbis_return == kAudioCodecProduceOutputPacketNeedsMoreInputData)
@@ -224,7 +224,7 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
     } else {
         /* normal output without additional buffering */
         while (true) {
-            UInt32 vorbis_return = CAVorbisDecoder::ProduceOutputPackets(the_data, vorbis_returned_data, vorbis_packets, NULL);
+            UInt32 vorbis_return = CAOpusDecoder::ProduceOutputPackets(the_data, vorbis_returned_data, vorbis_packets, NULL);
             if (vorbis_return == kAudioCodecProduceOutputPacketSuccess || vorbis_return == kAudioCodecProduceOutputPacketSuccessHasMore) {
                 if (vorbis_packets > 0)
                     mFramesBufferedList.front() -= vorbis_packets;
@@ -271,12 +271,12 @@ UInt32 CAOggVorbisDecoder::ProduceOutputPackets(void* outOutputData, UInt32& ioO
 }
 
 
-void CAOggVorbisDecoder::BDCInitialize(UInt32 inInputBufferByteSize)
+void CAOggOpusDecoder::BDCInitialize(UInt32 inInputBufferByteSize)
 {
-    CAVorbisDecoder::BDCInitialize(inInputBufferByteSize);
+    CAOpusDecoder::BDCInitialize(inInputBufferByteSize);
 }
 
-void CAOggVorbisDecoder::BDCUninitialize()
+void CAOggOpusDecoder::BDCUninitialize()
 {
     mFramesBufferedList.clear();
 
@@ -284,10 +284,10 @@ void CAOggVorbisDecoder::BDCUninitialize()
     mSOBufferSize = mSOBufferUsed = mSOBufferWrapped = mSOBufferPackets = mSOBufferPages = mSOReturned = 0;
     mSOBuffer = NULL;
 
-    CAVorbisDecoder::BDCUninitialize();
+    CAOpusDecoder::BDCUninitialize();
 }
 
-void CAOggVorbisDecoder::BDCReset()
+void CAOggOpusDecoder::BDCReset()
 {
     mFramesBufferedList.clear();
 
@@ -297,17 +297,17 @@ void CAOggVorbisDecoder::BDCReset()
 
     if (mCompressionInitialized)
         ogg_stream_reset(&mO_st);
-    CAVorbisDecoder::BDCReset();
+    CAOpusDecoder::BDCReset();
 }
 
-void CAOggVorbisDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
+void CAOggOpusDecoder::BDCReallocate(UInt32 inInputBufferByteSize)
 {
     mFramesBufferedList.clear();
-    CAVorbisDecoder::BDCReallocate(inInputBufferByteSize);
+    CAOpusDecoder::BDCReallocate(inInputBufferByteSize);
 }
 
 
-void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
+void CAOggOpusDecoder::InPacket(const void* inInputData, const AudioStreamPacketDescription* inPacketDescription)
 {
     dbg_printf("[VDO ]  >> [%08lx] :: InPacket({%u, %u})\n", (size_t) this, (unsigned int)inPacketDescription->mDataByteSize, (unsigned int)inPacketDescription->mVariableFramesInPacket);
     if (!mCompressionInitialized) {
@@ -339,7 +339,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
 
         vorbis_packet_desc.mDataByteSize = opk.bytes;
 
-        CAVorbisDecoder::InPacket(opk.packet, &vorbis_packet_desc);
+        CAOpusDecoder::InPacket(opk.packet, &vorbis_packet_desc);
     }
 
     mFramesBufferedList.push_back(packet_count);
@@ -366,7 +366,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
 }
 
 
-void CAOggVorbisDecoder::InitializeCompressionSettings()
+void CAOggOpusDecoder::InitializeCompressionSettings()
 {
     if (mCookie != NULL) {
         if (mCompressionInitialized)
@@ -395,5 +395,5 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
 
     ogg_stream_reset(&mO_st);
 
-    CAVorbisDecoder::InitializeCompressionSettings();
+    CAOpusDecoder::InitializeCompressionSettings();
 }

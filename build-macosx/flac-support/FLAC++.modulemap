@@ -1,0 +1,7 @@
+framework module FLAC__ {
+	requires cplusplus
+	umbrella header "all.h"
+	
+	export *
+	module * { export * }
+}

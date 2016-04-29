@@ -104,6 +104,8 @@
 		37CA8E150DD73F2D005C8CB6 /* alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
 		5526210A1B7BA8FD00F0550D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../../DebugConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		5526210B1B7BA8FD00F0550D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../../DefaultConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
+		5530E5F61CD3CAE700071A6D /* FLAC.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = FLAC.modulemap; sourceTree = "<group>"; };
+		5530E5F71CD3CB8100071A6D /* FLAC++.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "FLAC++.modulemap"; sourceTree = "<group>"; };
 		73744B050B1A1925002B059E /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		73744B1B0B1A1C43002B059E /* libflac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libflac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B520B1A21DA002B059E /* libflac++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libflac++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +236,8 @@
 				8D07F2C70486CC7A007CD1D0 /* Info.plist */,
 				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
 				73E1968D0A0D24C100D40234 /* FLAC++-Info.plist */,
+				5530E5F61CD3CAE700071A6D /* FLAC.modulemap */,
+				5530E5F71CD3CB8100071A6D /* FLAC++.modulemap */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -671,7 +675,6 @@
 		4FADC24308B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
@@ -701,6 +704,7 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				MODULEMAP_FILE = FLAC.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flac;
 				PRODUCT_NAME = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
@@ -711,7 +715,6 @@
 		4FADC24408B4156D00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -739,6 +742,7 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				MODULEMAP_FILE = FLAC.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flac;
 				PRODUCT_NAME = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
@@ -914,7 +918,6 @@
 		73E1968F0A0D24C200D40234 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = NO;
@@ -940,7 +943,9 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				MODULEMAP_FILE = "FLAC++.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
+				PRODUCT_MODULE_NAME = FLACxx;
 				PRODUCT_NAME = "FLAC++";
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = YES;
@@ -950,7 +955,6 @@
 		73E196900A0D24C200D40234 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = NO;
@@ -975,7 +979,9 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				MODULEMAP_FILE = "FLAC++.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
+				PRODUCT_MODULE_NAME = FLACxx;
 				PRODUCT_NAME = "FLAC++";
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = NO;

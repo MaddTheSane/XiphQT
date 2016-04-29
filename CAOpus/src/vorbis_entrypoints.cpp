@@ -31,7 +31,7 @@
 #include <AudioUnit/AudioCodec.h>
 
 #include "CAOpusDecoder.h"
-#include "CAOggVorbisDecoder.h"
+#include "CAOggOpusDecoder.h"
 #include "CAOpusEncoder.h"
 
 #include "ACCodecDispatch.h"
@@ -43,7 +43,7 @@ ComponentResult	CAOpusDecoderEntry(ComponentParameters* inParameters, CAOpusDeco
 }
 
 extern "C"
-ComponentResult	CAOggOpusDecoderEntry(ComponentParameters* inParameters, CAOggVorbisDecoder* inThis)
+ComponentResult	CAOggOpusDecoderEntry(ComponentParameters* inParameters, CAOggOpusDecoder* inThis)
 {
     return ACCodecDispatch(inParameters, inThis);
 }
@@ -52,7 +52,7 @@ ComponentResult	CAOggOpusDecoderEntry(ComponentParameters* inParameters, CAOggVo
 #if !defined(XIPHQT_NO_ENCODERS)
 
 extern "C"
-ComponentResult	CAOpusEncoderEntry(ComponentParameters* inParameters, CAVorbisEncoder* inThis)
+ComponentResult	CAOpusEncoderEntry(ComponentParameters* inParameters, CAOpusEncoder* inThis)
 {
     return ACCodecDispatch(inParameters, inThis);
 }
