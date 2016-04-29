@@ -2,4 +2,4 @@
 // Prefix header for all source files of the 'FLAC' target in the 'FLAC' project.
 //
 
-#include <Carbon/Carbon.h>
+#include <MacTypes.h>

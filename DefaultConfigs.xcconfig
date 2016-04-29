@@ -21,3 +21,5 @@ LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks @executable_path/../Framewo
 
 
 CODE_SIGN_IDENTITY = -
+
+ALWAYS_SEARCH_USER_PATHS = NO
