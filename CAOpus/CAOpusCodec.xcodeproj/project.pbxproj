@@ -26,6 +26,20 @@
 		5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5341CD3354400071A6D /* XCACodec.cpp */; };
 		5530E53C1CD3359200071A6D /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5381CD3359200071A6D /* ringbuffer.cpp */; };
 		5530E53D1CD3359200071A6D /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E53A1CD3359200071A6D /* wrap_ogg.cpp */; };
+		5530E5511CD33A7A00071A6D /* opusfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 5530E5501CD33A7A00071A6D /* opusfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5530E55A1CD33A9600071A6D /* http.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5521CD33A9600071A6D /* http.c */; };
+		5530E55B1CD33A9600071A6D /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5531CD33A9600071A6D /* info.c */; };
+		5530E55C1CD33A9600071A6D /* internal.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5541CD33A9600071A6D /* internal.c */; };
+		5530E55D1CD33A9600071A6D /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5530E5551CD33A9600071A6D /* internal.h */; };
+		5530E55E1CD33A9600071A6D /* opusfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5561CD33A9600071A6D /* opusfile.c */; };
+		5530E55F1CD33A9600071A6D /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5571CD33A9600071A6D /* stream.c */; };
+		5530E5601CD33A9600071A6D /* wincerts.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5581CD33A9600071A6D /* wincerts.c */; };
+		5530E5611CD33A9600071A6D /* winerrno.h in Headers */ = {isa = PBXBuildFile; fileRef = 5530E5591CD33A9600071A6D /* winerrno.h */; };
+		5530E56B1CD33B1B00071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
+		5530E56C1CD33B1B00071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
+		5530E56E1CD33B9C00071A6D /* Ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5530E56F1CD33B9C00071A6D /* Opus.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5530E5701CD33B9C00071A6D /* OpusFile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5481CD33A4200071A6D /* OpusFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +64,65 @@
 			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
 			remoteInfo = Opus;
 		};
+		5530E5671CD33AFB00071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D07F2C80486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
+		5530E5691CD33AFB00071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 734FB2E50B18B33E00D561D7;
+			remoteInfo = "libogg (static)";
+		};
+		5530E5711CD33BB600071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
+		5530E5731CD33BB600071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Opus;
+		};
+		5530E5751CD33BC400071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E4B91CD3268500071A6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5530E5471CD33A4200071A6D;
+			remoteInfo = OpusFile;
+		};
+		5530E5771CD33BC400071A6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
+			remoteInfo = Ogg;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5530E56D1CD33B7600071A6D /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5530E56E1CD33B9C00071A6D /* Ogg.framework in Copy Frameworks */,
+				5530E56F1CD33B9C00071A6D /* Opus.framework in Copy Frameworks */,
+				5530E5701CD33B9C00071A6D /* OpusFile.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5530E4C11CD3268500071A6D /* CAOpusCodec.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CAOpusCodec.component; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +175,18 @@
 		5530E53E1CD335EE00071A6D /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = "<group>"; };
 		5530E53F1CD3369300071A6D /* data_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = data_types.h; path = ../common/data_types.h; sourceTree = "<group>"; };
 		5530E5401CD337B200071A6D /* CAOpusCodec.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAOpusCodec.pch; sourceTree = "<group>"; };
+		5530E5481CD33A4200071A6D /* OpusFile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OpusFile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5530E54C1CD33A4200071A6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5530E5501CD33A7A00071A6D /* opusfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opusfile.h; sourceTree = "<group>"; };
+		5530E5521CD33A9600071A6D /* http.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = http.c; sourceTree = "<group>"; };
+		5530E5531CD33A9600071A6D /* info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = info.c; sourceTree = "<group>"; };
+		5530E5541CD33A9600071A6D /* internal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = internal.c; sourceTree = "<group>"; };
+		5530E5551CD33A9600071A6D /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = internal.h; sourceTree = "<group>"; };
+		5530E5561CD33A9600071A6D /* opusfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = opusfile.c; sourceTree = "<group>"; };
+		5530E5571CD33A9600071A6D /* stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream.c; sourceTree = "<group>"; };
+		5530E5581CD33A9600071A6D /* wincerts.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wincerts.c; sourceTree = "<group>"; };
+		5530E5591CD33A9600071A6D /* winerrno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = winerrno.h; sourceTree = "<group>"; };
+		5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +195,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				5530E50A1CD32DB400071A6D /* Opus.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5530E5441CD33A4200071A6D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E56B1CD33B1B00071A6D /* Ogg.framework in Frameworks */,
+				5530E56C1CD33B1B00071A6D /* Opus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +219,7 @@
 				5530E5251CD333E500071A6D /* External Source */,
 				5530E5111CD32DF500071A6D /* Resources */,
 				5530E5231CD332C400071A6D /* External Libs */,
+				5530E5491CD33A4200071A6D /* OpusFile */,
 				5530E5241CD332D800071A6D /* Frameworks */,
 				5530E4C21CD3268500071A6D /* Products */,
 			);
@@ -135,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				5530E4C11CD3268500071A6D /* CAOpusCodec.component */,
+				5530E5481CD33A4200071A6D /* OpusFile.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,6 +354,7 @@
 		5530E5231CD332C400071A6D /* External Libs */ = {
 			isa = PBXGroup;
 			children = (
+				5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */,
 				5530E5011CD32D9E00071A6D /* Opus.xcodeproj */,
 			);
 			name = "External Libs";
@@ -280,7 +376,46 @@
 			name = "External Source";
 			sourceTree = "<group>";
 		};
+		5530E5491CD33A4200071A6D /* OpusFile */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5501CD33A7A00071A6D /* opusfile.h */,
+				5530E5521CD33A9600071A6D /* http.c */,
+				5530E5531CD33A9600071A6D /* info.c */,
+				5530E5541CD33A9600071A6D /* internal.c */,
+				5530E5551CD33A9600071A6D /* internal.h */,
+				5530E5561CD33A9600071A6D /* opusfile.c */,
+				5530E5571CD33A9600071A6D /* stream.c */,
+				5530E5581CD33A9600071A6D /* wincerts.c */,
+				5530E5591CD33A9600071A6D /* winerrno.h */,
+				5530E54C1CD33A4200071A6D /* Info.plist */,
+			);
+			path = OpusFile;
+			sourceTree = "<group>";
+		};
+		5530E5631CD33AFB00071A6D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5530E5681CD33AFB00071A6D /* Ogg.framework */,
+				5530E56A1CD33AFB00071A6D /* libogg.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5530E5451CD33A4200071A6D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E5511CD33A7A00071A6D /* opusfile.h in Headers */,
+				5530E55D1CD33A9600071A6D /* internal.h in Headers */,
+				5530E5611CD33A9600071A6D /* winerrno.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		5530E4C01CD3268500071A6D /* CAOpusCodec */ = {
@@ -291,16 +426,39 @@
 				5530E4BE1CD3268500071A6D /* Frameworks */,
 				5530E4BF1CD3268500071A6D /* Resources */,
 				5530E5121CD32DFD00071A6D /* Rez */,
+				5530E56D1CD33B7600071A6D /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5530E5761CD33BC400071A6D /* PBXTargetDependency */,
+				5530E5781CD33BC400071A6D /* PBXTargetDependency */,
 				5530E51B1CD32FCC00071A6D /* PBXTargetDependency */,
 			);
 			name = CAOpusCodec;
 			productName = OpusCodec;
 			productReference = 5530E4C11CD3268500071A6D /* CAOpusCodec.component */;
 			productType = "com.apple.product-type.bundle";
+		};
+		5530E5471CD33A4200071A6D /* OpusFile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5530E54D1CD33A4200071A6D /* Build configuration list for PBXNativeTarget "OpusFile" */;
+			buildPhases = (
+				5530E5431CD33A4200071A6D /* Sources */,
+				5530E5441CD33A4200071A6D /* Frameworks */,
+				5530E5451CD33A4200071A6D /* Headers */,
+				5530E5461CD33A4200071A6D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5530E5721CD33BB600071A6D /* PBXTargetDependency */,
+				5530E5741CD33BB600071A6D /* PBXTargetDependency */,
+			);
+			name = OpusFile;
+			productName = OpusFile;
+			productReference = 5530E5481CD33A4200071A6D /* OpusFile.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -312,6 +470,9 @@
 				ORGANIZATIONNAME = "C.W. Betts";
 				TargetAttributes = {
 					5530E4C01CD3268500071A6D = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					5530E5471CD33A4200071A6D = {
 						CreatedOnToolsVersion = 7.3;
 					};
 				};
@@ -328,6 +489,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 5530E5631CD33AFB00071A6D /* Products */;
+					ProjectRef = 5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */;
+				},
+				{
 					ProductGroup = 5530E5021CD32D9E00071A6D /* Products */;
 					ProjectRef = 5530E5011CD32D9E00071A6D /* Opus.xcodeproj */;
 				},
@@ -335,6 +500,7 @@
 			projectRoot = "";
 			targets = (
 				5530E4C01CD3268500071A6D /* CAOpusCodec */,
+				5530E5471CD33A4200071A6D /* OpusFile */,
 			);
 		};
 /* End PBXProject section */
@@ -354,6 +520,20 @@
 			remoteRef = 5530E5081CD32D9E00071A6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		5530E5681CD33AFB00071A6D /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 5530E5671CD33AFB00071A6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5530E56A1CD33AFB00071A6D /* libogg.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libogg.a;
+			remoteRef = 5530E5691CD33AFB00071A6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -362,6 +542,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5530E5101CD32DEE00071A6D /* icon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5530E5461CD33A4200071A6D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +589,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5530E5431CD33A4200071A6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530E55A1CD33A9600071A6D /* http.c in Sources */,
+				5530E55B1CD33A9600071A6D /* info.c in Sources */,
+				5530E5601CD33A9600071A6D /* wincerts.c in Sources */,
+				5530E55E1CD33A9600071A6D /* opusfile.c in Sources */,
+				5530E55C1CD33A9600071A6D /* internal.c in Sources */,
+				5530E55F1CD33A9600071A6D /* stream.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -409,6 +609,26 @@
 			isa = PBXTargetDependency;
 			name = Opus;
 			targetProxy = 5530E51A1CD32FCC00071A6D /* PBXContainerItemProxy */;
+		};
+		5530E5721CD33BB600071A6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Ogg;
+			targetProxy = 5530E5711CD33BB600071A6D /* PBXContainerItemProxy */;
+		};
+		5530E5741CD33BB600071A6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Opus;
+			targetProxy = 5530E5731CD33BB600071A6D /* PBXContainerItemProxy */;
+		};
+		5530E5761CD33BC400071A6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5530E5471CD33A4200071A6D /* OpusFile */;
+			targetProxy = 5530E5751CD33BC400071A6D /* PBXContainerItemProxy */;
+		};
+		5530E5781CD33BC400071A6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Ogg;
+			targetProxy = 5530E5771CD33BC400071A6D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -530,6 +750,60 @@
 			};
 			name = Release;
 		};
+		5530E54E1CD33A4200071A6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = OpusFile/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REEXPORTED_FRAMEWORK_NAMES = "Opus Ogg";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5530E54F1CD33A4200071A6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = OpusFile/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusFile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REEXPORTED_FRAMEWORK_NAMES = "Opus Ogg";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -550,6 +824,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		5530E54D1CD33A4200071A6D /* Build configuration list for PBXNativeTarget "OpusFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5530E54E1CD33A4200071A6D /* Debug */,
+				5530E54F1CD33A4200071A6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
