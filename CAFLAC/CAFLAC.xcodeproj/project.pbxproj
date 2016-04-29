@@ -609,6 +609,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 556C3F3D1B794A5200D2CDDA /* DebugConfigs.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -627,6 +628,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 556C3F3E1B794A5200D2CDDA /* DefaultConfigs.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (

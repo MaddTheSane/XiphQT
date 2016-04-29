@@ -35,11 +35,11 @@
 		5530E55F1CD33A9600071A6D /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5571CD33A9600071A6D /* stream.c */; };
 		5530E5601CD33A9600071A6D /* wincerts.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5581CD33A9600071A6D /* wincerts.c */; };
 		5530E5611CD33A9600071A6D /* winerrno.h in Headers */ = {isa = PBXBuildFile; fileRef = 5530E5591CD33A9600071A6D /* winerrno.h */; };
-		5530E56B1CD33B1B00071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
-		5530E56C1CD33B1B00071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
 		5530E56E1CD33B9C00071A6D /* Ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5530E56F1CD33B9C00071A6D /* Opus.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5530E5701CD33B9C00071A6D /* OpusFile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5481CD33A4200071A6D /* OpusFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5530E5AF1CD344D800071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
+		5530E5B01CD344D800071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,8 +202,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5530E56B1CD33B1B00071A6D /* Ogg.framework in Frameworks */,
-				5530E56C1CD33B1B00071A6D /* Opus.framework in Frameworks */,
+				5530E5AF1CD344D800071A6D /* Ogg.framework in Frameworks */,
+				5530E5B01CD344D800071A6D /* Opus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,7 +774,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusFile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REEXPORTED_FRAMEWORK_NAMES = "Opus Ogg";
+				REEXPORTED_FRAMEWORK_NAMES = Opus;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -799,7 +799,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.maddthesane.OpusFile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REEXPORTED_FRAMEWORK_NAMES = "Opus Ogg";
+				REEXPORTED_FRAMEWORK_NAMES = Opus;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
