@@ -62,7 +62,7 @@ AudioChannelLayoutTag CAVorbisEncoder::gOutChannelLayouts[kVorbisEncoderOutChann
     kAudioChannelLayoutTag_MPEG_5_1_C,
 };
 
-CAVorbisEncoder::CAVorbisEncoder() :
+CAVorbisEncoder::CAVorbisEncoder(AudioComponentInstance inInstance) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false), mEOSHit(false),
     last_granulepos(0), last_packetno(0), mVorbisFPList(), mProducedPList(),
     mCfgMode(kVorbisEncoderModeQuality), mCfgQuality(0.4), mCfgBitrate(128), mCfgDict(NULL)
@@ -409,7 +409,7 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     dbg_printf("[  VE] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAVorbisEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf("[  VE]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -709,23 +709,23 @@ void CAVorbisEncoder::InitializeCompressionSettings()
         mCookie = new Byte[mCookieSize];
 
         unsigned long *qtatom = reinterpret_cast<unsigned long*>(mCookie); // reinterpret_cast ?!?
-        *qtatom++ = EndianU32_NtoB(header.bytes + 2 * sizeof(UInt32));
-        *qtatom++ = EndianU32_NtoB(kCookieTypeVorbisHeader);
+        *qtatom++ = CFSwapInt32HostToBig(header.bytes + 2 * sizeof(UInt32));
+        *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisHeader);
         BlockMoveData(header.packet, qtatom, header.bytes);
 
         qtatom = reinterpret_cast<unsigned long*>(mCookie + 2 * sizeof(UInt32) + header.bytes);
-        *qtatom++ = EndianU32_NtoB(header_vc.bytes + 2 * sizeof(UInt32));
-        *qtatom++ = EndianU32_NtoB(kCookieTypeVorbisComments);
+        *qtatom++ = CFSwapInt32HostToBig(header_vc.bytes + 2 * sizeof(UInt32));
+        *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisComments);
         BlockMoveData(header_vc.packet, qtatom, header_vc.bytes);
 
         qtatom = reinterpret_cast<unsigned long*>(mCookie + 4 * sizeof(UInt32) + header.bytes + header_vc.bytes);
-        *qtatom++ = EndianU32_NtoB(header_cb.bytes + 2 * sizeof(UInt32));
-        *qtatom++ = EndianU32_NtoB(kCookieTypeVorbisCodebooks);
+        *qtatom++ = CFSwapInt32HostToBig(header_cb.bytes + 2 * sizeof(UInt32));
+        *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisCodebooks);
         BlockMoveData(header_cb.packet, qtatom, header_cb.bytes);
 
         qtatom = reinterpret_cast<unsigned long*>(mCookie + 6 * sizeof(UInt32) + header.bytes + header_vc.bytes + header_cb.bytes);
-        *qtatom++ = EndianU32_NtoB(2 * sizeof(UInt32));
-        *qtatom++ = EndianU32_NtoB(kAudioTerminatorAtomType);
+        *qtatom++ = CFSwapInt32HostToBig(2 * sizeof(UInt32));
+        *qtatom++ = CFSwapInt32HostToBig(kAudioTerminatorAtomType);
     }
 
     dbg_printf("[  VE] < > [%08lx] :: InitializeCompressionSettings() - bru: %ld, brn: %ld, brl: %ld, brw: %ld\n",
@@ -907,7 +907,7 @@ Boolean CAVorbisEncoder::BuildSettings(void *outSettingsDict)
     Boolean ret = false;
     SInt32 n, ln;
     CFNumberRef cf_n;
-    CFMutableDictionaryRef sd;
+    CFMutableDictionaryRef sd = NULL;
     CFMutableDictionaryRef eltd;
     CFMutableArrayRef params;
 
@@ -973,7 +973,7 @@ Boolean CAVorbisEncoder::BuildSettings(void *outSettingsDict)
         CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Hint), cf_n);
         CFRelease(cf_n);
 
-        n = lroundf(mCfgQuality * 10.0) + 1;
+        n = (int)lroundf(mCfgQuality * 10.0) + 1;
         if (n < 0)
             n = 0;
         else if (n > 11)

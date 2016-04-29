@@ -45,7 +45,7 @@
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-CASpeexDecoder::CASpeexDecoder(Boolean inSkipFormatsInitialization /* = false */) :
+CASpeexDecoder::CASpeexDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0), mOutBufferStart(0),
     mSpeexFPList(),
@@ -214,7 +214,7 @@ void CASpeexDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPr
     dbg_printf("<.. [%08lx] CASpeexDecoder :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CASpeexDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CASpeexDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf(" >> [%08lx] CASpeexDecoder :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -360,35 +360,35 @@ void CASpeexDecoder::InitializeCompressionSettings()
     mCompressionInitialized = false;
 
     OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
-    Byte *ptrheader = mCookie + EndianU32_BtoN(atom->size);
+    Byte *ptrheader = mCookie + CFSwapInt32BigToHost(atom->size);
     CookieAtomHeader *aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
 
     // scan quickly through the cookie, check types and packet sizes
-    if (EndianS32_BtoN(atom->type) != kCookieTypeOggSerialNo || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
+    if (CFSwapInt32BigToHost(atom->type) != kCookieTypeOggSerialNo || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
         return;
-    ptrheader += EndianU32_BtoN(aheader->size);
-    if (EndianS32_BtoN(aheader->type) != kCookieTypeSpeexHeader || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
+    ptrheader += CFSwapInt32BigToHost(aheader->size);
+    if (CFSwapInt32BigToHost(aheader->type) != kCookieTypeSpeexHeader || static_cast<UInt32> (ptrheader - mCookie) > mCookieSize)
         return;
     // we ignore the rest: comments and extra headers
 
     // all OK, back to the first speex packet
-    aheader = reinterpret_cast<CookieAtomHeader*> (mCookie + EndianU32_BtoN(atom->size));
+    aheader = reinterpret_cast<CookieAtomHeader*> (mCookie + CFSwapInt32BigToHost(atom->size));
     SpeexHeader *inheader = reinterpret_cast<SpeexHeader *> (&aheader->data[0]);
 
     // TODO: convert, at some point, mSpeexHeader to a pointer?
-    mSpeexHeader.bitrate =                 EndianS32_LtoN(inheader->bitrate);
-    mSpeexHeader.extra_headers =           EndianS32_LtoN(inheader->extra_headers);
-    mSpeexHeader.frame_size =              EndianS32_LtoN(inheader->frame_size);
-    mSpeexHeader.frames_per_packet =       EndianS32_LtoN(inheader->frames_per_packet);
-    mSpeexHeader.header_size =             EndianS32_LtoN(inheader->header_size);
-    mSpeexHeader.mode =                    EndianS32_LtoN(inheader->mode);
-    mSpeexHeader.mode_bitstream_version =  EndianS32_LtoN(inheader->mode_bitstream_version);
-    mSpeexHeader.nb_channels =             EndianS32_LtoN(inheader->nb_channels);
-    mSpeexHeader.rate =                    EndianS32_LtoN(inheader->rate);
-    mSpeexHeader.reserved1 =               EndianS32_LtoN(inheader->reserved1);
-    mSpeexHeader.reserved2 =               EndianS32_LtoN(inheader->reserved2);
-    mSpeexHeader.speex_version_id =        EndianS32_LtoN(inheader->speex_version_id);
-    mSpeexHeader.vbr =                     EndianS32_LtoN(inheader->vbr);
+    mSpeexHeader.bitrate =                 CFSwapInt32LittleToHost(inheader->bitrate);
+    mSpeexHeader.extra_headers =           CFSwapInt32LittleToHost(inheader->extra_headers);
+    mSpeexHeader.frame_size =              CFSwapInt32LittleToHost(inheader->frame_size);
+    mSpeexHeader.frames_per_packet =       CFSwapInt32LittleToHost(inheader->frames_per_packet);
+    mSpeexHeader.header_size =             CFSwapInt32LittleToHost(inheader->header_size);
+    mSpeexHeader.mode =                    CFSwapInt32LittleToHost(inheader->mode);
+    mSpeexHeader.mode_bitstream_version =  CFSwapInt32LittleToHost(inheader->mode_bitstream_version);
+    mSpeexHeader.nb_channels =             CFSwapInt32LittleToHost(inheader->nb_channels);
+    mSpeexHeader.rate =                    CFSwapInt32LittleToHost(inheader->rate);
+    mSpeexHeader.reserved1 =               CFSwapInt32LittleToHost(inheader->reserved1);
+    mSpeexHeader.reserved2 =               CFSwapInt32LittleToHost(inheader->reserved2);
+    mSpeexHeader.speex_version_id =        CFSwapInt32LittleToHost(inheader->speex_version_id);
+    mSpeexHeader.vbr =                     CFSwapInt32LittleToHost(inheader->vbr);
 
     if (mSpeexHeader.mode >= SPEEX_NB_MODES)
         CODEC_THROW(kAudioCodecUnsupportedFormatError);

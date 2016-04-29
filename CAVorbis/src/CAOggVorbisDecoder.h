@@ -43,7 +43,7 @@ class CAOggVorbisDecoder :
 public CAVorbisDecoder
 {
  public:
-    CAOggVorbisDecoder();
+    CAOggVorbisDecoder(AudioComponentInstance inInstance);
     virtual ~CAOggVorbisDecoder();
 
     virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,

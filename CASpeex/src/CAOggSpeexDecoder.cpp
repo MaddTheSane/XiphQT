@@ -40,8 +40,8 @@
 #include "debug.h"
 
 
-CAOggSpeexDecoder::CAOggSpeexDecoder() :
-    CASpeexDecoder(true),
+CAOggSpeexDecoder::CAOggSpeexDecoder(AudioComponentInstance inInstance) :
+    CASpeexDecoder(inInstance, true),
     mO_st(), mFramesBufferedList()
 {
     CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphOggFramedSpeex,
@@ -261,8 +261,8 @@ void CAOggSpeexDecoder::InitializeCompressionSettings()
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
 
-        if (EndianS32_BtoN(atom->type) == kCookieTypeOggSerialNo && (mCookieSize - EndianS32_BtoN(atom->size) >= 0)) {
-            ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
+        if (CFSwapInt32BigToHost(atom->type) == kCookieTypeOggSerialNo && (mCookieSize - CFSwapInt32BigToHost(atom->size) >= 0)) {
+            ogg_stream_init(&mO_st, CFSwapInt32BigToHost(atom->serialno));
         }
     }
 

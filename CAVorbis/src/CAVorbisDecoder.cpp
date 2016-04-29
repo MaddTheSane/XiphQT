@@ -31,6 +31,7 @@
 
 #include <Ogg/ogg.h>
 #include <Vorbis/codec.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 #include "CAVorbisDecoder.h"
 
@@ -49,7 +50,7 @@
         (unsigned int)(x)->mChannelsPerFrame, (unsigned int)(x)->mBitsPerChannel
 
 
-CAVorbisDecoder::CAVorbisDecoder(Boolean inSkipFormatsInitialization /* = false */) :
+CAVorbisDecoder::CAVorbisDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mVorbisFPList(), mConsumedFPList(),
     mFullInPacketsZapped(0)
@@ -241,7 +242,7 @@ void CAVorbisDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
     dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAVorbisDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -423,17 +424,17 @@ void CAVorbisDecoder::InitializeCompressionSettings()
 
     while (ptrheader < cend) {
         aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-        ptrheader += EndianU32_BtoN(aheader->size);
-        if (ptrheader > cend || EndianU32_BtoN(aheader->size) <= 0)
+        ptrheader += CFSwapInt32BigToHost(aheader->size);
+        if (ptrheader > cend || CFSwapInt32BigToHost(aheader->size) <= 0)
             break;
 
-        switch(EndianS32_BtoN(aheader->type)) {
+        switch(CFSwapInt32BigToHost(aheader->type)) {
         case kCookieTypeVorbisHeader:
             header.b_o_s = 1;
             header.e_o_s = 0;
             header.granulepos = 0;
             header.packetno = 0;
-            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header.packet = aheader->data;
             break;
 
@@ -442,7 +443,7 @@ void CAVorbisDecoder::InitializeCompressionSettings()
             header_vc.e_o_s = 0;
             header_vc.granulepos = 0;
             header_vc.packetno = 1;
-            header_vc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header_vc.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header_vc.packet = aheader->data;
             break;
 
@@ -451,7 +452,7 @@ void CAVorbisDecoder::InitializeCompressionSettings()
             header_cb.e_o_s = 0;
             header_cb.granulepos = 0;
             header_cb.packetno = 2;
-            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header_cb.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header_cb.packet = aheader->data;
             break;
 

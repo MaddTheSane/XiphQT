@@ -49,7 +49,7 @@ typedef enum BDCStatus {
 class XCACodec : public ACBaseCodec
 {
  public:
-    XCACodec();
+    XCACodec( AudioComponentInstance inInstance );
     virtual ~XCACodec();
 
     // AudioCodec interface

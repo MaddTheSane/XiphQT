@@ -1,0 +1,23 @@
+#  Components.exp
+#  Xiph Audio Components
+#
+#  Created by C.W. Betts on 4/29/16.
+#  Copyright © 2016 C.W. Betts. All rights reserved.
+
+
+_CAVorbisDecoderEntry
+_CAVorbisDecoderFactory
+_CAOggVorbisDecoderEntry
+_CAOggVorbisDecoderFactory
+_CAVorbisEncoderEntry
+_CAVorbisEncoderFactory
+
+_CASpeexDecoderEntry
+_CASpeexDecoderFactory
+_CAOggSpeexDecoderEntry
+_CAOggSpeexDecoderFactory
+
+_CAFLACDecoderEntry
+_CAFLACDecoderFactory
+_CAOggFLACDecoderEntry
+_CAOggFLACDecoderFactory

@@ -40,8 +40,8 @@
 #include "debug.h"
 
 
-CAOggVorbisDecoder::CAOggVorbisDecoder() :
-    CAVorbisDecoder(true),
+CAOggVorbisDecoder::CAOggVorbisDecoder(AudioComponentInstance inInstance) :
+    CAVorbisDecoder(inInstance, true),
     mFramesBufferedList(),
     mSOBuffer(NULL),
     mSOBufferSize(0), mSOBufferUsed(0),
@@ -373,20 +373,20 @@ void CAOggVorbisDecoder::InitializeCompressionSettings()
             ogg_stream_clear(&mO_st);
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
-        Byte *ptrheader = mCookie + EndianU32_BtoN(atom->size);
+        Byte *ptrheader = mCookie + CFSwapInt32BigToHost(atom->size);
         Byte *cend = mCookie + mCookieSize;
         CookieAtomHeader *aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
 
-        if (EndianS32_BtoN(atom->type) == kCookieTypeOggSerialNo && EndianS32_BtoN(atom->size) <= mCookieSize) {
-            ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
+        if (CFSwapInt32BigToHost(atom->type) == kCookieTypeOggSerialNo && CFSwapInt32BigToHost(atom->size) <= mCookieSize) {
+            ogg_stream_init(&mO_st, CFSwapInt32BigToHost(atom->serialno));
         }
 
         while (ptrheader < cend) {
             aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-            ptrheader += EndianU32_BtoN(aheader->size);
+            ptrheader += CFSwapInt32BigToHost(aheader->size);
 
-            if (EndianS32_BtoN(aheader->type) == kCookieTypeVorbisFirstPageNo && ptrheader <= cend) {
-                mFirstPageNo = EndianU32_BtoN((reinterpret_cast<OggSerialNoAtom*> (aheader))->serialno);
+            if (CFSwapInt32BigToHost(aheader->type) == kCookieTypeVorbisFirstPageNo && ptrheader <= cend) {
+                mFirstPageNo = CFSwapInt32BigToHost((reinterpret_cast<OggSerialNoAtom*> (aheader))->serialno);
                 dbg_printf("[VDO ]   = [%08lx] :: InitializeCompressionSettings(fpn: %u)\n", (size_t) this, (unsigned int)mFirstPageNo);
                 break;
             }

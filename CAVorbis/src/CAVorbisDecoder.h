@@ -51,7 +51,7 @@ class CAVorbisDecoder:
 public XCACodec
 {
  public:
-    CAVorbisDecoder(Boolean inSkipFormatsInitialization = false);
+    CAVorbisDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
     ~CAVorbisDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -61,7 +61,7 @@ public XCACodec
     virtual void        Reset();
 
     virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
-    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
+    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable);
 
     virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
     virtual void        SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);

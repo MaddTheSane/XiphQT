@@ -40,8 +40,8 @@
 #include "debug.h"
 
 
-CAOggFLACDecoder::CAOggFLACDecoder() :
-    CAFLACDecoder(true),
+CAOggFLACDecoder::CAOggFLACDecoder(AudioComponentInstance inInstance) :
+    CAFLACDecoder(inInstance, true),
     mFramesBufferedList(),
     complete_pages(0)
 {
@@ -285,8 +285,8 @@ void CAOggFLACDecoder::InitializeCompressionSettings()
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
 
-        if (EndianS32_BtoN(atom->type) == kCookieTypeOggSerialNo && EndianS32_BtoN(atom->size) <= mCookieSize) {
-            ogg_stream_init(&mO_st, EndianS32_BtoN(atom->serialno));
+        if (CFSwapInt32BigToHost(atom->type) == kCookieTypeOggSerialNo && CFSwapInt32BigToHost(atom->size) <= mCookieSize) {
+            ogg_stream_init(&mO_st, CFSwapInt32BigToHost(atom->serialno));
         }
     }
 

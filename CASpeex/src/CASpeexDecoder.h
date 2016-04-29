@@ -52,7 +52,7 @@ class CASpeexDecoder:
 public XCACodec
 {
  public:
-    CASpeexDecoder(Boolean inSkipFormatsInitialization = false);
+    CASpeexDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
     virtual ~CASpeexDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -62,7 +62,7 @@ public XCACodec
     virtual void        Reset();
 
     virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
-    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
+    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable);
 
     virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
     virtual void        SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);

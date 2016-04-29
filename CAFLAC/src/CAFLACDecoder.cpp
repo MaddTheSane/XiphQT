@@ -44,7 +44,7 @@
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-CAFLACDecoder::CAFLACDecoder(Boolean inSkipFormatsInitialization /* = false */) :
+CAFLACDecoder::CAFLACDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0),
     mFLACsrate(44100), mFLACchannels(2), mFLACbits(16),
@@ -198,7 +198,7 @@ void CAFLACDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
     dbg_printf("<.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAFLACDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf(" >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -401,10 +401,10 @@ void CAFLACDecoder::InitializeCompressionSettings()
 
     while (ptrheader < cend) {
         aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-        ptrheader += EndianU32_BtoN(aheader->size);
+        ptrheader += CFSwapInt32BigToHost(aheader->size);
 
-        if (EndianS32_BtoN(aheader->type) == kCookieTypeFLACStreaminfo && ptrheader <= cend) {
-            UInt32 sib = EndianU32_BtoN(* (UInt32 *) (((Byte *)aheader->data) + 14));
+        if (CFSwapInt32BigToHost(aheader->type) == kCookieTypeFLACStreaminfo && ptrheader <= cend) {
+            UInt32 sib = CFSwapInt32BigToHost(* (UInt32 *) (((Byte *)aheader->data) + 14));
 
             sib >>= 4;
             mFLACbits = (sib & 0x1f) + 1;

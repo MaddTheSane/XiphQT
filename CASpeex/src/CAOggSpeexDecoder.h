@@ -43,7 +43,7 @@ class CAOggSpeexDecoder :
 public CASpeexDecoder
 {
  public:
-    CAOggSpeexDecoder();
+    CAOggSpeexDecoder(AudioComponentInstance inInstance);
     virtual ~CAOggSpeexDecoder();
 
     virtual void            SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);

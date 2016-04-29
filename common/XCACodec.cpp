@@ -34,7 +34,7 @@
 #include "debug.h"
 
 
-XCACodec::XCACodec() :
+XCACodec::XCACodec( AudioComponentInstance inInstance ) : ACBaseCodec(inInstance),
     mBDCBuffer(),
     mBDCStatus(kBDCStatusOK)
 {

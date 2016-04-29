@@ -43,7 +43,7 @@ class CAOggFLACDecoder :
 public CAFLACDecoder
 {
  public:
-    CAOggFLACDecoder();
+    CAOggFLACDecoder(AudioComponentInstance inInstance);
     virtual ~CAOggFLACDecoder();
 
     virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,

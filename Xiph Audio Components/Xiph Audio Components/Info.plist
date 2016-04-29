@@ -28,7 +28,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph Vorbis into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CAVorbisDecoderEntry</string>
+			<string>CAVorbisDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -46,7 +46,7 @@
 			<key>description</key>
 			<string>An AudioCodec that encodes linear PCM data into Xiph Vorbis</string>
 			<key>factoryFunction</key>
-			<string>CAVorbisEncoderEntry</string>
+			<string>CAVorbisEncoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -64,7 +64,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph (Ogg-framed) Vorbis into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CAOggVorbisDecoderEntry</string>
+			<string>CAOggVorbisDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -82,7 +82,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph (Ogg-framed) FLAC into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CAOggFLACDecoderEntry</string>
+			<string>CAOggFLACDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -100,7 +100,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph Speex (Ogg-framed) into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CAOggSpeexDecoderEntry</string>
+			<string>CAOggSpeexDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -118,7 +118,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph Speex into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CASpeexDecoderEntry</string>
+			<string>CASpeexDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
@@ -136,7 +136,7 @@
 			<key>description</key>
 			<string>An AudioCodec that decodes Xiph FLAC into linear PCM data</string>
 			<key>factoryFunction</key>
-			<string>CAFLACDecoderEntry</string>
+			<string>CAFLACDecoderFactory</string>
 			<key>manufacturer</key>
 			<string>Xiph</string>
 			<key>name</key>
