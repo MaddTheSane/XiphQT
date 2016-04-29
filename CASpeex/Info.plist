@@ -26,5 +26,44 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>CoreAudio Speex Decoder Component 0.1.3, Copyright © 2005-2006 Arek Korbik</string>
+	<key>AudioComponents</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Speex (Ogg-framed) into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAOggSpeexDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph (Ogg-framed) Speex</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XoSp</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Speex into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CASpeexDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Speex</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiSp</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+	</array>
 </dict>
 </plist>

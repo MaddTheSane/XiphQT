@@ -35,6 +35,7 @@
 
 #include "config.h"
 #include <Ogg/ogg.h>
+#include <MacTypes.h>
 
 extern Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData,
                            UInt32 inDataByteSize, UInt32 inDataStartOffset);

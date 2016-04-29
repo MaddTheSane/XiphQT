@@ -202,7 +202,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
     ogg_packet opk;
     UInt32 packet_count = 0;
     int oret;
-    AudioStreamPacketDescription speex_packet_desc = {0, mSpeexHeader.frame_size, 0};
+    AudioStreamPacketDescription speex_packet_desc = {0, static_cast<UInt32>(mSpeexHeader.frame_size), 0};
     UInt32 page_packets = ogg_page_packets(&op);
     SInt32 packet_length_adjust = 0;
 

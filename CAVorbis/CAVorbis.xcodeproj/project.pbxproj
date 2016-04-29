@@ -12,7 +12,6 @@
 		556C3F331B79480300D2CDDA /* Ogg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 556C3EF21B793FCE00D2CDDA /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		556C3F341B79480300D2CDDA /* Vorbis.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 556C3F1C1B79405000D2CDDA /* Vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		734252F60AECFAB8003F78A8 /* CAVorbisEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 734252F30AECFAB8003F78A8 /* CAVorbisEncoder.cpp */; };
-		734252F80AECFAB8003F78A8 /* CAVorbisEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 734252F50AECFAB8003F78A8 /* CAVorbisEncoderPublic.r */; };
 		737C589309125B5900700B79 /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589209125B5900700B79 /* vorbis_entrypoints.cpp */; };
 		737C58A109125C7E00700B79 /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589F09125C7E00700B79 /* wrap_ogg.cpp */; };
 		737C59960912617B00700B79 /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C59940912617B00700B79 /* CAOggVorbisDecoder.cpp */; };
@@ -27,7 +26,6 @@
 		737CA0D108F8352A00DAC36C /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 737CA0D008F8352A00DAC36C /* AudioCodecComponentGlue.c */; };
 		737CA1B008F8376400DAC36C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737CA1AD08F8376400DAC36C /* Carbon.framework */; };
 		737CA1E008F83B2F00DAC36C /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737CA1AC08F8376400DAC36C /* AudioUnit.framework */; };
-		737CA4D908F95A2C00DAC36C /* CAVorbisDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 737CA4B708F9588900DAC36C /* CAVorbisDecoderPublic.r */; };
 		73C298B30AEFAA7100EF9C25 /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737C589B09125C2700700B79 /* XCACodec.cpp */; };
 		8D01CCCA0486CAD60068D4B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
@@ -475,8 +473,6 @@
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				737CA4D908F95A2C00DAC36C /* CAVorbisDecoderPublic.r in Rez */,
-				734252F80AECFAB8003F78A8 /* CAVorbisEncoderPublic.r in Rez */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

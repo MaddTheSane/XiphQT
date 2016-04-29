@@ -102,7 +102,7 @@
 			#define DebugMessageN8(msg, N1, N2, N3, N4, N5, N6, N7, N8)		DebugPrintfRtn(DebugPrintfFile, "%.4f: "msg DebugPrintfLineEnding, ((Float64)(CAHostTimeBase::GetCurrentTimeInNanos()) / 1000000.0), N1, N2, N3, N4, N5, N6, N7, N8) FlushRtn
 			#define DebugMessageN9(msg, N1, N2, N3, N4, N5, N6, N7, N8, N9)	DebugPrintfRtn(DebugPrintfFile, "%.4f: "msg DebugPrintfLineEnding, ((Float64)(CAHostTimeBase::GetCurrentTimeInNanos()) / 1000000.0), N1, N2, N3, N4, N5, N6, N7, N8, N9) FlushRtn
 		#else
-			#define	DebugMessage(msg)										DebugPrintfRtn(DebugPrintfFile, "%s"DebugPrintfLineEnding, msg) FlushRtn
+			#define	DebugMessage(msg)										DebugPrintfRtn(DebugPrintfFile, "%s" DebugPrintfLineEnding, msg) FlushRtn
 			#define DebugMessageN1(msg, N1)									DebugPrintfRtn(DebugPrintfFile, msg DebugPrintfLineEnding, N1) FlushRtn
 			#define DebugMessageN2(msg, N1, N2)								DebugPrintfRtn(DebugPrintfFile, msg DebugPrintfLineEnding, N1, N2) FlushRtn
 			#define DebugMessageN3(msg, N1, N2, N3)							DebugPrintfRtn(DebugPrintfFile, msg DebugPrintfLineEnding, N1, N2, N3) FlushRtn

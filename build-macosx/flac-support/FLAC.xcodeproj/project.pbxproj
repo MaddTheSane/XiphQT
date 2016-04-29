@@ -687,12 +687,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FLAC_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
 					FLAC__NO_ASM,
-					FLAC__SYS_DARWIN,
-					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.3\\\"";
@@ -702,7 +700,6 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Library/Frameworks;
-				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
 				MODULEMAP_FILE = FLAC.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flac;
@@ -725,12 +722,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FLAC_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
 					FLAC__NO_ASM,
-					FLAC__SYS_DARWIN,
-					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.3\\\"";
@@ -740,7 +735,6 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Library/Frameworks;
-				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
 				MODULEMAP_FILE = FLAC.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flac;
@@ -757,9 +751,27 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					_DARWIN_USE_64_BIT_INODE,
-					FLAC__SSE_OS,
 					FLAC__SYS_DARWIN,
 					HAVE_SYS_PARAM_H,
+					FLAC__ALIGN_MALLOC_DATA,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=i386]" = (
+					FLAC__CPU_IA32,
+					FLAC__SSE_OS,
+					FLAC__AVX_SUPPORTED,
+					FLAC__HAS_X86INTRIN,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=ppc]" = (
+					FLAC__CPU_PPC,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					FLAC__CPU_X86_64,
+					FLAC__SSE_OS,
+					FLAC__AVX_SUPPORTED,
+					FLAC__HAS_X86INTRIN,
+					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -777,14 +789,32 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					_DARWIN_USE_64_BIT_INODE,
-					FLAC__SSE_OS,
 					FLAC__SYS_DARWIN,
 					HAVE_SYS_PARAM_H,
+					FLAC__ALIGN_MALLOC_DATA,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=i386]" = (
+					FLAC__CPU_IA32,
+					FLAC__SSE_OS,
+					FLAC__AVX_SUPPORTED,
+					FLAC__HAS_X86INTRIN,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=ppc]" = (
+					FLAC__CPU_PPC,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					FLAC__CPU_X86_64,
+					FLAC__SSE_OS,
+					FLAC__AVX_SUPPORTED,
+					FLAC__HAS_X86INTRIN,
+					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = (
-					"$(OTHER_CFLAGS)",
+					"$(inherited)",
 					"-fomit-frame-pointer",
 					"-funroll-loops",
 					"-finline-functions",
@@ -930,18 +960,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FLAC++_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(inherited)",
 					HAVE_INTTYPES_H,
 					FLAC__NO_ASM,
-					FLAC__SYS_DARWIN,
-					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.2\\\"";
 				INFOPLIST_FILE = "FLAC++-Info.plist";
 				INSTALL_PATH = /Library/Frameworks;
-				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
 				MODULEMAP_FILE = "FLAC++.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
@@ -949,7 +976,6 @@
 				PRODUCT_NAME = "FLAC++";
 				REEXPORTED_FRAMEWORK_NAMES = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -967,18 +993,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FLAC++_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(inherited)",
 					HAVE_INTTYPES_H,
 					FLAC__NO_ASM,
-					FLAC__SYS_DARWIN,
-					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.2\\\"";
 				INFOPLIST_FILE = "FLAC++-Info.plist";
 				INSTALL_PATH = /Library/Frameworks;
-				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
 				MODULEMAP_FILE = "FLAC++.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
@@ -986,7 +1009,6 @@
 				PRODUCT_NAME = "FLAC++";
 				REEXPORTED_FRAMEWORK_NAMES = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};

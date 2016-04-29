@@ -26,5 +26,62 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>CoreAudio Vorbis Decoder Component 0.1.7, Copyright © 2005-2006 Arek Korbik</string>
+	<key>AudioComponents</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph (Ogg-framed) Vorbis into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAOggVorbisDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph (Ogg-framed) Vorbis</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XoVs</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>265</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Vorbis into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAVorbisDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Vorbis Decoder</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiVs</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>265</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that encodes linear PCM data into Xiph Vorbis</string>
+			<key>factoryFunction</key>
+			<string>CAVorbisEncoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Vorbis Decoder</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiVs</string>
+			<key>type</key>
+			<string>aenc</string>
+			<key>version</key>
+			<integer>257</integer>
+		</dict>
+	</array>
 </dict>
 </plist>

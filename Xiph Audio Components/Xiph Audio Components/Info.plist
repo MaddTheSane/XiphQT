@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>thng</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2016 C.W. Betts. All rights reserved.</string>
+	<key>AudioComponents</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Vorbis into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAVorbisDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Vorbis Decoder</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiVs</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>265</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that encodes linear PCM data into Xiph Vorbis</string>
+			<key>factoryFunction</key>
+			<string>CAVorbisEncoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Vorbis Decoder</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiVs</string>
+			<key>type</key>
+			<string>aenc</string>
+			<key>version</key>
+			<integer>257</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph (Ogg-framed) Vorbis into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAOggVorbisDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph (Ogg-framed) Vorbis</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XoVs</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>265</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph (Ogg-framed) FLAC into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAOggFLACDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph (Ogg-framed) FLAC</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XoFL</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Speex (Ogg-framed) into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAOggSpeexDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph (Ogg-framed) Speex</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XoSp</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph Speex into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CASpeexDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph Speex</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiSp</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>An AudioCodec that decodes Xiph FLAC into linear PCM data</string>
+			<key>factoryFunction</key>
+			<string>CAFLACDecoderEntry</string>
+			<key>manufacturer</key>
+			<string>Xiph</string>
+			<key>name</key>
+			<string>Xiph FLAC</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>XiFL</string>
+			<key>type</key>
+			<string>adec</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
+	</array>
+</dict>
+</plist>

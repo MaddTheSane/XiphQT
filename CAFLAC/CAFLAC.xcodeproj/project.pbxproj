@@ -14,7 +14,6 @@
 		5589FB0B1B8B78D50011C7EE /* FLAC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5589FAFE1B8B78760011C7EE /* FLAC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5589FB0C1B8B78D50011C7EE /* FLAC++.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5589FB001B8B78760011C7EE /* FLAC++.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		732019C008FEDE8B002000DA /* CAFLACDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019BA08FEDE8B002000DA /* CAFLACDecoder.cpp */; };
-		732019CF08FEDF03002000DA /* CAFLACDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 732019C208FEDECB002000DA /* CAFLACDecoderPublic.r */; };
 		732019E208FEDF99002000DA /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019DF08FEDF99002000DA /* ringbuffer.cpp */; };
 		732019FF08FEDFAD002000DA /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019E708FEDFAD002000DA /* ACBaseCodec.cpp */; };
 		73201A0008FEDFAD002000DA /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019E908FEDFAD002000DA /* ACCodec.cpp */; };
@@ -478,7 +477,6 @@
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				732019CF08FEDF03002000DA /* CAFLACDecoderPublic.r in Rez */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,9 @@
       location = "group:DebugConfigs.xcconfig">
    </FileRef>
    <FileRef
+      location = "group:Xiph Audio Components/Xiph Audio Components.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:OggExport/OggExport.xcodeproj">
    </FileRef>
    <FileRef

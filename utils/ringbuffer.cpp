@@ -31,6 +31,7 @@
 
 #include "config.h"
 #include "ringbuffer.h"
+#include <cstring>
 
 RingBuffer::RingBuffer() :
 mBuffer(NULL),

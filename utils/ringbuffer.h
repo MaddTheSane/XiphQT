@@ -31,6 +31,7 @@
 #if !defined(__ringbuffer_h__)
 #define __ringbuffer_h__
 
+#include <MacTypes.h>
 #include "config.h"
 
 
