@@ -39,6 +39,8 @@
 #include "fccs.h"
 #include "data_types.h"
 
+#include <cmath>
+
 //#define NDEBUG
 #include "debug.h"
 
@@ -107,12 +109,12 @@ CAOpusEncoder::~CAOpusEncoder()
         delete[] mCookie;
 
     if (mCompressionInitialized) {
-        vorbis_block_clear(&mV_vb);
-        vorbis_dsp_clear(&mV_vd);
+        //vorbis_block_clear(&mV_vb);
+        //vorbis_dsp_clear(&mV_vd);
 
-        vorbis_comment_clear(&mV_vc);
+        //vorbis_comment_clear(&mV_vc);
 
-        vorbis_info_clear(&mV_vi);
+        //vorbis_info_clear(&mV_vi);
     }
 
     if (mCfgDict != NULL)
@@ -316,9 +318,9 @@ void CAOpusEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
         if(ioPropertyDataSize == sizeof(UInt32))
         {
             if (mIsInitialized) {
-                long long_blocksize = (reinterpret_cast<long *>(mV_vi.codec_setup))[1];
-                *reinterpret_cast<UInt32*>(outPropertyData) = long_blocksize;
-                //*reinterpret_cast<UInt32*>(outPropertyData) = 0;
+                //long long_blocksize = (reinterpret_cast<long *>(mV_vi.codec_setup))[1];
+                //*reinterpret_cast<UInt32*>(outPropertyData) = long_blocksize;
+                *reinterpret_cast<UInt32*>(outPropertyData) = 0;
             } else {
                 *reinterpret_cast<UInt32*>(outPropertyData) = 0;
             }
@@ -644,6 +646,7 @@ void CAOpusEncoder::FixFormats()
 
 void CAOpusEncoder::InitializeCompressionSettings()
 {
+	/*
     int ret = 0;
 
     if (mCompressionInitialized) {
@@ -730,6 +733,7 @@ void CAOpusEncoder::InitializeCompressionSettings()
     dbg_printf("[  VE] < > [%08lx] :: InitializeCompressionSettings() - bru: %ld, brn: %ld, brl: %ld, brw: %ld\n",
                (size_t) this, mV_vi.bitrate_upper, mV_vi.bitrate_nominal, mV_vi.bitrate_lower, mV_vi.bitrate_window);
     mCompressionInitialized = true;
+	 */
 }
 
 #pragma mark BDC handling
@@ -776,8 +780,9 @@ void CAOpusEncoder::InPacket(const void* inInputData, const AudioStreamPacketDes
 UInt32 CAOpusEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,
                                              AudioStreamPacketDescription* outPacketDescription)
 {
-    dbg_printf("[  VE]  >> [%08lx] CAOpusEncoder :: ProduceOutputPackets(%u [%u] %d)\n", (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, outPacketDescription != NULL);
+    dbg_printf("[  VE]  >> [%p] CAOpusEncoder :: ProduceOutputPackets(%u [%u] %d)\n", this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, outPacketDescription != NULL);
 
+	/*
     UInt32 theAnswer = kAudioCodecProduceOutputPacketSuccess;
 
     if (!mIsInitialized)
@@ -898,6 +903,8 @@ UInt32 CAOpusEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutput
     dbg_printf("[  VE] <.. [%08lx] CAOpusEncoder :: ProduceOutputPackets(%u [%u]) = %u\n",
                (size_t) this, (unsigned int)ioNumberPackets, (unsigned int)ioOutputDataByteSize, (unsigned int)theAnswer);
     return theAnswer;
+	 */
+	return 0;
 }
 
 /* ======================== Settings ======================= */
@@ -906,7 +913,7 @@ Boolean CAOpusEncoder::BuildSettings(void *outSettingsDict)
     Boolean ret = false;
     SInt32 n, ln;
     CFNumberRef cf_n;
-    CFMutableDictionaryRef sd;
+    CFMutableDictionaryRef sd = NULL;
     CFMutableDictionaryRef eltd;
     CFMutableArrayRef params;
 
@@ -972,7 +979,7 @@ Boolean CAOpusEncoder::BuildSettings(void *outSettingsDict)
         CFDictionaryAddValue(eltd, CFSTR(kAudioSettings_Hint), cf_n);
         CFRelease(cf_n);
 
-        n = lroundf(mCfgQuality * 10.0) + 1;
+        n = (int)lroundf(mCfgQuality * 10.0) + 1;
         if (n < 0)
             n = 0;
         else if (n > 11)

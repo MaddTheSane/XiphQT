@@ -32,6 +32,7 @@
 #define __CAOggVorbisDecoder_h__
 
 #include <Ogg/ogg.h>
+#include <OpusFile/opusfile.h>
 #include <vector>
 
 #include "CAOpusDecoder.h"

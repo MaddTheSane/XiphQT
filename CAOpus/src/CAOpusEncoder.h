@@ -34,7 +34,7 @@
 
 #include "XCACodec.h"
 
-#include <OpusFile/opusfile.h>
+#include <Opus/opus.h>
 
 #include <vector>
 

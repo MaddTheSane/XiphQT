@@ -33,24 +33,24 @@
 
 
 
-#define RES_ID			-17118
+#define RES_ID			-17148
 #define COMP_TYPE		'aenc'
-#define COMP_SUBTYPE		kAudioFormatXiphVorbis
+#define COMP_SUBTYPE	kAudioFormatXiphOpus
 #define COMP_MANUF		'Xiph'
 #define VERSION			kCAVorbis_aenc_Version
-#define NAME			"Xiph Vorbis Encoder"
-#define DESCRIPTION		"An AudioCodec that encodes linear PCM data into Xiph Vorbis"
-#define ENTRY_POINT		"CAVorbisEncoderEntry"
+#define NAME			"Xiph Opus Encoder"
+#define DESCRIPTION		"An AudioCodec that encodes linear PCM data into Xiph Opus"
+#define ENTRY_POINT		"CAOpusEncoderEntry"
 
-#define kPrimaryResourceID               -17118
+#define kPrimaryResourceID               -17148
 #define kComponentType                   'aenc'
-#define kComponentSubtype                kAudioFormatXiphVorbis
+#define kComponentSubtype                kAudioFormatXiphOpus
 #define kComponentManufacturer           'Xiph'
 #define kComponentFlags                  0
 #define kComponentVersion                kCAVorbis_aenc_Version
-#define kComponentName                   "Xiph Vorbis"
-#define kComponentInfo                   "An AudioCodec that encodes linear PCM data into Xiph Vorbis"
-#define kComponentEntryPoint             "CAVorbisEncoderEntry"
+#define kComponentName                   "Xiph Opus"
+#define kComponentInfo                   "An AudioCodec that encodes linear PCM data into Xiph Opus"
+#define kComponentEntryPoint             "CAOpusEncoderEntry"
 #define kComponentPublicResourceMapType	 0
 #define kComponentIsThreadSafe           1
 

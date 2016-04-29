@@ -33,24 +33,24 @@
 
 
 
-#define RES_ID			-17110
+#define RES_ID			-17140
 #define COMP_TYPE		'adec'
-#define COMP_SUBTYPE	kAudioFormatXiphOggFramedVorbis
+#define COMP_SUBTYPE	kAudioFormatXiphOggFramedOpus
 #define COMP_MANUF		'Xiph'
 #define VERSION			kCAVorbis_adec_Version
-#define NAME			"Xiph Vorbis (Ogg-framed) Decoder"
-#define DESCRIPTION		"An AudioCodec that decodes Xiph Vorbis (Ogg-framed) into linear PCM data"
-#define ENTRY_POINT		"CAOggVorbisDecoderEntry"
+#define NAME			"Xiph Opus (Ogg-framed) Decoder"
+#define DESCRIPTION		"An AudioCodec that decodes Xiph Opus (Ogg-framed) into linear PCM data"
+#define ENTRY_POINT		"CAOggOpusDecoderEntry"
 
-#define kPrimaryResourceID               -17110
+#define kPrimaryResourceID               -17140
 #define kComponentType                   'adec'
-#define kComponentSubtype                kAudioFormatXiphOggFramedVorbis
+#define kComponentSubtype                kAudioFormatXiphOggFramedOpus
 #define kComponentManufacturer           'Xiph'
 #define	kComponentFlags                  0
 #define kComponentVersion                kCAVorbis_adec_Version
-#define kComponentName                   "Xiph (Ogg-framed) Vorbis"
-#define kComponentInfo                   "An AudioCodec that decodes Xiph (Ogg-framed) Vorbis into linear PCM data"
-#define kComponentEntryPoint             "CAOggVorbisDecoderEntry"
+#define kComponentName                   "Xiph (Ogg-framed) Opus"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph (Ogg-framed) Opus into linear PCM data"
+#define kComponentEntryPoint             "CAOggOpusDecoderEntry"
 #define	kComponentPublicResourceMapType	 0
 #define kComponentIsThreadSafe           1
 
@@ -59,24 +59,24 @@
 #include "XCAResources.r"
 
 
-#define RES_ID			-17114
+#define RES_ID			-17144
 #define COMP_TYPE		'adec'
-#define COMP_SUBTYPE	kAudioFormatXiphVorbis
+#define COMP_SUBTYPE	kAudioFormatXiphOpus
 #define COMP_MANUF		'Xiph'
 #define VERSION			kCAVorbis_adec_Version
-#define NAME			"Xiph Vorbis Decoder"
-#define DESCRIPTION		"An AudioCodec that decodes Xiph Vorbis into linear PCM data"
-#define ENTRY_POINT		"CAVorbisDecoderEntry"
+#define NAME			"Xiph Opus Decoder"
+#define DESCRIPTION		"An AudioCodec that decodes Xiph Opus into linear PCM data"
+#define ENTRY_POINT		"CAOpusDecoderEntry"
 
-#define kPrimaryResourceID               -17114
+#define kPrimaryResourceID               -17144
 #define kComponentType                   'adec'
-#define kComponentSubtype                kAudioFormatXiphVorbis
+#define kComponentSubtype                kAudioFormatXiphOpus
 #define kComponentManufacturer           'Xiph'
 #define	kComponentFlags                  0
 #define kComponentVersion                kCAVorbis_adec_Version
-#define kComponentName                   "Xiph Vorbis"
-#define kComponentInfo                   "An AudioCodec that decodes Xiph Vorbis into linear PCM data"
-#define kComponentEntryPoint             "CAVorbisDecoderEntry"
+#define kComponentName                   "Xiph Opus"
+#define kComponentInfo                   "An AudioCodec that decodes Xiph Opus into linear PCM data"
+#define kComponentEntryPoint             "CAOpusDecoderEntry"
 #define	kComponentPublicResourceMapType	 0
 #define kComponentIsThreadSafe           1
 

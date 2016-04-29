@@ -1,7 +1,7 @@
 /*
- *  CAVorbisDecoder.cpp
+ *  CAOpusDecoder.cpp
  *
- *    CAVorbisDecoder class implementation; the main part of the Vorbis
+ *    CAOpusDecoder class implementation; the main part of the Vorbis
  *    codec functionality.
  *
  *
@@ -24,14 +24,13 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAVorbisDecoder.cpp 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id: CAOpusDecoder.cpp 12754 2007-03-14 03:51:23Z arek $
  *
  */
 
 
 #include <Ogg/ogg.h>
 #include <Opus/opus.h>
-#include <Vorbis/codec.h>
 
 #include "CAOpusDecoder.h"
 
@@ -58,14 +57,14 @@ CAOpusDecoder::CAOpusDecoder(Boolean inSkipFormatsInitialization /* = false */) 
     if (inSkipFormatsInitialization)
         return;
 
-    CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphVorbis,
+    CAStreamBasicDescription theInputFormat(kAudioStreamAnyRate, kAudioFormatXiphOpus,
                                             kVorbisBytesPerPacket, kVorbisFramesPerPacket,
                                             kVorbisBytesPerFrame, kVorbisChannelsPerFrame,
                                             kVorbisBitsPerChannel, kVorbisFormatFlags);
     AddInputFormat(theInputFormat);
 
-    mInputFormat.mSampleRate = 44100.0;
-    mInputFormat.mFormatID = kAudioFormatXiphVorbis;
+    mInputFormat.mSampleRate = 48000.0;
+    mInputFormat.mFormatID = kAudioFormatXiphOpus;
     mInputFormat.mFormatFlags = kVorbisFormatFlags;
     mInputFormat.mBytesPerPacket = kVorbisBytesPerPacket;
     mInputFormat.mFramesPerPacket = kVorbisFramesPerPacket;
@@ -97,10 +96,11 @@ CAOpusDecoder::~CAOpusDecoder()
         delete[] mCookie;
 
     if (mCompressionInitialized) {
-        vorbis_block_clear(&mV_vb);
-        vorbis_dsp_clear(&mV_vd);
+		opus_decoder_destroy(oDecoder);
+    //    vorbis_block_clear(&mV_vb);
+    //    vorbis_dsp_clear(&mV_vd);
 
-        vorbis_info_clear(&mV_vi);
+    //    vorbis_info_clear(&mV_vi);
     }
 }
 
@@ -229,7 +229,7 @@ void CAOpusDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
             if (ioPropertyDataSize != sizeof(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 
             CABundleLocker lock;
-            CFStringRef name = CFCopyLocalizedStringFromTableInBundle(CFSTR("Xiph Vorbis decoder"), CFSTR("CodecNames"), GetCodecBundle(), CFSTR(""));
+            CFStringRef name = CFCopyLocalizedStringFromTableInBundle(CFSTR("Xiph Opus decoder"), CFSTR("CodecNames"), GetCodecBundle(), CFSTR(""));
             *(CFStringRef*)outPropertyData = name;
             break;
         }
@@ -300,8 +300,8 @@ void CAOpusDecoder::SetCurrentInputFormat(const AudioStreamBasicDescription& inI
 {
     if (!mIsInitialized) {
         //	check to make sure the input format is legal
-        if (inInputFormat.mFormatID != kAudioFormatXiphVorbis) {
-            dbg_printf("CAVorbisDecoder::SetFormats: only support Xiph Vorbis for input\n");
+        if (inInputFormat.mFormatID != kAudioFormatXiphOpus) {
+            dbg_printf("CAOpusDecoder::SetFormats: only support Xiph Opus for input\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
@@ -322,7 +322,7 @@ void CAOpusDecoder::SetCurrentOutputFormat(const AudioStreamBasicDescription& in
               ((inOutputFormat.mFormatFlags == (kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked)) &&
                (inOutputFormat.mBitsPerChannel == 16))))
         {
-            dbg_printf("CAVorbisDecoder::SetFormats: only supports either 16 bit native endian signed integer or 32 bit native endian Core Audio floats for output\n");
+            dbg_printf("CAOpusDecoder::SetFormats: only supports either 16 bit native endian signed integer or 32 bit native endian Core Audio floats for output\n");
             CODEC_THROW(kAudioCodecUnsupportedFormatError);
         }
 
@@ -383,9 +383,9 @@ void CAOpusDecoder::SetCookie(const void* inMagicCookieData, UInt32 inMagicCooki
 
 void CAOpusDecoder::FixFormats()
 {
-    dbg_printf("[VD  ]  >> [%08lx] :: FixFormats()\n", (size_t) this);
-    mInputFormat.mSampleRate = mV_vi.rate;
-    mInputFormat.mChannelsPerFrame = mV_vi.channels;
+    dbg_printf("[VD  ]  >> [%p] :: FixFormats()\n", this);
+    //mInputFormat.mSampleRate = mV_vi.rate;
+    //mInputFormat.mChannelsPerFrame = mV_vi.channels;
     mInputFormat.mBitsPerChannel = 0;
     mInputFormat.mBytesPerPacket = 0;
     mInputFormat.mFramesPerPacket = 0;
@@ -408,10 +408,11 @@ void CAOpusDecoder::InitializeCompressionSettings()
         return;
 
     if (mCompressionInitialized) {
-        vorbis_block_clear(&mV_vb);
-        vorbis_dsp_clear(&mV_vd);
+		opus_decoder_destroy(oDecoder);
+        //vorbis_block_clear(&mV_vb);
+        //vorbis_dsp_clear(&mV_vd);
 
-        vorbis_info_clear(&mV_vi);
+        //vorbis_info_clear(&mV_vi);
     }
 
     mCompressionInitialized = false;
@@ -464,25 +465,26 @@ void CAOpusDecoder::InitializeCompressionSettings()
     if (header.bytes == 0 || header_vc.bytes == 0 || header_cb.bytes == 0)
         return;
 
-    vorbis_comment vc;
+	oDecoder = opus_decoder_create(48000, 2, NULL);
+    //vorbis_comment vc;
 
-    vorbis_info_init(&mV_vi);
-    vorbis_comment_init(&vc);
+    //vorbis_info_init(&mV_vi);
+    //vorbis_comment_init(&vc);
 
-    if (vorbis_synthesis_headerin(&mV_vi, &vc, &header) < 0) {
-        vorbis_comment_clear(&vc);
-        vorbis_info_clear(&mV_vi);
+    //if (vorbis_synthesis_headerin(&mV_vi, &vc, &header) < 0) {
+    //    vorbis_comment_clear(&vc);
+    //    vorbis_info_clear(&mV_vi);
+//
+    //    return;
+    //}
 
-        return;
-    }
+    //vorbis_synthesis_headerin(&mV_vi, &vc, &header_vc);
+    //vorbis_synthesis_headerin(&mV_vi, &vc, &header_cb);
 
-    vorbis_synthesis_headerin(&mV_vi, &vc, &header_vc);
-    vorbis_synthesis_headerin(&mV_vi, &vc, &header_cb);
+    //vorbis_synthesis_init(&mV_vd, &mV_vi);
+    //vorbis_block_init(&mV_vd, &mV_vb);
 
-    vorbis_synthesis_init(&mV_vd, &mV_vi);
-    vorbis_block_init(&mV_vd, &mV_vb);
-
-    vorbis_comment_clear(&vc);
+    //vorbis_comment_clear(&vc);
 
     mCompressionInitialized = true;
 }
@@ -509,7 +511,7 @@ void CAOpusDecoder::BDCReset()
     mConsumedFPList.clear();
     mFullInPacketsZapped = 0;
 
-    vorbis_synthesis_restart(&mV_vd);
+    //vorbis_synthesis_restart(&mV_vd);
 
     //vorbis_block_clear(&globals->vb);
     //vorbis_block_init(&globals->vd, &globals->vb);
@@ -539,7 +541,8 @@ void CAOpusDecoder::InPacket(const void* inInputData, const AudioStreamPacketDes
 UInt32 CAOpusDecoder::FramesReady() const
 {
     //return mNumFrames; // TODO: definitely probably not right!!
-    return vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), NULL);
+    //return vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), NULL);
+	return 0;
 }
 
 Boolean CAOpusDecoder::GenerateFrames()
@@ -547,6 +550,7 @@ Boolean CAOpusDecoder::GenerateFrames()
     Boolean ret = true;
 
     mBDCStatus = kBDCStatusOK;
+	/*
     while (vorbis_synthesis_pcmout(&mV_vd, NULL) == 0 && !mVorbisFPList.empty()) {
         ogg_packet op;
         int vErr;
@@ -576,7 +580,7 @@ Boolean CAOpusDecoder::GenerateFrames()
 
         if (ret != true)
             break;
-    }
+    }*/
 
     return ret;
 }
@@ -584,6 +588,7 @@ Boolean CAOpusDecoder::GenerateFrames()
 void CAOpusDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UInt32 inFramesOffset,
                                    AudioStreamPacketDescription* /* outPacketDescription */) const
 {
+	/*
     float **pcm;
     vorbis_synthesis_pcmout(const_cast<vorbis_dsp_state*> (&mV_vd), &pcm);  // ignoring the result, but should be (!!) at least inNumberFrames
 
@@ -612,12 +617,12 @@ void CAOpusDecoder::OutputFrames(void* outOutputData, UInt32 inNumberFrames, UIn
                 theOutputData += mV_vi.channels;
             }
         }
-    }
+    }*/
 }
 
 void CAOpusDecoder::Zap(UInt32 inFrames)
 {
-    vorbis_synthesis_read(&mV_vd, inFrames);
+    //vorbis_synthesis_read(&mV_vd, inFrames);
 
     mFullInPacketsZapped = 0;
     UInt32 frames = 0;

@@ -41,6 +41,9 @@ enum {
     kAudioFormatXiphVorbis                  = 'XiVs',
     kAudioFormatXiphOggFramedVorbis         = 'XoVs',
 
+    kAudioFormatXiphOpus                    = 'XiVo',
+    kAudioFormatXiphOggFramedOpus           = 'XoVo',
+    
     kAudioFormatXiphSpeex                   = 'XiSp',
     kAudioFormatXiphOggFramedSpeex          = 'XoSp',
 

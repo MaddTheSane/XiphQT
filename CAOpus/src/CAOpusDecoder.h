@@ -34,7 +34,7 @@
 
 #include "XCACodec.h"
 
-#include <OpusFile/opusfile.h>
+#include <Opus/opus.h>
 
 #include <vector>
 
@@ -97,20 +97,21 @@ public XCACodec
 
     Boolean mCompressionInitialized;
 
-    //vorbis_info mV_vi;
+	OpusDecoder *oDecoder;
+	//vorbis_info mV_vi;
     //vorbis_dsp_state mV_vd;
     //vorbis_block mV_vb;
 
-    struct VorbisFramePacket {
+    struct OpusFramePacket {
         UInt32 frames;
         UInt32 bytes;
         UInt32 left;
 
-        VorbisFramePacket() : frames(0), bytes(0), left(0) {};
-        VorbisFramePacket(UInt32 inFrames, UInt32 inBytes) : frames(inFrames), bytes(inBytes), left(inBytes) {};
+        OpusFramePacket() : frames(0), bytes(0), left(0) {};
+        OpusFramePacket(UInt32 inFrames, UInt32 inBytes) : frames(inFrames), bytes(inBytes), left(inBytes) {};
     };
 
-    typedef std::vector<VorbisFramePacket>	VorbisFramePacketList;
+    typedef std::vector<OpusFramePacket>	VorbisFramePacketList;
     VorbisFramePacketList mVorbisFPList;
     VorbisFramePacketList mConsumedFPList;
 

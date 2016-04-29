@@ -947,6 +947,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
 				PRODUCT_MODULE_NAME = FLACxx;
 				PRODUCT_NAME = "FLAC++";
+				REEXPORTED_FRAMEWORK_NAMES = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = YES;
 			};
@@ -983,6 +984,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.xiph.flacxx;
 				PRODUCT_MODULE_NAME = FLACxx;
 				PRODUCT_NAME = "FLAC++";
+				REEXPORTED_FRAMEWORK_NAMES = FLAC;
 				USER_HEADER_SEARCH_PATHS = "../../external-libs/flac/include ../../external-libs/flac/src/libFLAC/include";
 				ZERO_LINK = NO;
 			};

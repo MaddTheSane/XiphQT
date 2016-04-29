@@ -22,7 +22,7 @@
 		5530E52F1CD3340600071A6D /* CAOggOpusDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5261CD3340600071A6D /* CAOggOpusDecoder.cpp */; };
 		5530E5311CD3340600071A6D /* CAOpusDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5291CD3340600071A6D /* CAOpusDecoder.cpp */; };
 		5530E5321CD3340600071A6D /* CAOpusEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */; };
-		5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */; };
+		5530E5331CD3340600071A6D /* opus_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52D1CD3340600071A6D /* opus_entrypoints.cpp */; };
 		5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5341CD3354400071A6D /* XCACodec.cpp */; };
 		5530E53C1CD3359200071A6D /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5381CD3359200071A6D /* ringbuffer.cpp */; };
 		5530E53D1CD3359200071A6D /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E53A1CD3359200071A6D /* wrap_ogg.cpp */; };
@@ -40,6 +40,7 @@
 		5530E5701CD33B9C00071A6D /* OpusFile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5481CD33A4200071A6D /* OpusFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5530E5AF1CD344D800071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
 		5530E5B01CD344D800071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
+		5530E5FA1CD3D8A000071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,7 +151,7 @@
 		5530E4FF1CD32C5400071A6D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
 		5530E5001CD32C5400071A6D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
 		5530E5011CD32D9E00071A6D /* Opus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Opus.xcodeproj; path = "../external-libs/opus/macosx/Opus.xcodeproj"; sourceTree = "<group>"; };
-		5530E50B1CD32DEE00071A6D /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = "<group>"; };
+		5530E50B1CD32DEE00071A6D /* XCAResources.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = XCAResources.r; path = ../resources/XCAResources.r; sourceTree = "<group>"; };
 		5530E50C1CD32DEE00071A6D /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../resources/icon.icns; sourceTree = "<group>"; };
 		5530E50D1CD32DEE00071A6D /* icon.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = icon.r; path = ../resources/icon.r; sourceTree = "<group>"; };
 		5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = CAOpusDecoderPublic.r; sourceTree = "<group>"; };
@@ -163,7 +164,7 @@
 		5530E52A1CD3340600071A6D /* CAOpusDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOpusDecoder.h; sourceTree = "<group>"; };
 		5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAOpusEncoder.cpp; sourceTree = "<group>"; };
 		5530E52C1CD3340600071A6D /* CAOpusEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAOpusEncoder.h; sourceTree = "<group>"; };
-		5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vorbis_entrypoints.cpp; sourceTree = "<group>"; };
+		5530E52D1CD3340600071A6D /* opus_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = opus_entrypoints.cpp; sourceTree = "<group>"; };
 		5530E52E1CD3340600071A6D /* vorbis_versions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vorbis_versions.h; sourceTree = "<group>"; };
 		5530E5341CD3354400071A6D /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = "<group>"; };
 		5530E5351CD3354400071A6D /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = "<group>"; };
@@ -194,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5530E5FA1CD3D8A000071A6D /* Ogg.framework in Frameworks */,
 				5530E50A1CD32DB400071A6D /* Opus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,7 +320,7 @@
 				5530E52A1CD3340600071A6D /* CAOpusDecoder.h */,
 				5530E52B1CD3340600071A6D /* CAOpusEncoder.cpp */,
 				5530E52C1CD3340600071A6D /* CAOpusEncoder.h */,
-				5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */,
+				5530E52D1CD3340600071A6D /* opus_entrypoints.cpp */,
 				5530E52E1CD3340600071A6D /* vorbis_versions.h */,
 			);
 			name = Source;
@@ -427,6 +429,7 @@
 				5530E4BF1CD3268500071A6D /* Resources */,
 				5530E5121CD32DFD00071A6D /* Rez */,
 				5530E56D1CD33B7600071A6D /* Copy Frameworks */,
+				5530E5F91CD3D40400071A6D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -566,6 +569,24 @@
 		};
 /* End PBXRezBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5530E5F91CD3D40400071A6D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				../resources/icon.r,
+				../resources/icon.icns,
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ../resources\n${SYSTEM_DEVELOPER_TOOLS}/Rez -o \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\"/$'Icon\\x0D' icon.r\n${SYSTEM_DEVELOPER_TOOLS}/SetFile -a CE \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5530E4BD1CD3268500071A6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -579,7 +600,7 @@
 				5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */,
 				5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */,
 				5530E4E31CD326B300071A6D /* AudioCodecComponentGlue.c in Sources */,
-				5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */,
+				5530E5331CD3340600071A6D /* opus_entrypoints.cpp in Sources */,
 				5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */,
 				5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */,
 				5530E52F1CD3340600071A6D /* CAOggOpusDecoder.cpp in Sources */,
