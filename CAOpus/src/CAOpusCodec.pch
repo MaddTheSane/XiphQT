@@ -1,0 +1,14 @@
+//
+//  CAOpusCodec.pch
+//  CAOpusCodec
+//
+//  Created by C.W. Betts on 4/29/16.
+//  Copyright © 2016 C.W. Betts. All rights reserved.
+//
+
+#ifndef CAOpusCodec_pch
+#define CAOpusCodec_pch
+
+#include <Carbon/Carbon.h>
+
+#endif /* CAOpusCodec_pch */

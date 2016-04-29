@@ -20,7 +20,6 @@
 		5530E5151CD32E0700071A6D /* CAOpusDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50E1CD32DEE00071A6D /* CAOpusDecoderPublic.r */; };
 		5530E5161CD32E0700071A6D /* CAOpusEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E50F1CD32DEE00071A6D /* CAOpusEncoderPublic.r */; };
 		5530E52F1CD3340600071A6D /* CAOggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */; };
-		5530E5301CD3340600071A6D /* CAOpusCodec.exp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5281CD3340600071A6D /* CAOpusCodec.exp */; };
 		5530E5311CD3340600071A6D /* CAVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E5291CD3340600071A6D /* CAVorbisDecoder.cpp */; };
 		5530E5321CD3340600071A6D /* CAVorbisEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52B1CD3340600071A6D /* CAVorbisEncoder.cpp */; };
 		5530E5331CD3340600071A6D /* vorbis_entrypoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */; };
@@ -94,14 +93,16 @@
 		5530E52C1CD3340600071A6D /* CAVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAVorbisEncoder.h; sourceTree = "<group>"; };
 		5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vorbis_entrypoints.cpp; sourceTree = "<group>"; };
 		5530E52E1CD3340600071A6D /* vorbis_versions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vorbis_versions.h; sourceTree = "<group>"; };
-		5530E5341CD3354400071A6D /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XCACodec.cpp; sourceTree = "<group>"; };
-		5530E5351CD3354400071A6D /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCACodec.h; sourceTree = "<group>"; };
+		5530E5341CD3354400071A6D /* XCACodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XCACodec.cpp; path = ../common/XCACodec.cpp; sourceTree = "<group>"; };
+		5530E5351CD3354400071A6D /* XCACodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCACodec.h; path = ../common/XCACodec.h; sourceTree = "<group>"; };
 		5530E5371CD3359200071A6D /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../utils/debug.h; sourceTree = "<group>"; };
 		5530E5381CD3359200071A6D /* ringbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ringbuffer.cpp; path = ../utils/ringbuffer.cpp; sourceTree = "<group>"; };
 		5530E5391CD3359200071A6D /* ringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ringbuffer.h; path = ../utils/ringbuffer.h; sourceTree = "<group>"; };
 		5530E53A1CD3359200071A6D /* wrap_ogg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wrap_ogg.cpp; path = ../utils/wrap_ogg.cpp; sourceTree = "<group>"; };
 		5530E53B1CD3359200071A6D /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wrap_ogg.h; path = ../utils/wrap_ogg.h; sourceTree = "<group>"; };
 		5530E53E1CD335EE00071A6D /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../common/config.h; sourceTree = "<group>"; };
+		5530E53F1CD3369300071A6D /* data_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = data_types.h; path = ../common/data_types.h; sourceTree = "<group>"; };
+		5530E5401CD337B200071A6D /* CAOpusCodec.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAOpusCodec.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,14 +218,13 @@
 				5530E5261CD3340600071A6D /* CAOggVorbisDecoder.cpp */,
 				5530E5271CD3340600071A6D /* CAOggVorbisDecoder.h */,
 				5530E5281CD3340600071A6D /* CAOpusCodec.exp */,
+				5530E5401CD337B200071A6D /* CAOpusCodec.pch */,
 				5530E5291CD3340600071A6D /* CAVorbisDecoder.cpp */,
 				5530E52A1CD3340600071A6D /* CAVorbisDecoder.h */,
 				5530E52B1CD3340600071A6D /* CAVorbisEncoder.cpp */,
 				5530E52C1CD3340600071A6D /* CAVorbisEncoder.h */,
 				5530E52D1CD3340600071A6D /* vorbis_entrypoints.cpp */,
 				5530E52E1CD3340600071A6D /* vorbis_versions.h */,
-				5530E5341CD3354400071A6D /* XCACodec.cpp */,
-				5530E5351CD3354400071A6D /* XCACodec.h */,
 			);
 			name = Source;
 			path = src;
@@ -233,12 +233,15 @@
 		5530E5191CD32EAF00071A6D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				5530E5341CD3354400071A6D /* XCACodec.cpp */,
+				5530E5351CD3354400071A6D /* XCACodec.h */,
 				5530E53E1CD335EE00071A6D /* config.h */,
 				5530E5371CD3359200071A6D /* debug.h */,
 				5530E5381CD3359200071A6D /* ringbuffer.cpp */,
 				5530E5391CD3359200071A6D /* ringbuffer.h */,
 				5530E53A1CD3359200071A6D /* wrap_ogg.cpp */,
 				5530E53B1CD3359200071A6D /* wrap_ogg.h */,
+				5530E53F1CD3369300071A6D /* data_types.h */,
 				5530E5181CD32EAB00071A6D /* fccs.h */,
 			);
 			name = Common;
@@ -385,7 +388,6 @@
 				5530E5321CD3340600071A6D /* CAVorbisEncoder.cpp in Sources */,
 				5530E5311CD3340600071A6D /* CAVorbisDecoder.cpp in Sources */,
 				5530E53D1CD3359200071A6D /* wrap_ogg.cpp in Sources */,
-				5530E5301CD3340600071A6D /* CAOpusCodec.exp in Sources */,
 				5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */,
 				5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */,
 				5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */,
@@ -438,9 +440,11 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/CAOpusCodec.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					QT_IA32__VBR_BROKEN,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -479,6 +483,12 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/CAOpusCodec.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					QT_IA32__VBR_BROKEN,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -486,6 +496,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-falign-loops=16",
+				);
 				SDKROOT = macosx;
 			};
 			name = Release;
