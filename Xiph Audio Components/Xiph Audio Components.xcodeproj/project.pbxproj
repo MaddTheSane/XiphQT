@@ -50,6 +50,11 @@
 		5530E7961CD41B0D00071A6D /* AUInputElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E7311CD40EC100071A6D /* AUInputElement.cpp */; };
 		5530E7971CD41B3000071A6D /* AUDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E72F1CD40EC100071A6D /* AUDispatch.cpp */; };
 		5530E79A1CD41BE000071A6D /* ACPlugInDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E7981CD41BE000071A6D /* ACPlugInDispatch.cpp */; };
+		55F124381CD51B8C00CA90BE /* CAFLACDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E64E1CD3F2FD00071A6D /* CAFLACDecoderPublic.r */; };
+		55F124391CD51B9B00CA90BE /* CAVorbisDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E66A1CD3F32D00071A6D /* CAVorbisDecoderPublic.r */; };
+		55F1243A1CD51B9B00CA90BE /* CAVorbisEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E66D1CD3F32D00071A6D /* CAVorbisEncoderPublic.r */; };
+		55F1243B1CD51B9B00CA90BE /* CASpeexDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E65D1CD3F31900071A6D /* CASpeexDecoderPublic.r */; };
+		55F124401CD51C2600CA90BE /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 55F1243D1CD51BF300CA90BE /* icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +320,9 @@
 		5530E7931CD41AF000071A6D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		5530E7981CD41BE000071A6D /* ACPlugInDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPlugInDispatch.cpp; sourceTree = "<group>"; };
 		5530E7991CD41BE000071A6D /* ACPlugInDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPlugInDispatch.h; sourceTree = "<group>"; };
+		55F1243C1CD51BDE00CA90BE /* XCAResources.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; path = XCAResources.r; sourceTree = "<group>"; };
+		55F1243D1CD51BF300CA90BE /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		55F1243E1CD51BF400CA90BE /* icon.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; path = icon.r; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +375,7 @@
 				5530E6331CD3F27D00071A6D /* Info.plist */,
 				5530E6EF1CD4014200071A6D /* Components.exp */,
 				5530E7281CD40DFD00071A6D /* EntryPoints.cpp */,
+				55F1243F1CD51BFC00CA90BE /* Resources */,
 			);
 			path = "Xiph Audio Components";
 			sourceTree = "<group>";
@@ -697,6 +706,17 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		55F1243F1CD51BFC00CA90BE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				55F1243D1CD51BF300CA90BE /* icon.icns */,
+				55F1243E1CD51BF400CA90BE /* icon.r */,
+				55F1243C1CD51BDE00CA90BE /* XCAResources.r */,
+			);
+			name = Resources;
+			path = ../../resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -707,6 +727,7 @@
 				5530E62C1CD3F27D00071A6D /* Sources */,
 				5530E62D1CD3F27D00071A6D /* Frameworks */,
 				5530E62E1CD3F27D00071A6D /* Resources */,
+				55F124301CD51B8300CA90BE /* Rez */,
 			);
 			buildRules = (
 			);
@@ -863,10 +884,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55F124401CD51C2600CA90BE /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		55F124301CD51B8300CA90BE /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55F1243B1CD51B9B00CA90BE /* CASpeexDecoderPublic.r in Rez */,
+				55F1243A1CD51B9B00CA90BE /* CAVorbisEncoderPublic.r in Rez */,
+				55F124381CD51B8C00CA90BE /* CAFLACDecoderPublic.r in Rez */,
+				55F124391CD51B9B00CA90BE /* CAVorbisDecoderPublic.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5530E62C1CD3F27D00071A6D /* Sources */ = {

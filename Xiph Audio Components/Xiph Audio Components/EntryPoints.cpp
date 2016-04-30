@@ -17,10 +17,12 @@
 #include "ACPlugInDispatch.h"
 
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAVorbisDecoder);
-AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAFLACDecoder);
-AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggFLACDecoder);
-AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CASpeexDecoder);
-AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggSpeexDecoder);
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAVorbisEncoder);
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggVorbisDecoder);
+
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAFLACDecoder);
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggFLACDecoder);
+
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CASpeexDecoder);
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggSpeexDecoder);
 
