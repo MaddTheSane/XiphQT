@@ -44,7 +44,7 @@
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-CAFLACDecoder::CAFLACDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
+CAFLACDecoder::CAFLACDecoder(AudioComponentInstance inInstance, bool inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0),
     mFLACsrate(44100), mFLACchannels(2), mFLACbits(16),

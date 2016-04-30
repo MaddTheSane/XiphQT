@@ -817,7 +817,6 @@
 					"$(inherited)",
 					"-fomit-frame-pointer",
 					"-funroll-loops",
-					"-finline-functions",
 					"-D",
 					"FLaC__INLINE=__inline__",
 				);

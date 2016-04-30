@@ -45,7 +45,7 @@
 
 #define BlockMoveData(src, dest, size) memmove(dest, src, size)
 
-CASpeexDecoder::CASpeexDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
+CASpeexDecoder::CASpeexDecoder(AudioComponentInstance inInstance, bool inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mOutBuffer(NULL), mOutBufferSize(0), mOutBufferUsedSize(0), mOutBufferStart(0),
     mSpeexFPList(),

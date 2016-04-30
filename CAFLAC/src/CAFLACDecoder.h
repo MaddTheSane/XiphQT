@@ -51,7 +51,7 @@ class CAFLACDecoder:
 public XCACodec, FLAC::Decoder::Stream
 {
 public:
-    CAFLACDecoder( AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
+    CAFLACDecoder( AudioComponentInstance inInstance, bool inSkipFormatsInitialization = false);
     ~CAFLACDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat, \

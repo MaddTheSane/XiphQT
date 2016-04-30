@@ -50,7 +50,7 @@
         (unsigned int)(x)->mChannelsPerFrame, (unsigned int)(x)->mBitsPerChannel
 
 
-CAVorbisDecoder::CAVorbisDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
+CAVorbisDecoder::CAVorbisDecoder(AudioComponentInstance inInstance, bool inSkipFormatsInitialization /* = false */) : XCACodec(inInstance),
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mVorbisFPList(), mConsumedFPList(),
     mFullInPacketsZapped(0)

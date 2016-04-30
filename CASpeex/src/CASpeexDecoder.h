@@ -52,7 +52,7 @@ class CASpeexDecoder:
 public XCACodec
 {
  public:
-    CASpeexDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
+    CASpeexDecoder(AudioComponentInstance inInstance, bool inSkipFormatsInitialization = false);
     virtual ~CASpeexDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,

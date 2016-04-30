@@ -51,7 +51,7 @@ class CAVorbisDecoder:
 public XCACodec
 {
  public:
-    CAVorbisDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
+    CAVorbisDecoder(AudioComponentInstance inInstance, bool inSkipFormatsInitialization = false);
     ~CAVorbisDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
