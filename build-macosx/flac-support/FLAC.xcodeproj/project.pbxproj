@@ -10,6 +10,24 @@
 		37CA8E130DD73E6F005C8CB6 /* window.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CA8E120DD73E6F005C8CB6 /* window.h */; };
 		37CA8E160DD73F2D005C8CB6 /* alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CA8E150DD73F2D005C8CB6 /* alloc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CA8E170DD73F2D005C8CB6 /* alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CA8E150DD73F2D005C8CB6 /* alloc.h */; };
+		5503C1A41CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A01CDBD1D500FC7F50 /* lpc_intrin_avx2.c */; };
+		5503C1A51CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A01CDBD1D500FC7F50 /* lpc_intrin_avx2.c */; };
+		5503C1A61CDBD1D500FC7F50 /* lpc_intrin_sse.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A11CDBD1D500FC7F50 /* lpc_intrin_sse.c */; };
+		5503C1A71CDBD1D500FC7F50 /* lpc_intrin_sse.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A11CDBD1D500FC7F50 /* lpc_intrin_sse.c */; };
+		5503C1A81CDBD1D500FC7F50 /* lpc_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A21CDBD1D500FC7F50 /* lpc_intrin_sse2.c */; };
+		5503C1A91CDBD1D500FC7F50 /* lpc_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A21CDBD1D500FC7F50 /* lpc_intrin_sse2.c */; };
+		5503C1AA1CDBD1D500FC7F50 /* lpc_intrin_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A31CDBD1D500FC7F50 /* lpc_intrin_sse41.c */; };
+		5503C1AB1CDBD1D500FC7F50 /* lpc_intrin_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1A31CDBD1D500FC7F50 /* lpc_intrin_sse41.c */; };
+		5503C1AF1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AC1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c */; };
+		5503C1B01CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AC1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c */; };
+		5503C1B11CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AD1CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c */; };
+		5503C1B21CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AD1CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c */; };
+		5503C1B31CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AE1CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c */; };
+		5503C1B41CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1AE1CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c */; };
+		5503C1B71CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B51CDBD22F00FC7F50 /* fixed_intrin_sse2.c */; };
+		5503C1B81CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B51CDBD22F00FC7F50 /* fixed_intrin_sse2.c */; };
+		5503C1B91CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */; };
+		5503C1BA1CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */; };
 		73744B060B1A1925002B059E /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744B050B1A1925002B059E /* window.c */; };
 		73744B200B1A1D3A002B059E /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963E0A0D1AB900D40234 /* bitmath.c */; };
 		73744B210B1A1D3B002B059E /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963F0A0D1AB900D40234 /* cpu.c */; };
@@ -102,6 +120,15 @@
 		32BAE0B70371A74B00C91783 /* FLAC_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAC_Prefix.pch; sourceTree = "<group>"; };
 		37CA8E120DD73E6F005C8CB6 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
 		37CA8E150DD73F2D005C8CB6 /* alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
+		5503C1A01CDBD1D500FC7F50 /* lpc_intrin_avx2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpc_intrin_avx2.c; sourceTree = "<group>"; };
+		5503C1A11CDBD1D500FC7F50 /* lpc_intrin_sse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpc_intrin_sse.c; sourceTree = "<group>"; };
+		5503C1A21CDBD1D500FC7F50 /* lpc_intrin_sse2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpc_intrin_sse2.c; sourceTree = "<group>"; };
+		5503C1A31CDBD1D500FC7F50 /* lpc_intrin_sse41.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpc_intrin_sse41.c; sourceTree = "<group>"; };
+		5503C1AC1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_encoder_intrin_avx2.c; sourceTree = "<group>"; };
+		5503C1AD1CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_encoder_intrin_sse2.c; sourceTree = "<group>"; };
+		5503C1AE1CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_encoder_intrin_ssse3.c; sourceTree = "<group>"; };
+		5503C1B51CDBD22F00FC7F50 /* fixed_intrin_sse2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fixed_intrin_sse2.c; sourceTree = "<group>"; };
+		5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fixed_intrin_ssse3.c; sourceTree = "<group>"; };
 		5526210A1B7BA8FD00F0550D /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../../DebugConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		5526210B1B7BA8FD00F0550D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../../DefaultConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		5530E5F61CD3CAE700071A6D /* FLAC.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = FLAC.modulemap; sourceTree = "<group>"; };
@@ -280,15 +307,24 @@
 				73E1963F0A0D1AB900D40234 /* cpu.c */,
 				73E196400A0D1AB900D40234 /* crc.c */,
 				73E196430A0D1AB900D40234 /* fixed.c */,
+				5503C1B51CDBD22F00FC7F50 /* fixed_intrin_sse2.c */,
+				5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */,
 				73E196440A0D1AB900D40234 /* float.c */,
 				73E196450A0D1AB900D40234 /* format.c */,
 				73E196460A0D1AB900D40234 /* lpc.c */,
+				5503C1A01CDBD1D500FC7F50 /* lpc_intrin_avx2.c */,
+				5503C1A11CDBD1D500FC7F50 /* lpc_intrin_sse.c */,
+				5503C1A21CDBD1D500FC7F50 /* lpc_intrin_sse2.c */,
+				5503C1A31CDBD1D500FC7F50 /* lpc_intrin_sse41.c */,
 				73E196470A0D1AB900D40234 /* md5.c */,
 				73E196480A0D1AB900D40234 /* memory.c */,
 				73E196490A0D1AB900D40234 /* metadata_iterators.c */,
 				73E1964A0A0D1AB900D40234 /* metadata_object.c */,
 				73E1964D0A0D1AB900D40234 /* stream_decoder.c */,
 				73E1964F0A0D1AB900D40234 /* stream_encoder.c */,
+				5503C1AC1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c */,
+				5503C1AD1CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c */,
+				5503C1AE1CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c */,
 				73E1964E0A0D1AB900D40234 /* stream_encoder_framing.c */,
 				73744B050B1A1925002B059E /* window.c */,
 			);
@@ -587,21 +623,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				73744B200B1A1D3A002B059E /* bitmath.c in Sources */,
+				5503C1B01CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */,
 				73744B210B1A1D3B002B059E /* cpu.c in Sources */,
 				73744B220B1A1D3C002B059E /* crc.c in Sources */,
 				73744B230B1A1D3D002B059E /* fixed.c in Sources */,
 				73744B240B1A1D3E002B059E /* float.c in Sources */,
 				73744B250B1A1D3F002B059E /* format.c in Sources */,
+				5503C1A51CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */,
 				73744B260B1A1D40002B059E /* lpc.c in Sources */,
 				73744B270B1A1D40002B059E /* md5.c in Sources */,
 				73744B280B1A1D41002B059E /* memory.c in Sources */,
 				73744B290B1A1D41002B059E /* metadata_iterators.c in Sources */,
+				5503C1BA1CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */,
+				5503C1A71CDBD1D500FC7F50 /* lpc_intrin_sse.c in Sources */,
+				5503C1A91CDBD1D500FC7F50 /* lpc_intrin_sse2.c in Sources */,
 				73744B2A0B1A1D42002B059E /* metadata_object.c in Sources */,
 				73744B2B0B1A1D43002B059E /* stream_decoder.c in Sources */,
+				5503C1AB1CDBD1D500FC7F50 /* lpc_intrin_sse41.c in Sources */,
 				73744B2C0B1A1D43002B059E /* stream_encoder.c in Sources */,
 				73744B2D0B1A1D44002B059E /* stream_encoder_framing.c in Sources */,
 				73744B2E0B1A1D45002B059E /* window.c in Sources */,
+				5503C1B41CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */,
+				5503C1B81CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */,
 				738C0AFB0B8D4CFB0010DDDC /* bitreader.c in Sources */,
+				5503C1B21CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */,
 				738C0AFC0B8D4CFB0010DDDC /* bitwriter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,21 +676,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				73E196510A0D1AB900D40234 /* bitmath.c in Sources */,
+				5503C1AF1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */,
 				73E196520A0D1AB900D40234 /* cpu.c in Sources */,
 				73E196530A0D1AB900D40234 /* crc.c in Sources */,
 				73E196560A0D1AB900D40234 /* fixed.c in Sources */,
 				73E196570A0D1AB900D40234 /* float.c in Sources */,
 				73E196580A0D1AB900D40234 /* format.c in Sources */,
+				5503C1A41CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */,
 				73E196590A0D1AB900D40234 /* lpc.c in Sources */,
 				73E1965A0A0D1AB900D40234 /* md5.c in Sources */,
 				73E1965B0A0D1AB900D40234 /* memory.c in Sources */,
 				73E1965C0A0D1AB900D40234 /* metadata_iterators.c in Sources */,
+				5503C1B91CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */,
+				5503C1A61CDBD1D500FC7F50 /* lpc_intrin_sse.c in Sources */,
+				5503C1A81CDBD1D500FC7F50 /* lpc_intrin_sse2.c in Sources */,
 				73E1965D0A0D1AB900D40234 /* metadata_object.c in Sources */,
 				73E196600A0D1AB900D40234 /* stream_decoder.c in Sources */,
+				5503C1AA1CDBD1D500FC7F50 /* lpc_intrin_sse41.c in Sources */,
 				73E196610A0D1AB900D40234 /* stream_encoder_framing.c in Sources */,
 				73E196620A0D1AB900D40234 /* stream_encoder.c in Sources */,
 				73744B060B1A1925002B059E /* window.c in Sources */,
+				5503C1B31CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */,
+				5503C1B71CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */,
 				738C0AF90B8D4CFB0010DDDC /* bitreader.c in Sources */,
+				5503C1B11CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */,
 				738C0AFA0B8D4CFB0010DDDC /* bitwriter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -690,7 +744,6 @@
 					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
-					FLAC__NO_ASM,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.3\\\"";
@@ -725,7 +778,6 @@
 					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
-					FLAC__NO_ASM,
 					HAVE_LROUND,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION=\\\"1.1.3\\\"";
@@ -839,7 +891,6 @@
 					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
-					FLAC__NO_ASM,
 					FLAC__SYS_DARWIN,
 					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
@@ -868,7 +919,6 @@
 					"$(inherited)",
 					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
 					HAVE_INTTYPES_H,
-					FLAC__NO_ASM,
 					FLAC__SYS_DARWIN,
 					FLAC__ALIGN_MALLOC_DATA,
 					HAVE_LROUND,
