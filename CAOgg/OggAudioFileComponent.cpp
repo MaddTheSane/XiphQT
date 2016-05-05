@@ -9,13 +9,12 @@
 #include "OggAudioFileComponent.hpp"
 #include "OggAudioFile.hpp"
 
-OggAudioFormat* gFLACAudioFormat = new OggAudioFormat();
+OggAudioFormat* gOggAudioFormat = new OggAudioFormat();
 
 AudioFileFormat* OggAudioFileComponent::GetAudioFormat() const
 {
-	return gFLACAudioFormat;
+	return gOggAudioFormat;
 }
-
 
 OggAudioFileComponent::OggAudioFileComponent(AudioComponentInstance inInstance)
 : AudioFileObjectComponentBase(inInstance)
@@ -26,7 +25,3 @@ OggAudioFileComponent::OggAudioFileComponent(AudioComponentInstance inInstance)
 	
 	SetAudioFileObject(new OggAudioFile());
 }
-
-
-
-
