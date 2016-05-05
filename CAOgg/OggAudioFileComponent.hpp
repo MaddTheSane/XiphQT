@@ -22,5 +22,4 @@ public:
 	virtual ComponentResult	Version() { return kOggAudioFileComponent_Version; }
 };
 
-
 #endif /* OggAudioFileComponent_hpp */

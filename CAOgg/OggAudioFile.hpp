@@ -150,5 +150,4 @@ public:
 	OSStatus	GetEstimatedDuration(Float64 * duration);
 };
 
-
 #endif /* OggAudioFile_hpp */
