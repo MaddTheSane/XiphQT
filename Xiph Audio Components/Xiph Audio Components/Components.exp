@@ -21,3 +21,6 @@ _CAFLACDecoderEntry
 _CAFLACDecoderFactory
 _CAOggFLACDecoderEntry
 _CAOggFLACDecoderFactory
+
+_OggAudioFileComponentEntry
+_OggAudioFileComponentFactory

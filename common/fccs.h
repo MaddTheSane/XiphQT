@@ -49,6 +49,8 @@ enum {
 
     kAudioFormatXiphFLAC                    = 'XiFL',
     kAudioFormatXiphOggFramedFLAC           = 'XoFL',
+	
+	kAudioFileFormatOgg						= 'OggS',
 
     kVideoFormatXiphTheora                  = 'XiTh'
 };
