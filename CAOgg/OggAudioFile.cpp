@@ -313,7 +313,7 @@ Boolean OggAudioFile::IsDataFormatSupported(const AudioStreamBasicDescription *i
 	return false;
 }
 
-OSStatus OggAudioFile::OpenFromDataSource(SInt8 inPermissions)
+OSStatus OggAudioFile::OpenFromDataSource()
 {
 	return kAudio_UnimplementedError;
 }
@@ -323,7 +323,7 @@ OSStatus OggAudioFile::ParseAudioFile()
 	return kAudio_UnimplementedError;
 }
 
-OSStatus OggAudioFile::ScanForPackets(SInt64 inToPacketCount)
+OSStatus OggAudioFile::ScanForPackets(SInt64 inToPacketCount, DataSource* inDataSrc, bool fullyParsedIfEndOfDataReached)
 {
 	return kAudio_UnimplementedError;
 }

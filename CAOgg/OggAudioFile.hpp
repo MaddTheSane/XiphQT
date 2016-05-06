@@ -97,7 +97,7 @@ public:
 								 UInt32					inDataSize,
 								 const void				*inPropertyData);
 
-	virtual OSStatus OpenFromDataSource(SInt8 inPermissions);
+	virtual OSStatus OpenFromDataSource();
 	
 	virtual OSStatus Create(CFURLRef							inFileRef,
 							const AudioStreamBasicDescription	*inFormat);
@@ -134,7 +134,7 @@ public:
 	virtual Boolean 	IsDataFormatSupported(const AudioStreamBasicDescription	*inFormat);
 	
 	virtual OSStatus	CreatePacketTable();
-	virtual OSStatus	ScanForPackets(SInt64  inToPacketCount);
+	virtual OSStatus	ScanForPackets(SInt64  inToPacketCount, DataSource* inDataSrc = NULL, bool fullyParsedIfEndOfDataReached = true);
 	
 	OSStatus 	ParseFirstPacketHeader(SInt64 filePosition, AudioStreamBasicDescription &format);
 	OSStatus 	ParseStreamInfo(SInt64 filePosition, AudioStreamBasicDescription	&format);
