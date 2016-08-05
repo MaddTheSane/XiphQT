@@ -1,4 +1,4 @@
-/*	Copyright � 2007 Apple Inc. All Rights Reserved.
+/*	Copyright © 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -57,7 +57,7 @@
 
 #define kStreamInfoSize 38 // 1 byte type + 3 bytes size + 34 bytes data
 
-Float32 gFLACSampleRates[16]			= 	{	0.0f, // in the stream info
+static const Float32 gFLACSampleRates[16]			= 	{	0.0f, // in the stream info
                                             88200.0f,
                                            176400.0f,
 										   192000.0f,
@@ -74,7 +74,7 @@ Float32 gFLACSampleRates[16]			= 	{	0.0f, // in the stream info
                                             0.0f,	// DHz in 16-bit field in header (yes, DHz)
                                             0.0f	};	// invalid to prevent syncword issues
 
-UInt32 gFLACBlockSizes[16]			= 	{	0, // reserved
+static const UInt32 gFLACBlockSizes[16]			= 	{	0, // reserved
                                               192,
                                               576,
 											 1152,
@@ -91,7 +91,7 @@ UInt32 gFLACBlockSizes[16]			= 	{	0, // reserved
 											16384,
 											32768 };
 
-UInt32 gFLACBitDepths[8]			= 	{	0, // get from STREAMINFO metadata block
+static const UInt32 gFLACBitDepths[8]			= 	{	0, // get from STREAMINFO metadata block
 											8,
 										   12,
 											0, // reserved
@@ -100,7 +100,7 @@ UInt32 gFLACBitDepths[8]			= 	{	0, // get from STREAMINFO metadata block
 										   24,
 										    0 }; // reserved
 
-AudioChannelLayoutTag gFLACChannelConfigToLayoutTag[] = {
+static const AudioChannelLayoutTag gFLACChannelConfigToLayoutTag[] = {
 	kAudioChannelLayoutTag_Mono,
 	kAudioChannelLayoutTag_Stereo,
 	kAudioChannelLayoutTag_MPEG_3_0_A,
@@ -122,7 +122,7 @@ AudioChannelLayoutTag gFLACChannelConfigToLayoutTag[] = {
 // This is directly out of the FLAC crc.c sources -- we don't want to link against
 // those sources directly. This table should never change
 
-Byte const FLAC_crc8[256] = {
+static Byte const FLAC_crc8[256] = {
 	0x00, 0x07, 0x0E, 0x09, 0x1C, 0x1B, 0x12, 0x15,
 	0x38, 0x3F, 0x36, 0x31, 0x24, 0x23, 0x2A, 0x2D,
 	0x70, 0x77, 0x7E, 0x79, 0x6C, 0x6B, 0x62, 0x65,
@@ -158,7 +158,7 @@ Byte const FLAC_crc8[256] = {
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool	IsSupportedFLACFormat(UInt32	inFormatID)
+static bool IsSupportedFLACFormat(UInt32	inFormatID)
 {
 	switch(inFormatID)
 	{
