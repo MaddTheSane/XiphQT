@@ -1,0 +1,16 @@
+﻿/* No comment provided by engineer. */
+"FLAC" = "FLAC";
+"FLAC encoder" = "FLAC encoder";
+"FLAC Encoder" = "FLAC Encoder";
+"Compression Level"= "Compression Level";
+"The compression level of the FLAC encoder" = "The compression level of the FLAC encoder";
+"FLAC decoder" = "FLAC decoder";
+
+"Xiph Vorbis" = "Xiph Vorbis";
+"Xiph Vorbis encoder" = "Xiph Vorbis encoder";
+"Xiph.Org Foundation" = "Xiph.Org Foundation";
+"Xiph Vorbis decoder" = "Xiph Vorbis decoder";
+
+"Xiph FLAC decoder" = "Xiph FLAC decoder";
+
+"Xiph Speex decoder" = "Xiph Speex decoder";

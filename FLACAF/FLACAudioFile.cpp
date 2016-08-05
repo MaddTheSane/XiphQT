@@ -882,7 +882,7 @@ OSStatus FLACAudioFile::GetChannelLayout(	UInt32						*ioDataSize,
 	}
 
 	size_t	dSize = *ioDataSize;
-	*ioDataSize = std::min(dSize, sizeof(AudioChannelLayout));
+	*ioDataSize = (UInt32)std::min(dSize, sizeof(AudioChannelLayout));
 
     if (ioPropertyData)
     {
