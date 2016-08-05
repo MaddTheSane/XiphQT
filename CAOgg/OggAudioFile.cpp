@@ -10,6 +10,7 @@
 #include "OggAudioFile.hpp"
 #include "CABundleLocker.h"
 #include "fccs.h"
+#include "GetCodecBundle.h"
 
 static OSStatus GetAllFormatIDs(UInt32* ioDataSize, void* outPropertyData)
 {
@@ -81,7 +82,7 @@ AudioFileObject* OggAudioFormat::New()
 void OggAudioFormat::GetFileTypeName(CFStringRef *outName)
 {
 	CABundleLocker lock;
-	CFBundleRef theBundle = NULL;//GetAudioToolboxBundle();
+	CFBundleRef theBundle = GetCodecBundle();
 	if(theBundle != NULL)
 	{
 		*outName = CFCopyLocalizedStringFromTableInBundle(CFSTR("Ogg"), CFSTR("FileTypeNames"), theBundle, CFSTR("A file type name."));

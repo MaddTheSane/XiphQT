@@ -50,6 +50,7 @@
 #include "CAAutoDisposer.h"
 #include "ACFLACApple.h"
 #include "fccs.h"
+#include "GetCodecBundle.h"
 
 #define	kCompletePacketTable            -1
 
@@ -908,7 +909,7 @@ void FLACAudioFormat::GetExtensions(CFArrayRef *outArray)
 void FLACAudioFormat::GetFileTypeName(CFStringRef *outName)
 {
 	CABundleLocker lock;
-	CFBundleRef theBundle = NULL;//GetAudioToolboxBundle();
+	CFBundleRef theBundle = GetCodecBundle();
 	if(theBundle != NULL)
 	{
 		*outName = CFCopyLocalizedStringFromTableInBundle(CFSTR("FLAC"), CFSTR("FileTypeNames"), theBundle, CFSTR("A file type name."));
