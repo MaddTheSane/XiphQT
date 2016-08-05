@@ -32,7 +32,7 @@
 #include "wrap_ogg.h"
 #include <string>
 
-Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData, UInt32 inDataByteSize, UInt32 inDataStartOffset)
+Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData, size_t inDataByteSize, off_t inDataStartOffset)
 {
     if (inDataByteSize - inDataStartOffset < 27)
         return false;
@@ -47,8 +47,8 @@ Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData, UInt32 inDataBy
     if (inDataByteSize - inDataStartOffset < headerBytes)
         return false;
 
-    UInt32 bodyBytes = 0;
-    UInt32 i;
+    size_t bodyBytes = 0;
+    size_t i;
 
     /* just checking... */
     for (i = 0; i < data[26]; i++) {

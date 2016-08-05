@@ -348,7 +348,6 @@
 		559E53231D546CC800F2D50F /* FLACAudioFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FLACAudioFile.cpp; sourceTree = "<group>"; };
 		559E53241D546CC800F2D50F /* FLACAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACAudioFile.h; sourceTree = "<group>"; };
 		559E53251D546CC800F2D50F /* FLACAudioFileComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FLACAudioFileComponent.cpp; sourceTree = "<group>"; };
-		559E53261D546CC800F2D50F /* FLACAudioFileComponent.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = FLACAudioFileComponent.exp; sourceTree = "<group>"; };
 		559E53271D546CC800F2D50F /* FLACAudioFileComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACAudioFileComponent.h; sourceTree = "<group>"; };
 		559E532B1D546D2E00F2D50F /* ACFLACResIDs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACFLACResIDs.h; sourceTree = "<group>"; };
 		559E532C1D546D2E00F2D50F /* ACFLACVersions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACFLACVersions.h; sourceTree = "<group>"; };
@@ -753,7 +752,6 @@
 				559E53231D546CC800F2D50F /* FLACAudioFile.cpp */,
 				559E53241D546CC800F2D50F /* FLACAudioFile.h */,
 				559E53251D546CC800F2D50F /* FLACAudioFileComponent.cpp */,
-				559E53261D546CC800F2D50F /* FLACAudioFileComponent.exp */,
 				559E53271D546CC800F2D50F /* FLACAudioFileComponent.h */,
 				556F3E9D1D54D5A600332834 /* FLACAudioFileComponent.r */,
 			);

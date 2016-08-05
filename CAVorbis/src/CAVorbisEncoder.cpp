@@ -317,7 +317,7 @@ void CAVorbisEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioP
         if(ioPropertyDataSize == sizeof(UInt32))
         {
             if (mIsInitialized) {
-                long long_blocksize = (reinterpret_cast<long *>(mV_vi.codec_setup))[1];
+                SInt32 long_blocksize = (reinterpret_cast<SInt32 *>(mV_vi.codec_setup))[1];
                 *reinterpret_cast<UInt32*>(outPropertyData) = long_blocksize;
                 //*reinterpret_cast<UInt32*>(outPropertyData) = 0;
             } else {
@@ -664,7 +664,7 @@ void CAVorbisEncoder::InitializeCompressionSettings()
 
     vorbis_info_init(&mV_vi);
 
-    UInt32 sample_rate = lround(mOutputFormat.mSampleRate);
+    UInt32 sample_rate = (UInt32)lround(mOutputFormat.mSampleRate);
 
     if (mCfgMode == kVorbisEncoderModeQuality) {
         ret = vorbis_encode_init_vbr(&mV_vi, mOutputFormat.mChannelsPerFrame, sample_rate, mCfgQuality);
@@ -705,25 +705,25 @@ void CAVorbisEncoder::InitializeCompressionSettings()
         ogg_packet header, header_vc, header_cb;
         vorbis_analysis_headerout(&mV_vd, &mV_vc, &header, &header_vc, &header_cb);
 
-        mCookieSize = header.bytes + header_vc.bytes + header_cb.bytes + 4 * 2 * sizeof(UInt32);
+        mCookieSize = (UInt32)(header.bytes + header_vc.bytes + header_cb.bytes + 4 * 2 * sizeof(UInt32));
         mCookie = new Byte[mCookieSize];
 
-        unsigned long *qtatom = reinterpret_cast<unsigned long*>(mCookie); // reinterpret_cast ?!?
-        *qtatom++ = CFSwapInt32HostToBig(header.bytes + 2 * sizeof(UInt32));
+        unsigned int *qtatom = reinterpret_cast<unsigned int*>(mCookie); // reinterpret_cast ?!?
+        *qtatom++ = CFSwapInt32HostToBig((UInt32)header.bytes + 2 * sizeof(UInt32));
         *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisHeader);
         BlockMoveData(header.packet, qtatom, header.bytes);
 
-        qtatom = reinterpret_cast<unsigned long*>(mCookie + 2 * sizeof(UInt32) + header.bytes);
-        *qtatom++ = CFSwapInt32HostToBig(header_vc.bytes + 2 * sizeof(UInt32));
+        qtatom = reinterpret_cast<unsigned int*>(mCookie + 2 * sizeof(UInt32) + header.bytes);
+        *qtatom++ = CFSwapInt32HostToBig((UInt32)header_vc.bytes + 2 * sizeof(UInt32));
         *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisComments);
         BlockMoveData(header_vc.packet, qtatom, header_vc.bytes);
 
-        qtatom = reinterpret_cast<unsigned long*>(mCookie + 4 * sizeof(UInt32) + header.bytes + header_vc.bytes);
-        *qtatom++ = CFSwapInt32HostToBig(header_cb.bytes + 2 * sizeof(UInt32));
+        qtatom = reinterpret_cast<unsigned int*>(mCookie + 4 * sizeof(UInt32) + header.bytes + header_vc.bytes);
+        *qtatom++ = CFSwapInt32HostToBig((UInt32)header_cb.bytes + 2 * sizeof(UInt32));
         *qtatom++ = CFSwapInt32HostToBig(kCookieTypeVorbisCodebooks);
         BlockMoveData(header_cb.packet, qtatom, header_cb.bytes);
 
-        qtatom = reinterpret_cast<unsigned long*>(mCookie + 6 * sizeof(UInt32) + header.bytes + header_vc.bytes + header_cb.bytes);
+        qtatom = reinterpret_cast<unsigned int*>(mCookie + 6 * sizeof(UInt32) + header.bytes + header_vc.bytes + header_cb.bytes);
         *qtatom++ = CFSwapInt32HostToBig(2 * sizeof(UInt32));
         *qtatom++ = CFSwapInt32HostToBig(kAudioTerminatorAtomType);
     }
@@ -803,8 +803,8 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
 
             BlockMoveData(op_left.packet, &((static_cast<Byte *>(outOutputData))[bout]), op_left.bytes);
             outPacketDescription[fout].mStartOffset = bout;
-            outPacketDescription[fout].mVariableFramesInPacket = op_left.granulepos - last_granulepos;
-            outPacketDescription[fout].mDataByteSize = op_left.bytes;
+            outPacketDescription[fout].mVariableFramesInPacket = (UInt32)(op_left.granulepos - last_granulepos);
+            outPacketDescription[fout].mDataByteSize = (UInt32)op_left.bytes;
             last_granulepos = op_left.granulepos;
             fout++;
             bout += op_left.bytes;
@@ -826,8 +826,8 @@ UInt32 CAVorbisEncoder::ProduceOutputPackets(void* outOutputData, UInt32& ioOutp
 
             BlockMoveData(op.packet, &((static_cast<Byte *>(outOutputData))[bout]), op.bytes);
             outPacketDescription[fout].mStartOffset = bout;
-            outPacketDescription[fout].mVariableFramesInPacket = op.granulepos - last_granulepos;
-            outPacketDescription[fout].mDataByteSize = op.bytes;
+            outPacketDescription[fout].mVariableFramesInPacket = (UInt32)(op.granulepos - last_granulepos);
+            outPacketDescription[fout].mDataByteSize = (UInt32)op.bytes;
             last_granulepos = op.granulepos;
             fout++;
             bout += op.bytes;

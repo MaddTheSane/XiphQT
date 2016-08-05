@@ -337,7 +337,7 @@ void CAOggVorbisDecoder::InPacket(const void* inInputData, const AudioStreamPack
 
         packet_count++;
 
-        vorbis_packet_desc.mDataByteSize = opk.bytes;
+        vorbis_packet_desc.mDataByteSize = (UInt32)opk.bytes;
 
         CAVorbisDecoder::InPacket(opk.packet, &vorbis_packet_desc);
     }

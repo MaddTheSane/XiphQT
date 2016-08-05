@@ -38,7 +38,7 @@
 #include <MacTypes.h>
 
 extern Boolean WrapOggPage(ogg_page* outOggPage, const void* inRawData,
-                           UInt32 inDataByteSize, UInt32 inDataStartOffset);
+                           size_t inDataByteSize, off_t inDataStartOffset);
 
 
 #endif /* __wrap_ogg_h__ */

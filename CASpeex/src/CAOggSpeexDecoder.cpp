@@ -235,7 +235,7 @@ void CAOggSpeexDecoder::InPacket(const void* inInputData, const AudioStreamPacke
 
         packet_count++;
 
-        speex_packet_desc.mDataByteSize = opk.bytes;
+        speex_packet_desc.mDataByteSize = (UInt32)opk.bytes;
         speex_packet_desc.mVariableFramesInPacket = mSpeexHeader.frame_size * mSpeexHeader.frames_per_packet;
         if (packet_count == 1 && packet_length_adjust > 0) {
             speex_packet_desc.mVariableFramesInPacket -= packet_length_adjust;
@@ -261,7 +261,7 @@ void CAOggSpeexDecoder::InitializeCompressionSettings()
 
         OggSerialNoAtom *atom = reinterpret_cast<OggSerialNoAtom*> (mCookie);
 
-        if (CFSwapInt32BigToHost(atom->type) == kCookieTypeOggSerialNo && (mCookieSize - CFSwapInt32BigToHost(atom->size) >= 0)) {
+        if (CFSwapInt32BigToHost(atom->type) == kCookieTypeOggSerialNo && ((int)mCookieSize - ((int)CFSwapInt32BigToHost(atom->size)) >= 0)) {
             ogg_stream_init(&mO_st, CFSwapInt32BigToHost(atom->serialno));
         }
     }

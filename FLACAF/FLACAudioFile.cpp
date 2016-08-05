@@ -254,7 +254,7 @@ OSStatus FLACAudioFile::ReadPackets(	Boolean							inUseCache,
         
         if (*ioNumPackets + inStartingPacket > totalPacketCount)
 		{
-            *ioNumPackets = totalPacketCount - inStartingPacket;
+            *ioNumPackets = (UInt32)(totalPacketCount - inStartingPacket);
 		}
 			
 		if (*ioNumPackets == 0)
@@ -649,14 +649,14 @@ OSStatus FLACAudioFile::ParseStreamInfo	(SInt64 filePosition, AudioStreamBasicDe
 	theCookie.total_samples = CFSwapInt64HostToBig(theCookie.total_samples);
 	if (format.mFramesPerPacket != 0)
 	{
-		numPackets = (mPacketTableInfo.mNumberValidFrames/format.mFramesPerPacket);
+		numPackets = (UInt32)(mPacketTableInfo.mNumberValidFrames/format.mFramesPerPacket);
 		// we're done with duration so we use it as a temp variable
 		duration = numPackets * format.mFramesPerPacket;
 		if (duration < mPacketTableInfo.mNumberValidFrames) // we probably have a partial packet, so add one if we do
 		{
 			++numPackets;
 		}
-		mPacketTableInfo.mRemainderFrames = mPacketTableInfo.mNumberValidFrames - duration; // 0 is perfectly acceptable here
+		mPacketTableInfo.mRemainderFrames = (UInt32)(mPacketTableInfo.mNumberValidFrames - duration); // 0 is perfectly acceptable here
 	}
 	blockPosition += 4;
 	
@@ -1318,7 +1318,7 @@ OSStatus	FLACAudioFile::ScanForSyncWord (SInt64 filePosition, SInt64 endOfAudioD
 	
 	if (endOfAudioData - filePosition < maxPacketSize)
 	{
-		maxPacketSize = endOfAudioData - filePosition;
+		maxPacketSize = (UInt32)(endOfAudioData - filePosition);
 	}
 	bytesToCheck = maxPacketSize - kFLACMinHeaderSize;
 	

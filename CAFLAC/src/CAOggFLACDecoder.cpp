@@ -265,7 +265,7 @@ void CAOggFLACDecoder::InPacket(const void* inInputData, const AudioStreamPacket
 
         packet_count++;
 
-        flac_packet_desc.mDataByteSize = opk.bytes;
+        flac_packet_desc.mDataByteSize = (UInt32)opk.bytes;
 
         CAFLACDecoder::InPacket(opk.packet, &flac_packet_desc);
     }

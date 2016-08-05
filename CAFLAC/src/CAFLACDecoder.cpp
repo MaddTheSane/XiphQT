@@ -568,7 +568,7 @@ void CAFLACDecoder::DFPclear()
 
         BlockMoveData(mBDCBuffer.GetData(), buffer, *bytes);
 
-        mBDCBuffer.Zap(*bytes);
+        mBDCBuffer.Zap((UInt32)*bytes);
         ffp.left -= *bytes;
         if (ffp.left == 0) {
             mFLACFPList.erase(mFLACFPList.begin());

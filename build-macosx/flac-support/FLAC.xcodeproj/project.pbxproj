@@ -902,9 +902,7 @@
 					"../../external-libs/flac/include",
 				);
 				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = flac;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -930,9 +928,7 @@
 					"../../external-libs/flac/include",
 				);
 				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = flac;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -960,9 +956,7 @@
 					"../../external-libs/flac/include",
 				);
 				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = "flac++";
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -988,9 +982,7 @@
 					"../../external-libs/flac/include",
 				);
 				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = "flac++";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
