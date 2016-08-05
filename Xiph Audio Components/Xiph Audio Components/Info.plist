@@ -150,6 +150,24 @@
 			<key>version</key>
 			<integer>260</integer>
 		</dict>
+		<dict>
+			<key>description</key>
+			<string>reads the flac file format</string>
+			<key>factoryFunction</key>
+			<string>FLACAudioFileComponentFactory</string>
+			<key>manufacturer</key>
+			<string>Acme</string>
+			<key>name</key>
+			<string>FLAC AudioFile Component</string>
+			<key>sandboxSafe</key>
+			<true/>
+			<key>subtype</key>
+			<string>flac</string>
+			<key>type</key>
+			<string>afil</string>
+			<key>version</key>
+			<integer>260</integer>
+		</dict>
 	</array>
 </dict>
 </plist>

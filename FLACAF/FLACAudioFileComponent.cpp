@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -71,4 +71,4 @@ FLACAudioFileComponent::FLACAudioFileComponent(ComponentInstance inInstance)
 	SetAudioFileObject(new FLACAudioFile());
 }
 
-COMPONENT_ENTRY(FLACAudioFileComponent);
+//COMPONENT_ENTRY(FLACAudioFileComponent);

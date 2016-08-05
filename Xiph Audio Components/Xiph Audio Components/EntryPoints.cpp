@@ -16,6 +16,7 @@
 #include "CAVorbisEncoder.h"
 #include "ACPlugInDispatch.h"
 #include "OggAudioFileComponent.hpp"
+#include "FLACAudioFileComponent.h"
 
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAVorbisDecoder);
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAVorbisEncoder);
@@ -28,3 +29,4 @@ AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CASpeexDecoder);
 AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggSpeexDecoder);
 
 AUDIOCOMPONENT_ENTRY(AudioFileComponentFactory, OggAudioFileComponent);
+AUDIOCOMPONENT_ENTRY(AudioFileComponentFactory, FLACAudioFileComponent);

@@ -24,3 +24,5 @@ _CAOggFLACDecoderFactory
 
 _OggAudioFileComponentEntry
 _OggAudioFileComponentFactory
+_FLACAudioFileComponentEntry
+_FLACAudioFileComponentFactory

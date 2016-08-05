@@ -66,6 +66,8 @@
 		5530E7961CD41B0D00071A6D /* AUInputElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E7311CD40EC100071A6D /* AUInputElement.cpp */; };
 		5530E7971CD41B3000071A6D /* AUDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E72F1CD40EC100071A6D /* AUDispatch.cpp */; };
 		5530E79A1CD41BE000071A6D /* ACPlugInDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E7981CD41BE000071A6D /* ACPlugInDispatch.cpp */; };
+		559E53281D546CC800F2D50F /* FLACAudioFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 559E53231D546CC800F2D50F /* FLACAudioFile.cpp */; };
+		559E53291D546CC800F2D50F /* FLACAudioFileComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 559E53251D546CC800F2D50F /* FLACAudioFileComponent.cpp */; };
 		55F124381CD51B8C00CA90BE /* CAFLACDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E64E1CD3F2FD00071A6D /* CAFLACDecoderPublic.r */; };
 		55F124391CD51B9B00CA90BE /* CAVorbisDecoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E66A1CD3F32D00071A6D /* CAVorbisDecoderPublic.r */; };
 		55F1243A1CD51B9B00CA90BE /* CAVorbisEncoderPublic.r in Rez */ = {isa = PBXBuildFile; fileRef = 5530E66D1CD3F32D00071A6D /* CAVorbisEncoderPublic.r */; };
@@ -337,6 +339,16 @@
 		5530E7931CD41AF000071A6D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		5530E7981CD41BE000071A6D /* ACPlugInDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPlugInDispatch.cpp; sourceTree = "<group>"; };
 		5530E7991CD41BE000071A6D /* ACPlugInDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPlugInDispatch.h; sourceTree = "<group>"; };
+		559E53181D54630300F2D50F /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
+		559E53191D54630300F2D50F /* CAAtomicStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomicStack.h; sourceTree = "<group>"; };
+		559E53231D546CC800F2D50F /* FLACAudioFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FLACAudioFile.cpp; sourceTree = "<group>"; };
+		559E53241D546CC800F2D50F /* FLACAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACAudioFile.h; sourceTree = "<group>"; };
+		559E53251D546CC800F2D50F /* FLACAudioFileComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FLACAudioFileComponent.cpp; sourceTree = "<group>"; };
+		559E53261D546CC800F2D50F /* FLACAudioFileComponent.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = FLACAudioFileComponent.exp; sourceTree = "<group>"; };
+		559E53271D546CC800F2D50F /* FLACAudioFileComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACAudioFileComponent.h; sourceTree = "<group>"; };
+		559E532B1D546D2E00F2D50F /* ACFLACResIDs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACFLACResIDs.h; sourceTree = "<group>"; };
+		559E532C1D546D2E00F2D50F /* ACFLACVersions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACFLACVersions.h; sourceTree = "<group>"; };
+		559E532D1D546D3800F2D50F /* ACFLACApple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACFLACApple.h; sourceTree = "<group>"; };
 		55F1243C1CD51BDE00CA90BE /* XCAResources.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; path = XCAResources.r; sourceTree = "<group>"; };
 		55F1243D1CD51BF300CA90BE /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		55F1243E1CD51BF400CA90BE /* icon.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; path = icon.r; sourceTree = "<group>"; };
@@ -429,6 +441,7 @@
 				5530E6571CD3F31900071A6D /* CASpeex */,
 				5530E64A1CD3F2FD00071A6D /* CAFLAC */,
 				5503C1131CDBA7F600FC7F50 /* CAOgg */,
+				559E53211D546C4200F2D50F /* FLAC Audio File */,
 				5530E6331CD3F27D00071A6D /* Info.plist */,
 				5530E6EF1CD4014200071A6D /* Components.exp */,
 				5530E7281CD40DFD00071A6D /* EntryPoints.cpp */,
@@ -623,6 +636,8 @@
 		5530E6CB1CD3F8D000071A6D /* PublicUtility */ = {
 			isa = PBXGroup;
 			children = (
+				559E53181D54630300F2D50F /* CAAtomic.h */,
+				559E53191D54630300F2D50F /* CAAtomicStack.h */,
 				5530E7891CD41A4100071A6D /* CAAudioChannelLayout.cpp */,
 				5530E78A1CD41A4100071A6D /* CAAudioChannelLayout.h */,
 				5530E78B1CD41A4100071A6D /* CAAudioChannelLayoutObject.cpp */,
@@ -722,6 +737,22 @@
 				5530E76A1CD40EC100071A6D /* AUTimestampGenerator.h */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		559E53211D546C4200F2D50F /* FLAC Audio File */ = {
+			isa = PBXGroup;
+			children = (
+				559E532D1D546D3800F2D50F /* ACFLACApple.h */,
+				559E532B1D546D2E00F2D50F /* ACFLACResIDs.h */,
+				559E532C1D546D2E00F2D50F /* ACFLACVersions.h */,
+				559E53231D546CC800F2D50F /* FLACAudioFile.cpp */,
+				559E53241D546CC800F2D50F /* FLACAudioFile.h */,
+				559E53251D546CC800F2D50F /* FLACAudioFileComponent.cpp */,
+				559E53261D546CC800F2D50F /* FLACAudioFileComponent.exp */,
+				559E53271D546CC800F2D50F /* FLACAudioFileComponent.h */,
+			);
+			name = "FLAC Audio File";
+			path = ../../FLACAF;
 			sourceTree = "<group>";
 		};
 		55F1243F1CD51BFC00CA90BE /* Resources */ = {
@@ -932,10 +963,12 @@
 				5530E6551CD3F2FD00071A6D /* CAOggFLACDecoder.cpp in Sources */,
 				5503C14C1CDBAA9A00FC7F50 /* CACFString.cpp in Sources */,
 				5530E7911CD41A9700071A6D /* AUScopeElement.cpp in Sources */,
+				559E53281D546CC800F2D50F /* FLACAudioFile.cpp in Sources */,
 				5530E6731CD3F32D00071A6D /* CAVorbisEncoder.cpp in Sources */,
 				5530E6721CD3F32D00071A6D /* CAVorbisDecoder.cpp in Sources */,
 				5530E6DA1CD3F8D000071A6D /* CABundleLocker.cpp in Sources */,
 				5530E7971CD41B3000071A6D /* AUDispatch.cpp in Sources */,
+				559E53291D546CC800F2D50F /* FLACAudioFileComponent.cpp in Sources */,
 				5503C11D1CDBA87C00FC7F50 /* OggAudioFileComponent.cpp in Sources */,
 				5530E7881CD41A2400071A6D /* AUBase.cpp in Sources */,
 				5530E76D1CD40EE500071A6D /* CAXException.cpp in Sources */,

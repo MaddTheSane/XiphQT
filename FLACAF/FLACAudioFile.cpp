@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -49,6 +49,7 @@
 #include "CABundleLocker.h"
 #include "CAAutoDisposer.h"
 #include "ACFLACApple.h"
+#include "fccs.h"
 
 #define	kCompletePacketTable            -1
 
@@ -164,6 +165,10 @@ bool	IsSupportedFLACFormat(UInt32	inFormatID)
 		case kAudioFormatFLAC:
 			return true;
 			break;
+			
+		case kAudioFormatXiphFLAC:
+			return true;
+			break;
 	}
 	return false;
 }
@@ -220,7 +225,7 @@ OSStatus FLACAudioFile::ReadPackets(	Boolean							inUseCache,
                                     void							*outBuffer)
 {
     OSStatus		err = noErr;
-    PacketTable*	packetTable	;
+    CompressedPacketTable*	packetTable	;
     bool            packetDescriptionsOnly = ((outBuffer == NULL) && (outPacketDescriptions != NULL)) ? true : false;
     
     FailWithAction((ioNumPackets == NULL) || (*ioNumPackets < 1), err = kAudioFileUnspecifiedError, Bail, "invalid num packets parameter");
@@ -230,7 +235,7 @@ OSStatus FLACAudioFile::ReadPackets(	Boolean							inUseCache,
 	FailIf(err != noErr, Bail, "ScanForPackets (FLAC) failed");
 	
 	// verify that there are any packets after inStartingPacket
-	if (inStartingPacket > GetPacketCount())
+	if (inStartingPacket > GetNumPackets())
 	{
 		return kAudioFileInvalidPacketOffsetError;
 	}
@@ -243,7 +248,7 @@ OSStatus FLACAudioFile::ReadPackets(	Boolean							inUseCache,
         UInt32	                           totalBytes = 0;
         UInt32                              i;
         AudioStreamPacketDescription 		curPacket;
-        SInt64                              totalPacketCount =  GetPacketCount();
+        SInt64                              totalPacketCount =  GetNumPackets();
         
         *outNumBytes = 0;
         
@@ -325,7 +330,7 @@ OSStatus FLACAudioFile::WritePackets(	Boolean								inUseCache,
     UInt64							i;
     UInt8							*bufLoc = (UInt8 *) inBuffer;
     AudioStreamPacketDescription	curPacket = {0};
-    PacketTable						*pTable;
+    CompressedPacketTable			*pTable;
     UInt32							byteCount;
     UInt32							totalByteCount = 0;
     UInt32							packetCount = 0;
@@ -342,20 +347,20 @@ OSStatus FLACAudioFile::WritePackets(	Boolean								inUseCache,
     FailIf(ioNumPackets == NULL, Bail, "WritePackets Failed");
     FailIf(*ioNumPackets == 0, Bail, "WritePackets Failed");
     // for now, only append packets to the end
-    FailWithAction(inStartingPacket != GetPacketCount(), err = kAudioFileInvalidPacketOffsetError, Bail, "");
+    FailWithAction(inStartingPacket != GetNumPackets(), err = kAudioFileInvalidPacketOffsetError, Bail, "");
 
 	pTable = GetPacketTable(true);
 
 	FailIf(pTable == NULL, Bail, "WritePackets: GetPacketTable() Failed");
     FailWithAction(inPacketDescriptions == NULL, err = kAudioFileInvalidPacketOffsetError, Bail, "Packet Descriptions were not provided");
 
-    offset = (GetPacketCount() == 0) ? GetDataOffset() : (*pTable)[GetPacketCount() - 1].mStartOffset + (*pTable)[GetPacketCount() - 1].mDataByteSize;
+    offset = (GetNumPackets() == 0) ? GetDataOffset() : (*pTable)[GetNumPackets() - 1].mStartOffset + (*pTable)[GetNumPackets() - 1].mDataByteSize;
 
     for (i = 0; i < *ioNumPackets; i++)
     {        
  		UInt32 flacStart = CFSwapInt32HostToBig(kFLACStartBytes);
         
-        if (GetPacketCount() == 0)
+        if (GetNumPackets() == 0)
         {
  			// we don't do any of the odd stereo layouts
 			mChannelLayoutTag = gFLACChannelConfigToLayoutTag[dataFormat.mChannelsPerFrame - 1];
@@ -368,7 +373,7 @@ OSStatus FLACAudioFile::WritePackets(	Boolean								inUseCache,
 		}
 		else
 		{
-			AudioStreamPacketDescription   previousPacket = (*pTable)[GetPacketCount() - 1];
+			AudioStreamPacketDescription   previousPacket = (*pTable)[GetNumPackets() - 1];
             curPacket.mStartOffset = previousPacket.mStartOffset +  previousPacket.mDataByteSize;
             curPacket.mDataByteSize = inPacketDescriptions[i].mDataByteSize;
 		}
@@ -670,7 +675,7 @@ OSStatus FLACAudioFile::ParseFirstPacketHeader(SInt64 filePosition, AudioStreamB
 {
     OSStatus                err = noErr;
     UInt32	                byteCount;
-    PacketTable             *packetTable;
+    CompressedPacketTable   *packetTable;
     UInt32                  sampleRateIndex = 0;
     UInt32                  channelConfigurationBits = 0;
     UInt32                  blockingStrategy = 0, blockSizeBits = 0;
@@ -1060,7 +1065,7 @@ SInt64 FLACAudioFile::GetNumPackets(void)
 		}
     }
     
-    return (GetPacketCount());
+    return (GetNumPackets());
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1390,12 +1395,12 @@ OSStatus	FLACAudioFile::ScanForPackets(SInt64  inToPacketCount)
     SInt64                              oldPos;
     SInt64                              packetCount = 0;
 	SInt64                              endOfAudioData = 0;
-	PacketTable                         *packetTable = NULL;    
+	CompressedPacketTable               *packetTable = NULL;
     SInt64                              packetsToAdd = 0;
 	UInt32								headerSize = 0, offsetToSyncWord = 0, currentByte = 0;
 
     packetTable = GetPacketTable(true); // get table to determine the size or create a new one
-    packetCount = GetPacketCount();     // how many packets are already in the table?
+    packetCount = GetNumPackets();     // how many packets are already in the table?
 
     if (inToPacketCount != kCompletePacketTable)
     {
@@ -1420,7 +1425,7 @@ OSStatus	FLACAudioFile::ScanForPackets(SInt64  inToPacketCount)
 		filePos = (*packetTable)[packetCount-1].mStartOffset + (*packetTable)[packetCount-1].mDataByteSize;
     }
     
-    packetsToAdd = (inToPacketCount == kCompletePacketTable) ? kCompletePacketTable : inToPacketCount - GetPacketCount();
+    packetsToAdd = (inToPacketCount == kCompletePacketTable) ? kCompletePacketTable : inToPacketCount - GetNumPackets();
     
 	{
 		CAAutoFree<Byte> FLACHeader(kFLACMaxHeaderSize, true);
