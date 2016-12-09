@@ -28,6 +28,18 @@
 		5503C1B81CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B51CDBD22F00FC7F50 /* fixed_intrin_sse2.c */; };
 		5503C1B91CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */; };
 		5503C1BA1CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5503C1B61CDBD22F00FC7F50 /* fixed_intrin_ssse3.c */; };
+		55A5FEDB1DFB6AB500E07058 /* ogg_decoder_aspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 55A5FED71DFB6AB500E07058 /* ogg_decoder_aspect.h */; };
+		55A5FEDC1DFB6AB500E07058 /* ogg_encoder_aspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 55A5FED81DFB6AB500E07058 /* ogg_encoder_aspect.h */; };
+		55A5FEDD1DFB6AB500E07058 /* ogg_helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 55A5FED91DFB6AB500E07058 /* ogg_helper.h */; };
+		55A5FEDE1DFB6AB500E07058 /* ogg_mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 55A5FEDA1DFB6AB500E07058 /* ogg_mapping.h */; };
+		55A5FEE31DFB6CA200E07058 /* ogg_decoder_aspect.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEDF1DFB6CA200E07058 /* ogg_decoder_aspect.c */; };
+		55A5FEE41DFB6CA200E07058 /* ogg_decoder_aspect.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEDF1DFB6CA200E07058 /* ogg_decoder_aspect.c */; };
+		55A5FEE51DFB6CA200E07058 /* ogg_encoder_aspect.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE01DFB6CA200E07058 /* ogg_encoder_aspect.c */; };
+		55A5FEE61DFB6CA200E07058 /* ogg_encoder_aspect.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE01DFB6CA200E07058 /* ogg_encoder_aspect.c */; };
+		55A5FEE71DFB6CA200E07058 /* ogg_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE11DFB6CA200E07058 /* ogg_helper.c */; };
+		55A5FEE81DFB6CA200E07058 /* ogg_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE11DFB6CA200E07058 /* ogg_helper.c */; };
+		55A5FEE91DFB6CA200E07058 /* ogg_mapping.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */; };
+		55A5FEEA1DFB6CA200E07058 /* ogg_mapping.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */; };
 		73744B060B1A1925002B059E /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744B050B1A1925002B059E /* window.c */; };
 		73744B200B1A1D3A002B059E /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963E0A0D1AB900D40234 /* bitmath.c */; };
 		73744B210B1A1D3B002B059E /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963F0A0D1AB900D40234 /* cpu.c */; };
@@ -133,6 +145,14 @@
 		5526210B1B7BA8FD00F0550D /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../../DefaultConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		5530E5F61CD3CAE700071A6D /* FLAC.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = FLAC.modulemap; sourceTree = "<group>"; };
 		5530E5F71CD3CB8100071A6D /* FLAC++.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "FLAC++.modulemap"; sourceTree = "<group>"; };
+		55A5FED71DFB6AB500E07058 /* ogg_decoder_aspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ogg_decoder_aspect.h; sourceTree = "<group>"; };
+		55A5FED81DFB6AB500E07058 /* ogg_encoder_aspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ogg_encoder_aspect.h; sourceTree = "<group>"; };
+		55A5FED91DFB6AB500E07058 /* ogg_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ogg_helper.h; sourceTree = "<group>"; };
+		55A5FEDA1DFB6AB500E07058 /* ogg_mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ogg_mapping.h; sourceTree = "<group>"; };
+		55A5FEDF1DFB6CA200E07058 /* ogg_decoder_aspect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_decoder_aspect.c; sourceTree = "<group>"; };
+		55A5FEE01DFB6CA200E07058 /* ogg_encoder_aspect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_encoder_aspect.c; sourceTree = "<group>"; };
+		55A5FEE11DFB6CA200E07058 /* ogg_helper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_helper.c; sourceTree = "<group>"; };
+		55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_mapping.c; sourceTree = "<group>"; };
 		73744B050B1A1925002B059E /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		73744B1B0B1A1C43002B059E /* libflac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libflac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B520B1A21DA002B059E /* libflac++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libflac++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -327,6 +347,10 @@
 				5503C1AE1CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c */,
 				73E1964E0A0D1AB900D40234 /* stream_encoder_framing.c */,
 				73744B050B1A1925002B059E /* window.c */,
+				55A5FEDF1DFB6CA200E07058 /* ogg_decoder_aspect.c */,
+				55A5FEE01DFB6CA200E07058 /* ogg_encoder_aspect.c */,
+				55A5FEE11DFB6CA200E07058 /* ogg_helper.c */,
+				55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */,
 			);
 			name = FLAC;
 			path = libFLAC;
@@ -388,6 +412,10 @@
 			isa = PBXGroup;
 			children = (
 				73E196020A0D193600D40234 /* all.h */,
+				55A5FED71DFB6AB500E07058 /* ogg_decoder_aspect.h */,
+				55A5FED81DFB6AB500E07058 /* ogg_encoder_aspect.h */,
+				55A5FED91DFB6AB500E07058 /* ogg_helper.h */,
+				55A5FEDA1DFB6AB500E07058 /* ogg_mapping.h */,
 				73E196040A0D193700D40234 /* bitmath.h */,
 				738C0AF30B8D4BF40010DDDC /* bitreader.h */,
 				738C0AF40B8D4BF40010DDDC /* bitwriter.h */,
@@ -458,9 +486,12 @@
 				73E1961D0A0D19CE00D40234 /* assert.h in Headers */,
 				73E1961E0A0D19CE00D40234 /* callback.h in Headers */,
 				73E1961F0A0D19CE00D40234 /* export.h in Headers */,
+				55A5FEDB1DFB6AB500E07058 /* ogg_decoder_aspect.h in Headers */,
 				73E196220A0D19CE00D40234 /* format.h in Headers */,
 				73E196230A0D19CE00D40234 /* metadata.h in Headers */,
 				73E196240A0D19CE00D40234 /* ordinals.h in Headers */,
+				55A5FEDE1DFB6AB500E07058 /* ogg_mapping.h in Headers */,
+				55A5FEDC1DFB6AB500E07058 /* ogg_encoder_aspect.h in Headers */,
 				73E196270A0D19CE00D40234 /* stream_decoder.h in Headers */,
 				73E196280A0D19CE00D40234 /* stream_encoder.h in Headers */,
 				73E196290A0D1A1E00D40234 /* all.h in Headers */,
@@ -481,6 +512,7 @@
 				738C0AF50B8D4BF40010DDDC /* bitreader.h in Headers */,
 				738C0AF60B8D4BF40010DDDC /* bitwriter.h in Headers */,
 				37CA8E130DD73E6F005C8CB6 /* window.h in Headers */,
+				55A5FEDD1DFB6AB500E07058 /* ogg_helper.h in Headers */,
 				37CA8E160DD73F2D005C8CB6 /* alloc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,12 +658,15 @@
 				5503C1B01CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */,
 				73744B210B1A1D3B002B059E /* cpu.c in Sources */,
 				73744B220B1A1D3C002B059E /* crc.c in Sources */,
+				55A5FEE81DFB6CA200E07058 /* ogg_helper.c in Sources */,
 				73744B230B1A1D3D002B059E /* fixed.c in Sources */,
 				73744B240B1A1D3E002B059E /* float.c in Sources */,
 				73744B250B1A1D3F002B059E /* format.c in Sources */,
 				5503C1A51CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */,
+				55A5FEE61DFB6CA200E07058 /* ogg_encoder_aspect.c in Sources */,
 				73744B260B1A1D40002B059E /* lpc.c in Sources */,
 				73744B270B1A1D40002B059E /* md5.c in Sources */,
+				55A5FEEA1DFB6CA200E07058 /* ogg_mapping.c in Sources */,
 				73744B280B1A1D41002B059E /* memory.c in Sources */,
 				73744B290B1A1D41002B059E /* metadata_iterators.c in Sources */,
 				5503C1BA1CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */,
@@ -644,6 +679,7 @@
 				73744B2D0B1A1D44002B059E /* stream_encoder_framing.c in Sources */,
 				73744B2E0B1A1D45002B059E /* window.c in Sources */,
 				5503C1B41CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */,
+				55A5FEE41DFB6CA200E07058 /* ogg_decoder_aspect.c in Sources */,
 				5503C1B81CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */,
 				738C0AFB0B8D4CFB0010DDDC /* bitreader.c in Sources */,
 				5503C1B21CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */,
@@ -679,12 +715,15 @@
 				5503C1AF1CDBD1EE00FC7F50 /* stream_encoder_intrin_avx2.c in Sources */,
 				73E196520A0D1AB900D40234 /* cpu.c in Sources */,
 				73E196530A0D1AB900D40234 /* crc.c in Sources */,
+				55A5FEE71DFB6CA200E07058 /* ogg_helper.c in Sources */,
 				73E196560A0D1AB900D40234 /* fixed.c in Sources */,
 				73E196570A0D1AB900D40234 /* float.c in Sources */,
 				73E196580A0D1AB900D40234 /* format.c in Sources */,
 				5503C1A41CDBD1D500FC7F50 /* lpc_intrin_avx2.c in Sources */,
+				55A5FEE51DFB6CA200E07058 /* ogg_encoder_aspect.c in Sources */,
 				73E196590A0D1AB900D40234 /* lpc.c in Sources */,
 				73E1965A0A0D1AB900D40234 /* md5.c in Sources */,
+				55A5FEE91DFB6CA200E07058 /* ogg_mapping.c in Sources */,
 				73E1965B0A0D1AB900D40234 /* memory.c in Sources */,
 				73E1965C0A0D1AB900D40234 /* metadata_iterators.c in Sources */,
 				5503C1B91CDBD22F00FC7F50 /* fixed_intrin_ssse3.c in Sources */,
@@ -697,6 +736,7 @@
 				73E196620A0D1AB900D40234 /* stream_encoder.c in Sources */,
 				73744B060B1A1925002B059E /* window.c in Sources */,
 				5503C1B31CDBD1EE00FC7F50 /* stream_encoder_intrin_ssse3.c in Sources */,
+				55A5FEE31DFB6CA200E07058 /* ogg_decoder_aspect.c in Sources */,
 				5503C1B71CDBD22F00FC7F50 /* fixed_intrin_sse2.c in Sources */,
 				738C0AF90B8D4CFB0010DDDC /* bitreader.c in Sources */,
 				5503C1B11CDBD1EE00FC7F50 /* stream_encoder_intrin_sse2.c in Sources */,
@@ -806,6 +846,7 @@
 					FLAC__SYS_DARWIN,
 					HAVE_SYS_PARAM_H,
 					FLAC__ALIGN_MALLOC_DATA,
+					FLAC__HAS_OGG,
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=i386]" = (
 					FLAC__CPU_IA32,
@@ -827,6 +868,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PER_ARCH_CFLAGS_i386 = "-D FLAC__CPU_IA32";
 				PER_ARCH_CFLAGS_ppc = "-D FLAC__CPU_PPC";
@@ -844,6 +886,7 @@
 					FLAC__SYS_DARWIN,
 					HAVE_SYS_PARAM_H,
 					FLAC__ALIGN_MALLOC_DATA,
+					FLAC__HAS_OGG,
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=i386]" = (
 					FLAC__CPU_IA32,
@@ -865,6 +908,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-fomit-frame-pointer",

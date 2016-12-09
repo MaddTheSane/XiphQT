@@ -52,28 +52,28 @@ enum
 
 // QuickTime Atoms
 struct AtomHeader {
-  SInt32              size;                   /* = sizeof(AudioFormatAtom)*/
-  OSType              type;               /* = kAudioFormatAtomType*/
+  SInt32              size;               /*!< = sizeof(AudioFormatAtom)*/
+  OSType              type;               /*!< = kAudioFormatAtomType*/
 };
 typedef struct AtomHeader          AtomHeader;
 
 struct FullAtomHeader {
-  SInt32              size;                   /* = sizeof(AudioFormatAtom)*/
-  OSType              type;               /* = kAudioFormatAtomType*/
+  SInt32              size;               /*!< = sizeof(AudioFormatAtom)*/
+  OSType              type;               /*!< = kAudioFormatAtomType*/
   OSType              versionFlags;
 };
 typedef struct FullAtomHeader          FullAtomHeader;
 
 struct AudioFormatAtom {
-  SInt32                size;                   /* = sizeof(AudioFormatAtom)*/
-  OSType              atomType;               /* = kAudioFormatAtomType*/
+  SInt32              size;                   /*!< = sizeof(AudioFormatAtom)*/
+  OSType              atomType;               /*!< = kAudioFormatAtomType*/
   OSType              format;
 };
 typedef struct AudioFormatAtom          AudioFormatAtom;
 
 struct AudioTerminatorAtom {
-  SInt32                size;                   /* = sizeof(AudioTerminatorAtom)*/
-  OSType              atomType;               /* = kAudioTerminatorAtomType*/
+  SInt32              size;                   /*!< = sizeof(AudioTerminatorAtom)*/
+  OSType              atomType;               /*!< = kAudioTerminatorAtomType*/
 };
 typedef struct AudioTerminatorAtom      AudioTerminatorAtom;
 
