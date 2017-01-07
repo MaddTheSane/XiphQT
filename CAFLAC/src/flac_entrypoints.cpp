@@ -30,17 +30,10 @@
 
 #include "CAFLACDecoder.h"
 #include "CAOggFLACDecoder.h"
+#include "ACPlugInDispatch.h"
+#include "ComponentBase.h"
 
-#include "ACCodecDispatch.h"
 
-extern "C"
-ComponentResult	CAFLACDecoderEntry(ComponentParameters* inParameters, CAFLACDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAFLACDecoder);
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggFLACDecoder);
 
-extern "C"
-ComponentResult	CAOggFLACDecoderEntry(ComponentParameters* inParameters, CAOggFLACDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}

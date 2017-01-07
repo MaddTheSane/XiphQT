@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55202FD51E219602009C17B6 /* ComponentBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55202FD31E219602009C17B6 /* ComponentBase.cpp */; };
+		55202FDB1E21967C009C17B6 /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55202FD91E21967C009C17B6 /* CAXException.cpp */; };
+		55202FDE1E219750009C17B6 /* ACPlugInDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55202FDC1E219750009C17B6 /* ACPlugInDispatch.cpp */; };
 		556C40D41B79654800D2CDDA /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 556C40C21B7964A500D2CDDA /* Ogg.framework */; };
 		556C40D61B79656000D2CDDA /* Ogg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 556C40C21B7964A500D2CDDA /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5589FB091B8B78CA0011C7EE /* FLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5589FAFE1B8B78760011C7EE /* FLAC.framework */; };
@@ -115,6 +118,12 @@
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		32BAE0B30371A71500C91783 /* CAFLAC_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAFLAC_Prefix.pch; sourceTree = "<group>"; };
+		55202FD31E219602009C17B6 /* ComponentBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentBase.cpp; sourceTree = "<group>"; };
+		55202FD41E219602009C17B6 /* ComponentBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentBase.h; sourceTree = "<group>"; };
+		55202FD91E21967C009C17B6 /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
+		55202FDA1E21967C009C17B6 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
+		55202FDC1E219750009C17B6 /* ACPlugInDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPlugInDispatch.cpp; sourceTree = "<group>"; };
+		55202FDD1E219750009C17B6 /* ACPlugInDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPlugInDispatch.h; sourceTree = "<group>"; };
 		556C3F3D1B794A5200D2CDDA /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		556C3F3E1B794A5200D2CDDA /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = SOURCE_ROOT; };
 		556C40BC1B7964A500D2CDDA /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = ogg/macosx/Ogg.xcodeproj; sourceTree = "<group>"; };
@@ -241,6 +250,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		55202FD61E219610009C17B6 /* AudioUnits */ = {
+			isa = PBXGroup;
+			children = (
+				55202FD71E219620009C17B6 /* AUPublic */,
+			);
+			path = AudioUnits;
+			sourceTree = "<group>";
+		};
+		55202FD71E219620009C17B6 /* AUPublic */ = {
+			isa = PBXGroup;
+			children = (
+				55202FD81E21962B009C17B6 /* AUBase */,
+			);
+			path = AUPublic;
+			sourceTree = "<group>";
+		};
+		55202FD81E21962B009C17B6 /* AUBase */ = {
+			isa = PBXGroup;
+			children = (
+				55202FD31E219602009C17B6 /* ComponentBase.cpp */,
+				55202FD41E219602009C17B6 /* ComponentBase.h */,
+			);
+			path = AUBase;
+			sourceTree = "<group>";
+		};
 		556C40A01B79626300D2CDDA /* External libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,6 +339,7 @@
 		732019E408FEDFAD002000DA /* CoreAudio */ = {
 			isa = PBXGroup;
 			children = (
+				55202FD61E219610009C17B6 /* AudioUnits */,
 				732019E508FEDFAD002000DA /* AudioCodecs */,
 				732019F608FEDFAD002000DA /* PublicUtility */,
 			);
@@ -322,6 +357,8 @@
 		732019E608FEDFAD002000DA /* ACPublic */ = {
 			isa = PBXGroup;
 			children = (
+				55202FDC1E219750009C17B6 /* ACPlugInDispatch.cpp */,
+				55202FDD1E219750009C17B6 /* ACPlugInDispatch.h */,
 				732019E708FEDFAD002000DA /* ACBaseCodec.cpp */,
 				732019E808FEDFAD002000DA /* ACBaseCodec.h */,
 				732019E908FEDFAD002000DA /* ACCodec.cpp */,
@@ -344,6 +381,8 @@
 				732019FC08FEDFAD002000DA /* CAMath.h */,
 				732019FD08FEDFAD002000DA /* CAStreamBasicDescription.cpp */,
 				732019FE08FEDFAD002000DA /* CAStreamBasicDescription.h */,
+				55202FD91E21967C009C17B6 /* CAXException.cpp */,
+				55202FDA1E21967C009C17B6 /* CAXException.h */,
 			);
 			path = PublicUtility;
 			sourceTree = "<group>";
@@ -506,9 +545,12 @@
 				73201A0508FEDFAD002000DA /* CABundleLocker.cpp in Sources */,
 				73201A0608FEDFAD002000DA /* CADebugMacros.cpp in Sources */,
 				73201A0708FEDFAD002000DA /* CAStreamBasicDescription.cpp in Sources */,
+				55202FD51E219602009C17B6 /* ComponentBase.cpp in Sources */,
 				734EA2400902851800D10866 /* XCACodec.cpp in Sources */,
 				73AE0E550907D14A0008B8A1 /* flac_entrypoints.cpp in Sources */,
 				7350DCD2098BC2F100A5DAB4 /* CAOggFLACDecoder.cpp in Sources */,
+				55202FDB1E21967C009C17B6 /* CAXException.cpp in Sources */,
+				55202FDE1E219750009C17B6 /* ACPlugInDispatch.cpp in Sources */,
 				7350DCD8098BC37D00A5DAB4 /* wrap_ogg.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -561,6 +603,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CAFLAC_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = AUDIOCODECS_SUPPORT_PLUGINS;
 				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Components";
@@ -585,6 +628,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CAFLAC_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = AUDIOCODECS_SUPPORT_PLUGINS;
 				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Components";
