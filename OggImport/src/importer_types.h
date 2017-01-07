@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: importer_types.h 13696 2007-09-02 15:34:00Z arek $
+ *  Last modified: $Id$
  *
  */
 

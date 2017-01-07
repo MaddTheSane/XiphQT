@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAOggVorbisDecoder.h 11273 2006-04-24 22:28:46Z arek $
+ *  Last modified: $Id$
  *
  */
 

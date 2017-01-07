@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: TheoraDecoder.c 16093 2009-06-08 23:16:39Z arek $
+ *  Last modified: $Id$
  *
  */
 

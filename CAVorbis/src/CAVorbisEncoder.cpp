@@ -24,7 +24,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAVorbisEncoder.cpp 12399 2007-01-30 21:13:19Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -692,7 +692,7 @@ void CAVorbisEncoder::InitializeCompressionSettings()
     }
 
     vorbis_comment_init(&mV_vc);
-    vorbis_comment_add_tag(&mV_vc, "ENCODER", "XiphQT, CAVorbisEncoder.cpp $Rev: 12399 $");
+    vorbis_comment_add_tag(&mV_vc, "ENCODER", "XiphQT, CAVorbisEncoder.cpp $Rev$");
 
     vorbis_analysis_init(&mV_vd, &mV_vi);
     vorbis_block_init(&mV_vd, &mV_vb);

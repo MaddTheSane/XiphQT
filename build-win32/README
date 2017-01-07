@@ -1,0 +1,24 @@
+Building - Win32
+================
+
+To build XiphQT on for Win32 OS you will need Visual-C compiler,
+QuickTime SDK 7 for Win32 and a set of statically compiled Xiph
+libraries (ogg, vorbis, speex).
+
+By default, the QT SDK is expected to be installed in the default location:
+C:\Program Files\QuickTime SDK
+and the Xiph libraries are supposed to be located in the same directory
+as 'xiph-qt' directory (using simple library names, without numerical
+version suffixes). 
+
+The project files will build XiphQT in a single file XiphQT.qtx and then
+install it in the default directory for third-party QuickTime components:
+C:\Program Files\QuickTime\QTComponents
+
+
+Installing - Win32
+==================
+
+The binary component file XiphQT.qtx needs to be installed in 'QTComponents'
+sub-folder of your QuickTime installation.
+

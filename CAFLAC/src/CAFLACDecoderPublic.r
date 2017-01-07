@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAFLACDecoderPublic.r 10761 2006-01-28 19:30:37Z arek $
+ *  Last modified: $Id$
  *
  */
 

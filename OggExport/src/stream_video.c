@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: stream_video.c 13634 2007-08-26 20:28:21Z arek $
+ *  Last modified: $Id$
  *
  */
 
