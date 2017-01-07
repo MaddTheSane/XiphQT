@@ -1144,6 +1144,7 @@
 					"AUDIOCODECS_SUPPORT_PLUGINS=1",
 					"$(inherited)",
 				);
+				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = "Xiph Audio Components/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Xiph-Audio-Components";
@@ -1164,6 +1165,7 @@
 					"AUDIOCODECS_SUPPORT_PLUGINS=1",
 					"$(inherited)",
 				);
+				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = "Xiph Audio Components/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Xiph-Audio-Components";
