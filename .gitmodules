@@ -1,3 +1,18 @@
 [submodule "external-libs/opus"]
 	path = external-libs/opus
 	url = git://git.opus-codec.org/opus.git
+[submodule "external-libs/vorbis"]
+	path = external-libs/vorbis
+	url = https://github.com/MaddTheSane/vorbis.git
+[submodule "external-libs/speex"]
+	path = external-libs/speex
+	url = https://github.com/MaddTheSane/speex.git
+[submodule "external-libs/ogg"]
+	path = external-libs/ogg
+	url = https://github.com/MaddTheSane/ogg.git
+[submodule "external-libs/flac"]
+	path = external-libs/flac
+	url = https://github.com/MaddTheSane/flac.git
+[submodule "external-libs/theora"]
+	path = external-libs/theora
+	url = https://github.com/MaddTheSane/theora.git
