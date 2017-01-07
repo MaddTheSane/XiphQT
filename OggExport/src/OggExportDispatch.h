@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: OggExportDispatch.h 16023 2009-05-24 15:06:20Z arek $
+ *  Last modified: $Id$
  *
  */
 

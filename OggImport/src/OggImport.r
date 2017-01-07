@@ -24,7 +24,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: OggImport.r 13693 2007-09-01 15:09:39Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -364,7 +364,7 @@ resource 'STR ' (kImporterNameStringResID, OggImporterName, purgeable) {
 };
 
 resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
-    "Ogg " "0.1.6" " (See http://www.xiph.org)."
+    "Ogg " "0.1.12" " (See http://xiph.org)."
 };
 
 
@@ -375,63 +375,80 @@ resource 'STR ' (kImporterInfoStringResID, OggImporterName, purgeable) {
 */
 resource 'mime' (kImporterResID, OggImporterName, purgeable) {
     {
-        kMimeInfoMimeTypeTag,       1, "application/ogg";
-        kMimeInfoMimeTypeTag,       2, "application/x-ogg";
-        kMimeInfoMimeTypeTag,       3, "audio/x-speex";
-        kMimeInfoMimeTypeTag,       4, "audio/speex";
-        kMimeInfoMimeTypeTag,       5, "application/x-annodex";
-        kMimeInfoMimeTypeTag,       6, "application/annodex";
-        kMimeInfoMimeTypeTag,       7, "application/ogg";
-        kMimeInfoMimeTypeTag,       8, "application/x-ogg";
-        kMimeInfoMimeTypeTag,       9, "audio/x-ogg";
-        kMimeInfoMimeTypeTag,      10, "audio/ogg";
-        kMimeInfoMimeTypeTag,      11, "video/x-ogg";
-        kMimeInfoMimeTypeTag,      12, "video/ogg";
-        kMimeInfoMimeTypeTag,      13, "audio/x-annodex";
-        kMimeInfoMimeTypeTag,      14, "audio/annodex";
-        kMimeInfoMimeTypeTag,      15, "video/x-annodex";
-        kMimeInfoMimeTypeTag,      16, "video/annodex";
+        kMimeInfoMimeTypeTag,       1, "audio/ogg";
+        kMimeInfoMimeTypeTag,       2, "audio/ogg";
+        kMimeInfoMimeTypeTag,       3, "application/x-annodex";
+        kMimeInfoMimeTypeTag,       4, "application/annodex";
+        kMimeInfoMimeTypeTag,       5, "application/ogg";
+        kMimeInfoMimeTypeTag,       6, "audio/ogg";
+        kMimeInfoMimeTypeTag,       7, "video/ogg";
+        kMimeInfoMimeTypeTag,       8, "audio/x-annodex";
+        kMimeInfoMimeTypeTag,       9, "audio/annodex";
+        kMimeInfoMimeTypeTag,      10, "video/x-annodex";
+        kMimeInfoMimeTypeTag,      11, "video/annodex";
 
         kMimeInfoFileExtensionTag,  1, "ogg";
-        kMimeInfoFileExtensionTag,  2, "ogg";
-        kMimeInfoFileExtensionTag,  3, "spx";
-        kMimeInfoFileExtensionTag,  4, "spx";
-        kMimeInfoFileExtensionTag,  5, "anx";
-        kMimeInfoFileExtensionTag,  6, "anx";
-        kMimeInfoFileExtensionTag,  7, "ogx";
-        kMimeInfoFileExtensionTag,  8, "ogx";
-        kMimeInfoFileExtensionTag,  9, "oga";
-        kMimeInfoFileExtensionTag, 10, "oga";
-        kMimeInfoFileExtensionTag, 11, "ogv";
-        kMimeInfoFileExtensionTag, 12, "ogv";
-        kMimeInfoFileExtensionTag, 13, "axa";
-        kMimeInfoFileExtensionTag, 14, "axa";
-        kMimeInfoFileExtensionTag, 15, "axv";
-        kMimeInfoFileExtensionTag, 16, "axv";
+        kMimeInfoFileExtensionTag,  2, "spx";
+        kMimeInfoFileExtensionTag,  3, "anx";
+        kMimeInfoFileExtensionTag,  4, "anx";
+        kMimeInfoFileExtensionTag,  5, "ogx";
+        kMimeInfoFileExtensionTag,  6, "oga";
+        kMimeInfoFileExtensionTag,  7, "ogv";
+        kMimeInfoFileExtensionTag,  8, "axa";
+        kMimeInfoFileExtensionTag,  9, "axa";
+        kMimeInfoFileExtensionTag, 10, "axv";
+        kMimeInfoFileExtensionTag, 11, "axv";
 
-        kMimeInfoDescriptionTag,    1, "Ogg Multimedia Bitstream";
-        kMimeInfoDescriptionTag,    2, "Ogg Multimedia Bitstream";
-        kMimeInfoDescriptionTag,    3, "Ogg Speex";
-        kMimeInfoDescriptionTag,    4, "Ogg Speex";
-        kMimeInfoDescriptionTag,    5, "Annodex Media";
-        kMimeInfoDescriptionTag,    6, "Annodex Media";
-        kMimeInfoDescriptionTag,    7, "Ogg Multimedia Bitstream";
-        kMimeInfoDescriptionTag,    8, "Ogg Multimedia Bitstream";
-        kMimeInfoDescriptionTag,    9, "Ogg Audio";
-        kMimeInfoDescriptionTag,   10, "Ogg Audio";
-        kMimeInfoDescriptionTag,   11, "Ogg Video";
-        kMimeInfoDescriptionTag,   12, "Ogg Video";
-        kMimeInfoDescriptionTag,   13, "Annodex Audio";
-        kMimeInfoDescriptionTag,   14, "Annodex Audio";
-        kMimeInfoDescriptionTag,   15, "Annodex Video";
-        kMimeInfoDescriptionTag,   16, "Annodex Video";
+        kMimeInfoDescriptionTag,    1, "Ogg Vorbis I";
+        kMimeInfoDescriptionTag,    2, "Ogg Speex";
+        kMimeInfoDescriptionTag,    3, "Annodex Media";
+        kMimeInfoDescriptionTag,    4, "Annodex Media";
+        kMimeInfoDescriptionTag,    5, "Ogg Multimedia Bitstream";
+        kMimeInfoDescriptionTag,    6, "Ogg Audio";
+        kMimeInfoDescriptionTag,    7, "Ogg Video";
+        kMimeInfoDescriptionTag,    8, "Annodex Audio";
+        kMimeInfoDescriptionTag,    9, "Annodex Audio";
+        kMimeInfoDescriptionTag,   10, "Annodex Video";
+        kMimeInfoDescriptionTag,   11, "Annodex Video";
     };
 };
 
+// Not using proper new file types (OggX, OggA, OggV) [RFC5334] below until better
+// times (like, when iTunes supports anything beside OggS)
 resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
     kVersionDoesntMatter,
     {
         kQTMediaConfigVideoGroupID,
+        kQTMediaConfigBinaryFile | \
+            kQTMediaConfigTakeFileAssociationByDefault | \
+            kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
+            kQTMediaConfigUsePluginByDefault,
+        'OggS',
+        'TVOD',	/* we don't have a creator code for our files, hijack QT player */
+        kImporterComponentType, kCodecFormat, kSoundComponentManufacturer,
+        0, 0,
+        'OGX ',
+        kQTMediaInfoNetGroup,
+
+        /* no synonyms */
+        {
+        },
+
+        {
+            "Ogg Multimedia Bitstream",
+            "ogx",
+            "QuickTime Player",
+            "Ogg file importer",
+            "",
+        },
+
+        /* mime types array */
+        {
+            "application/ogg";
+        };
+//    };
+//    {
+        kQTMediaConfigAudioGroupID,
         kQTMediaConfigBinaryFile | \
             kQTMediaConfigTakeFileAssociationByDefault | \
             kQTMediaConfigCanUseApp | kQTMediaConfigCanUsePlugin | \
@@ -448,17 +465,16 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
         },
 
         {
-            "Ogg Multimedia Bitstream",
-            "ogg, ogx",
+            "Ogg Vorbis I audio",
+            "ogg",
             "QuickTime Player",
-            "Ogg file importer",
+            "Ogg Vorbis I file importer",
             "",
         },
 
         /* mime types array */
         {
-            "application/x-ogg";
-            "application/ogg";
+            "audio/ogg";
         };
 //    };
 //    {
@@ -488,7 +504,6 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
 
         /* mime types array */
         {
-            "video/x-ogg";
             "video/ogg";
         };
 //    };
@@ -519,7 +534,6 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
 
         /* mime types array */
         {
-            "audio/x-ogg";
             "audio/ogg";
         };
 //    };
@@ -550,8 +564,7 @@ resource 'mcfg' (kImporterResID, OggImporterName, purgeable) {
 
         /* mime types array */
         {
-            "audio/x-speex";
-            "audio/speex";
+            "audio/ogg";
         };
 //    };
 //    {

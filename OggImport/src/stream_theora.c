@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: stream_theora.c 16093 2009-06-08 23:16:39Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -81,6 +81,62 @@ UInt32 gcd(UInt32 a, UInt32 b)
     }
 
     return a;
+}
+
+/* TEMPORARILY here */
+long
+theora_private_page_duration(StreamInfo *si /*, ogg_page *og */)
+{
+    long count = 0;
+    int oret = 0;
+    ogg_packet op;
+
+    while (1) {
+        oret = ogg_stream_packetout(&si->os, &op);
+        if (oret < 0)
+            continue;
+        else if (oret < 1)
+            break;
+        count += 1;
+    };
+
+    return count;
+}
+
+
+static void _gp_to_time_subsec(StreamInfo *si, ogg_int64_t gp, TimeValue64 *ts, Float64 *subsec)
+{
+    ogg_int64_t frames = gp >> si->si_theora.granulepos_shift;
+    frames += gp - (frames << si->si_theora.granulepos_shift);
+
+    *ts = frames * si->si_theora.fps_framelen / si->rate;
+    *subsec = (Float64) (frames - *ts * si->rate / si->si_theora.fps_framelen) * (Float64) si->si_theora.fps_framelen / (Float64) si->rate;
+}
+
+static void _find_base_gp(StreamInfo *si, ogg_page *opg)
+{
+    ogg_int64_t grpos = ogg_page_granulepos(opg);
+    int packets = ogg_page_packets(opg);
+
+    if (grpos >= 0 && packets > 0) { // checking packet num explicitly - some older muxers were timestamping empty pages with 1|1...
+        ogg_int64_t duration = theora_private_page_duration(si); // will use page that's been recently pagein-ed, assumes
+                                                                 // we've been consistently packeting-out so far...
+        dbg_printf("---/t / page duration: %lld, %lld (%lld); pkts: %d\n", duration, ogg_page_granulepos(opg), si->lastGranulePos, packets);
+        if (duration >= 0) {
+            if (si->si_theora.bitstream_version <= 0x00030200) {
+                // compensate for 0-based grpos in pre-3.2.1 bitstreams (as opposed to 1-based)
+                duration += 1;
+            }
+            si->baseGranulePos = grpos - (duration << si->si_theora.granulepos_shift); // subtracting from the "frames at last keyframe" part directly
+            if (si->baseGranulePos < 0)
+                si->baseGranulePos = 0;
+            _gp_to_time_subsec(si, si->baseGranulePos, &si->baseGranuleTime, &si->baseGranuleTimeSubSecond);
+            si->baseGranulePosFound = true;
+            dbg_printf("---/t / found base grpos: %lld, %lf\n", si->baseGranuleTime, si->baseGranuleTimeSubSecond);
+        }
+    } else {
+        dbg_printf("---/t / page no duration: %lld (nr: %ld) (%lld); pkts: %d\n", ogg_page_granulepos(opg), ogg_page_pageno(opg), si->lastGranulePos, packets);
+    }
 }
 
 int recognize_header__theora(ogg_page *op)
@@ -229,6 +285,8 @@ int process_first_packet__theora(StreamInfo *si, ogg_page *op, ogg_packet *opckt
 
     th_decode_headerin(&si->si_theora.ti, &si->si_theora.tc, &si->si_theora.ts, opckt); //check errors?
 
+    si->si_theora.bitstream_version = (si->si_theora.ti.version_major << 16) + (si->si_theora.ti.version_minor << 8) + (si->si_theora.ti.version_subminor);
+
     si->numChannels = 0;
     //si->lastMediaInserted = 0;
     si->mediaLength = 0;
@@ -285,6 +343,13 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
     case kTStateReadingCodebooks:
         ogg_stream_pagein(&si->os, opg);
         break;
+
+    case kTStateReadingFirstPacket:
+    case kTStateReadingPackets:
+        if (!si->baseGranulePosFound)
+            ogg_stream_pagein(&si->os, opg);
+        break;
+
     default:
         break;
     }
@@ -357,14 +422,13 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
             break;
 
         case kTStateReadingFirstPacket:
-            if (ogg_page_pageno(opg) > 3) {
-                si->lastGranulePos = ogg_page_granulepos(opg);
-                dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
-                loop = false;
+            si->lastGranulePos = 0;
 
-                if (si->lastGranulePos < 0)
-                    si->lastGranulePos = 0;
-            }
+            _find_base_gp(si, opg);
+
+            if (si->baseGranulePosFound)
+                si->lastGranulePos = si->baseGranulePos;
+
             si->si_theora.state = kTStateReadingPackets;
             break;
 
@@ -377,13 +441,13 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                 int i, segments;
                 Boolean continued = ogg_page_continued(opg);
                 TimeValue durationPerSample = 0;
-                ogg_int64_t last_packet_pos = si->lastGranulePos >> si->si_theora.granulepos_shift;
-                last_packet_pos += si->lastGranulePos - (last_packet_pos << si->si_theora.granulepos_shift);
 
-                loop = false;
-                if (ovret < 0) {
-                    ret = invalidMedia;
-                    break;
+                if (!si->baseGranulePosFound) {
+                    _find_base_gp(si, opg);
+
+                    if (si->baseGranulePosFound) {
+                        si->lastGranulePos = si->baseGranulePos;
+                    }
                 }
 
                 if (continued)
@@ -467,7 +531,7 @@ ComponentResult process_stream_page__theora(OggImportGlobals *globals, StreamInf
                 }
 
                 if (!globals->usingIdle) {
-                    if (si->sample_refs_count >= kTSRefsInitial)
+                    if (si->sample_refs_count >= kTSRefsInitial && si->baseGranulePosFound)
                         ret = _commit_srefs(globals, si, &movie_changed);
                 }
 
@@ -493,6 +557,11 @@ ComponentResult flush_stream__theora(OggImportGlobals *globals, StreamInfo *si, 
     ComponentResult err = noErr;
     Boolean movie_changed = false;
 
+    if (!si->baseGranulePosFound) {
+        dbg_printf("[OIv ]  =  [%08lx] :: flush_stream() - asked to flush but still no base grpos!!\n", (UInt32) globals);
+        return err;
+    }
+
     err = _commit_srefs(globals, si, &movie_changed);
 
     if (movie_changed && notify)
@@ -515,4 +584,54 @@ ComponentResult granulepos_to_time__theora(StreamInfo *si, ogg_int64_t *gp, Time
     time->base = NULL;
 
     return err;
+};
+
+ComponentResult update_group_gp__theora(OggImportGlobals *globals, StreamInfo *si)
+{
+    ComponentResult ret = noErr;
+    TimeValue offset;
+    Float64 offset_subsec;
+    TimeValue movieTS = 0;
+
+    if (si->groupBaseOffsetApplied)
+        return ret;
+
+    if (globals->currentGroupBase == si->baseGranuleTime && globals->currentGroupBaseSubSecond == si->baseGranuleTimeSubSecond)
+        return ret;
+
+    movieTS = GetMovieTimeScale(globals->theMovie);
+
+    offset = si->baseGranuleTime - globals->currentGroupBase;
+    offset_subsec =  si->baseGranuleTimeSubSecond - globals->currentGroupBaseSubSecond;
+    if (offset_subsec < 0.0) {
+        offset -= 1;
+        offset_subsec += 1.0;
+    }
+
+    dbg_printf("---/t / offset diff: %ld %lf\n", offset, offset_subsec);
+
+    if (offset > 0 || offset_subsec > 0.0) {
+        TimeValue track_offset = offset * movieTS;
+        if (offset_subsec > 0.0) {
+            TimeValue track_subsec_offset = (TimeValue) (offset_subsec * movieTS);
+            offset_subsec -= (Float64) track_subsec_offset / (Float64) movieTS;
+            track_offset += track_subsec_offset;
+        }
+        dbg_printf("---/t / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, track_offset);
+        si->streamOffset += track_offset;
+    }
+
+    if (offset_subsec > 0.0) {
+        dbg_printf("---/t / adjusting streamOffsetSamples: %ld (dt: %ld)\n", si->streamOffsetSamples, (UInt32) (offset_subsec * si->rate));
+        if (_add_first_duration(si, offset_subsec * si->rate) != noErr)
+            si->streamOffsetSamples += offset_subsec * si->rate;
+    }
+
+    si->groupBaseOffsetApplied = true;
+
+    dbg_printf("[OIt ]  =  [%08lx] :: update_group_gp(): group base: (%lld, %lf) stream base: (%lld, %lf)\n", (UInt32) globals,
+               globals->currentGroupBase, globals->currentGroupBaseSubSecond, si->baseGranuleTime, si->baseGranuleTimeSubSecond);
+
+
+    return ret;
 };

@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: stream_types_vorbis.h 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -34,6 +34,7 @@
 
 #if !defined(_NO_VORBIS_SUPPORT)
 #include <Vorbis/codec.h>
+#include "stream_private_vorbis.h"
 
 typedef enum VorbisImportStates {
     kVStateInitial,
@@ -54,6 +55,8 @@ typedef struct {
 
     vorbis_info vi;
     vorbis_comment vc;
+
+    StreamPrivate__vorbis private;
 } StreamInfo__vorbis;
 
 

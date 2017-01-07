@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: versions.h 16058 2009-05-29 18:07:42Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -32,9 +32,9 @@
 #define __versions_h__
 
 #ifdef DEBUG
-#define kOgg_eat__Version		(0x00FF010B)
+#define kOgg_eat__Version		(0x00FF010D)
 #else
-#define kOgg_eat__Version		(0x0000010B)
+#define kOgg_eat__Version		(0x0000010D)
 #endif /* DEBUG */
 
 #endif /* __versions_h__ */

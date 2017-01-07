@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: TheoraDecoder.c 16093 2009-06-08 23:16:39Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -426,7 +426,7 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
     ICMDataProcRecordPtr dataProc = drp->dataProcRecord.dataProc ? &drp->dataProcRecord : NULL;
     SInt32 dataAvailable = dataProc != NULL ? codecMinimumDataSize : -1;
 
-    dbg_printf("--:Theora:-  CodecDecodeBand(%08lx, %08lx, %08lx) cald (                 frN: %8ld, dataProc: %8lx)\n",
+    dbg_printf("[TD  ]  >> [%08lx] :: DecodeBand(%08lx, %08lx): (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
     if (dataAvailable > -1) {
@@ -492,9 +492,14 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             data_buffer = glob->p_buffer;
         }
 
-        if (myDrp->draw == 0)
-            err = codecDroppedFrameErr;
-        else {
+        if (myDrp->draw == 0) {
+            // returning codecDroppedFrameErr here seems to seriously confuse QuickTime on Windows,
+            //  so let's pretend it's all cool - the DrawBand will return that same error later, but
+            // that's apparently much more OK
+
+            // err = codecDroppedFrameErr;
+            ;
+        } else {
             op.b_o_s = 0;
             op.e_o_s = 0;
             op.granulepos = -1;
@@ -502,7 +507,8 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
             op.bytes = data_size;
             op.packet = data_buffer;
             terr = th_decode_packetin(glob->td, &op, NULL);
-            dbg_printf("--:Theora:-  theora_decode_packetin(pktno: %lld, size: %ld, data1: [%02x]) = %d\n", op.packetno, op.bytes, data_buffer[0], terr);
+            dbg_printf("[TD  ]     [%08lx] :: DecodeBand(): theora_decode_packetin(pktno: %lld, size: %ld, data1: [%02x]) = %d\n",
+                       (long) glob, op.packetno, op.bytes, data_buffer[0], terr);
 
             if (terr != 0) {
                 myDrp->draw = 0;
@@ -513,6 +519,8 @@ pascal ComponentResult Theora_ImageCodecDecodeBand(Theora_Globals glob, ImageSub
 
     myDrp->decoded = 1;
     drp->codecData += dataConsumed;
+
+    dbg_printf("[TD  ] <   [%08lx] :: DecodeBand() = %ld\n", (long) glob, err);
     return err;
 }
 
@@ -524,7 +532,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
     unsigned char *dataPtr = (unsigned char *)drp->codecData;
     ICMDataProcRecordPtr dataProc = drp->dataProcRecord.dataProc ? &drp->dataProcRecord : NULL;
 
-    dbg_printf("--:Theora:-  CodecDrawBand(%08lx, %08lx, %08lx) called (                 frN: %8ld, dataProc: %8lx)\n",
+    dbg_printf("[TD  ]  >> [%08lx] :: DrawBand(%08lx, %08lx):   (                 frN: %8ld, dataProc: %8lx)\n",
                (long)glob, (long)drp, (long)myDrp, myDrp->frameNumber, (long)dataProc);
 
     if (myDrp->decoded == 0) {
@@ -536,7 +544,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
             err = codecDroppedFrameErr;
         } else  {
             th_ycbcr_buffer ycbcrB;
-            dbg_printf("--:Theora:-  calling theora_decode_YUVout()...\n");
+            dbg_printf("[TD  ]     [%08lx] :: DrawBand(): calling theora_decode_YUVout()...\n", (long)glob);
             th_decode_ycbcr_out(glob->td, ycbcrB);
             if (myDrp->pixelFormat == k422YpCbCr8PixelFormat) {
                 if (glob->ti.pixel_fmt == TH_PF_420) {
@@ -558,6 +566,7 @@ pascal ComponentResult Theora_ImageCodecDrawBand(Theora_Globals glob, ImageSubCo
         }
     }
 
+    dbg_printf("[TD  ] <   [%08lx] :: DrawBand() = %ld\n", (long) glob, err);
     return err;
 }
 
@@ -566,17 +575,19 @@ pascal ComponentResult Theora_ImageCodecEndBand(Theora_Globals glob, ImageSubCod
 #pragma unused(glob, result, flags)
     OSErr err = noErr;
     Theora_DecompressRecord *myDrp = (Theora_DecompressRecord *)drp->userDecompressRecord;
-    dbg_printf("--:Theora:-   CodecEndBand(%08lx, %08lx, %08lx, %08lx) called\n", (long)glob, (long)drp, (long)drp->userDecompressRecord, result);
+    dbg_printf("[TD  ]  >> [%08lx] :: EndBand(%08lx, %08lx, %08lx)\n", (long)glob, (long)drp, (long)drp->userDecompressRecord, result);
 
     if (myDrp->draw == 0)
         err = codecDroppedFrameErr;
+
+    dbg_printf("[TD  ] <   [%08lx] :: EndBand() = %ld\n", (long)glob, err);
     return err;
 }
 
 pascal ComponentResult Theora_ImageCodecQueueStarting(Theora_Globals glob)
 {
 #pragma unused(glob)
-    dbg_printf("--:Theora:- CodecQueueStarting(%08lx) called\n", (long)glob);
+    dbg_printf("[TD  ] <>> [%08lx] :: QueueStarting()\n", (long)glob);
 
     return noErr;
 }
@@ -584,7 +595,7 @@ pascal ComponentResult Theora_ImageCodecQueueStarting(Theora_Globals glob)
 pascal ComponentResult Theora_ImageCodecQueueStopping(Theora_Globals glob)
 {
 #pragma unused(glob)
-    dbg_printf("--:Theora:- CodecQueueStopping(%08lx) called\n", (long)glob);
+    dbg_printf("[TD  ] <>> [%08lx] :: QueueStopping()\n", (long)glob);
 
     return noErr;
 }
@@ -837,8 +848,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
                ycbcr[2].width, ycbcr[2].height, ycbcr[2].stride);
 
     lines = height;
-    dst_base = baseAddr + pinfo->componentInfoY.offset;
-    dst_stride = pinfo->componentInfoY.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoY.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoY.rowBytes);
     src_base = ycbcr[0].data + off_y * ycbcr[0].stride + off_x;
     src_stride = ycbcr[0].stride;
     while (lines-- > 0) {
@@ -848,8 +859,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     }
 
     lines = height / 2;
-    dst_base = baseAddr + pinfo->componentInfoCb.offset;
-    dst_stride = pinfo->componentInfoCb.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoCb.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoCb.rowBytes);
     src_base = ycbcr[1].data + off_y * ycbcr[1].stride + off_x2;
     src_stride = ycbcr[1].stride;
     while (lines-- > 0) {
@@ -859,8 +870,8 @@ OSErr CopyPlanarYCbCr422ToPlanarYUV422(th_ycbcr_buffer ycbcr, ICMDataProcRecordP
     }
 
     lines = height / 2;
-    dst_base = baseAddr + pinfo->componentInfoCr.offset;
-    dst_stride = pinfo->componentInfoCr.rowBytes;
+    dst_base = baseAddr + EndianS32_BtoN(pinfo->componentInfoCr.offset);
+    dst_stride = EndianU32_BtoN(pinfo->componentInfoCr.rowBytes);
     src_base = ycbcr[2].data + off_y * ycbcr[2].stride + off_x2;;
     src_stride = ycbcr[2].stride;
     while (lines-- > 0) {

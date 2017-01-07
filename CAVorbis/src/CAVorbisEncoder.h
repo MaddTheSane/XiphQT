@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: CAVorbisEncoder.h 12394 2007-01-30 01:21:22Z arek $
+ *  Last modified: $Id$
  *
  */
 

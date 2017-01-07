@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: importer_types.h 13696 2007-09-02 15:34:00Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -101,6 +101,11 @@ typedef struct {
     SampleDescriptionHandle sampleDesc;
 
     ogg_int64_t         lastGranulePos;
+    ogg_int64_t         baseGranulePos;
+    Boolean             baseGranulePosFound;
+    TimeValue64         baseGranuleTime;
+    Float64             baseGranuleTimeSubSecond;
+    Boolean             groupBaseOffsetApplied;
 
     TimeValue           incompleteCompensation;
 
@@ -166,6 +171,9 @@ typedef struct {
     Boolean                 groupStreamsFound;
     TimeValue               currentGroupOffset;
     Float64                 currentGroupOffsetSubSecond;   // same as with timeLoaded
+
+    TimeValue64             currentGroupBase;
+    Float64                 currentGroupBaseSubSecond;     // same as with timeLoaded
 
     long                    newMovieFlags;
 
@@ -247,6 +255,8 @@ typedef ComponentResult (*flush_stream) (OggImportGlobals *globals, StreamInfo *
 
 typedef ComponentResult (*granulepos_to_time) (StreamInfo *si, ogg_int64_t *gp, TimeRecord *time);
 
+typedef ComponentResult (*update_group_granulepos) (OggImportGlobals *globals, StreamInfo *si);
+
 
 typedef struct stream_format_handle_funcs {
     process_stream_page                 process_page;
@@ -264,8 +274,10 @@ typedef struct stream_format_handle_funcs {
     clear_stream                        clear;
 
     granulepos_to_time                  gp_to_time;
+
+    update_group_granulepos             update_group_gp;
 } stream_format_handle_funcs;
 
-#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+#define HANDLE_FUNCTIONS__NULL { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 
 #endif /* __importer_types_h__ */

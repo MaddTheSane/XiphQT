@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: samplerefs.c 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -124,3 +124,23 @@ ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean
 
     return err;
 }
+
+ComponentResult _add_first_duration(StreamInfo *si, TimeValue duration)
+{
+    ComponentResult err = noErr;
+    SampleReference64Record *srptr = NULL;
+
+    if (si->sample_refs_count < 1)
+        return -1;
+
+    srptr = &si->sample_refs[0];
+
+    dbg_printf("[OIsr]  =! _add_first_duration(): dur: %d += %d [%08lx, %08lx]\n", srptr->durationPerSample, duration,
+               (UInt32) si->sample_refs, (UInt32) srptr);
+    srptr->durationPerSample += duration;
+    si->sample_refs_duration += duration;
+
+
+    return err;
+}
+

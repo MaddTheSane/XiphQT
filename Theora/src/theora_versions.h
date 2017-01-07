@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: theora_versions.h 16094 2009-06-08 23:24:03Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -33,10 +33,10 @@
 
 
 #ifdef DEBUG
-#define kTheora_imdc_Version		(0x00FF0104)
+#define kTheora_imdc_Version		(0x00FF0105)
 #define kTheora_imco_Version		(0x00FF0101)
 #else
-#define kTheora_imdc_Version		(0x00000104)
+#define kTheora_imdc_Version		(0x00000105)
 #define kTheora_imco_Version		(0x00000101)
 #endif /* DEBUG */
 

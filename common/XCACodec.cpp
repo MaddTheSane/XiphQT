@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: XCACodec.cpp 12435 2007-02-06 01:49:26Z arek $
+ *  Last modified: $Id$
  *
  */
 

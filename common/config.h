@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: config.h 12347 2007-01-18 15:16:53Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -31,6 +31,7 @@
 #if !defined(__xiphqt_config_h__)
 #define __xiphqt_config_h__
 
+#include "os_types.h"
 
 #if !defined(XIPHQT_NO_ENCODERS)
 #define kXiphQTBundleID "org.xiph.xiph-qt.xiphqt"

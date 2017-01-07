@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: utils.c 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -83,4 +83,10 @@ void find_last_page_GP(const unsigned char *data, UInt32 data_size,
             *serialno = ogg_page_serialno(&op);
         }
     }
+}
+
+void gp_to_time_subsec(int rate, ogg_int64_t gp, TimeValue64 *ts, Float64 *subsec)
+{
+    *ts = gp / rate;
+    *subsec = (Float64) (gp - *ts * rate) / (Float64) rate;
 }

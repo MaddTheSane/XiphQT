@@ -1,3 +1,91 @@
+2010-10-01  Arek Korbik  <arkadini@gmail.com>
+
+	* Theora/src/TheoraDecoder.c:
+	Use "correct" endian for the 'y420' pixmap info structure.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_types_theora.h:
+	Handle base grpos of pre-3.2.1 Theora bitstreams correctly.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_flac.c:
+	* OggImport/src/stream_speex.c:
+	Add minimal stub code for Speex and FLAC to not block group base
+	discovery if used with other streams.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_vorbis.c:
+	Use track-based offset as much as possible; add some older Theora
+	compatibility.
+
+2009-08-02  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/stream_private_vorbis.h (added):
+	* OggImport/src/stream_private_vorbis.c (added):
+	* OggImport/src/stream_types_vorbis.h:
+	* build-macosx/XiphQT.xcodeproj/project.pbxproj:
+	Add code to calculate duration of Vorbis ogg page.
+
+	* OggImport/src/OggImport.c:
+	* OggImport/src/importer_types.h:
+	* OggImport/src/stream_theora.c:
+	* OggImport/src/stream_theora.h:
+	* OggImport/src/stream_vorbis.c:
+	* OggImport/src/stream_vorbis.h:
+	Add code to calculate base granulepos for each group of streams
+	and use it to correctly synchronize the streams withing the
+	groups.
+
+	* OggImport/src/samplerefs.h:
+	* OggImport/src/samplerefs.c:
+	Add method for updating the duration of the first pending sample
+	reference.
+
+	* OggImport/src/utils.h:
+	* OggImport/src/utils.c:
+	Add granulepos -> time conversion utility.
+
+	* OggImport/src/stream_flac.h:
+	* OggImport/src/stream_speex.h:
+	Adapt to changes.
+
+2009-07-18  Arek Korbik  <arkadini@gmail.com>
+
+	* OggImport/src/OggImport.r:
+	* OggImport/src/versions.h:
+	Update importer MIME types to better match RFC5334.
+
+2009-07-04  Arek Korbik  <arkadini@gmail.com>
+
+	* Theora/src/TheoraDecoder.c:
+	Don't indicate "dropped frame" as early as in DecodeBand - seems
+	to make difference on Windows.
+
+2009-07-04  Arek Korbik  <arkadini@gmail.com>
+
+	* build-win32/XiphQT.sln (added):
+	* build-win32/XiphQT.vcproj (added):
+	Add VS2008 project files.
+
+2009-07-04  Arek Korbik  <arkadini@gmail.com>
+
+	* common/os_types.h (added):
+	* common/config.h:
+	* OggImport/src/samplerefs.h:
+	Add some Windows compatibility touches.
+
+2009-06-21  Arek Korbik  <arkadini@gmail.com>
+
+	* OggExport/src/OggExport.c:
+	Don't expect the StdAudio compression component to do double
+	conversion - initialize it with LPCM as input instead.
+	Fixes #1305.
+
 === release 0.1.9 ===
 
 2009-06-14  Arek Korbik  <arkadini@gmail.com>

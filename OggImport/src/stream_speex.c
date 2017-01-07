@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: stream_speex.c 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -259,6 +259,7 @@ ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo
             break;
 
         case kSStateReadingFirstPacket:
+            // FIXME: calculate page duration like in Theora and Vorbis case, one day...
             if (ogg_page_pageno(opg) > 2) {
                 si->lastGranulePos = ogg_page_granulepos(opg);
                 dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
@@ -267,6 +268,11 @@ ComponentResult process_stream_page__speex(OggImportGlobals *globals, StreamInfo
                 if (si->lastGranulePos < 0)
                     si->lastGranulePos = 0;
             }
+
+            si->baseGranulePos = si->lastGranulePos;
+            si->baseGranulePosFound = true;
+            gp_to_time_subsec(si->rate, si->baseGranulePos, &si->baseGranuleTime, &si->baseGranuleTimeSubSecond);
+
             si->si_speex.state = kSStateReadingPackets;
             break;
 

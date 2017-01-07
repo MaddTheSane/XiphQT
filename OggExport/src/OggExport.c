@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: OggExport.c 16023 2009-05-24 15:06:20Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -168,6 +168,10 @@ static ComponentResult _movie_fps(Movie theMovie, Fixed *fps);
 #include <ImageCompression.k.h>
 #include <ComponentDispatchHelper.c>
 #endif
+
+
+#define DBG_SOUNDDESC_FMT "[SD: fmt='%4.4s', ch=%d, sr=%lf, bps=%d]"
+#define DBG_SOUNDDESC_FILL(x) ((char *) (&(x)->dataFormat)), (x)->numChannels, ((x)->sampleRate / 65536.0), (x)->sampleSize
 
 
 pascal ComponentResult OggExportOpen(OggExportGlobalsPtr globals, ComponentInstance self) {
@@ -704,7 +708,7 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
 
         if (!err && globals->setdlg_movie != NULL) {
             SoundDescriptionHandle sdh = (SoundDescriptionHandle) NewHandle(0);
-            Media media;
+            Media media = NULL;
             Track track = globals->setdlg_track;
             if (track == NULL)
                 track = GetMovieIndTrackType(globals->setdlg_movie, 1, AudioMediaCharacteristic,
@@ -712,15 +716,42 @@ ComponentResult ConfigAndShowStdAudioDlg(OggExportGlobalsPtr globals, WindowRef 
             if (track != NULL)
                 media = GetTrackMedia(track);
 
-            if (media != NULL)
+            if (media != NULL) {
                 GetMediaSampleDescription(media, 1, (SampleDescriptionHandle) sdh);
+                dbg_printf("[  OE] !sd [%08lx] :: ConfigAndShowStdAudioDlg() :: " DBG_SOUNDDESC_FMT "\n", (UInt32) globals, DBG_SOUNDDESC_FILL(*sdh));
+            }
 
             if (GetHandleSize((Handle) sdh) > 0) {
-                err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
-                                             kQTSCAudioPropertyID_InputSoundDescription,
-                                             sizeof(SoundDescriptionHandle), &sdh);
-                dbg_printf("[  OE]  sd [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+                SoundDescriptionHandle sdh_v2;
+                SoundDescriptionV2Ptr sd;
+                err = QTSoundDescriptionConvert(kQTSoundDescriptionKind_Movie_AnyVersion,
+                                                sdh, kQTSoundDescriptionKind_Movie_Version2, &sdh_v2);
+                if (!err) {
+                    AudioStreamBasicDescription asbd;
+                    sd = (SoundDescriptionV2Ptr) *sdh_v2;
+
+                    // here we're "pretending" that the input is uncompressed floats - the actually important bits are sample rate and number of channels;
+                    // eventually, we'll be extracting uncompressed PCM samples from the source movie, anyway...
+                    asbd.mSampleRate = sd->audioSampleRate;
+                    asbd.mChannelsPerFrame = sd->numAudioChannels;
+                    asbd.mFormatID = kAudioFormatLinearPCM;
+                    asbd.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+                    asbd.mFramesPerPacket = 1;
+                    asbd.mBitsPerChannel = 32;
+                    asbd.mBytesPerFrame = sd->numAudioChannels * 4;
+                    asbd.mBytesPerPacket = sd->numAudioChannels * 4;
+
+                    // channel layout shouldn't matter here... right? :/
+
+                    err = QTSetComponentProperty(stdAudio, kQTPropertyClass_SCAudio,
+                                                 kQTSCAudioPropertyID_InputBasicDescription,
+                                                 sizeof(asbd), &asbd);
+                    dbg_printf("[  OE] =bd [%08lx] :: ConfigAndShowStdAudioDlg() = %ld\n", (UInt32) globals, err);
+                }
+
+                DisposeHandle((Handle) sdh_v2);
             }
+
             DisposeHandle((Handle) sdh);
         } else {
             err = _preconfig_stdaudio(stdAudio);

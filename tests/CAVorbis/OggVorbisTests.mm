@@ -65,6 +65,22 @@
 	XCTAssert(appended == false);
 }
 
+- (void)testAppendUninitialized
+{
+    UInt32 bytes = 0;
+    UInt32 packets = 0;
+
+    Boolean appended = false;
+
+    try {
+        mOggDecoder->AppendInputData(NULL, bytes, packets, NULL);
+        appended = true;
+    } catch (...) {
+    };
+
+    XCTAssert(appended == false);
+}
+
 - (void)testInitCookie
 {
 	std::ifstream f_in;

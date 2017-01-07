@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: samplerefs.h 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -31,11 +31,13 @@
 #if !defined(__samplerefs_h__)
 #define __samplerefs_h__
 
+#include "config.h"
 #include "importer_types.h"
 
 
 extern ComponentResult _store_sample_reference(StreamInfo *si, SInt64 *dataOffset, int size, TimeValue duration, short smp_flags);
 extern ComponentResult _commit_srefs(OggImportGlobals *globals, StreamInfo *si, Boolean *movie_changed);
+extern ComponentResult _add_first_duration(StreamInfo *si, TimeValue duration);
 
 
 #endif /* __samplerefs_h__ */

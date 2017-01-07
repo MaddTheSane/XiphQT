@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: utils.h 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -38,6 +38,7 @@
 extern int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size);
 extern void find_last_page_GP(const unsigned char *data, UInt32 data_size,
                               ogg_int64_t *gp, long *serialno);
+extern void gp_to_time_subsec(int rate, ogg_int64_t gp, TimeValue64 *ts, Float64 *subsec);
 
 
 #endif /* __ogg_utils_h__ */

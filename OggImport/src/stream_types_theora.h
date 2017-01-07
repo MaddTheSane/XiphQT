@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *
- *  Last modified: $Id: stream_types_theora.h 12754 2007-03-14 03:51:23Z arek $
+ *  Last modified: $Id$
  *
  */
 
@@ -59,6 +59,8 @@ typedef struct {
     th_info ti;
     th_comment tc;
     th_setup_info *ts;
+
+    UInt32 bitstream_version;
 
     UInt32 granulepos_shift;
     UInt32 fps_framelen;
