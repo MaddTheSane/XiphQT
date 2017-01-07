@@ -10,7 +10,6 @@
 		5530E4E01CD326B300071A6D /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4CD1CD326B300071A6D /* ACBaseCodec.cpp */; };
 		5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4CF1CD326B300071A6D /* ACCodec.cpp */; };
 		5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */; };
-		5530E4E31CD326B300071A6D /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */; };
 		5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4D81CD326B300071A6D /* CABundleLocker.cpp */; };
 		5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */; };
 		5530E4E61CD326B300071A6D /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5530E4DE1CD326B300071A6D /* CAStreamBasicDescription.cpp */; };
@@ -132,15 +131,12 @@
 		5530E4CE1CD326B300071A6D /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		5530E4CF1CD326B300071A6D /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
 		5530E4D01CD326B300071A6D /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
-		5530E4D11CD326B300071A6D /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
 		5530E4D21CD326B300071A6D /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
 		5530E4D31CD326B300071A6D /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
 		5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
 		5530E4D51CD326B300071A6D /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
-		5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
 		5530E4D81CD326B300071A6D /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
 		5530E4D91CD326B300071A6D /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
-		5530E4DA1CD326B300071A6D /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
 		5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
 		5530E4DC1CD326B300071A6D /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
 		5530E4DD1CD326B300071A6D /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
@@ -249,7 +245,6 @@
 			isa = PBXGroup;
 			children = (
 				5530E4CC1CD326B300071A6D /* ACPublic */,
-				5530E4D61CD326B300071A6D /* AudioCodecComponentGlue.c */,
 			);
 			path = AudioCodecs;
 			sourceTree = "<group>";
@@ -261,7 +256,6 @@
 				5530E4CE1CD326B300071A6D /* ACBaseCodec.h */,
 				5530E4CF1CD326B300071A6D /* ACCodec.cpp */,
 				5530E4D01CD326B300071A6D /* ACCodec.h */,
-				5530E4D11CD326B300071A6D /* ACCodecDispatch.h */,
 				5530E4D21CD326B300071A6D /* ACCodecDispatchTypes.h */,
 				5530E4D31CD326B300071A6D /* ACConditionalMacros.h */,
 				5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */,
@@ -277,7 +271,6 @@
 				5530E4FD1CD32C2800071A6D /* CADebugPrintf.h */,
 				5530E4D81CD326B300071A6D /* CABundleLocker.cpp */,
 				5530E4D91CD326B300071A6D /* CABundleLocker.h */,
-				5530E4DA1CD326B300071A6D /* CAConditionalMacros.h */,
 				5530E4DB1CD326B300071A6D /* CADebugMacros.cpp */,
 				5530E4DC1CD326B300071A6D /* CADebugMacros.h */,
 				5530E4DD1CD326B300071A6D /* CAMath.h */,
@@ -599,7 +592,6 @@
 				5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */,
 				5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */,
 				5530E4E11CD326B300071A6D /* ACCodec.cpp in Sources */,
-				5530E4E31CD326B300071A6D /* AudioCodecComponentGlue.c in Sources */,
 				5530E5331CD3340600071A6D /* opus_entrypoints.cpp in Sources */,
 				5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */,
 				5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */,

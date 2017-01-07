@@ -28,7 +28,6 @@
 		7326B51E0B5AC44B004CE9D3 /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449EF0B1A012B002B059E /* XCACodec.cpp */; };
 		7326B51F0B5AC44B004CE9D3 /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F30B1A0159002B059E /* ringbuffer.cpp */; };
 		7326B5200B5AC44B004CE9D3 /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F50B1A0159002B059E /* wrap_ogg.cpp */; };
-		7326B5210B5AC44B004CE9D3 /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */; };
 		7326B5220B5AC44B004CE9D3 /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A030B1A0270002B059E /* ACBaseCodec.cpp */; };
 		7326B5230B5AC44B004CE9D3 /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A050B1A0270002B059E /* ACCodec.cpp */; };
 		7326B5240B5AC44B004CE9D3 /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */; };
@@ -84,7 +83,6 @@
 		737449F10B1A012B002B059E /* XCACodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449EF0B1A012B002B059E /* XCACodec.cpp */; };
 		737449F70B1A0159002B059E /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F30B1A0159002B059E /* ringbuffer.cpp */; };
 		737449F90B1A0159002B059E /* wrap_ogg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 737449F50B1A0159002B059E /* wrap_ogg.cpp */; };
-		73744A020B1A023D002B059E /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */; };
 		73744A0C0B1A0270002B059E /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A030B1A0270002B059E /* ACBaseCodec.cpp */; };
 		73744A0E0B1A0270002B059E /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A050B1A0270002B059E /* ACCodec.cpp */; };
 		73744A130B1A0270002B059E /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */; };
@@ -247,7 +245,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837C50B193896005C7A69 /* Speex.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 734FB2E40B18B33E00D561D7;
+			remoteGlobalIDString = 738837760B193667005C7A69;
 			remoteInfo = "libspeex (static)";
 		};
 		7326B50B0B5AC44B004CE9D3 /* PBXContainerItemProxy */ = {
@@ -310,7 +308,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 738837C50B193896005C7A69 /* Speex.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 734FB2E40B18B33E00D561D7;
+			remoteGlobalIDString = 738837760B193667005C7A69;
 			remoteInfo = "libspeex (static)";
 		};
 		73744A3F0B1A045B002B059E /* PBXContainerItemProxy */ = {
@@ -397,14 +395,14 @@
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		32BAE0B30371A71500C91783 /* XiphQT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XiphQT_Prefix.pch; sourceTree = "<group>"; };
+		37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stream_private_vorbis.c; path = ../OggImport/src/stream_private_vorbis.c; sourceTree = SOURCE_ROOT; };
+		37B42EC60FF5453E00FC88AE /* stream_private_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stream_private_vorbis.h; path = ../OggImport/src/stream_private_vorbis.h; sourceTree = SOURCE_ROOT; };
 		5589FB1E1B8B79870011C7EE /* DefaultConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DefaultConfigs.xcconfig; path = ../DefaultConfigs.xcconfig; sourceTree = "<group>"; };
 		5589FB1F1B8B79870011C7EE /* DebugConfigs.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugConfigs.xcconfig; path = ../DebugConfigs.xcconfig; sourceTree = "<group>"; };
 		55FA1A391B8B8456005C60B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		55FA1A3C1B8B86D6005C60B2 /* flac.ogg.cookie */ = {isa = PBXFileReference; lastKnownFileType = file; path = flac.ogg.cookie; sourceTree = "<group>"; };
 		55FA1A3D1B8B86D6005C60B2 /* vorbis.ogg.cookie */ = {isa = PBXFileReference; lastKnownFileType = file; path = vorbis.ogg.cookie; sourceTree = "<group>"; };
 		55FA1A3E1B8B86D6005C60B2 /* vorbis.ogg.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = vorbis.ogg.data; sourceTree = "<group>"; };
-		37B42EC50FF5453E00FC88AE /* stream_private_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stream_private_vorbis.c; path = ../OggImport/src/stream_private_vorbis.c; sourceTree = SOURCE_ROOT; };
-		37B42EC60FF5453E00FC88AE /* stream_private_vorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stream_private_vorbis.h; path = ../OggImport/src/stream_private_vorbis.h; sourceTree = SOURCE_ROOT; };
 		7326B5510B5AC44B004CE9D3 /* XiphQT (decoders).component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XiphQT (decoders).component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7326B5520B5AC44B004CE9D3 /* Info (decoders).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info (decoders).plist"; sourceTree = "<group>"; };
 		73271C820B610B2400175874 /* RingBufferTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBufferTests.h; sourceTree = "<group>"; };
@@ -451,19 +449,16 @@
 		737449F40B1A0159002B059E /* ringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ringbuffer.h; path = ../utils/ringbuffer.h; sourceTree = SOURCE_ROOT; };
 		737449F50B1A0159002B059E /* wrap_ogg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wrap_ogg.cpp; path = ../utils/wrap_ogg.cpp; sourceTree = SOURCE_ROOT; };
 		737449F60B1A0159002B059E /* wrap_ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wrap_ogg.h; path = ../utils/wrap_ogg.h; sourceTree = SOURCE_ROOT; };
-		73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
 		73744A030B1A0270002B059E /* ACBaseCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACBaseCodec.cpp; sourceTree = "<group>"; };
 		73744A040B1A0270002B059E /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		73744A050B1A0270002B059E /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
 		73744A060B1A0270002B059E /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
-		73744A070B1A0270002B059E /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
 		73744A080B1A0270002B059E /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
 		73744A090B1A0270002B059E /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
 		73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
 		73744A0B0B1A0270002B059E /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
 		73744A150B1A0288002B059E /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
 		73744A160B1A0288002B059E /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
-		73744A170B1A0288002B059E /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
 		73744A180B1A0288002B059E /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
 		73744A190B1A0288002B059E /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
 		73744A1A0B1A0288002B059E /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
@@ -860,7 +855,6 @@
 		737449FE0B1A01F8002B059E /* AudioCodecs */ = {
 			isa = PBXGroup;
 			children = (
-				73744A010B1A023D002B059E /* AudioCodecComponentGlue.c */,
 				737449FF0B1A020D002B059E /* ACPublic */,
 			);
 			path = AudioCodecs;
@@ -873,7 +867,6 @@
 				73744A040B1A0270002B059E /* ACBaseCodec.h */,
 				73744A050B1A0270002B059E /* ACCodec.cpp */,
 				73744A060B1A0270002B059E /* ACCodec.h */,
-				73744A070B1A0270002B059E /* ACCodecDispatch.h */,
 				73744A080B1A0270002B059E /* ACCodecDispatchTypes.h */,
 				73744A090B1A0270002B059E /* ACConditionalMacros.h */,
 				73744A0A0B1A0270002B059E /* GetCodecBundle.cpp */,
@@ -887,7 +880,6 @@
 			children = (
 				73744A150B1A0288002B059E /* CABundleLocker.cpp */,
 				73744A160B1A0288002B059E /* CABundleLocker.h */,
-				73744A170B1A0288002B059E /* CAConditionalMacros.h */,
 				73744A180B1A0288002B059E /* CADebugMacros.cpp */,
 				73744A190B1A0288002B059E /* CADebugMacros.h */,
 				73744A1A0B1A0288002B059E /* CAMath.h */,
@@ -1367,7 +1359,6 @@
 				7326B51E0B5AC44B004CE9D3 /* XCACodec.cpp in Sources */,
 				7326B51F0B5AC44B004CE9D3 /* ringbuffer.cpp in Sources */,
 				7326B5200B5AC44B004CE9D3 /* wrap_ogg.cpp in Sources */,
-				7326B5210B5AC44B004CE9D3 /* AudioCodecComponentGlue.c in Sources */,
 				7326B5220B5AC44B004CE9D3 /* ACBaseCodec.cpp in Sources */,
 				7326B5230B5AC44B004CE9D3 /* ACCodec.cpp in Sources */,
 				7326B5240B5AC44B004CE9D3 /* GetCodecBundle.cpp in Sources */,
@@ -1427,7 +1418,6 @@
 				737449F10B1A012B002B059E /* XCACodec.cpp in Sources */,
 				737449F70B1A0159002B059E /* ringbuffer.cpp in Sources */,
 				737449F90B1A0159002B059E /* wrap_ogg.cpp in Sources */,
-				73744A020B1A023D002B059E /* AudioCodecComponentGlue.c in Sources */,
 				73744A0C0B1A0270002B059E /* ACBaseCodec.cpp in Sources */,
 				73744A0E0B1A0270002B059E /* ACCodec.cpp in Sources */,
 				73744A130B1A0270002B059E /* GetCodecBundle.cpp in Sources */,

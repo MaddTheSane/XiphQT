@@ -18,7 +18,6 @@
 		732019FF08FEDFAD002000DA /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019E708FEDFAD002000DA /* ACBaseCodec.cpp */; };
 		73201A0008FEDFAD002000DA /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019E908FEDFAD002000DA /* ACCodec.cpp */; };
 		73201A0208FEDFAD002000DA /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019EF08FEDFAD002000DA /* GetCodecBundle.cpp */; };
-		73201A0308FEDFAD002000DA /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 732019F108FEDFAD002000DA /* AudioCodecComponentGlue.c */; };
 		73201A0508FEDFAD002000DA /* CABundleLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019F708FEDFAD002000DA /* CABundleLocker.cpp */; };
 		73201A0608FEDFAD002000DA /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019FA08FEDFAD002000DA /* CADebugMacros.cpp */; };
 		73201A0708FEDFAD002000DA /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 732019FD08FEDFAD002000DA /* CAStreamBasicDescription.cpp */; };
@@ -131,15 +130,12 @@
 		732019E808FEDFAD002000DA /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		732019E908FEDFAD002000DA /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
 		732019EA08FEDFAD002000DA /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
-		732019EB08FEDFAD002000DA /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
 		732019EC08FEDFAD002000DA /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
 		732019EE08FEDFAD002000DA /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
 		732019EF08FEDFAD002000DA /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
 		732019F008FEDFAD002000DA /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
-		732019F108FEDFAD002000DA /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
 		732019F708FEDFAD002000DA /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
 		732019F808FEDFAD002000DA /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
-		732019F908FEDFAD002000DA /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
 		732019FA08FEDFAD002000DA /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
 		732019FB08FEDFAD002000DA /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
 		732019FC08FEDFAD002000DA /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
@@ -319,7 +315,6 @@
 			isa = PBXGroup;
 			children = (
 				732019E608FEDFAD002000DA /* ACPublic */,
-				732019F108FEDFAD002000DA /* AudioCodecComponentGlue.c */,
 			);
 			path = AudioCodecs;
 			sourceTree = "<group>";
@@ -331,7 +326,6 @@
 				732019E808FEDFAD002000DA /* ACBaseCodec.h */,
 				732019E908FEDFAD002000DA /* ACCodec.cpp */,
 				732019EA08FEDFAD002000DA /* ACCodec.h */,
-				732019EB08FEDFAD002000DA /* ACCodecDispatch.h */,
 				732019EC08FEDFAD002000DA /* ACCodecDispatchTypes.h */,
 				732019EE08FEDFAD002000DA /* ACConditionalMacros.h */,
 				732019EF08FEDFAD002000DA /* GetCodecBundle.cpp */,
@@ -345,7 +339,6 @@
 			children = (
 				732019F708FEDFAD002000DA /* CABundleLocker.cpp */,
 				732019F808FEDFAD002000DA /* CABundleLocker.h */,
-				732019F908FEDFAD002000DA /* CAConditionalMacros.h */,
 				732019FA08FEDFAD002000DA /* CADebugMacros.cpp */,
 				732019FB08FEDFAD002000DA /* CADebugMacros.h */,
 				732019FC08FEDFAD002000DA /* CAMath.h */,
@@ -510,7 +503,6 @@
 				732019FF08FEDFAD002000DA /* ACBaseCodec.cpp in Sources */,
 				73201A0008FEDFAD002000DA /* ACCodec.cpp in Sources */,
 				73201A0208FEDFAD002000DA /* GetCodecBundle.cpp in Sources */,
-				73201A0308FEDFAD002000DA /* AudioCodecComponentGlue.c in Sources */,
 				73201A0508FEDFAD002000DA /* CABundleLocker.cpp in Sources */,
 				73201A0608FEDFAD002000DA /* CADebugMacros.cpp in Sources */,
 				73201A0708FEDFAD002000DA /* CAStreamBasicDescription.cpp in Sources */,

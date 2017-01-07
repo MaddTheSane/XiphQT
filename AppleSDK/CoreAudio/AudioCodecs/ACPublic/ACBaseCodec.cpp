@@ -1,133 +1,143 @@
-/*	Copyright: 	© Copyright 2005 Apple Computer, Inc. All rights reserved.
-
-	Disclaimer:	IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc.
-			("Apple") in consideration of your agreement to the following terms, and your
-			use, installation, modification or redistribution of this Apple software
-			constitutes acceptance of these terms.  If you do not agree with these terms,
-			please do not use, install, modify or redistribute this Apple software.
-
-			In consideration of your agreement to abide by the following terms, and subject
-			to these terms, Apple grants you a personal, non-exclusive license, under Apple’s
-			copyrights in this original Apple software (the "Apple Software"), to use,
-			reproduce, modify and redistribute the Apple Software, with or without
-			modifications, in source and/or binary forms; provided that if you redistribute
-			the Apple Software in its entirety and without modifications, you must retain
-			this notice and the following text and disclaimers in all such redistributions of
-			the Apple Software.  Neither the name, trademarks, service marks or logos of
-			Apple Computer, Inc. may be used to endorse or promote products derived from the
-			Apple Software without specific prior written permission from Apple.  Except as
-			expressly stated in this notice, no other rights or licenses, express or implied,
-			are granted by Apple herein, including but not limited to any patent rights that
-			may be infringed by your derivative works or by other works in which the Apple
-			Software may be incorporated.
-
-			The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
-			WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
-			WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-			PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
-			COMBINATION WITH YOUR PRODUCTS.
-
-			IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
-			CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-			GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-			ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION
-			OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT
-			(INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN
-			ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-/*=============================================================================
-	ACBaseCodec.cpp
-
-=============================================================================*/
-
 /*
- * Changed by Arek Korbik <arkadini@gmail.com>
- * 30.11.2005: added platform conditional around
- *   kAudioCodecPropertyNameCFString in ACBaseCode::GetProperty()
- *
- */
-
+     File: ACBaseCodec.cpp
+ Abstract: ACBaseCodec.h
+  Version: 1.1
+ 
+ Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
+ Inc. ("Apple") in consideration of your agreement to the following
+ terms, and your use, installation, modification or redistribution of
+ this Apple software constitutes acceptance of these terms.  If you do
+ not agree with these terms, please do not use, install, modify or
+ redistribute this Apple software.
+ 
+ In consideration of your agreement to abide by the following terms, and
+ subject to these terms, Apple grants you a personal, non-exclusive
+ license, under Apple's copyrights in this original Apple software (the
+ "Apple Software"), to use, reproduce, modify and redistribute the Apple
+ Software, with or without modifications, in source and/or binary forms;
+ provided that if you redistribute the Apple Software in its entirety and
+ without modifications, you must retain this notice and the following
+ text and disclaimers in all such redistributions of the Apple Software.
+ Neither the name, trademarks, service marks or logos of Apple Inc. may
+ be used to endorse or promote products derived from the Apple Software
+ without specific prior written permission from Apple.  Except as
+ expressly stated in this notice, no other rights or licenses, express or
+ implied, are granted by Apple herein, including but not limited to any
+ patent rights that may be infringed by your derivative works or by other
+ works in which the Apple Software may be incorporated.
+ 
+ The Apple Software is provided by Apple on an "AS IS" basis.  APPLE
+ MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
+ THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND
+ OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ 
+ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
+ OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
+ MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED
+ AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+ STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ 
+ Copyright (C) 2014 Apple Inc. All Rights Reserved.
+ 
+*/
 //=============================================================================
 //	Includes
 //=============================================================================
-
-#include "ACBaseCodec.h"
 #include <algorithm>
+#include "ACBaseCodec.h"
+
 #include "CABundleLocker.h"
+
+#if TARGET_OS_WIN32
+	#include "CAWin32StringResources.h"
+#endif
 
 //=============================================================================
 //	ACBaseCodec
 //=============================================================================
 
-ACBaseCodec::ACBaseCodec()
+ACBaseCodec::ACBaseCodec( AudioComponentInstance inInstance )
 :
-	ACCodec(),
+	ACCodec(inInstance),
 	mIsInitialized(false),
 	mInputFormatList(),
 	mInputFormat(),
 	mOutputFormatList(),
 	mOutputFormat()
 {
+	mCodecSubType = 0;
+	if (inInstance) GetSubType();
 }
 
 ACBaseCodec::~ACBaseCodec()
 {
 }
 
-void	ACBaseCodec::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void	ACBaseCodec::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
 	switch(inPropertyID)
 	{
+#if BUILD_ADEC_LIB
 		case kAudioCodecPropertyNameCFString:
-			outPropertyDataSize = sizeof(CFStringRef);
-			outWritable = false;
-			break;
-		case kAudioCodecPropertyManufacturerCFString:
-			outPropertyDataSize = sizeof(CFStringRef);
-			outWritable = false;
-			break;
 		case kAudioCodecPropertyFormatCFString:
-			outPropertyDataSize = sizeof(CFStringRef);
+		case kAudioCodecPropertyManufacturerCFString:
+			outPropertyDataSize = 0;
 			outWritable = false;
 			break;
+#else
+		case kAudioCodecPropertyNameCFString:
+			outPropertyDataSize = SizeOf32(CFStringRef);
+			outWritable = false;
+			break;
+			
+		case kAudioCodecPropertyManufacturerCFString:
+			outPropertyDataSize = SizeOf32(CFStringRef);
+			outWritable = false;
+			break;
+			
+		case kAudioCodecPropertyFormatCFString:
+			outPropertyDataSize = SizeOf32(CFStringRef);
+			outWritable = false;
+			break;			
+#endif
+		case kAudioCodecPropertyRequiresPacketDescription:
+			outPropertyDataSize = SizeOf32(UInt32);
+			outWritable = false;
+			break;
+			
 		case kAudioCodecPropertyMinimumNumberInputPackets :
-			outPropertyDataSize = sizeof(UInt32);
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
 			break;
+			
 		case kAudioCodecPropertyMinimumNumberOutputPackets :
-			outPropertyDataSize = sizeof(UInt32);
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
-			break;
-		case kAudioCodecPropertyInputChannelLayout :
-		case kAudioCodecPropertyOutputChannelLayout :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-		case kAudioCodecPropertyAvailableInputChannelLayouts :
-		case kAudioCodecPropertyAvailableOutputChannelLayouts :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
 			break;
 
 		case kAudioCodecPropertyCurrentInputFormat:
-			outPropertyDataSize = sizeof(AudioStreamBasicDescription);
+			outPropertyDataSize = SizeOf32(AudioStreamBasicDescription);
 			outWritable = true;
 			break;
 			
 		case kAudioCodecPropertySupportedInputFormats:
-		case kAudioCodecInputFormatsForOutputFormat:
-			outPropertyDataSize = GetNumberSupportedInputFormats() * sizeof(AudioStreamBasicDescription);
+		case kAudioCodecPropertyInputFormatsForOutputFormat:
+			outPropertyDataSize = GetNumberSupportedInputFormats() * SizeOf32(AudioStreamBasicDescription);
 			outWritable = false;
 			break;
 			
 		case kAudioCodecPropertyCurrentOutputFormat:
-			outPropertyDataSize = sizeof(AudioStreamBasicDescription);
+			outPropertyDataSize = SizeOf32(AudioStreamBasicDescription);
 			outWritable = true;
 			break;
 			
 		case kAudioCodecPropertySupportedOutputFormats:
-		case kAudioCodecOutputFormatsForInputFormat:
-			outPropertyDataSize = GetNumberSupportedOutputFormats() * sizeof(AudioStreamBasicDescription);
+		case kAudioCodecPropertyOutputFormatsForInputFormat:
+			outPropertyDataSize = GetNumberSupportedOutputFormats() * SizeOf32(AudioStreamBasicDescription);
 			outWritable = false;
 			break;
 			
@@ -137,42 +147,37 @@ void	ACBaseCodec::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& out
 			break;
 			
 		case kAudioCodecPropertyInputBufferSize:
-			outPropertyDataSize = sizeof(UInt32);
-			outWritable = true;
+			outPropertyDataSize = SizeOf32(UInt32);
+			outWritable = false;
 			break;
 			
 		case kAudioCodecPropertyUsedInputBufferSize:
-			outPropertyDataSize = sizeof(UInt32);
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
 			break;
 		
 		case kAudioCodecPropertyIsInitialized:
-			outPropertyDataSize = sizeof(UInt32);
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
 			break;
 
 		case kAudioCodecPropertyAvailableNumberChannels:
-			outPropertyDataSize = sizeof(UInt32) * 2; // Mono, stereo
+			outPropertyDataSize = SizeOf32(UInt32) * 2; // Mono, stereo
 			outWritable = false;
 			break;
 			
  		case kAudioCodecPropertyPrimeMethod:
-			outPropertyDataSize = sizeof(UInt32);
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
 			break;
 
  		case kAudioCodecPropertyPrimeInfo:
-			outPropertyDataSize = sizeof(AudioCodecPrimeInfo);
+			outPropertyDataSize = SizeOf32(AudioCodecPrimeInfo);
 			outWritable = false;
 			break;
 
- 		case kAudioCodecUseRecommendedSampleRate:
-			outPropertyDataSize = sizeof(UInt32);
-			outWritable = false;
-			break;
-			
- 		case kAudioCodecOutputPrecedence:
-			outPropertyDataSize = sizeof(UInt32);
+ 		case kAudioCodecPropertyDoesSampleRateConversion:
+			outPropertyDataSize = SizeOf32(UInt32);
 			outWritable = false;
 			break;
 
@@ -189,48 +194,58 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 	
 	switch(inPropertyID)
 	{
-#if TARGET_OS_MAC
+#if !BUILD_ADEC_LIB
 		case kAudioCodecPropertyNameCFString:
 		{
-			if (ioPropertyDataSize != sizeof(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
+			if (ioPropertyDataSize != SizeOf32(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 			
 			CABundleLocker lock;
 			CFStringRef name = CFCopyLocalizedStringFromTableInBundle(CFSTR("unknown codec"), CFSTR("CodecNames"), GetCodecBundle(), CFSTR(""));
 			*(CFStringRef*)outPropertyData = name;
 			break; 
 		}
+		
 		case kAudioCodecPropertyManufacturerCFString:
 		{
-			if (ioPropertyDataSize != sizeof(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
+			if (ioPropertyDataSize != SizeOf32(CFStringRef)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 			
 			CABundleLocker lock;
-			CFStringRef name = CFCopyLocalizedStringFromTableInBundle(CFSTR("Apple Computer, Inc."), CFSTR("CodecNames"), GetCodecBundle(), CFSTR(""));
+			CFStringRef name = CFCopyLocalizedStringFromTableInBundle(CFSTR("Apple, Inc."), CFSTR("CodecNames"), GetCodecBundle(), CFSTR(""));
 			*(CFStringRef*)outPropertyData = name;
 			break; 
 		}
-#endif
-		case kAudioCodecPropertyMinimumNumberInputPackets :
-			if(ioPropertyDataSize != sizeof(UInt32)) CODEC_THROW(kAudioCodecBadPropertySizeError);
-			*(UInt32*)outPropertyData = 1;
+#else
+			// If called on the device these should return nothing but 0
+		case kAudioCodecPropertyNameCFString:
+		case kAudioCodecPropertyFormatCFString:
+		case kAudioCodecPropertyManufacturerCFString:
+			ioPropertyDataSize = 0;
+			outPropertyData = 0;
 			break;
-		case kAudioCodecPropertyMinimumNumberOutputPackets :
-			if(ioPropertyDataSize != sizeof(UInt32)) CODEC_THROW(kAudioCodecBadPropertySizeError);
+#endif
+        case kAudioCodecPropertyRequiresPacketDescription:
+  			if(ioPropertyDataSize == SizeOf32(UInt32))
+			{
+                *reinterpret_cast<UInt32*>(outPropertyData) = 0; 
+            }
+			else
+			{
+				CODEC_THROW(kAudioCodecBadPropertySizeError);
+			}
+            break;
+			
+		case kAudioCodecPropertyMinimumNumberInputPackets :
+			if(ioPropertyDataSize != SizeOf32(UInt32)) CODEC_THROW(kAudioCodecBadPropertySizeError);
 			*(UInt32*)outPropertyData = 1;
 			break;
 			
-		case kAudioCodecPropertyInputChannelLayout :
-		case kAudioCodecPropertyOutputChannelLayout :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-		case kAudioCodecPropertyAvailableInputChannelLayouts :
-		case kAudioCodecPropertyAvailableOutputChannelLayouts :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
+		case kAudioCodecPropertyMinimumNumberOutputPackets :
+			if(ioPropertyDataSize != SizeOf32(UInt32)) CODEC_THROW(kAudioCodecBadPropertySizeError);
+			*(UInt32*)outPropertyData = 1;
 			break;
 			
 		case kAudioCodecPropertyCurrentInputFormat:
-			if(ioPropertyDataSize == sizeof(AudioStreamBasicDescription))
+			if(ioPropertyDataSize == SizeOf32(AudioStreamBasicDescription))
 			{
 				GetCurrentInputFormat(*reinterpret_cast<AudioStreamBasicDescription*>(outPropertyData));
 			}
@@ -241,14 +256,14 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
 		case kAudioCodecPropertySupportedInputFormats:
-		case kAudioCodecInputFormatsForOutputFormat:
-			thePacketsToGet = ioPropertyDataSize / sizeof(AudioStreamBasicDescription);
+		case kAudioCodecPropertyInputFormatsForOutputFormat:
+			thePacketsToGet = ioPropertyDataSize / SizeOf32(AudioStreamBasicDescription);
 			GetSupportedInputFormats(reinterpret_cast<AudioStreamBasicDescription*>(outPropertyData), thePacketsToGet);
-			ioPropertyDataSize = thePacketsToGet * sizeof(AudioStreamBasicDescription);
+			ioPropertyDataSize = thePacketsToGet * SizeOf32(AudioStreamBasicDescription);
 			break;
 			
 		case kAudioCodecPropertyCurrentOutputFormat:
-			if(ioPropertyDataSize == sizeof(AudioStreamBasicDescription))
+			if(ioPropertyDataSize == SizeOf32(AudioStreamBasicDescription))
 			{
 				GetCurrentOutputFormat(*reinterpret_cast<AudioStreamBasicDescription*>(outPropertyData));
 			}
@@ -259,10 +274,10 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
 		case kAudioCodecPropertySupportedOutputFormats:
-		case kAudioCodecOutputFormatsForInputFormat:
-			thePacketsToGet = ioPropertyDataSize / sizeof(AudioStreamBasicDescription);
+		case kAudioCodecPropertyOutputFormatsForInputFormat:
+			thePacketsToGet = ioPropertyDataSize / SizeOf32(AudioStreamBasicDescription);
 			GetSupportedOutputFormats(reinterpret_cast<AudioStreamBasicDescription*>(outPropertyData), thePacketsToGet);
-			ioPropertyDataSize = thePacketsToGet * sizeof(AudioStreamBasicDescription);
+			ioPropertyDataSize = thePacketsToGet * SizeOf32(AudioStreamBasicDescription);
 			break;
 			
 		case kAudioCodecPropertyMagicCookie:
@@ -277,7 +292,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
 		case kAudioCodecPropertyInputBufferSize:
-			if(ioPropertyDataSize == sizeof(UInt32))
+			if(ioPropertyDataSize == SizeOf32(UInt32))
 			{
 				*reinterpret_cast<UInt32*>(outPropertyData) = GetInputBufferByteSize();
 			}
@@ -288,7 +303,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
 		case kAudioCodecPropertyUsedInputBufferSize:
-			if(ioPropertyDataSize == sizeof(UInt32))
+			if(ioPropertyDataSize == SizeOf32(UInt32))
 			{
 				*reinterpret_cast<UInt32*>(outPropertyData) = GetUsedInputBufferByteSize();
 			}
@@ -299,7 +314,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
 		case kAudioCodecPropertyIsInitialized:
-			if(ioPropertyDataSize == sizeof(UInt32))
+			if(ioPropertyDataSize == SizeOf32(UInt32))
 			{
 				*reinterpret_cast<UInt32*>(outPropertyData) = IsInitialized() ? 1 : 0;
 			}
@@ -310,7 +325,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 			
         case kAudioCodecPropertyAvailableNumberChannels:
-  			if(ioPropertyDataSize == sizeof(UInt32) * 2)
+  			if(ioPropertyDataSize == SizeOf32(UInt32) * 2)
 			{
 				(reinterpret_cast<UInt32*>(outPropertyData))[0] = 1;
 				(reinterpret_cast<UInt32*>(outPropertyData))[1] = 2;
@@ -322,7 +337,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 
         case kAudioCodecPropertyPrimeMethod:
-  			if(ioPropertyDataSize == sizeof(UInt32))
+  			if(ioPropertyDataSize == SizeOf32(UInt32))
 			{
 				*reinterpret_cast<UInt32*>(outPropertyData) = (UInt32)kAudioCodecPrimeMethod_None;
 			}
@@ -333,7 +348,7 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			break;
 
 		case kAudioCodecPropertyPrimeInfo:
-  			if(ioPropertyDataSize == sizeof(AudioCodecPrimeInfo) )
+  			if(ioPropertyDataSize == SizeOf32(AudioCodecPrimeInfo) )
 			{
 				(reinterpret_cast<AudioCodecPrimeInfo*>(outPropertyData))->leadingFrames = 0;
 				(reinterpret_cast<AudioCodecPrimeInfo*>(outPropertyData))->trailingFrames = 0;
@@ -344,21 +359,10 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 			}
 			break;
 
-        case kAudioCodecUseRecommendedSampleRate:
-  			if(ioPropertyDataSize == sizeof(UInt32))
+        case kAudioCodecPropertyDoesSampleRateConversion:
+  			if(ioPropertyDataSize == SizeOf32(UInt32))
 			{
 				*reinterpret_cast<UInt32*>(outPropertyData) = 0;
-			}
-			else
-			{
-				CODEC_THROW(kAudioCodecBadPropertySizeError);
-			}
-			break;
-
-        case kAudioCodecOutputPrecedence:
-  			if(ioPropertyDataSize == sizeof(UInt32))
-			{
-				*reinterpret_cast<UInt32*>(outPropertyData) = kAudioCodecOutputPrecedenceNone;
 			}
 			else
 			{
@@ -375,29 +379,16 @@ void	ACBaseCodec::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPrope
 
 void	ACBaseCodec::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPropertyDataSize, const void* inPropertyData)
 {
+	// No property can be set when the codec is initialized
+	if(mIsInitialized)
+	{
+		CODEC_THROW(kAudioCodecIllegalOperationError);
+	}
+	
 	switch(inPropertyID)
 	{
-		case kAudioCodecPropertyMinimumNumberInputPackets :
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-		case kAudioCodecPropertyMinimumNumberOutputPackets :
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-
-		case kAudioCodecPropertyInputChannelLayout :
-		case kAudioCodecPropertyOutputChannelLayout :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-
-		case kAudioCodecPropertyAvailableInputChannelLayouts :
-		case kAudioCodecPropertyAvailableOutputChannelLayouts :
-			// by default a codec doesn't support channel layouts.
-			CODEC_THROW(kAudioCodecIllegalOperationError);
-			break;
-
 		case kAudioCodecPropertyCurrentInputFormat:
-			if(inPropertyDataSize == sizeof(AudioStreamBasicDescription))
+			if(inPropertyDataSize == SizeOf32(AudioStreamBasicDescription))
 			{
 				SetCurrentInputFormat(*reinterpret_cast<const AudioStreamBasicDescription*>(inPropertyData));
 			}
@@ -408,7 +399,7 @@ void	ACBaseCodec::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inProper
 			break;
 			
 		case kAudioCodecPropertyCurrentOutputFormat:
-			if(inPropertyDataSize == sizeof(AudioStreamBasicDescription))
+			if(inPropertyDataSize == SizeOf32(AudioStreamBasicDescription))
 			{
 				SetCurrentOutputFormat(*reinterpret_cast<const AudioStreamBasicDescription*>(inPropertyData));
 			}
@@ -422,17 +413,9 @@ void	ACBaseCodec::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inProper
 			SetMagicCookie(inPropertyData, inPropertyDataSize);
 			break;
 			
+		case kAudioCodecPropertyMinimumNumberOutputPackets :
+		case kAudioCodecPropertyMinimumNumberInputPackets :
 		case kAudioCodecPropertyInputBufferSize:
-			if(inPropertyDataSize == sizeof(UInt32))
-			{
-				ReallocateInputBuffer(*reinterpret_cast<const UInt32*>(inPropertyData));
-			}
-			else
-			{
-				CODEC_THROW(kAudioCodecBadPropertySizeError);
-			}
-			break;
-			
 		case kAudioCodecPropertyNameCFString:
 		case kAudioCodecPropertyManufacturerCFString:
 		case kAudioCodecPropertyFormatCFString:
@@ -443,21 +426,20 @@ void	ACBaseCodec::SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inProper
 		case kAudioCodecPropertyAvailableNumberChannels:
 		case kAudioCodecPropertyPrimeMethod:
 		case kAudioCodecPropertyPrimeInfo:
-		case kAudioCodecOutputFormatsForInputFormat:
-		case kAudioCodecInputFormatsForOutputFormat:
-		case kAudioCodecUseRecommendedSampleRate:
-		case kAudioCodecOutputPrecedence:
+		case kAudioCodecPropertyOutputFormatsForInputFormat:
+		case kAudioCodecPropertyInputFormatsForOutputFormat:
+		case kAudioCodecPropertyDoesSampleRateConversion:
+		case kAudioCodecPropertyRequiresPacketDescription:
 			CODEC_THROW(kAudioCodecIllegalOperationError);
 			break;
 			
 		default:
 			CODEC_THROW(kAudioCodecUnknownPropertyError);
 			break;
-			
 	};
 }
 
-void	ACBaseCodec::Initialize(const AudioStreamBasicDescription* inInputFormat, const AudioStreamBasicDescription* inOutputFormat, const void* inMagicCookie, UInt32 inMagicCookieByteSize)
+void	ACBaseCodec::Initialize(const AudioStreamBasicDescription* /* inInputFormat */, const AudioStreamBasicDescription* /* inOutputFormat */, const void* /* inMagicCookie */, UInt32 /* inMagicCookieByteSize */)
 {
 	mIsInitialized = true;
 }
@@ -473,12 +455,12 @@ void	ACBaseCodec::Reset()
 
 UInt32	ACBaseCodec::GetNumberSupportedInputFormats() const
 {
-	return mInputFormatList.size();
+	return (UInt32)mInputFormatList.size();
 }
 
 void	ACBaseCodec::GetSupportedInputFormats(AudioStreamBasicDescription* outInputFormats, UInt32& ioNumberInputFormats) const
 {
-	UInt32 theNumberFormats = mInputFormatList.size();
+	UInt32 theNumberFormats = (UInt32)mInputFormatList.size();
 	ioNumberInputFormats = (theNumberFormats < ioNumberInputFormats) ? theNumberFormats : ioNumberInputFormats;
 	
 	FormatList::const_iterator theIterator = mInputFormatList.begin();
@@ -512,12 +494,12 @@ void	ACBaseCodec::SetCurrentInputFormat(const AudioStreamBasicDescription& inInp
 
 UInt32	ACBaseCodec::GetNumberSupportedOutputFormats() const
 {
-	return mOutputFormatList.size();
+	return (UInt32)mOutputFormatList.size();
 }
 
 void	ACBaseCodec::GetSupportedOutputFormats(AudioStreamBasicDescription* outOutputFormats, UInt32& ioNumberOutputFormats) const
 {
-	UInt32 theNumberFormats = mOutputFormatList.size();
+	UInt32 theNumberFormats = (UInt32)mOutputFormatList.size();
 	ioNumberOutputFormats = (theNumberFormats < ioNumberOutputFormats) ? theNumberFormats : ioNumberOutputFormats;
 	
 	FormatList::const_iterator theIterator = mOutputFormatList.begin();
@@ -554,12 +536,12 @@ UInt32	ACBaseCodec::GetMagicCookieByteSize() const
 	return 0;
 }
 
-void	ACBaseCodec::GetMagicCookie(void* outMagicCookieData, UInt32& ioMagicCookieDataByteSize) const
+void	ACBaseCodec::GetMagicCookie(void* /* outMagicCookieData */, UInt32& ioMagicCookieDataByteSize) const
 {
 	ioMagicCookieDataByteSize = 0;
 }
 
-void	ACBaseCodec::SetMagicCookie(const void* outMagicCookieData, UInt32 inMagicCookieDataByteSize)
+void	ACBaseCodec::SetMagicCookie(const void* /* outMagicCookieData */, UInt32 /* inMagicCookieDataByteSize */)
 {
 	if(mIsInitialized)
 	{
@@ -585,4 +567,14 @@ void	ACBaseCodec::AddOutputFormat(const AudioStreamBasicDescription& inOutputFor
 		theIterator = std::lower_bound(mOutputFormatList.begin(), mOutputFormatList.end(), inOutputFormat);
 		mOutputFormatList.insert(theIterator, inOutputFormat);
 	}
+}
+
+OSType ACBaseCodec::GetSubType()
+{
+	if (!mCodecSubType)
+	{
+		AudioComponentDescription desc = GetComponentDescription();
+		mCodecSubType = desc.componentSubType;
+	}
+	return mCodecSubType;
 }

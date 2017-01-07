@@ -19,7 +19,6 @@
 		73814C180908039E00C478FC /* ACBaseCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C000908039E00C478FC /* ACBaseCodec.cpp */; };
 		73814C190908039E00C478FC /* ACCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C020908039E00C478FC /* ACCodec.cpp */; };
 		73814C1A0908039E00C478FC /* GetCodecBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C080908039E00C478FC /* GetCodecBundle.cpp */; };
-		73814C1B0908039E00C478FC /* AudioCodecComponentGlue.c in Sources */ = {isa = PBXBuildFile; fileRef = 73814C0A0908039E00C478FC /* AudioCodecComponentGlue.c */; };
 		73814C1C0908039E00C478FC /* CABundleLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C100908039E00C478FC /* CABundleLocker.cpp */; };
 		73814C1D0908039E00C478FC /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C130908039E00C478FC /* CADebugMacros.cpp */; };
 		73814C1E0908039E00C478FC /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73814C160908039E00C478FC /* CAStreamBasicDescription.cpp */; };
@@ -118,15 +117,12 @@
 		73814C010908039E00C478FC /* ACBaseCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACBaseCodec.h; sourceTree = "<group>"; };
 		73814C020908039E00C478FC /* ACCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ACCodec.cpp; sourceTree = "<group>"; };
 		73814C030908039E00C478FC /* ACCodec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodec.h; sourceTree = "<group>"; };
-		73814C040908039E00C478FC /* ACCodecDispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatch.h; sourceTree = "<group>"; };
 		73814C050908039E00C478FC /* ACCodecDispatchTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACCodecDispatchTypes.h; sourceTree = "<group>"; };
 		73814C070908039E00C478FC /* ACConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ACConditionalMacros.h; sourceTree = "<group>"; };
 		73814C080908039E00C478FC /* GetCodecBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GetCodecBundle.cpp; sourceTree = "<group>"; };
 		73814C090908039E00C478FC /* GetCodecBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetCodecBundle.h; sourceTree = "<group>"; };
-		73814C0A0908039E00C478FC /* AudioCodecComponentGlue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = AudioCodecComponentGlue.c; sourceTree = "<group>"; };
 		73814C100908039E00C478FC /* CABundleLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CABundleLocker.cpp; sourceTree = "<group>"; };
 		73814C110908039E00C478FC /* CABundleLocker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CABundleLocker.h; sourceTree = "<group>"; };
-		73814C120908039E00C478FC /* CAConditionalMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAConditionalMacros.h; sourceTree = "<group>"; };
 		73814C130908039E00C478FC /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
 		73814C140908039E00C478FC /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
 		73814C150908039E00C478FC /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
@@ -281,7 +277,6 @@
 			isa = PBXGroup;
 			children = (
 				73814BFF0908039E00C478FC /* ACPublic */,
-				73814C0A0908039E00C478FC /* AudioCodecComponentGlue.c */,
 			);
 			path = AudioCodecs;
 			sourceTree = "<group>";
@@ -293,7 +288,6 @@
 				73814C010908039E00C478FC /* ACBaseCodec.h */,
 				73814C020908039E00C478FC /* ACCodec.cpp */,
 				73814C030908039E00C478FC /* ACCodec.h */,
-				73814C040908039E00C478FC /* ACCodecDispatch.h */,
 				73814C050908039E00C478FC /* ACCodecDispatchTypes.h */,
 				73814C070908039E00C478FC /* ACConditionalMacros.h */,
 				73814C080908039E00C478FC /* GetCodecBundle.cpp */,
@@ -330,7 +324,6 @@
 			children = (
 				73814C100908039E00C478FC /* CABundleLocker.cpp */,
 				73814C110908039E00C478FC /* CABundleLocker.h */,
-				73814C120908039E00C478FC /* CAConditionalMacros.h */,
 				73814C130908039E00C478FC /* CADebugMacros.cpp */,
 				73814C140908039E00C478FC /* CADebugMacros.h */,
 				73814C150908039E00C478FC /* CAMath.h */,
@@ -495,7 +488,6 @@
 				73814C180908039E00C478FC /* ACBaseCodec.cpp in Sources */,
 				73814C190908039E00C478FC /* ACCodec.cpp in Sources */,
 				73814C1A0908039E00C478FC /* GetCodecBundle.cpp in Sources */,
-				73814C1B0908039E00C478FC /* AudioCodecComponentGlue.c in Sources */,
 				73814C1C0908039E00C478FC /* CABundleLocker.cpp in Sources */,
 				73814C1D0908039E00C478FC /* CADebugMacros.cpp in Sources */,
 				73814C1E0908039E00C478FC /* CAStreamBasicDescription.cpp in Sources */,

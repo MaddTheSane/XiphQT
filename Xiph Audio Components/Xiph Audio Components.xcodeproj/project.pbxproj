@@ -608,8 +608,8 @@
 				5530E6CB1CD3F8D000071A6D /* PublicUtility */,
 			);
 			name = CoreAudio;
-			path = /Users/cwbetts/DeveloperStuff/CoreAudioUtilityClasses/CoreAudio;
-			sourceTree = "<absolute>";
+			path = AppleSDK/CoreAudio;
+			sourceTree = "<group>";
 			usesTabs = 1;
 		};
 		5530E6BF1CD3F8D000071A6D /* AudioCodecs */ = {
