@@ -60,6 +60,8 @@ typedef struct {
     th_comment tc;
     th_setup_info *ts;
 
+    UInt32 bitstream_version;
+
     UInt32 granulepos_shift;
     UInt32 fps_framelen;
 

@@ -39,7 +39,31 @@
 #include "data_types.h"
 
 #include "samplerefs.h"
+#include "utils.h"
 
+extern int vorbis_private_extract_info(StreamInfo *si);
+extern long vorbis_private_page_duration(StreamInfo *si);
+
+
+static void _find_base_gp(StreamInfo *si, ogg_page *opg)
+{
+    ogg_int64_t grpos = ogg_page_granulepos(opg);
+    if (grpos >= 0) {
+        ogg_int64_t duration = vorbis_private_page_duration(si); // will use page that's been recently pagein-ed, assumes
+                                                                 // we've been consistently packeting-out so far...
+        dbg_printf("---/v / page duration: %lld, %lld (%lld)\n", duration, ogg_page_granulepos(opg), si->lastGranulePos);
+        if (duration >= 0) {
+            si->baseGranulePos = grpos - duration;
+            if (si->baseGranulePos < 0)
+                si->baseGranulePos = 0;
+            gp_to_time_subsec(si->rate, si->baseGranulePos, &si->baseGranuleTime, &si->baseGranuleTimeSubSecond);
+            si->baseGranulePosFound = true;
+            dbg_printf("---/v / found base grpos: %lld, %lf\n", si->baseGranuleTime, si->baseGranuleTimeSubSecond);
+        }
+    } else {
+        dbg_printf("---/v / page no duration: %lld (nr: %ld) (%lld)\n", ogg_page_granulepos(opg), ogg_page_pageno(opg), si->lastGranulePos);
+    }
+}
 
 int recognize_header__vorbis(ogg_page *op)
 {
@@ -205,6 +229,13 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
     case kVStateReadingCodebooks:
         ogg_stream_pagein(&si->os, opg);
         break;
+
+    case kVStateReadingFirstPacket:
+    case kVStateReadingPackets:
+        if (!si->baseGranulePosFound)
+            ogg_stream_pagein(&si->os, opg);
+        break;
+
     default:
         break;
     }
@@ -261,18 +292,20 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                 dbg_printf("---/  / streamOffset: [%ld, %ld], %lg\n", si->streamOffset, si->streamOffsetSamples, globals->currentGroupOffsetSubSecond);
                 si->incompleteCompensation = 0;
                 loop = false; //there should be an end of page here according to specs...
+
+                vorbis_private_extract_info(si);
             }
             break;
 
         case kVStateReadingFirstPacket:
-            if (ogg_page_pageno(opg) > 3) {
-                si->lastGranulePos = ogg_page_granulepos(opg);
-                dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
-                loop = false;
+            si->lastGranulePos = 0;
 
-                if (si->lastGranulePos < 0)
-                    si->lastGranulePos = 0;
-            }
+            _find_base_gp(si, opg);
+
+            if (si->baseGranulePosFound)
+                si->lastGranulePos = si->baseGranulePos;
+
+            // now update the sound desc
             {
                 unsigned long pagenoatom[3] = { EndianU32_NtoB(sizeof(pagenoatom)), EndianU32_NtoB(kCookieTypeVorbisFirstPageNo),
                                                 EndianU32_NtoB(ogg_page_pageno(opg)) };
@@ -298,6 +331,16 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                 TimeValue   duration  = pos - si->lastGranulePos;
                 short       smp_flags = 0;
 
+                if (!si->baseGranulePosFound) {
+                    _find_base_gp(si, opg);
+
+                    if (si->baseGranulePosFound) {
+                        si->lastGranulePos = si->baseGranulePos;
+                        // update current page duration as we now know it
+                        duration = pos - si->lastGranulePos;
+                    }
+                }
+
                 if (ogg_page_continued(opg) || si->incompleteCompensation != 0)
                     smp_flags |= mediaSampleNotSync;
 
@@ -317,6 +360,9 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
                 if (si->insertTime == 0 && si->streamOffsetSamples > 0) {
                     dbg_printf("   -   :++: increasing duration (%ld) by sampleOffset: %ld\n", duration, si->streamOffsetSamples);
                     duration += si->streamOffsetSamples;
+                    
+                    si->streamOffsetSamples = 0;
+                    
                 }
 
                 ret = _store_sample_reference(si, &globals->dataOffset, len, duration, smp_flags);
@@ -327,7 +373,7 @@ ComponentResult process_stream_page__vorbis(OggImportGlobals *globals, StreamInf
 
                 if (!globals->usingIdle) {
                     //if (si->sample_refs_count >= si->sample_refs_size)
-                    if (si->sample_refs_count >= kVSRefsInitial)
+                    if (si->sample_refs_count >= kVSRefsInitial && si->baseGranulePosFound)
                         ret = _commit_srefs(globals, si, &movie_changed);
                 }
 
@@ -353,10 +399,64 @@ ComponentResult flush_stream__vorbis(OggImportGlobals *globals, StreamInfo *si, 
     ComponentResult ret = noErr;
     Boolean movie_changed = false;
 
+    if (!si->baseGranulePosFound) {
+        dbg_printf("[OIv ]  =  [%08lx] :: flush_stream() - asked to flush but still no base grpos!!\n", (UInt32) globals);
+        return ret;
+    }
+
     ret = _commit_srefs(globals, si, &movie_changed);
 
     if (movie_changed && notify)
         NotifyMovieChanged(globals, true);
+
+    return ret;
+};
+
+ComponentResult update_group_gp__vorbis(OggImportGlobals *globals, StreamInfo *si)
+{
+    ComponentResult ret = noErr;
+    TimeValue offset;
+    Float64 offset_subsec;
+    TimeValue movieTS = 0;
+
+    if (si->groupBaseOffsetApplied)
+        return ret;
+
+    if (globals->currentGroupBase == si->baseGranuleTime && globals->currentGroupBaseSubSecond == si->baseGranuleTimeSubSecond)
+        return ret;
+
+    movieTS = GetMovieTimeScale(globals->theMovie);
+
+    offset = si->baseGranuleTime - globals->currentGroupBase;
+    offset_subsec =  si->baseGranuleTimeSubSecond - globals->currentGroupBaseSubSecond;
+    if (offset_subsec < 0.0) {
+        offset -= 1;
+        offset_subsec += 1.0;
+    }
+
+    dbg_printf("---/v / offset diff: %ld %lf\n", offset, offset_subsec);
+
+    if (offset > 0 || offset_subsec > 0.0) {
+        TimeValue track_offset = offset * movieTS;
+        if (offset_subsec > 0.0) {
+            TimeValue track_subsec_offset = (TimeValue) (offset_subsec * movieTS);
+            offset_subsec -= (Float64) track_subsec_offset / (Float64) movieTS;
+            track_offset += track_subsec_offset;
+        }
+        dbg_printf("---/v / adjusting streamOffset: %ld (dt: %ld)\n", si->streamOffset, track_offset);
+        si->streamOffset += track_offset;
+    }
+
+    if (offset_subsec > 0.0) {
+        dbg_printf("---/v / adjusting streamOffsetSamples: %ld (dt: %ld)\n", si->streamOffsetSamples, (UInt32) (offset_subsec * si->rate));
+        if (_add_first_duration(si, offset_subsec * si->rate) != noErr)
+            si->streamOffsetSamples += offset_subsec * si->rate;
+    }
+
+    si->groupBaseOffsetApplied = true;
+
+    dbg_printf("[OIv ]  =  [%08lx] :: update_group_gp(): group base: (%lld, %lf) stream base: (%lld, %lf)\n", (UInt32) globals,
+               globals->currentGroupBase, globals->currentGroupBaseSubSecond, si->baseGranuleTime, si->baseGranuleTimeSubSecond);
 
     return ret;
 };

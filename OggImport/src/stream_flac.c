@@ -309,6 +309,7 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
 
         case kFStateReadingFirstPacket:
             // what to do with this one? is it needed at all??
+            // in case with used with video we'll need to calculate page duration like in Theora and Vorbis case - maybe one day...
             if (ogg_page_pageno(opg) > 2 && false) {
                 si->lastGranulePos = ogg_page_granulepos(opg);
                 dbg_printf("----==< skipping: %llx, %lx\n", si->lastGranulePos, ogg_page_pageno(opg));
@@ -317,6 +318,11 @@ ComponentResult process_stream_page__flac(OggImportGlobals *globals, StreamInfo 
                 if (si->lastGranulePos < 0)
                     si->lastGranulePos = 0;
             }
+
+            si->baseGranulePos = si->lastGranulePos;
+            si->baseGranulePosFound = true;
+            gp_to_time_subsec(si->rate, si->baseGranulePos, &si->baseGranuleTime, &si->baseGranuleTimeSubSecond);
+
             si->si_flac.state = kFStateReadingPackets;
             break;
 

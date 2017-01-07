@@ -363,6 +363,12 @@ static ComponentResult OpenStream(OggImportGlobalsPtr globals, long serialno, og
 
         // si->sampleOffset = 0;
 
+        si->baseGranulePosFound = false;
+        si->baseGranulePos = 0;
+        si->baseGranuleTime = -1;
+        si->baseGranuleTimeSubSecond = 0.0;
+        si->groupBaseOffsetApplied = false;
+
         globals->numTracksStarted++;
     }
 
@@ -775,6 +781,9 @@ ComponentResult CreateTrackAndMedia(OggImportGlobalsPtr globals, StreamInfoPtr s
                     SetTrackEnabled(si->theTrack, true);
 
                     si->lastGranulePos = 0;
+                    si->baseGranulePos = 0;
+                    si->baseGranulePosFound = false;
+                    si->groupBaseOffsetApplied = false;
                 }
                 else
                 {
@@ -1059,6 +1068,67 @@ ComponentResult FlushAllStreams(OggImportGlobalsPtr globals, Boolean notify)
 
 /* =============================================================== */
 
+static Boolean found_all_base_gps(OggImportGlobalsPtr globals) {
+    int i;
+    Boolean found_all = true;
+
+    for (i = 0; i < globals->streamCount; i++) {
+        StreamInfoPtr si = &(*globals->streamInfoHandle)[i];
+        if (!si->baseGranulePosFound) {
+            found_all = false;
+            break;
+        }
+    }
+
+    return found_all;
+}
+
+#define TIME_SUBSEC_EARLIER(t1, t1ss, t2, t2ss) (((t1) < (t2)) || (((t1) == (t2)) && ((t1ss) < (t2ss))))
+
+static void set_group_base(OggImportGlobalsPtr globals) {
+    int i;
+    ComponentResult err = noErr;
+    TimeValue64 min = -1;
+    Float64 min_subsec = 0.0;
+
+    dbg_printf("[OI  ]  >> [%08lx] :: set_group_base()\n", (UInt32) globals);
+
+    for (i = 0; i < globals->streamCount; i++) {
+        StreamInfoPtr si = &(*globals->streamInfoHandle)[i];
+
+        dbg_printf("[OI  ]     [%08lx] :: set_group_base(): comparing %lld %lf < %lld %lf\n", (UInt32) globals, si->baseGranuleTime, si->baseGranuleTimeSubSecond,
+                   min, min_subsec);
+
+        if (min == -1 || TIME_SUBSEC_EARLIER(si->baseGranuleTime, si->baseGranuleTimeSubSecond, min, min_subsec)) {
+            min = si->baseGranuleTime;
+            min_subsec = si->baseGranuleTimeSubSecond;
+        }
+    }
+
+    globals->currentGroupBase = min;
+    globals->currentGroupBaseSubSecond = min_subsec;
+
+    dbg_printf("[OI  ] <   [%08lx] :: set_group_base() = %lld %lf\n", (UInt32) globals, globals->currentGroupBase, globals->currentGroupBaseSubSecond);
+}
+
+static ComponentResult update_stream_base_offsets(OggImportGlobalsPtr globals) {
+    int i;
+    ComponentResult ret = noErr;
+
+    for (i = 0; i < globals->streamCount; i++) {
+        StreamInfoPtr si = &(*globals->streamInfoHandle)[i];
+
+        if (si->sfhf->update_group_gp != NULL) {
+            ret = (*si->sfhf->update_group_gp)(globals, si);
+
+            if (ret != noErr)
+                break;
+        }
+    }
+
+    return ret;
+}
+
 static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
     ComponentResult ret = noErr;
     long serialno;
@@ -1113,6 +1183,10 @@ static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
     if (si != NULL) {
         if (process_page) {
             ret = ProcessStreamPage(globals, si, op);
+            if (globals->currentGroupBase < 0 && found_all_base_gps(globals)) {
+                set_group_base(globals);
+                update_stream_base_offsets(globals);
+            }
         }
 
         if (ogg_page_eos(op)) {
@@ -1122,6 +1196,8 @@ static ComponentResult ProcessPage(OggImportGlobalsPtr globals, ogg_page *op) {
                 globals->groupStreamsFound = false;
                 globals->currentGroupOffset = -1;
                 globals->currentGroupOffsetSubSecond = 0.0;
+                globals->currentGroupBase = -1;
+                globals->currentGroupBaseSubSecond = 0.0;
             }
         }
     }
@@ -1184,6 +1260,9 @@ static ComponentResult StateProcess(OggImportGlobalsPtr globals) {
             globals->currentGroupOffset = globals->startTime;
             globals->currentGroupOffsetSubSecond = (Float64) (globals->startTime % GetMovieTimeScale(globals->theMovie)) / (Float64) GetMovieTimeScale(globals->theMovie);
             globals->groupStreamsFound = false;
+
+            globals->currentGroupBase = -1;
+            globals->currentGroupBaseSubSecond = 0.0;
 
             if (!globals->sizeInitialised) {
                 result = XQTGetFileSize(globals);

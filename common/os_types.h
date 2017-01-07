@@ -1,10 +1,10 @@
 /*
- *  utils.h
+ *  os_types.h
  *
- *    Support functions header file.
+ *    Additional, OS-types specific configuration file.
  *
  *
- *  Copyright (c) 2006,2007  Arek Korbik
+ *  Copyright (c) 2009  Arek Korbik
  *
  *  This file is part of XiphQT, the Xiph QuickTime Components.
  *
@@ -28,17 +28,13 @@
  */
 
 
-#if !defined(__ogg_utils_h__)
-#define __ogg_utils_h__
+#if !defined(__xiphqt__os_types__)
+#define __xiphqt__os_types__
 
-#include "config.h"
-#include <ogg/ogg.h>
-#include <Vorbis/codec.h>
+#if !defined(__APPLE_CC__) && !defined(REZ)
+#include <MacTypes.h>
+#include <MacMemory.h>
+#include <CoreServices.h>
+#endif /* __APPLE_CC__ && REZ */
 
-extern int unpack_vorbis_comments(vorbis_comment *vc, const void *data, UInt32 data_size);
-extern void find_last_page_GP(const unsigned char *data, UInt32 data_size,
-                              ogg_int64_t *gp, long *serialno);
-extern void gp_to_time_subsec(int rate, ogg_int64_t gp, TimeValue64 *ts, Float64 *subsec);
-
-
-#endif /* __ogg_utils_h__ */
+#endif /* __xiphqt__os_types__ */

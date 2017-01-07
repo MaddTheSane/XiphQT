@@ -34,6 +34,7 @@
 
 #if !defined(_NO_VORBIS_SUPPORT)
 #include <Vorbis/codec.h>
+#include "stream_private_vorbis.h"
 
 typedef enum VorbisImportStates {
     kVStateInitial,
@@ -54,6 +55,8 @@ typedef struct {
 
     vorbis_info vi;
     vorbis_comment vc;
+
+    StreamPrivate__vorbis private;
 } StreamInfo__vorbis;
 
 

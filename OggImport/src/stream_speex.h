@@ -49,7 +49,7 @@ extern ComponentResult flush_stream__speex(OggImportGlobals *globals, StreamInfo
 
 #define HANDLE_FUNCTIONS__SPEEX { &process_stream_page__speex, &recognize_header__speex, \
             &verify_header__speex, &process_first_packet__speex, &create_sample_description__speex, \
-            NULL, NULL, &initialize_stream__speex, &flush_stream__speex, &clear_stream__speex, NULL }
+            NULL, NULL, &initialize_stream__speex, &flush_stream__speex, &clear_stream__speex, NULL, NULL }
 
 
 #endif /* __stream_vorbis_h__ */
