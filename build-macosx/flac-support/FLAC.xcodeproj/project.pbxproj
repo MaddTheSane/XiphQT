@@ -40,6 +40,7 @@
 		55A5FEE81DFB6CA200E07058 /* ogg_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE11DFB6CA200E07058 /* ogg_helper.c */; };
 		55A5FEE91DFB6CA200E07058 /* ogg_mapping.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */; };
 		55A5FEEA1DFB6CA200E07058 /* ogg_mapping.c in Sources */ = {isa = PBXBuildFile; fileRef = 55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */; };
+		55FD17631E24CEFD00DA416D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FD17621E24CEFD00DA416D /* Ogg.framework */; };
 		73744B060B1A1925002B059E /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 73744B050B1A1925002B059E /* window.c */; };
 		73744B200B1A1D3A002B059E /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963E0A0D1AB900D40234 /* bitmath.c */; };
 		73744B210B1A1D3B002B059E /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73E1963F0A0D1AB900D40234 /* cpu.c */; };
@@ -153,6 +154,7 @@
 		55A5FEE01DFB6CA200E07058 /* ogg_encoder_aspect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_encoder_aspect.c; sourceTree = "<group>"; };
 		55A5FEE11DFB6CA200E07058 /* ogg_helper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_helper.c; sourceTree = "<group>"; };
 		55A5FEE21DFB6CA200E07058 /* ogg_mapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ogg_mapping.c; sourceTree = "<group>"; };
+		55FD17621E24CEFD00DA416D /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ogg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B050B1A1925002B059E /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		73744B1B0B1A1C43002B059E /* libflac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libflac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73744B520B1A21DA002B059E /* libflac++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libflac++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +242,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55FD17631E24CEFD00DA416D /* Ogg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +276,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55FD17621E24CEFD00DA416D /* Ogg.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
