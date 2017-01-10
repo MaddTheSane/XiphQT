@@ -1,6 +1,6 @@
 [submodule "external-libs/opus"]
 	path = external-libs/opus
-	url = git://git.opus-codec.org/opus.git
+	url = https://github.com/MaddTheSane/opus.git
 [submodule "external-libs/vorbis"]
 	path = external-libs/vorbis
 	url = https://github.com/MaddTheSane/vorbis.git
