@@ -9,6 +9,7 @@
 #ifndef CAOpusCodec_pch
 #define CAOpusCodec_pch
 
-#include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <AudioUnit/AudioUnit.h>
 
 #endif /* CAOpusCodec_pch */

@@ -1,3 +1,6 @@
 _CAOpusDecoderEntry
+_CAOpusDecoderFactory
 _CAOggOpusDecoderEntry
+_CAOggOpusDecoderFactory
 _CAOpusEncoderEntry
+_CAOpusEncoderFactory

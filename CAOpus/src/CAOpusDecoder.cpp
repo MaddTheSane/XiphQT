@@ -425,17 +425,17 @@ void CAOpusDecoder::InitializeCompressionSettings()
 
     while (ptrheader < cend) {
         aheader = reinterpret_cast<CookieAtomHeader*> (ptrheader);
-        ptrheader += EndianU32_BtoN(aheader->size);
-        if (ptrheader > cend || EndianU32_BtoN(aheader->size) <= 0)
+        ptrheader += CFSwapInt32BigToHost(aheader->size);
+        if (ptrheader > cend || CFSwapInt32BigToHost(aheader->size) <= 0)
             break;
 
-        switch(EndianS32_BtoN(aheader->type)) {
+        switch(CFSwapInt32BigToHost(aheader->type)) {
         case kCookieTypeVorbisHeader:
             header.b_o_s = 1;
             header.e_o_s = 0;
             header.granulepos = 0;
             header.packetno = 0;
-            header.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header.packet = aheader->data;
             break;
 
@@ -444,7 +444,7 @@ void CAOpusDecoder::InitializeCompressionSettings()
             header_vc.e_o_s = 0;
             header_vc.granulepos = 0;
             header_vc.packetno = 1;
-            header_vc.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header_vc.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header_vc.packet = aheader->data;
             break;
 
@@ -453,7 +453,7 @@ void CAOpusDecoder::InitializeCompressionSettings()
             header_cb.e_o_s = 0;
             header_cb.granulepos = 0;
             header_cb.packetno = 2;
-            header_cb.bytes = EndianS32_BtoN(aheader->size) - 2 * sizeof(int);
+            header_cb.bytes = CFSwapInt32BigToHost(aheader->size) - 2 * sizeof(int);
             header_cb.packet = aheader->data;
             break;
 
