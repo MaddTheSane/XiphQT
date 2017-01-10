@@ -40,6 +40,14 @@
 		5530E5AF1CD344D800071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
 		5530E5B01CD344D800071A6D /* Opus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5071CD32D9E00071A6D /* Opus.framework */; };
 		5530E5FA1CD3D8A000071A6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5530E5681CD33AFB00071A6D /* Ogg.framework */; };
+		55FD17471E24C90C00DA416D /* ComponentBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55FD17451E24C90C00DA416D /* ComponentBase.cpp */; };
+		55FD174C1E24C92D00DA416D /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55FD174A1E24C92D00DA416D /* CAXException.cpp */; };
+		55FD17541E24CA5B00DA416D /* ACPlugInDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55FD17501E24CA5B00DA416D /* ACPlugInDispatch.cpp */; };
+		55FD17551E24CA5B00DA416D /* ACSimpleCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55FD17521E24CA5B00DA416D /* ACSimpleCodec.cpp */; };
+		55FD175E1E24CD4400DA416D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FD17581E24CD2800DA416D /* AudioToolbox.framework */; };
+		55FD175F1E24CD4400DA416D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FD17591E24CD2800DA416D /* AudioUnit.framework */; };
+		55FD17601E24CD4400DA416D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FD175A1E24CD2800DA416D /* CoreAudio.framework */; };
+		55FD17611E24CD4400DA416D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FD17561E24CD1500DA416D /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +192,18 @@
 		5530E5581CD33A9600071A6D /* wincerts.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wincerts.c; sourceTree = "<group>"; };
 		5530E5591CD33A9600071A6D /* winerrno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = winerrno.h; sourceTree = "<group>"; };
 		5530E5621CD33AFB00071A6D /* Ogg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Ogg.xcodeproj; path = "../external-libs/ogg/macosx/Ogg.xcodeproj"; sourceTree = "<group>"; };
+		55FD17451E24C90C00DA416D /* ComponentBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentBase.cpp; sourceTree = "<group>"; };
+		55FD17461E24C90C00DA416D /* ComponentBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentBase.h; sourceTree = "<group>"; };
+		55FD174A1E24C92D00DA416D /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
+		55FD174B1E24C92D00DA416D /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
+		55FD17501E24CA5B00DA416D /* ACPlugInDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPlugInDispatch.cpp; sourceTree = "<group>"; };
+		55FD17511E24CA5B00DA416D /* ACPlugInDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPlugInDispatch.h; sourceTree = "<group>"; };
+		55FD17521E24CA5B00DA416D /* ACSimpleCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACSimpleCodec.cpp; sourceTree = "<group>"; };
+		55FD17531E24CA5B00DA416D /* ACSimpleCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACSimpleCodec.h; sourceTree = "<group>"; };
+		55FD17561E24CD1500DA416D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		55FD17581E24CD2800DA416D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		55FD17591E24CD2800DA416D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		55FD175A1E24CD2800DA416D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,7 +212,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5530E5FA1CD3D8A000071A6D /* Ogg.framework in Frameworks */,
+				55FD175F1E24CD4400DA416D /* AudioUnit.framework in Frameworks */,
+				55FD17611E24CD4400DA416D /* CoreFoundation.framework in Frameworks */,
 				5530E50A1CD32DB400071A6D /* Opus.framework in Frameworks */,
+				55FD17601E24CD4400DA416D /* CoreAudio.framework in Frameworks */,
+				55FD175E1E24CD4400DA416D /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +259,7 @@
 		5530E4CA1CD326B300071A6D /* CoreAudio */ = {
 			isa = PBXGroup;
 			children = (
+				55FD174D1E24C93B00DA416D /* AudioUnits */,
 				5530E4CB1CD326B300071A6D /* AudioCodecs */,
 				5530E4D71CD326B300071A6D /* PublicUtility */,
 			);
@@ -258,6 +283,10 @@
 				5530E4D01CD326B300071A6D /* ACCodec.h */,
 				5530E4D21CD326B300071A6D /* ACCodecDispatchTypes.h */,
 				5530E4D31CD326B300071A6D /* ACConditionalMacros.h */,
+				55FD17501E24CA5B00DA416D /* ACPlugInDispatch.cpp */,
+				55FD17511E24CA5B00DA416D /* ACPlugInDispatch.h */,
+				55FD17521E24CA5B00DA416D /* ACSimpleCodec.cpp */,
+				55FD17531E24CA5B00DA416D /* ACSimpleCodec.h */,
 				5530E4D41CD326B300071A6D /* GetCodecBundle.cpp */,
 				5530E4D51CD326B300071A6D /* GetCodecBundle.h */,
 			);
@@ -267,6 +296,8 @@
 		5530E4D71CD326B300071A6D /* PublicUtility */ = {
 			isa = PBXGroup;
 			children = (
+				55FD174A1E24C92D00DA416D /* CAXException.cpp */,
+				55FD174B1E24C92D00DA416D /* CAXException.h */,
 				5530E4FC1CD32C2800071A6D /* CADebugPrintf.cpp */,
 				5530E4FD1CD32C2800071A6D /* CADebugPrintf.h */,
 				5530E4D81CD326B300071A6D /* CABundleLocker.cpp */,
@@ -358,6 +389,10 @@
 		5530E5241CD332D800071A6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55FD17581E24CD2800DA416D /* AudioToolbox.framework */,
+				55FD17591E24CD2800DA416D /* AudioUnit.framework */,
+				55FD175A1E24CD2800DA416D /* CoreAudio.framework */,
+				55FD17561E24CD1500DA416D /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -395,6 +430,31 @@
 				5530E56A1CD33AFB00071A6D /* libogg.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		55FD174D1E24C93B00DA416D /* AudioUnits */ = {
+			isa = PBXGroup;
+			children = (
+				55FD174E1E24C94C00DA416D /* AUPublic */,
+			);
+			path = AudioUnits;
+			sourceTree = "<group>";
+		};
+		55FD174E1E24C94C00DA416D /* AUPublic */ = {
+			isa = PBXGroup;
+			children = (
+				55FD174F1E24C95900DA416D /* AUBase */,
+			);
+			path = AUPublic;
+			sourceTree = "<group>";
+		};
+		55FD174F1E24C95900DA416D /* AUBase */ = {
+			isa = PBXGroup;
+			children = (
+				55FD17451E24C90C00DA416D /* ComponentBase.cpp */,
+				55FD17461E24C90C00DA416D /* ComponentBase.h */,
+			);
+			path = AUBase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -588,6 +648,7 @@
 				5530E4FE1CD32C2800071A6D /* CADebugPrintf.cpp in Sources */,
 				5530E5321CD3340600071A6D /* CAOpusEncoder.cpp in Sources */,
 				5530E5311CD3340600071A6D /* CAOpusDecoder.cpp in Sources */,
+				55FD17541E24CA5B00DA416D /* ACPlugInDispatch.cpp in Sources */,
 				5530E53D1CD3359200071A6D /* wrap_ogg.cpp in Sources */,
 				5530E4E21CD326B300071A6D /* GetCodecBundle.cpp in Sources */,
 				5530E5361CD3354400071A6D /* XCACodec.cpp in Sources */,
@@ -596,6 +657,9 @@
 				5530E4E41CD326B300071A6D /* CABundleLocker.cpp in Sources */,
 				5530E4E51CD326B300071A6D /* CADebugMacros.cpp in Sources */,
 				5530E52F1CD3340600071A6D /* CAOggOpusDecoder.cpp in Sources */,
+				55FD17551E24CA5B00DA416D /* ACSimpleCodec.cpp in Sources */,
+				55FD17471E24C90C00DA416D /* ComponentBase.cpp in Sources */,
+				55FD174C1E24C92D00DA416D /* CAXException.cpp in Sources */,
 				5530E53C1CD3359200071A6D /* ringbuffer.cpp in Sources */,
 				5530E4E01CD326B300071A6D /* ACBaseCodec.cpp in Sources */,
 				5530E4E61CD326B300071A6D /* CAStreamBasicDescription.cpp in Sources */,
@@ -742,6 +806,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAOpusCodec.exp;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = AUDIOCODECS_SUPPORT_PLUGINS;
 				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = OpusCodec/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -757,6 +822,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				EXPORTED_SYMBOLS_FILE = src/CAOpusCodec.exp;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = AUDIOCODECS_SUPPORT_PLUGINS;
 				GENERATE_PKGINFO_FILE = YES;
 				INFOPLIST_FILE = OpusCodec/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";

@@ -50,7 +50,7 @@ class CAOpusDecoder:
 public XCACodec
 {
  public:
-    CAOpusDecoder(Boolean inSkipFormatsInitialization = false);
+    CAOpusDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization = false);
     ~CAOpusDecoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -60,7 +60,7 @@ public XCACodec
     virtual void        Reset();
 
     virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
-    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
+    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable);
 
     virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
     virtual void        SetCurrentOutputFormat(const AudioStreamBasicDescription& inOutputFormat);

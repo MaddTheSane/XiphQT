@@ -44,7 +44,7 @@ class CAOggOpusDecoder :
 public CAOpusDecoder
 {
  public:
-    CAOggOpusDecoder();
+    CAOggOpusDecoder(AudioComponentInstance inInstance);
     virtual ~CAOggOpusDecoder();
 
     virtual UInt32          ProduceOutputPackets(void* outOutputData, UInt32& ioOutputDataByteSize, UInt32& ioNumberPackets,

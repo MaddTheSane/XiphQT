@@ -49,10 +49,10 @@
         (unsigned int)(x)->mChannelsPerFrame, (unsigned int)(x)->mBitsPerChannel
 
 
-CAOpusDecoder::CAOpusDecoder(Boolean inSkipFormatsInitialization /* = false */) :
+CAOpusDecoder::CAOpusDecoder(AudioComponentInstance inInstance, Boolean inSkipFormatsInitialization /* = false */) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false),
     mVorbisFPList(), mConsumedFPList(),
-    mFullInPacketsZapped(0)
+    mFullInPacketsZapped(0), XCACodec(inInstance)
 {
     if (inSkipFormatsInitialization)
         return;
@@ -242,7 +242,7 @@ void CAOpusDecoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
     dbg_printf("[VD  ] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAOpusDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAOpusDecoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf("[VD  ]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)
@@ -534,7 +534,7 @@ void CAOpusDecoder::InPacket(const void* inInputData, const AudioStreamPacketDes
     const Byte * theData = static_cast<const Byte *> (inInputData) + inPacketDescription->mStartOffset;
     UInt32 size = inPacketDescription->mDataByteSize;
     mBDCBuffer.In(theData, size);
-    mVorbisFPList.push_back(VorbisFramePacket(inPacketDescription->mVariableFramesInPacket, inPacketDescription->mDataByteSize));
+    //mVorbisFPList.push_back(VorbisFramePacket(inPacketDescription->mVariableFramesInPacket, inPacketDescription->mDataByteSize));
 }
 
 

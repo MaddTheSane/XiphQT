@@ -40,8 +40,8 @@
 #include "debug.h"
 
 
-CAOggOpusDecoder::CAOggOpusDecoder() :
-    CAOpusDecoder(true),
+CAOggOpusDecoder::CAOggOpusDecoder(AudioComponentInstance inInstance) :
+    CAOpusDecoder(inInstance,true),
     mFramesBufferedList(),
     mSOBuffer(NULL),
     mSOBufferSize(0), mSOBufferUsed(0),

@@ -30,31 +30,17 @@
 
 #include <AudioUnit/AudioCodec.h>
 
+#include "ACPlugInDispatch.h"
 #include "CAOpusDecoder.h"
 #include "CAOggOpusDecoder.h"
 #include "CAOpusEncoder.h"
 
-#include "ACCodecDispatch.h"
 
-extern "C"
-ComponentResult	CAOpusDecoderEntry(ComponentParameters* inParameters, CAOpusDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
-
-extern "C"
-ComponentResult	CAOggOpusDecoderEntry(ComponentParameters* inParameters, CAOggOpusDecoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
-
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOpusDecoder);
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOggOpusDecoder);
 
 #if !defined(XIPHQT_NO_ENCODERS)
 
-extern "C"
-ComponentResult	CAOpusEncoderEntry(ComponentParameters* inParameters, CAOpusEncoder* inThis)
-{
-    return ACCodecDispatch(inParameters, inThis);
-}
+AUDIOCOMPONENT_ENTRY(AudioCodecFactory, CAOpusEncoder);
 
 #endif  /* XIPHQT_NO_ENCODERS */

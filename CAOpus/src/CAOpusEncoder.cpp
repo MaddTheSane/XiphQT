@@ -63,10 +63,10 @@ AudioChannelLayoutTag CAOpusEncoder::gOutChannelLayouts[kVorbisEncoderOutChannel
     kAudioChannelLayoutTag_MPEG_5_1_C,
 };
 
-CAOpusEncoder::CAOpusEncoder() :
+CAOpusEncoder::CAOpusEncoder(AudioComponentInstance inInstance) :
     mCookie(NULL), mCookieSize(0), mCompressionInitialized(false), mEOSHit(false),
     last_granulepos(0), last_packetno(0), mVorbisFPList(), mProducedPList(),
-    mCfgMode(kVorbisEncoderModeQuality), mCfgQuality(0.4), mCfgBitrate(128), mCfgDict(NULL)
+    mCfgMode(kVorbisEncoderModeQuality), mCfgQuality(0.4), mCfgBitrate(128), mCfgDict(NULL), XCACodec(inInstance)
 {
     CAStreamBasicDescription theInputFormat1(kAudioStreamAnyRate, kAudioFormatLinearPCM,
                                              0, 1, 0, 0, 32, kAudioFormatFlagsNativeFloatPacked);
@@ -410,7 +410,7 @@ void CAOpusEncoder::GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPro
     dbg_printf("[  VE] <.. [%08lx] :: GetProperty('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
 }
 
-void CAOpusEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable)
+void CAOpusEncoder::GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable)
 {
     dbg_printf("[  VE]  >> [%08lx] :: GetPropertyInfo('%4.4s')\n", (size_t) this, reinterpret_cast<char*> (&inPropertyID));
     switch(inPropertyID)

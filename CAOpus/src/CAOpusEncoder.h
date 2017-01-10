@@ -43,7 +43,7 @@ class CAOpusEncoder:
 public XCACodec
 {
  public:
-    CAOpusEncoder();
+    CAOpusEncoder(AudioComponentInstance inInstance);
     virtual ~CAOpusEncoder();
 
     virtual void        Initialize(const AudioStreamBasicDescription* inInputFormat,
@@ -56,7 +56,7 @@ public XCACodec
                                              AudioStreamPacketDescription* outPacketDescription);
 
     virtual void        GetProperty(AudioCodecPropertyID inPropertyID, UInt32& ioPropertyDataSize, void* outPropertyData);
-    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, bool& outWritable);
+    virtual void        GetPropertyInfo(AudioCodecPropertyID inPropertyID, UInt32& outPropertyDataSize, Boolean& outWritable);
     virtual void        SetProperty(AudioCodecPropertyID inPropertyID, UInt32 inPropertyDataSize, const void* inPropertyData);
 
     virtual void        SetCurrentInputFormat(const AudioStreamBasicDescription& inInputFormat);
